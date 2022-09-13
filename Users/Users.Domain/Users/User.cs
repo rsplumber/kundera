@@ -46,7 +46,7 @@ public class User : AggregateRoot<UserId>
         _nationalCode = nationalCode;
     }
 
-    public async Task<User> CreateAsync(Username username, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(Username username, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(username);
         if (exists)
@@ -57,7 +57,7 @@ public class User : AggregateRoot<UserId>
         return new User(username);
     }
 
-    public async Task<User> CreateAsync(PhoneNumber phoneNumber, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(PhoneNumber phoneNumber, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(phoneNumber);
         if (exists)
@@ -68,7 +68,7 @@ public class User : AggregateRoot<UserId>
         return new User(phoneNumber);
     }
 
-    public async Task<User> CreateAsync(Email email, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(Email email, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(email);
         if (exists)
@@ -79,7 +79,7 @@ public class User : AggregateRoot<UserId>
         return new User(email);
     }
 
-    public async Task<User> CreateAsync(NationalCode nationalCode, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(NationalCode nationalCode, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(nationalCode);
         if (exists)
