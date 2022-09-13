@@ -5,20 +5,25 @@ namespace RoleManagements.Domain.Tests.Permissions;
 
 public class PermissionRepository : IPermissionRepository
 {
-    private static readonly List<Permission> permissions = new();
+    private readonly List<Permission> _permissions;
+
+    public PermissionRepository()
+    {
+        _permissions = new List<Permission>();
+    }
 
     public async Task CreateAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
     {
-        permissions.Add(entity);
+        _permissions.Add(entity);
     }
 
     public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = new CancellationToken())
     {
-        return permissions.FirstOrDefault(service => service.Id == id);
+        return _permissions.FirstOrDefault(service => service.Id == id);
     }
 
     public async ValueTask<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
-        return permissions.Exists(service => service.Id == id);
+        return _permissions.Exists(service => service.Id == id);
     }
 }

@@ -7,19 +7,15 @@ namespace RoleManagements.Domain.Tests.Services;
 
 public class ServiceTest
 {
-    private readonly IServiceRepository _repository;
     private const string ServiceName = "FundManagement";
 
-    public ServiceTest()
-    {
-        _repository = new ServiceRepository();
-    }
 
     [Fact]
     public async Task service_creation()
     {
-        var service = await Service.CreateAsync(ServiceName, _repository);
-        await _repository.CreateAsync(service);
+        var repository = new ServiceRepository();
+        var service = await Service.CreateAsync(ServiceName, repository);
+        await repository.CreateAsync(service);
         Assert.NotNull(service);
         Assert.Equal(ServiceName, service.Id.Value);
     }
@@ -27,25 +23,30 @@ public class ServiceTest
     [Fact]
     public async Task service_creation_event()
     {
-        var service = await Service.CreateAsync("LoanManagement", _repository);
+        var repository = new ServiceRepository();
+        var service = await Service.CreateAsync("LoanManagement", repository);
         Assert.Contains(service.DomainEvents!, de => de.GetType() == typeof(ServiceCreatedEvent));
     }
 
     [Fact]
     public async Task service_duplicate_creation_fail()
     {
+        var name = "LoanManagement";
+        var repository = new ServiceRepository();
+        var service = await Service.CreateAsync(name, repository);
+        await repository.CreateAsync(service);
         await Assert.ThrowsAsync<ServiceAlreadyExistsException>(async () =>
         {
-            await Service.CreateAsync(ServiceName, _repository);
+            await Service.CreateAsync(name, repository);
         });
     }
 
     [Fact]
     public async Task service_toggle_status()
     {
-        var id = ServiceId.From(ServiceName);
-        var service = await _repository.FindAsync(id);
-        Assert.Equal(ServiceStatus.Active, service!.Status);
+        var repository = new ServiceRepository();
+        var service = await Service.CreateAsync("LoanManagement", repository);
+        Assert.Equal(ServiceStatus.Active, service.Status);
         service.DeActivate();
         Assert.Equal(ServiceStatus.DeActive, service.Status);
         service.Activate();
@@ -55,7 +56,8 @@ public class ServiceTest
     [Fact]
     public async Task service_status_changed_event()
     {
-        var service = await Service.CreateAsync("Statuser", _repository);
+        var repository = new ServiceRepository();
+        var service = await Service.CreateAsync("LoanManagement", repository);
         service.DeActivate();
         Assert.Contains(service.DomainEvents!, de => de.GetType() == typeof(ServiceStatusChangedEvent));
     }

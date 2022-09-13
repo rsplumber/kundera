@@ -5,7 +5,12 @@ namespace RoleManagements.Domain.Tests.Services;
 
 public class ServiceRepository : IServiceRepository
 {
-    private static readonly List<Service> Services = new();
+    private readonly List<Service> Services;
+
+    public ServiceRepository()
+    {
+        Services = new List<Service>();
+    }
 
     public async Task CreateAsync(Service entity, CancellationToken cancellationToken = new())
     {

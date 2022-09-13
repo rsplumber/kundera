@@ -5,20 +5,25 @@ namespace RoleManagements.Domain.Tests.Roles;
 
 public class RoleRepository : IRoleRepository
 {
-    private static readonly List<Role> Roles = new();
+    private readonly List<Role> _roles;
+
+    public RoleRepository()
+    {
+        _roles = new List<Role>();
+    }
 
     public async Task CreateAsync(Role entity, CancellationToken cancellationToken = new())
     {
-        Roles.Add(entity);
+        _roles.Add(entity);
     }
 
     public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = new())
     {
-        return Roles.FirstOrDefault(service => service.Id == id);
+        return _roles.FirstOrDefault(service => service.Id == id);
     }
 
     public async ValueTask<bool> ExistsAsync(RoleId id, CancellationToken cancellationToken = default)
     {
-        return Roles.Exists(service => service.Id == id);
+        return _roles.Exists(service => service.Id == id);
     }
 }
