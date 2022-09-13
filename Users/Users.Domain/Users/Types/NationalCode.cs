@@ -15,7 +15,7 @@ public class NationalCode : CustomType<string, NationalCode>
     protected override void Validate()
     {
         if (!Regex.IsMatch(Value, RegexPattern, RegexOptions.IgnoreCase))
-            throw new InvalidNationalCodeException(Value);
+            throw new InvalidNationalCodeException();
 
         var check = Convert.ToInt32(Value.Substring(9, 1));
         var sum = Enumerable.Range(0, 9)
@@ -24,7 +24,7 @@ public class NationalCode : CustomType<string, NationalCode>
 
         if (!(sum < 2 ? check == sum : check + sum == 11))
         {
-            throw new InvalidNationalCodeException(Value);
+            throw new InvalidNationalCodeException();
         }
 
         base.Validate();

@@ -16,7 +16,7 @@ public class Email : CustomType<string, Email>
     {
         if (!Regex.IsMatch(Value, RegexPattern, RegexOptions.IgnoreCase))
         {
-            throw new InvalidEmailException(Value);
+            throw new InvalidEmailException();
         }
 
         base.Validate();

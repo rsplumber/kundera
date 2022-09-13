@@ -16,7 +16,7 @@ public class PhoneNumber : CustomType<string, PhoneNumber>
     {
         if (!Regex.IsMatch(Value, RegexPattern, RegexOptions.IgnoreCase))
         {
-            throw new InvalidPhoneNumberException(Value);
+            throw new InvalidPhoneNumberException();
         }
 
         base.Validate();
