@@ -19,11 +19,11 @@ public class RoleRepository : IRoleRepository
 
     public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = new())
     {
-        return _roles.FirstOrDefault(service => service.Id == id);
+        return _roles.FirstOrDefault(role => role.Id == id);
     }
 
     public async ValueTask<bool> ExistsAsync(RoleId id, CancellationToken cancellationToken = default)
     {
-        return _roles.Exists(service => service.Id == id);
+        return _roles.Exists(role => role.Id == id);
     }
 }

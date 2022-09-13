@@ -5,7 +5,7 @@ using Tes.Domain.Contracts;
 
 namespace RoleManagements.Domain.UserRoles;
 
-public class UserRole : AggregateRoot<RoleId>
+public class UserRole : AggregateRoot<UserId>
 {
     private readonly List<RoleId> _roles;
 

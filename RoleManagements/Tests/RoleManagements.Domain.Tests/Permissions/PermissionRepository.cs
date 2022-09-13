@@ -19,11 +19,11 @@ public class PermissionRepository : IPermissionRepository
 
     public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = new CancellationToken())
     {
-        return _permissions.FirstOrDefault(service => service.Id == id);
+        return _permissions.FirstOrDefault(permission => permission.Id == id);
     }
 
     public async ValueTask<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
-        return _permissions.Exists(service => service.Id == id);
+        return _permissions.Exists(permission => permission.Id == id);
     }
 }

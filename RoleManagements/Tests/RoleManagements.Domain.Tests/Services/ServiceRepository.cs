@@ -5,25 +5,25 @@ namespace RoleManagements.Domain.Tests.Services;
 
 public class ServiceRepository : IServiceRepository
 {
-    private readonly List<Service> Services;
+    private readonly List<Service> _services;
 
     public ServiceRepository()
     {
-        Services = new List<Service>();
+        _services = new List<Service>();
     }
 
     public async Task CreateAsync(Service entity, CancellationToken cancellationToken = new())
     {
-        Services.Add(entity);
+        _services.Add(entity);
     }
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = new())
     {
-        return Services.FirstOrDefault(service => service.Id == id);
+        return _services.FirstOrDefault(service => service.Id == id);
     }
 
     public async ValueTask<bool> ExistsAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        return Services.Exists(service => service.Id == id);
+        return _services.Exists(service => service.Id == id);
     }
 }
