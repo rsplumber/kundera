@@ -15,20 +15,19 @@ public class User : AggregateRoot<UserId>
     public User() : base(UserId.Generate())
     {
     }
-    
+
     public User(string username) : base(UserId.Generate())
     {
         _username = username;
         AddDomainEvent(new UserCreatedEvent(Id));
-        
     }
-    
+
     public User(PhoneNumber phoneNumber) : base(UserId.Generate())
     {
         _phoneNumber = phoneNumber;
         AddDomainEvent(new UserCreatedEvent(Id));
     }
-    
+
     public User(Email email) : base(UserId.Generate())
     {
         _email = email;
@@ -44,13 +43,4 @@ public class User : AggregateRoot<UserId>
     public string? PhoneNumber => _phoneNumber;
 
     public string? Email => _email;
-    
-    public void ChangeName(Name firstname,Name lastname)
-    {
-        _firstname = firstname;
-        _lastname = lastname;
-        AddDomainEvent(new UserChangedNameEvent(Id));
-    }
-    
-    
 }
