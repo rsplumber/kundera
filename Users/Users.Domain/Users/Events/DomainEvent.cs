@@ -1,7 +1,7 @@
 ﻿using Tes.Domain.Contracts;
 using Tes.Events.Contracts;
 
-namespace Users.Domain.Events;
+namespace Users.Domain.Users.Events;
 
 public record DomainEvent : IDomainEvent
 {

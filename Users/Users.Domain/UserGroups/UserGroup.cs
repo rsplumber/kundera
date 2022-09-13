@@ -1,4 +1,5 @@
 ﻿using Tes.Domain.Contracts;
+using Users.Domain.Users;
 
 namespace Users.Domain;
 

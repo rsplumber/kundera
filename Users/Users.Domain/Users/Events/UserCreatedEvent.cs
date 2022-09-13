@@ -1,3 +1,3 @@
-﻿namespace Users.Domain.Events;
+﻿namespace Users.Domain.Users.Events;
 
 public record UserCreatedEvent(UserId UserId) : DomainEvent;

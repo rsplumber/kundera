@@ -1,8 +1,8 @@
 ﻿using Tes.Domain.Contracts;
-using Users.Domain.Events;
-using Users.Domain.Types;
+using Users.Domain.Users.Events;
+using Users.Domain.Users.Types;
 
-namespace Users.Domain;
+namespace Users.Domain.Users;
 
 public class User : AggregateRoot<UserId>
 {
@@ -11,6 +11,7 @@ public class User : AggregateRoot<UserId>
     private string? _lastname;
     private readonly string? _phoneNumber;
     private readonly string? _email;
+    private readonly string? _nationalCode;
 
     public User() : base(UserId.Generate())
     {
@@ -31,6 +32,12 @@ public class User : AggregateRoot<UserId>
     public User(Email email) : base(UserId.Generate())
     {
         _email = email;
+        AddDomainEvent(new UserCreatedEvent(Id));
+    }
+    
+    public User(NationalCode nationalCode) : base(UserId.Generate())
+    {
+        _nationalCode = nationalCode;
         AddDomainEvent(new UserCreatedEvent(Id));
     }
 

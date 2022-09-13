@@ -1,7 +1,7 @@
 ﻿using Tes.Domain.Contracts;
-using Users.Domain.Types;
+using Users.Domain.Users.Types;
 
-namespace Users.Domain.Exception;
+namespace Users.Domain.Users.Exception;
 
 public class InvalidEmailException : DomainException
 {

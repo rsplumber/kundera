@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using Tes.Domain.Contracts;
-using Users.Domain.Exception;
+using Users.Domain.Users.Exception;
 
-namespace Users.Domain.Types;
+namespace Users.Domain.Users.Types;
 
 public class Email : CustomType<string, Email>
 {
