@@ -17,4 +17,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\RoleManagements.Domain\RoleManagements.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -9,7 +9,6 @@ namespace RoleManagements.Domain.Scopes;
 
 public class Scope : AggregateRoot<ScopeId>
 {
-    private readonly string _title;
     private ScopeStatus _status;
     private readonly List<ServiceId> _services;
     private readonly List<RoleId> _roles;
@@ -18,16 +17,15 @@ public class Scope : AggregateRoot<ScopeId>
     {
     }
 
-    private Scope(ScopeId id, Name title) : base(id)
+    private Scope(ScopeId id) : base(id)
     {
         _services = new List<ServiceId>();
         _roles = new List<RoleId>();
-        _title = title;
         _status = ScopeStatus.Active;
         AddDomainEvent(new ScopeCreatedEvent(id));
     }
 
-    public static async Task<Scope> CreateAsync(Name name, Name title, IScopeRepository repository)
+    public static async Task<Scope> CreateAsync(Name name, IScopeRepository repository)
     {
         var id = ScopeId.From(name);
         var exists = await repository.ExistsAsync(id);
@@ -36,10 +34,8 @@ public class Scope : AggregateRoot<ScopeId>
             throw new ScopeAlreadyExistsException(name);
         }
 
-        return new Scope(id, title);
+        return new Scope(id);
     }
-
-    public string Title => _title;
 
     public ScopeStatus Status => _status;
 

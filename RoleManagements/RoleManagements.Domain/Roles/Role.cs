@@ -8,21 +8,21 @@ namespace RoleManagements.Domain.Roles;
 
 public class Role : AggregateRoot<RoleId>
 {
-    private readonly string _title;
     private readonly List<PermissionId> _permissions;
+    private readonly Dictionary<string, string> _meta;
 
     protected Role()
     {
     }
 
-    private Role(RoleId id, Name title) : base(id)
+    private Role(RoleId id) : base(id)
     {
         _permissions = new List<PermissionId>();
-        _title = title;
+        _meta = new Dictionary<string, string>();
         AddDomainEvent(new RoleCreatedEvent(id));
     }
 
-    public static async Task<Role> CreateAsync(Name name, Name title, IRoleRepository repository)
+    public static async Task<Role> CreateAsync(Name name, IRoleRepository repository)
     {
         var id = RoleId.From(name);
         var exists = await repository.ExistsAsync(id);
@@ -31,10 +31,8 @@ public class Role : AggregateRoot<RoleId>
             throw new RoleAlreadyExistsException(name);
         }
 
-        return new Role(id, title);
+        return new Role(id);
     }
-
-    public string Title => _title;
 
     public IReadOnlyCollection<PermissionId> Permissions => _permissions.AsReadOnly();
 
@@ -53,5 +51,24 @@ public class Role : AggregateRoot<RoleId>
     public bool HasPermission(PermissionId permission)
     {
         return _permissions.Exists(id => id == permission);
+    }
+
+    public IReadOnlyDictionary<string, string> Meta => _meta;
+
+    public void AddMeta(string key, string value)
+    {
+        _meta.TryAdd(key, value);
+    }
+
+    public void RemoveMeta(string key)
+    {
+        if (GetMetaValue(key) is null) return;
+        _meta.Remove(key);
+    }
+
+    public string? GetMetaValue(string key)
+    {
+        _meta.TryGetValue(key, out var value);
+        return value;
     }
 }

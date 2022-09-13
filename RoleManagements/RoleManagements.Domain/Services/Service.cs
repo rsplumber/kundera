@@ -7,21 +7,19 @@ namespace RoleManagements.Domain.Services;
 
 public class Service : AggregateRoot<ServiceId>
 {
-    private readonly string _title;
     private ServiceStatus _status;
 
     protected Service()
     {
     }
 
-    private Service(ServiceId id, Name title) : base(id)
+    private Service(ServiceId id) : base(id)
     {
-        _title = title;
         _status = ServiceStatus.Active;
         AddDomainEvent(new ServiceCreatedEvent(id));
     }
 
-    public static async Task<Service> CreateAsync(Name name, Name title, IServiceRepository repository)
+    public static async Task<Service> CreateAsync(Name name, IServiceRepository repository)
     {
         var id = ServiceId.From(name);
         var exists = await repository.ExistsAsync(id);
@@ -30,10 +28,8 @@ public class Service : AggregateRoot<ServiceId>
             throw new ServiceAlreadyExistsException(name);
         }
 
-        return new Service(id, title);
+        return new Service(id);
     }
-
-    public string Title => _title;
 
     public ServiceStatus Status => _status;
 
