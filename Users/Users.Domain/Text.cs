@@ -1,6 +1,6 @@
 ﻿using Tes.Domain.Contracts;
 
-namespace Users.Domain.Users.Types;
+namespace Users.Domain;
 
 public class Text : CustomType<string, Text>
 {
