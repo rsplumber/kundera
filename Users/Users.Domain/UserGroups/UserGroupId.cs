@@ -1,6 +1,6 @@
 ﻿using Tes.Domain.Contracts;
 
-namespace Users.Domain;
+namespace Users.Domain.UserGroups;
 
 public class UserGroupId : CustomType<Guid, UserGroupId>, IIdentity
 {

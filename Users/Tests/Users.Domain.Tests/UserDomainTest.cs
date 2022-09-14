@@ -10,7 +10,7 @@ public class UserDomainTest
     [Fact]
     public async Task create_user_by_username_success()
     {
-        Username username = "test";
+        Username username = "test123";
         var user = await User.CreateAsync(username, _userRepository);
         Assert.NotNull(user);
         Assert.IsType<User>(user);
@@ -30,7 +30,7 @@ public class UserDomainTest
     [Fact]
     public async Task create_user_by_phoneNumber_success()
     {
-        PhoneNumber number = "09111111111";
+        PhoneNumber number = "09111111112";
         var user = await User.CreateAsync(number, _userRepository);
         Assert.NotNull(user);
         Assert.IsType<User>(user);
@@ -40,7 +40,7 @@ public class UserDomainTest
     [Fact]
     public async Task create_user_by_nationalCode_success()
     {
-        NationalCode nationalCode = "1111251452";
+        NationalCode nationalCode = "1230058915";
         var user = await User.CreateAsync(nationalCode, _userRepository);
         Assert.NotNull(user);
         Assert.IsType<User>(user);
@@ -48,38 +48,45 @@ public class UserDomainTest
     }
     
     [Fact]
-    public void create_user_by_username_duplicate_fail()
+    public async Task create_user_by_username_duplicate_fail()
     {
-        Username username = "test";
-        User.CreateAsync(username, _userRepository);
-        Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () =>
+        Username username = "testaaa";
+        var user = await User.CreateAsync(username, _userRepository);
+        await _userRepository.CreateAsync(user);
+        await Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () =>
         {
             await User.CreateAsync(username, _userRepository);   
         });
     }
 
     [Fact]
-    public void create_user_by_email_duplicate_fail()
+    public async Task create_user_by_email_duplicate_fail()
     {
         Email email = "test@gmail.com";
-        User.CreateAsync(email, _userRepository);
-        Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () => { await User.CreateAsync(email, _userRepository); });
+        var user = await User.CreateAsync(email, _userRepository);
+        await _userRepository.CreateAsync(user);
+        await Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () =>
+        {
+            await User.CreateAsync(email, _userRepository);
+        });
     }
     
     [Fact]
-    public void create_user_by_phoneNumber_duplicate_fail()
+    public async Task create_user_by_phoneNumber_duplicate_fail()
     {
         PhoneNumber phoneNumber = "09111111111";
-        User.CreateAsync(phoneNumber, _userRepository);
-        Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () => { await User.CreateAsync(phoneNumber, _userRepository); });
+        var user = await User.CreateAsync(phoneNumber, _userRepository);
+        await _userRepository.CreateAsync(user);
+        await Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () => { await User.CreateAsync(phoneNumber, _userRepository); });
     }
     
     [Fact]
-    public void create_user_by_nationalCode_duplicate_fail()
+    public async Task create_user_by_nationalCode_duplicate_fail()
     {
         NationalCode nationalCode = "1111251452";
-        User.CreateAsync(nationalCode, _userRepository);
-        Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () => { await User.CreateAsync(nationalCode, _userRepository); });
+        var user = await User.CreateAsync(nationalCode, _userRepository);
+        await _userRepository.CreateAsync(user);
+        await Assert.ThrowsAsync<UserDuplicateIdentifierException>(async () => { await User.CreateAsync(nationalCode, _userRepository); });
     }
 
 
