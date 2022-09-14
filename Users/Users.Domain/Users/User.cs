@@ -1,4 +1,5 @@
 ﻿using Tes.Domain.Contracts;
+using Users.Domain.UserGroups;
 using Users.Domain.Users.Events;
 using Users.Domain.Users.Exception;
 using Users.Domain.Users.Types;
@@ -16,37 +17,40 @@ public class User : AggregateRoot<UserId>
     private string? _statusChangedReason;
     private UserStatus _status;
     private DateTime _statusChangedDate;
+    private readonly List<UserGroupId> _userGroups;
 
     protected User()
     {
     }
 
-    private User(UserId id) : base(id)
+    private User(UserId id, UserGroupId userGroupId) : base(id)
     {
+        _userGroups = new List<UserGroupId>();
+        JoinGroup(userGroupId);
         AddDomainEvent(new UserCreatedEvent(id));
     }
 
-    private User(Username username) : this(UserId.Generate())
+    private User(Username username, UserGroupId userGroupId) : this(UserId.Generate(), userGroupId)
     {
         _username = username;
     }
 
-    private User(PhoneNumber phoneNumber) : this(UserId.Generate())
+    private User(PhoneNumber phoneNumber, UserGroupId userGroupId) : this(UserId.Generate(), userGroupId)
     {
         _phoneNumber = phoneNumber;
     }
 
-    private User(Email email) : this(UserId.Generate())
+    private User(Email email, UserGroupId userGroupId) : this(UserId.Generate(), userGroupId)
     {
         _email = email;
     }
 
-    private User(NationalCode nationalCode) : this(UserId.Generate())
+    private User(NationalCode nationalCode, UserGroupId userGroupId) : this(UserId.Generate(), userGroupId)
     {
         _nationalCode = nationalCode;
     }
 
-    public static async Task<User> CreateAsync(Username username, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(Username username, UserGroupId userGroupId, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(username);
         if (exists)
@@ -54,10 +58,10 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(username);
         }
 
-        return new User(username);
+        return new User(username, userGroupId);
     }
 
-    public static async Task<User> CreateAsync(PhoneNumber phoneNumber, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(PhoneNumber phoneNumber, UserGroupId userGroupId, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(phoneNumber);
         if (exists)
@@ -65,10 +69,10 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(phoneNumber);
         }
 
-        return new User(phoneNumber);
+        return new User(phoneNumber, userGroupId);
     }
 
-    public static async Task<User> CreateAsync(Email email, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(Email email, UserGroupId userGroupId, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(email);
         if (exists)
@@ -76,10 +80,10 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(email);
         }
 
-        return new User(email);
+        return new User(email, userGroupId);
     }
 
-    public static async Task<User> CreateAsync(NationalCode nationalCode, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(NationalCode nationalCode, UserGroupId userGroupId, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(nationalCode);
         if (exists)
@@ -87,7 +91,7 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(nationalCode);
         }
 
-        return new User(nationalCode);
+        return new User(nationalCode, userGroupId);
     }
 
     public string? Username => _username;
@@ -108,7 +112,25 @@ public class User : AggregateRoot<UserId>
 
     public DateTime StatusChangedDate => _statusChangedDate;
 
+    public IReadOnlyCollection<UserGroupId> UserGroups => _userGroups.AsReadOnly();
+
     private void ChangeReason(Text? reason) => _statusChangedReason = reason ?? null;
+
+    public void JoinGroup(UserGroupId userGroupId)
+    {
+        _userGroups.Add(userGroupId);
+    }
+
+    public void RemoveFromGroup(UserGroupId userGroupId)
+    {
+        _userGroups.Remove(userGroupId);
+    }
+
+    public void ChangeName(Name firstName, Name lastname)
+    {
+        _firstname = firstName;
+        _lastname = lastname;
+    }
 
     private void ChangeStatus(UserStatus status, Text? reason = null)
     {
