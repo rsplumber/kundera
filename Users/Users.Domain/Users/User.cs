@@ -28,6 +28,7 @@ public class User : AggregateRoot<UserId>
     {
         _userGroups = new List<UserGroupId>();
         _roles = new List<RoleId>();
+        _status = UserStatus.Active;
         JoinGroup(userGroupId);
         AddDomainEvent(new UserCreatedEvent(id));
     }
@@ -145,6 +146,10 @@ public class User : AggregateRoot<UserId>
         _firstname = firstName;
         _lastname = lastname;
     }
+
+    public void Activate() => ChangeStatus(UserStatus.Active);
+
+    public void Block(Text? reason = null) => ChangeStatus(UserStatus.Block, reason);
 
     private void ChangeStatus(UserStatus status, Text? reason = null)
     {
