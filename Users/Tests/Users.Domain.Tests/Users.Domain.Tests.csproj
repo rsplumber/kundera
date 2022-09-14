@@ -17,4 +17,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Users.Domain\Users.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
