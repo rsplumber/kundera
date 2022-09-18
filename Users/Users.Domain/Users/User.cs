@@ -121,7 +121,7 @@ public class User : AggregateRoot<UserId>
 
     private void ChangeReason(Text? reason) => _statusChangedReason = reason ?? null;
 
-    public void JoinGroup(UserGroupId userGroup)
+    private void JoinGroup(UserGroupId userGroup)
     {
         _userGroups.Add(userGroup);
     }
