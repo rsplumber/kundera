@@ -78,7 +78,7 @@ public class ScopesController : Controller
         return CreateResponse();
     }
 
-    [HttpDelete("{id:required}/services")]
+    [HttpDelete("{id:required}/roles")]
     public async Task<IActionResult> RemoveRoleAsync(
         [FromRoute] string id,
         [FromBody] RemoveScopeRoleRequest request,
