@@ -1,0 +1,13 @@
+﻿using Tes.CQRS.Contracts;
+
+namespace Users.Application.UserGroups;
+
+public sealed record UserGroupsQuery() : Query<IEnumerable<UserGroupsResponse>>;
+
+public sealed record UserGroupsResponse(string Id, string Name, string UserGroupStatus)
+{
+    public string? Description { get; set; }
+
+    public string? Parent { get; set; }
+    
+}
