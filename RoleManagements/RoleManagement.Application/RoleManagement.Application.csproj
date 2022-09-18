@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Roles" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\RoleManagements.Domain\RoleManagements.Domain.csproj" />
     </ItemGroup>
     
