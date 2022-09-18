@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using RoleManagement.Application.Scopes;
 using RoleManagements.Domain.Scopes.Types;
 using Tes.CQRS;
-using Controller = Tes.Web.Controllers.Controller;
 
 namespace RoleManagement.Web.Api.Scopes;
 
+[ApiController]
 [Route("/scopes")]
-public class ScopesController : Controller
+public class ScopesController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
@@ -21,7 +21,7 @@ public class ScopesController : Controller
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpGet]
@@ -33,7 +33,7 @@ public class ScopesController : Controller
         };
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpGet("{id:required}")]
@@ -41,7 +41,7 @@ public class ScopesController : Controller
     {
         var query = new ScopeQuery(ScopeId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpPost("{id:required}/services")]
@@ -52,7 +52,7 @@ public class ScopesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpDelete("{id:required}/services")]
@@ -63,7 +63,7 @@ public class ScopesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
 
@@ -75,7 +75,7 @@ public class ScopesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpDelete("{id:required}/roles")]
@@ -86,6 +86,6 @@ public class ScopesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 }

@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using RoleManagement.Application.Permissions;
 using RoleManagements.Domain.Permissions.Types;
 using Tes.CQRS;
-using Controller = Tes.Web.Controllers.Controller;
 
 namespace RoleManagement.Web.Api.Permissions;
 
+[ApiController]
 [Route("/permissions")]
-public class PermissionsController : Controller
+public class PermissionsController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
@@ -25,7 +25,7 @@ public class PermissionsController : Controller
         };
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpGet("{id:required}")]
@@ -33,7 +33,7 @@ public class PermissionsController : Controller
     {
         var query = new PermissionQuery(PermissionId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpPost("{id:required}/meta")]
@@ -44,7 +44,7 @@ public class PermissionsController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpDelete("{id:required}/meta")]
@@ -55,6 +55,6 @@ public class PermissionsController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 }

@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using RoleManagement.Application.Services;
 using RoleManagements.Domain.Services.Types;
 using Tes.CQRS;
-using Controller = Tes.Web.Controllers.Controller;
 
 namespace RoleManagement.Web.Api.Services;
 
+[ApiController]
 [Route("/services")]
-public class ServicesController : Controller
+public class ServicesController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
@@ -21,7 +21,7 @@ public class ServicesController : Controller
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpGet]
@@ -33,7 +33,7 @@ public class ServicesController : Controller
         };
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpGet("{id:required}")]
@@ -41,7 +41,7 @@ public class ServicesController : Controller
     {
         var query = new ServiceQuery(ServiceId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpPatch("{id:required}/activate")]
@@ -49,7 +49,7 @@ public class ServicesController : Controller
     {
         var command = new ActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpPatch("{id:required}/de-activate")]
@@ -57,6 +57,6 @@ public class ServicesController : Controller
     {
         var command = new DeActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 }

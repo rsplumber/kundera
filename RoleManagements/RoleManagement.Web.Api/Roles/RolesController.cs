@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using RoleManagement.Application.Roles;
 using RoleManagements.Domain.Roles.Types;
 using Tes.CQRS;
-using Controller = Tes.Web.Controllers.Controller;
 
 namespace RoleManagement.Web.Api.Roles;
 
+[ApiController]
 [Route("/roles")]
-public class RolesController : Controller
+public class RolesController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
@@ -21,7 +21,7 @@ public class RolesController : Controller
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpGet]
@@ -33,7 +33,7 @@ public class RolesController : Controller
         };
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpGet("{id:required}")]
@@ -41,7 +41,7 @@ public class RolesController : Controller
     {
         var query = new RoleQuery(RoleId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
-        return CreateResponse(response);
+        return Ok(response);
     }
 
     [HttpPost("{id:required}/meta")]
@@ -52,7 +52,7 @@ public class RolesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 
     [HttpDelete("{id:required}/meta")]
@@ -63,6 +63,6 @@ public class RolesController : Controller
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
-        return CreateResponse();
+        return Ok();
     }
 }
