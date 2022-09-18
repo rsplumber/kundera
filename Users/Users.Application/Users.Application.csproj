@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="UserGroups" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Tes.Standard.CQRS.Abstractions" Version="1.0.3" />
     </ItemGroup>
 
