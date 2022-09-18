@@ -1,5 +1,6 @@
 ﻿using Tes.Domain.Contracts;
 using Users.Domain.UserGroups.Events;
+using Users.Domain.UserGroups.Types;
 
 namespace Users.Domain.UserGroups;
 
@@ -8,17 +9,21 @@ public class UserGroup : AggregateRoot<UserGroupId>
     private string _name;
     private string? _description;
     private UserGroupId? _parent;
+    private UserGroupStatus _status;
+    private DateTime _statusChangedDate;
     private readonly ICollection<RoleId> _roles;
 
-    public UserGroup(string name, RoleId role) : base(UserGroupId.Generate())
+
+    private UserGroup(string name, RoleId role) : base(UserGroupId.Generate())
     {
         _name = name;
         _roles = new List<RoleId>();
+        _status = UserGroupStatus.Enable;
         AssignRole(role);
         AddDomainEvent(new UserGroupCreatedEvent(Id));
     }
 
-    public UserGroup(string name, RoleId role, UserGroupId parent) : this(name, role)
+    private UserGroup(string name, RoleId role, UserGroupId parent) : this(name, role)
     {
         _parent = parent;
     }
@@ -38,6 +43,8 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public string? Description => _description;
 
     public UserGroupId? Parent => _parent;
+    public UserGroupStatus UserGroupStatus => _status;
+    public DateTime? StatusChangedDate => _statusChangedDate;
 
     public IReadOnlyCollection<RoleId> Roles => (IReadOnlyCollection<RoleId>) _roles;
 
@@ -65,5 +72,16 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public void RevokeRole(RoleId role)
     {
         _roles.Remove(role);
+    }
+
+    public void Enable() => ChangeStatus(UserGroupStatus.Enable);
+
+    public void Disable() => ChangeStatus(UserGroupStatus.Disable);
+
+    private void ChangeStatus(UserGroupStatus status)
+    {
+        _status = status;
+        _statusChangedDate = DateTime.UtcNow;
+        AddDomainEvent(new UserGroupStatusChangedEvent(Id, status));
     }
 }
