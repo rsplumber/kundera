@@ -148,7 +148,9 @@ public class User : AggregateRoot<UserId>
     }
 
     public void Activate() => ChangeStatus(UserStatus.Active);
-
+    
+    public void Suspend() => ChangeStatus(UserStatus.Suspend);
+    
     public void Block(Text? reason = null) => ChangeStatus(UserStatus.Block, reason);
 
     private void ChangeStatus(UserStatus status, Text? reason = null)
