@@ -1,11 +1,10 @@
-﻿using RoleManagements.Domain;
-using Tes.CQRS.Contracts;
+﻿using Tes.CQRS.Contracts;
 
 namespace RoleManagement.Application.Roles;
 
-public sealed record RolesQuery : Query<RolesResponse>
+public sealed record RolesQuery : Query<IEnumerable<RolesResponse>>
 {
-    public Name? Name { get; set; }
-};
+    public string? Name { get; set; }
+}
 
 public sealed record RolesResponse(string Id);

@@ -1,8 +1,10 @@
-﻿using RoleManagements.Domain.Services.Types;
-using Tes.CQRS.Contracts;
+﻿using Tes.CQRS.Contracts;
 
 namespace RoleManagement.Application.Services;
 
-public sealed record ServicesQuery(ServiceId ServiceId) : Query<ServicesResponse>;
+public sealed record ServicesQuery : Query<IEnumerable<ServicesResponse>>
+{
+    public string? Name { get; set; }
+}
 
 public sealed record ServicesResponse(string Id, string Status);

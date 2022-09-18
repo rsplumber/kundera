@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RoleManagement.Application\RoleManagement.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Tes.Common.Identity.Web.Authorization" Version="1.0.2" />
+        <PackageReference Include="Tes.Common.Web.Controllers" Version="1.0.0" />
+        <PackageReference Include="Tes.Standard.Serializer.Abstractions" Version="1.0.1" />
+        <PackageReference Include="Tes.Standard.Web.Requests" Version="1.0.2" />
+    </ItemGroup>
+    
+</Project>
