@@ -47,7 +47,7 @@ public class ServiceTest
         var repository = new ServiceRepository();
         var service = await Service.CreateAsync("LoanManagement", repository);
         Assert.Equal(ServiceStatus.Active, service.Status);
-        service.DeActivate();
+        service.DiActivate();
         Assert.Equal(ServiceStatus.DeActive, service.Status);
         service.Activate();
         Assert.Equal(ServiceStatus.Active, service.Status);
@@ -58,7 +58,7 @@ public class ServiceTest
     {
         var repository = new ServiceRepository();
         var service = await Service.CreateAsync("LoanManagement", repository);
-        service.DeActivate();
+        service.DiActivate();
         Assert.Contains(service.DomainEvents!, de => de.GetType() == typeof(ServiceStatusChangedEvent));
     }
 }

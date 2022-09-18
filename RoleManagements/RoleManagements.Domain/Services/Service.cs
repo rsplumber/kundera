@@ -35,7 +35,7 @@ public class Service : AggregateRoot<ServiceId>
 
     public void Activate() => ChangeStatus(ServiceStatus.Active);
 
-    public void DeActivate() => ChangeStatus(ServiceStatus.DeActive);
+    public void DiActivate() => ChangeStatus(ServiceStatus.DeActive);
 
     private void ChangeStatus(ServiceStatus status)
     {

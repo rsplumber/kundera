@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Abstractions", "Auth\Authorization\Authorization.Abstractions\Authorization.Abstractions.csproj", "{4176C032-93E3-4005-BD9E-3A9574E1E88D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Application", "RoleManagements\RoleManagement.Application\RoleManagement.Application.csproj", "{3FBE89EB-2A97-47F1-B58E-D86050406BCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,7 @@ Global
 		{C1453CCB-1359-480F-A425-8664912AB9F9} = {9916B43B-4B86-4312-98A4-564F49A9DC0A}
 		{52605267-AB55-41E5-ACF5-C585DB81827D} = {9916B43B-4B86-4312-98A4-564F49A9DC0A}
 		{4176C032-93E3-4005-BD9E-3A9574E1E88D} = {9916B43B-4B86-4312-98A4-564F49A9DC0A}
+		{3FBE89EB-2A97-47F1-B58E-D86050406BCA} = {CA85AC55-8212-4053-8C25-F33792C39BBC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{92DBA7FC-ACF8-4863-AAE4-6169965E14E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -85,5 +88,9 @@ Global
 		{4176C032-93E3-4005-BD9E-3A9574E1E88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4176C032-93E3-4005-BD9E-3A9574E1E88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4176C032-93E3-4005-BD9E-3A9574E1E88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FBE89EB-2A97-47F1-B58E-D86050406BCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FBE89EB-2A97-47F1-B58E-D86050406BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FBE89EB-2A97-47F1-B58E-D86050406BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FBE89EB-2A97-47F1-B58E-D86050406BCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
