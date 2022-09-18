@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Kundera.Authorization</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Kundera.Authorization.Abstractions</Title>
+        <Authors>Aliasghar Sharifian(Plumber)</Authors>
+    </PropertyGroup>
+
+</Project>

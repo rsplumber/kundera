@@ -1,4 +1,4 @@
-﻿using Authorization.Abstractions;
+﻿using Kundera.Authorization;
 
 namespace Authorization.Infrastructure;
 

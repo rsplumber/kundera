@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Infrastructure", "Auth\Authorization\Authorization.Infrastructure\Authorization.Infrastructure.csproj", "{52605267-AB55-41E5-ACF5-C585DB81827D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Abstractions", "Auth\Authorization\Authorization.Abstractions\Authorization.Abstractions.csproj", "{4176C032-93E3-4005-BD9E-3A9574E1E88D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Authorization.Abstractions", "Auth\Authorization\Kundera.Authorization.Abstractions\Kundera.Authorization.Abstractions.csproj", "{4176C032-93E3-4005-BD9E-3A9574E1E88D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Application", "RoleManagements\RoleManagement.Application\RoleManagement.Application.csproj", "{3FBE89EB-2A97-47F1-B58E-D86050406BCA}"
 EndProject

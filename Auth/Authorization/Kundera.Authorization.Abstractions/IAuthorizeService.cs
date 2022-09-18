@@ -1,4 +1,4 @@
-﻿namespace Authorization.Abstractions;
+﻿namespace Kundera.Authorization;
 
 public interface IAuthorizeService
 {

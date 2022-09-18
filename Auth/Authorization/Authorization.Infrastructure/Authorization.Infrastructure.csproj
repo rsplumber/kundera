@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Authorization.Abstractions\Authorization.Abstractions.csproj" />
+      <ProjectReference Include="..\Kundera.Authorization.Abstractions\Kundera.Authorization.Abstractions.csproj" />
       <ProjectReference Include="..\Authorization.Application\Authorization.Application.csproj" />
     </ItemGroup>
 
