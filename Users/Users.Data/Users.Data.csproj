@@ -7,12 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Users.Application\Users.Application.csproj" />
-      <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <ProjectReference Include="..\Users.Application\Users.Application.csproj" />
+        <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Tes.Standard.CQRS.Abstractions" Version="1.0.3" />
+        <PackageReference Include="Tes.Standard.CQRS.Abstractions" Version="1.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Users.Builder" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Users.Application\Users.Application.csproj" />
+        <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
     </ItemGroup>
 
 </Project>
