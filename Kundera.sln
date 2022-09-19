@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Web.Api", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Application", "Users\Users.Application\Users.Application.csproj", "{2F13E0FC-BDF2-4E96-B5A7-12CA19E68A54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Web.Api", "Users\Users.Web.Api\Users.Web.Api.csproj", "{99F664B7-DAD2-4444-ABFF-3813CBFAABF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,7 @@ Global
 		{3FBE89EB-2A97-47F1-B58E-D86050406BCA} = {CA85AC55-8212-4053-8C25-F33792C39BBC}
 		{3EF9AE7C-CA86-4F51-9372-7602AC2F3876} = {CA85AC55-8212-4053-8C25-F33792C39BBC}
 		{2F13E0FC-BDF2-4E96-B5A7-12CA19E68A54} = {91F4460A-494A-4FD6-A008-A354632041DE}
+		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4} = {91F4460A-494A-4FD6-A008-A354632041DE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{92DBA7FC-ACF8-4863-AAE4-6169965E14E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -106,5 +109,9 @@ Global
 		{2F13E0FC-BDF2-4E96-B5A7-12CA19E68A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F13E0FC-BDF2-4E96-B5A7-12CA19E68A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F13E0FC-BDF2-4E96-B5A7-12CA19E68A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
