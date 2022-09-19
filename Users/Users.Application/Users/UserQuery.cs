@@ -5,7 +5,7 @@ namespace Users.Application.Users;
 
 public sealed record UserQuery(UserId User) : Query<UserResponse>;
 
-public sealed record UserResponse(string Id, string Username)
+public sealed record UserResponse(string Id, IEnumerable<string> Usernames)
 {
     public IEnumerable<string> UserGroups { get; set; } = Array.Empty<string>();
 

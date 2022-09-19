@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Bootstrap", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication.Domain", "Auth\Authentication\Authentication.Domain\Authentication.Domain.csproj", "{A12E96B6-E580-4C60-B2B1-23E14EE40F6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Data", "Users\Users.Data\Users.Data.csproj", "{66DD45B0-63BD-47DD-9657-4DB3380F183B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,7 @@ Global
 		{80396D53-77AA-4C19-901F-C187BDE8C5D3} = {CA85AC55-8212-4053-8C25-F33792C39BBC}
 		{99F664B7-DAD2-4444-ABFF-3813CBFAABF4} = {91F4460A-494A-4FD6-A008-A354632041DE}
 		{A12E96B6-E580-4C60-B2B1-23E14EE40F6C} = {00B906EA-30DE-4A02-A873-0137C5D2C704}
+		{66DD45B0-63BD-47DD-9657-4DB3380F183B} = {91F4460A-494A-4FD6-A008-A354632041DE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{92DBA7FC-ACF8-4863-AAE4-6169965E14E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -141,5 +144,9 @@ Global
 		{A12E96B6-E580-4C60-B2B1-23E14EE40F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A12E96B6-E580-4C60-B2B1-23E14EE40F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A12E96B6-E580-4C60-B2B1-23E14EE40F6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66DD45B0-63BD-47DD-9657-4DB3380F183B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66DD45B0-63BD-47DD-9657-4DB3380F183B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66DD45B0-63BD-47DD-9657-4DB3380F183B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66DD45B0-63BD-47DD-9657-4DB3380F183B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
