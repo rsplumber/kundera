@@ -15,8 +15,4 @@
         <PackageReference Include="Tes.Standard.Web.Requests" Version="1.0.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extentions" />
-    </ItemGroup>
-
 </Project>

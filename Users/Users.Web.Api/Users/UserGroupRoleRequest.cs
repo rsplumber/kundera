@@ -6,31 +6,31 @@ using Users.Domain.Users;
 
 namespace Users.Web.Api.Users;
 
-public record AssignUserRoleRequest(Guid User, List<string> RoleIds) : IWebRequest
+public record AssignUserRoleRequest(List<string> RoleIds) : IWebRequest
 {
-    public AssignUserRoleCommand ToCommand() => new(UserId.From(User), RoleIds.Select(RoleId.From).ToArray());
+    public AssignUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId), RoleIds.Select(RoleId.From).ToArray());
 }
 
 public class AssignUserRoleRequestValidator : RequestValidator<AssignUserRoleRequest>
 {
     public AssignUserRoleRequestValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.RoleIds)
             .NotEmpty().WithMessage("Enter a valid User")
             .NotNull().WithMessage("Enter a valid User");
     }
 }
 
-public record RevokeUserRoleRequest(Guid User, List<string> RoleIds) : IWebRequest
+public record RevokeUserRoleRequest(List<string> RoleIds) : IWebRequest
 {
-    public RevokeUserRoleCommand ToCommand() => new(UserId.From(User), RoleIds.Select(RoleId.From).ToArray());
+    public RevokeUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId), RoleIds.Select(RoleId.From).ToArray());
 }
 
 public class RevokeUserRoleRequestValidator : RequestValidator<RevokeUserRoleRequest>
 {
     public RevokeUserRoleRequestValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.RoleIds)
             .NotEmpty().WithMessage("Enter a valid User")
             .NotNull().WithMessage("Enter a valid User");
     }

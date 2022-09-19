@@ -24,18 +24,18 @@ public class UserGroupsController : ControllerBase
         return Ok();
     }
     
-    [HttpPost]
-    public async Task<IActionResult> AssignRole([FromBody] AssignUserGroupRoleRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/roles")]
+    public async Task<IActionResult> AssignRole([FromRoute] Guid id,[FromBody] AssignUserGroupRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
     
-    [HttpPost]
-    public async Task<IActionResult> RevokeRole([FromBody] RevokeUserGroupRoleRequest request, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}/roles")]
+    public async Task<IActionResult> RevokeRole([FromRoute] Guid id, [FromBody] RevokeUserGroupRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }

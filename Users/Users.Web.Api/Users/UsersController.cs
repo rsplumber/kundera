@@ -24,58 +24,58 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AssignRoleAsync([FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/roles")]
+    public async Task<IActionResult> AssignRoleAsync([FromRoute] Guid id, [FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> RevokeRoleAsync([FromBody] RevokeUserRoleRequest request, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}/roles")]
+    public async Task<IActionResult> RevokeRoleAsync([FromRoute] Guid id, [FromBody] RevokeUserRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> JoinGroupAsync([FromBody] JoinUserToGroupRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/groups")]
+    public async Task<IActionResult> JoinGroupAsync([FromRoute] Guid id,[FromBody] JoinUserToGroupRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> RemoveFromGroupAsync([FromBody] RemoveUserFromGroupRequest request, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}/groups")]
+    public async Task<IActionResult> RemoveFromGroupAsync([FromRoute] Guid id, [FromBody] RemoveUserFromGroupRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> ActivateUserAsync([FromBody] ActiveUserStatusRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required}/activate")]
+    public async Task<IActionResult> ActivateUserAsync([FromRoute] Guid id,[FromBody] ActiveUserStatusRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SuspendFromGroupAsync([FromBody] SuspendUserStatusRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required}/suspend")]
+    public async Task<IActionResult> SuspendFromGroupAsync([FromRoute] Guid id,[FromBody] SuspendUserStatusRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> BlockFromGroup([FromBody] BlockUserStatusRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required}/block")]
+    public async Task<IActionResult> BlockFromGroup([FromRoute] Guid id,[FromBody] BlockUserStatusRequest request, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand();
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
