@@ -4,7 +4,7 @@ using Users.Domain.Users;
 
 namespace Users.Application.UserGroups;
 
-public sealed record UserGroupQuery(UserGroupId UserGroupId) : Query<UserGroupResponse>;
+public sealed record UserGroupQuery(UserGroupId UserGroup) : Query<UserGroupResponse>;
 
 public sealed record UserGroupResponse(string Id, string Name, string UserGroupStatus)
 {

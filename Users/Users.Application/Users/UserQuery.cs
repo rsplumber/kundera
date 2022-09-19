@@ -3,7 +3,7 @@ using Users.Domain.Users;
 
 namespace Users.Application.Users;
 
-public sealed record UserQuery(UserId UserId) : Query<UserResponse>;
+public sealed record UserQuery(UserId User) : Query<UserResponse>;
 
 public sealed record UserResponse(string Id, string Username)
 {

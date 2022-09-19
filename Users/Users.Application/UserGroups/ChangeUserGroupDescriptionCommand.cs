@@ -4,4 +4,4 @@ using Users.Domain.UserGroups;
 
 namespace Users.Application.UserGroups;
 
-public sealed record ChangeUserGroupDescriptionCommand(UserGroupId UserGroupId, Text Description) : Command;
+public sealed record ChangeUserGroupDescriptionCommand(UserGroupId UserGroup, Text Description) : Command;

@@ -4,4 +4,4 @@ using Users.Domain.Users.Types;
 
 namespace Users.Application.Users;
 
-public sealed record CreateUserCommand(Username Username, UserGroupId UserGroupId) : Command;
+public sealed record CreateUserCommand(Username Username, UserGroupId UserGroup) : Command;

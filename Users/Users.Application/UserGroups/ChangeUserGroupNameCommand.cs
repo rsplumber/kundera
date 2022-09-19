@@ -4,4 +4,4 @@ using Users.Domain.UserGroups;
 
 namespace Users.Application.UserGroups;
 
-public sealed record ChangeUserGroupNameCommand(UserGroupId UserGroupId, Name Name) : Command;
+public sealed record ChangeUserGroupNameCommand(UserGroupId UserGroup, Name Name) : Command;
