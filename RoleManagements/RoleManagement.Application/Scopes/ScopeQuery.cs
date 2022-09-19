@@ -3,7 +3,7 @@ using Tes.CQRS.Contracts;
 
 namespace RoleManagement.Application.Scopes;
 
-public sealed record ScopeQuery(ScopeId ScopeId) : Query<ScopeResponse>;
+public sealed record ScopeQuery(ScopeId Scope) : Query<ScopeResponse>;
 
 public sealed record ScopeResponse(string Id, string Status)
 {

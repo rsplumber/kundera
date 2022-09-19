@@ -20,16 +20,16 @@ public class AddPermissionMetaRequestValidator : RequestValidator<AddPermissionM
     }
 }
 
-public record RemovePermissionMetaRequest(Dictionary<string, string> Meta) : IWebRequest
+public record RemovePermissionMetaRequest(string[] MetaKeys) : IWebRequest
 {
-    public RemovePermissionMetaCommand ToCommand(string permissionId) => new(PermissionId.From(permissionId), Meta);
+    public RemovePermissionMetaCommand ToCommand(string permissionId) => new(PermissionId.From(permissionId), MetaKeys);
 }
 
 public class RemovePermissionMetaRequestValidator : RequestValidator<RemovePermissionMetaRequest>
 {
     public RemovePermissionMetaRequestValidator()
     {
-        RuleFor(request => request.Meta)
+        RuleFor(request => request.MetaKeys)
             .NotEmpty().WithMessage("Enter valid Meta")
             .NotNull().WithMessage("Enter valid Meta");
     }

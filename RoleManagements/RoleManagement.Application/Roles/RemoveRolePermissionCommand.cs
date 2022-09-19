@@ -4,4 +4,4 @@ using Tes.CQRS.Contracts;
 
 namespace RoleManagement.Application.Roles;
 
-public sealed record ValidateRoleQuery(RoleId Role, PermissionId RequestedPermission) : Query<bool>;
+public sealed record RemoveRolePermissionCommand(RoleId Role, params PermissionId[] Permissions) : Command;

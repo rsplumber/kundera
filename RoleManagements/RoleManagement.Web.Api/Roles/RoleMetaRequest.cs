@@ -20,16 +20,16 @@ public class AddRoleMetaRequestValidator : RequestValidator<AddRoleMetaRequest>
     }
 }
 
-public record RemoveRoleMetaRequest(Dictionary<string, string> Meta) : IWebRequest
+public record RemoveRoleMetaRequest(string[] MetaKeys) : IWebRequest
 {
-    public RemoveRoleMetaCommand ToCommand(string roleId) => new(RoleId.From(roleId), Meta);
+    public RemoveRoleMetaCommand ToCommand(string roleId) => new(RoleId.From(roleId), MetaKeys);
 }
 
 public class RemoveRoleMetaRequestValidator : RequestValidator<RemoveRoleMetaRequest>
 {
     public RemoveRoleMetaRequestValidator()
     {
-        RuleFor(request => request.Meta)
+        RuleFor(request => request.MetaKeys)
             .NotEmpty().WithMessage("Enter valid Meta")
             .NotNull().WithMessage("Enter valid Meta");
     }
