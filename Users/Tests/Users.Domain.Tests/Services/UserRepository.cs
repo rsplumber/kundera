@@ -5,37 +5,22 @@ namespace Users.Domain.Tests.Services;
 
 public class UserRepository : IUserRepository
 {
-    private static List<User>? _users = new List<User>();
-    
+    private static readonly List<User> Users = new();
 
-    public Task CreateAsync(User entity, CancellationToken cancellationToken = new CancellationToken())
+
+    public Task CreateAsync(User entity, CancellationToken cancellationToken = default)
     {
-        _users.Add(entity);
+        Users.Add(entity);
         return Task.CompletedTask;
     }
 
-    public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
     {
-        return _users.FirstOrDefault(u => u.Id == id);
+        return Users.FirstOrDefault(u => u.Id == id);
     }
 
     public ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
     {
-        return ValueTask.FromResult(_users.Exists(u => u.Username == username));
-    }
-
-    public ValueTask<bool> ExistsAsync(PhoneNumber phoneNumber, CancellationToken cancellationToken = default)
-    {
-        return ValueTask.FromResult(_users.Exists(u => u.PhoneNumber == phoneNumber));
-    }
-
-    public ValueTask<bool> ExistsAsync(Email email, CancellationToken cancellationToken = default)
-    {
-        return ValueTask.FromResult(_users.Exists(u => u.Email == email));
-    }
-
-    public ValueTask<bool> ExistsAsync(NationalCode nationalCode, CancellationToken cancellationToken = default)
-    {
-        return ValueTask.FromResult(_users.Exists(u => u.NationalCode == nationalCode));
+        return ValueTask.FromResult(Users.Exists(u => u.Username == username));
     }
 }

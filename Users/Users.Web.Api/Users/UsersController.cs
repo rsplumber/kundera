@@ -17,7 +17,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateByUsernameAsync([FromBody] CreateUserByUsernameRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateAsync([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateByPhoneNumberAsync([FromBody] CreateUserByPhoneNumberRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AssignRoleAsync([FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -33,7 +33,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateByEmailAsync([FromBody] CreateUserByEmailRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RevokeRoleAsync([FromBody] RevokeUserRoleRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateByNationalCodeAsync([FromBody] CreateUserByNationalCodeRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> JoinGroupAsync([FromBody] JoinUserToGroupRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -49,7 +49,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AssignRole([FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RemoveFromGroupAsync([FromBody] RemoveUserFromGroupRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -57,7 +57,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> RevokeRole([FromBody] RevokeUserRoleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> ActivateUserAsync([FromBody] ActiveUserStatusRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -65,31 +65,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> JoinGroup([FromBody] JoinUserToGroupRequest request, CancellationToken cancellationToken)
-    {
-        var command = request.ToCommand();
-        await _serviceBus.SendAsync(command, cancellationToken);
-        return Ok();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> RemoveFromGroup([FromBody] RemoveUserFromGroupRequest request, CancellationToken cancellationToken)
-    {
-        var command = request.ToCommand();
-        await _serviceBus.SendAsync(command, cancellationToken);
-        return Ok();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> ActiveUser([FromBody] ActiveUserStatusRequest request, CancellationToken cancellationToken)
-    {
-        var command = request.ToCommand();
-        await _serviceBus.SendAsync(command, cancellationToken);
-        return Ok();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> SuspendFromGroup([FromBody] SuspendUserStatusRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SuspendFromGroupAsync([FromBody] SuspendUserStatusRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
