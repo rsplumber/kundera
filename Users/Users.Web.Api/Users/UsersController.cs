@@ -56,11 +56,18 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
+    [HttpGet("{id:required:guid}")]
     public async Task<IActionResult> UserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new UserQuery(UserId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
         return Ok(response);
     }
+    
+    //Todo Api baraye Assign va Revoke kardan role
+    
+    //Todo Api baraye join shodan be group! nmidonam bayad toye kodom controller bashe, ono khodet peyda kon vali nadidamesh
+    
+    
+
 }

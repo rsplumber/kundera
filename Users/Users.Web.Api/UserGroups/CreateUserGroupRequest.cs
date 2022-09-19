@@ -14,11 +14,13 @@ public class CreateUserGroupRequestValidator : RequestValidator<CreateUserGroupR
 {
     public CreateUserGroupRequestValidator()
     {
+        //Todo Enter a valid Email???(Message)
         RuleFor(request => request.Name)
             .MinimumLength(3).WithMessage("UserGroup minimum length 3")
             .NotEmpty().WithMessage("Enter a valid Email")
             .NotNull().WithMessage("Enter a valid Email");
 
+        //Todo Enter a valid UserGroup???(Message)
         RuleFor(request => request.RoleIds)
             .NotEmpty().WithMessage("Enter a valid UserGroup")
             .NotNull().WithMessage("Enter a valid UserGroup");

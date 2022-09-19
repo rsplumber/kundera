@@ -19,6 +19,7 @@ public class UserGroupsController : ControllerBase
         _serviceBus = serviceBus;
     }
 
+    //Todo joda kardane Roles az Create va sakhte 2 Api mozaja baraye ezafe va kam kardan roles
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateUserGroupRequest request, CancellationToken cancellationToken)
     {
@@ -28,6 +29,7 @@ public class UserGroupsController : ControllerBase
     }
     
 
+    //Todo name koja estefade shode?!
     [HttpGet]
     public async Task<IActionResult> UserGroupsAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
@@ -36,7 +38,7 @@ public class UserGroupsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
+    [HttpGet("{id:required:guid}")]
     public async Task<IActionResult> UserGroupAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new UserGroupQuery(UserGroupId.From(id));
