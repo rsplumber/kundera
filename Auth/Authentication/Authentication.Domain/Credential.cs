@@ -7,7 +7,7 @@ namespace Authentication.Domain;
 public class Credential : AggregateRoot<UniqueIdentifier>
 {
     private readonly Guid _userId;
-    private readonly string _password;
+    private readonly Password _password;
 
     protected Credential()
     {
@@ -29,8 +29,6 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
         return new(uniqueIdentifier, password, user);
     }
-
-    public UniqueIdentifier UniqueIdentifier => Id;
 
     public UserId User => _userId;
 
