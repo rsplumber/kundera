@@ -23,6 +23,24 @@ public class UsersController : ControllerBase
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
+    
+    [HttpPost("{id:required:guid}/usernames")]
+    public async Task<IActionResult> AddUsernameAsync([FromRoute] Guid id, [FromBody] AddUserUsernameRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpDelete("{id:required:guid}/usernames")]
+    public async Task<IActionResult> RemoveUsernameAsync([FromRoute] Guid id, [FromBody] RemoveUserUsernameRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    //todo has username from application to api
 
     [HttpPost("{id:required:guid}/roles")]
     public async Task<IActionResult> AssignRoleAsync([FromRoute] Guid id, [FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
