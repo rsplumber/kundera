@@ -47,6 +47,22 @@ public class UsersController : ControllerBase
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> AssignRole([FromBody] AssignUserRoleRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand();
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> RevokeRole([FromBody] RevokeUserRoleRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand();
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
 
     [HttpGet]
     public async Task<IActionResult> UsersAsync([FromQuery] string? name, CancellationToken cancellationToken)
@@ -63,8 +79,6 @@ public class UsersController : ControllerBase
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
         return Ok(response);
     }
-    
-    //Todo Api baraye Assign va Revoke kardan role
     
     //Todo Api baraye join shodan be group! nmidonam bayad toye kodom controller bashe, ono khodet peyda kon vali nadidamesh
     

@@ -33,7 +33,7 @@ public class UserGroupsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> AssignRole([FromBody] RevokeUserGroupRoleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RevokeRole([FromBody] RevokeUserGroupRoleRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
