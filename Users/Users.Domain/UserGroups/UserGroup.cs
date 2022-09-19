@@ -17,9 +17,11 @@ public class UserGroup : AggregateRoot<UserGroupId>
     private UserGroup(string name, RoleId role) : base(UserGroupId.Generate())
     {
         _name = name;
+
         _roles = new List<RoleId>();
-        _status = UserGroupStatus.Enable;
         AssignRole(role);
+
+        _status = UserGroupStatus.Enable;
         AddDomainEvent(new UserGroupCreatedEvent(Id));
     }
 
@@ -28,12 +30,12 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _parent = parent;
     }
 
-    public static UserGroup From(Name name, RoleId role)
+    public static UserGroup Create(Name name, RoleId role)
     {
         return new UserGroup(name, role);
     }
 
-    public static UserGroup From(Name name, RoleId role, UserGroupId parent)
+    public static UserGroup Create(Name name, RoleId role, UserGroupId parent)
     {
         return new UserGroup(name, role, parent);
     }

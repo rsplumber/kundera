@@ -8,12 +8,12 @@ namespace Users.Domain.Users;
 
 public class User : AggregateRoot<UserId>
 {
-    private readonly string _username;
+    private readonly List<Username> _usernames;
+    private readonly ICollection<UserGroupId> _userGroups;
+    private readonly ICollection<RoleId> _roles;
     private UserStatus _status;
     private string? _statusChangedReason;
     private DateTime _statusChangedDate;
-    private readonly ICollection<UserGroupId> _userGroups;
-    private readonly ICollection<RoleId> _roles;
 
     protected User()
     {
@@ -21,11 +21,16 @@ public class User : AggregateRoot<UserId>
 
     private User(Username username, UserGroupId userGroupId) : base(UserId.Generate())
     {
+        _usernames = new List<Username>();
+        AddUsername(username);
+
         _userGroups = new List<UserGroupId>();
-        _roles = new List<RoleId>();
-        _username = username;
-        _status = UserStatus.Active;
         JoinGroup(userGroupId);
+
+        _roles = new List<RoleId>();
+
+        _status = UserStatus.Active;
+
         AddDomainEvent(new UserCreatedEvent(Id));
     }
 
@@ -42,7 +47,7 @@ public class User : AggregateRoot<UserId>
     }
 
 
-    public string Username => _username;
+    public IReadOnlyCollection<Username> Usernames => _usernames.AsReadOnly();
 
     public string? Reason => _statusChangedReason;
 
@@ -55,6 +60,26 @@ public class User : AggregateRoot<UserId>
     public IReadOnlyCollection<RoleId> Roles => (IReadOnlyCollection<RoleId>) _roles;
 
     private void ChangeReason(Text? reason) => _statusChangedReason = reason ?? null;
+
+    public void AddUsername(Username username)
+    {
+        if (Has(username))
+        {
+            throw new UserDuplicateIdentifierException(username);
+        }
+
+        _usernames.Add(username);
+    }
+
+    public void RemoveUsername(Username username)
+    {
+        _usernames.Remove(username);
+    }
+
+    public bool Has(Username username)
+    {
+        return _usernames.Exists(u => u == username);
+    }
 
     public void JoinGroup(UserGroupId userGroup)
     {
