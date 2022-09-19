@@ -63,6 +63,22 @@ public class UsersController : ControllerBase
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> JoinGroup([FromBody] JoinUserToGroupRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand();
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> RemoveFromGroup([FromBody] RemoveUserFromGroupRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand();
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
 
     [HttpGet]
     public async Task<IActionResult> UsersAsync([FromQuery] string? name, CancellationToken cancellationToken)
