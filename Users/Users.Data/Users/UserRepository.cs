@@ -1,5 +1,4 @@
 ﻿using Users.Domain.Users;
-using Users.Domain.Users.Types;
 
 namespace Users.Data.Users;
 
@@ -16,6 +15,11 @@ internal class UserRepository : IUserRepository
     }
 
     public ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(User entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
