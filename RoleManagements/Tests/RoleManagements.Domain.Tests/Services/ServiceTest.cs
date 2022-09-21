@@ -34,7 +34,7 @@ public class ServiceTest
         var name = "LoanManagement";
         var repository = new ServiceRepository();
         var service = await Service.CreateAsync(name, repository);
-        await repository.CreateAsync(service);
+        await repository.AddAsync(service);
         await Assert.ThrowsAsync<ServiceAlreadyExistsException>(async () => { await Service.CreateAsync(name, repository); });
     }
 
