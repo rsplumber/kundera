@@ -5,7 +5,7 @@ namespace Users.Data.Users;
 
 internal class UserRepository : IUserRepository
 {
-    public Task CreateAsync(User entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(User entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

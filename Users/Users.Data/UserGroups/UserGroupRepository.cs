@@ -4,7 +4,7 @@ namespace Users.Data.UserGroups;
 
 internal class UserGroupRepository : IUserGroupRepository
 {
-    public Task CreateAsync(UserGroup entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(UserGroup entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
