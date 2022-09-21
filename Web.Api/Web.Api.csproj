@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Auth\Authentication\Authentication.Web.Api\Authentication.Web.Api.csproj" />
+      <ProjectReference Include="..\Auth\Authorization\Authorization.Web.Api\Authorization.Web.Api.csproj" />
       <ProjectReference Include="..\RoleManagements\RoleManagement.Web.Api\RoleManagement.Web.Api.csproj" />
       <ProjectReference Include="..\Users\Users.Web.Api\Users.Web.Api.csproj" />
     </ItemGroup>
