@@ -18,9 +18,14 @@ public record UniqueIdentifier : IIdentity
 
     public static UniqueIdentifier Parse(string uniqueIdentifier)
     {
-        var split = uniqueIdentifier.Split("_");
+        var split = uniqueIdentifier.Split("_:_");
+        if (split.Length is 0 or > 2)
+        {
+            throw new ArgumentOutOfRangeException();
+        }
+
         var identifier = split.First();
-        var type = split.LastOrDefault();
+        var type = split.Length == 2 ? split.LastOrDefault() : DefaultType;
         return new(identifier, type);
     }
 
@@ -30,7 +35,7 @@ public record UniqueIdentifier : IIdentity
 
     public string Identifier => _identifier;
 
-    public string Value => $"{_identifier}_{_type}";
+    public string Value => $"{_identifier}_:_{_type}";
 
     public virtual bool Equals(UniqueIdentifier? other)
     {
