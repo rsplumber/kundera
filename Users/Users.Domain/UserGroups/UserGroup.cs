@@ -66,6 +66,13 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _parent = parent;
     }
 
+    public void RemoveParent()
+    {
+        AddDomainEvent(new UserGroupParentChangedEvent(Id, null, Parent));
+        _parent = null;
+    }
+
+
     public void AssignRole(RoleId role)
     {
         _roles.Add(role);

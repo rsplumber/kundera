@@ -25,5 +25,7 @@ internal sealed class RemoveUserUsernameCommandHandler : CommandHandler<RemoveUs
         }
 
         user.RemoveUsername(message.Username);
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
     }
 }

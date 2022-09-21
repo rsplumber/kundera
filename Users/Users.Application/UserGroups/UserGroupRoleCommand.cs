@@ -2,6 +2,7 @@
 using Tes.CQRS.Contracts;
 using Users.Domain;
 using Users.Domain.UserGroups;
+using Users.Domain.UserGroups.Exception;
 
 namespace Users.Application.UserGroups;
 
@@ -11,16 +12,52 @@ public sealed record RevokeUserGroupRoleCommand(UserGroupId UserGroup, params Ro
 
 internal sealed class AssignUserGroupRoleCommandHandler : CommandHandler<AssignUserGroupRoleCommand>
 {
-    public override Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserGroupRepository _userGroupRepository;
+
+    public AssignUserGroupRoleCommandHandler(IUserGroupRepository userGroupRepository)
     {
-        throw new NotImplementedException();
+        _userGroupRepository = userGroupRepository;
+    }
+
+    public override async Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = default)
+    {
+        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        if (group is null)
+        {
+            throw new UserGroupNotFoundException();
+        }
+
+        foreach (var role in message.Roles)
+        {
+            group.AssignRole(role);
+        }
+
+        await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }
 
 internal sealed class RevokeUserGroupRoleCommandHandler : CommandHandler<RevokeUserGroupRoleCommand>
 {
-    public override Task HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserGroupRepository _userGroupRepository;
+
+    public RevokeUserGroupRoleCommandHandler(IUserGroupRepository userGroupRepository)
     {
-        throw new NotImplementedException();
+        _userGroupRepository = userGroupRepository;
+    }
+
+    public override async Task HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = default)
+    {
+        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        if (group is null)
+        {
+            throw new UserGroupNotFoundException();
+        }
+
+        foreach (var role in message.Roles)
+        {
+            group.RevokeRole(role);
+        }
+
+        await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }

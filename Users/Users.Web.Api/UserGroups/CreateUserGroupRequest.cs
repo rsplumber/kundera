@@ -4,9 +4,9 @@ using Users.Application.UserGroups;
 
 namespace Users.Web.Api.UserGroups;
 
-public record CreateUserGroupRequest(string Name) : IWebRequest
+public record CreateUserGroupRequest(string Name, string RoleId) : IWebRequest
 {
-    public CreateUserGroupCommand ToCommand() => new(Name);
+    public CreateUserGroupCommand ToCommand() => new(Name, Domain.RoleId.From(RoleId));
 }
 
 public class CreateUserGroupRequestValidator : RequestValidator<CreateUserGroupRequest>
@@ -14,8 +14,8 @@ public class CreateUserGroupRequestValidator : RequestValidator<CreateUserGroupR
     public CreateUserGroupRequestValidator()
     {
         RuleFor(request => request.Name)
-            .MinimumLength(6).WithMessage("Email minimum length 3")
-            .NotEmpty().WithMessage("Enter a valid Email")
-            .NotNull().WithMessage("Enter a valid Email");
+            .MinimumLength(6).WithMessage("UserGroup name minimum length 3")
+            .NotEmpty().WithMessage("Enter a valid UserGroup name")
+            .NotNull().WithMessage("Enter a valid UserGroup name");
     }
 }

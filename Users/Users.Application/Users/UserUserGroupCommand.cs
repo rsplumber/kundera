@@ -28,7 +28,6 @@ internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToG
         }
 
         user.JoinGroup(message.UserGroup);
-
         await _userRepository.UpdateAsync(user, cancellationToken);
     }
 }
@@ -51,7 +50,6 @@ internal sealed class RemoveUserFromGroupCommandHandler : CommandHandler<RemoveU
         }
 
         user.RemoveFromGroup(message.UserGroup);
-
         await _userRepository.UpdateAsync(user, cancellationToken);
     }
 }
