@@ -19,13 +19,14 @@ internal sealed class RevokeUserRoleCommandHandler : CommandHandler<RevokeUserRo
 
     public override async Task HandleAsync(RevokeUserRoleCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var (userId, roleIds) = message;
+        var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        foreach (var role in message.Roles)
+        foreach (var role in roleIds)
         {
             user.RevokeRole(role);
         }

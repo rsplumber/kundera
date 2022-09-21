@@ -17,7 +17,6 @@ internal sealed class ExistUserUsernameCommandHandler : CommandHandler<ExistUser
 
     public override async Task<bool> HandleAsync(ExistUserUsernameCommand message, CancellationToken cancellationToken = default)
     {
-        var existsAsync = await _userRepository.ExistsAsync(message.Username, cancellationToken);
-        return existsAsync;
+        return await _userRepository.ExistsAsync(message.Username, cancellationToken);
     }
 }

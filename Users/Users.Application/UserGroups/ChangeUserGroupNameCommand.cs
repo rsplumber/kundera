@@ -19,13 +19,14 @@ internal sealed class ChangeUserGroupNameCommandHandler : CommandHandler<ChangeU
 
     public override async Task HandleAsync(ChangeUserGroupNameCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        var (userGroupId, name) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        group.ChangeName(message.Name);
+        group.ChangeName(name);
         await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }

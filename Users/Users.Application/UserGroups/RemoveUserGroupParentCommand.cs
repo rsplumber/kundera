@@ -5,6 +5,7 @@ using Users.Domain.UserGroups.Exception;
 
 namespace Users.Application.UserGroups;
 
+//Todo Chera parent migire?! Unused
 public sealed record RemoveUserGroupParentCommand(UserGroupId UserGroup, UserGroupId Parent) : Command;
 
 internal sealed class RemoveUserGroupParentCommandHandler : CommandHandler<RemoveUserGroupParentCommand>

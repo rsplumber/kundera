@@ -27,6 +27,7 @@ internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToG
             throw new UserNotFoundException();
         }
 
+        //Todo Check UserGroup Exists
         user.JoinGroup(message.UserGroup);
         await _userRepository.UpdateAsync(user, cancellationToken);
     }
@@ -49,6 +50,7 @@ internal sealed class RemoveUserFromGroupCommandHandler : CommandHandler<RemoveU
             throw new UserNotFoundException();
         }
 
+        //Todo Check UserGroup Exists
         user.RemoveFromGroup(message.UserGroup);
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

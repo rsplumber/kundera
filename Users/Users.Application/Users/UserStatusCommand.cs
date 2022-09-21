@@ -23,13 +23,14 @@ internal sealed class ActiveUserCommandHandler : CommandHandler<ActiveUserComman
 
     public override async Task HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var (userId, reason) = message;
+        var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Activate(message.Reason);
+        user.Activate(reason);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
     }
@@ -46,13 +47,14 @@ internal sealed class SuspendUserCommandHandler : CommandHandler<SuspendUserComm
 
     public override async Task HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var (userId, reason) = message;
+        var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Suspend(message.Reason);
+        user.Suspend(reason);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
     }
@@ -69,13 +71,14 @@ internal sealed class BlockUserCommandHandler : CommandHandler<BlockUserCommand>
 
     public override async Task HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var (userId, reason) = message;
+        var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Block(message.Reason);
+        user.Block(reason);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

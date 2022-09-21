@@ -19,13 +19,14 @@ internal sealed class ChangeUserGroupDescriptionCommandHandler : CommandHandler<
 
     public override async Task HandleAsync(ChangeUserGroupDescriptionCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        var (userGroupId, description) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        group.ChangeDescription(message.Description);
+        group.ChangeDescription(description);
         await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }

@@ -18,13 +18,14 @@ internal sealed class SetUserGroupParentCommandHandler : ICommandHandler<SetUser
 
     public async Task HandleAsync(SetUserGroupParentCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        var (userGroupId, parent) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        group.SetParent(message.Parent);
+        group.SetParent(parent);
         await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }

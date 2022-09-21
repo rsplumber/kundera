@@ -18,7 +18,8 @@ internal sealed class CreateUserGroupCommandHandler : CommandHandler<CreateUserG
 
     public override async Task HandleAsync(CreateUserGroupCommand message, CancellationToken cancellationToken = default)
     {
-        var userGroup = UserGroup.Create(message.Name, message.Role);
+        var (name, roleId) = message;
+        var userGroup = UserGroup.Create(name, roleId);
         await _userGroupRepository.AddAsync(userGroup, cancellationToken);
     }
 }

@@ -18,13 +18,14 @@ internal sealed class RemoveUserUsernameCommandHandler : CommandHandler<RemoveUs
 
     public override async Task HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var (userId, username) = message;
+        var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.RemoveUsername(message.Username);
+        user.RemoveUsername(username);
         await _userRepository.UpdateAsync(user, cancellationToken);
 
     }

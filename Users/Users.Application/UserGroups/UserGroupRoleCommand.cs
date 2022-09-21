@@ -21,13 +21,14 @@ internal sealed class AssignUserGroupRoleCommandHandler : CommandHandler<AssignU
 
     public override async Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        var (userGroupId, roleIds) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        foreach (var role in message.Roles)
+        foreach (var role in roleIds)
         {
             group.AssignRole(role);
         }
@@ -47,13 +48,14 @@ internal sealed class RevokeUserGroupRoleCommandHandler : CommandHandler<RevokeU
 
     public override async Task HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
+        var (userGroupId, roleIds) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        foreach (var role in message.Roles)
+        foreach (var role in roleIds)
         {
             group.RevokeRole(role);
         }

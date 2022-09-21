@@ -18,13 +18,14 @@ internal sealed class MoveUserGroupParentCommandHandler : CommandHandler<MoveUse
 
     public override async Task HandleAsync(MoveUserGroupParentCommand message, CancellationToken cancellationToken = default)
     {
-        var group = await _userGroupRepository.FindAsync(message.From, cancellationToken);
+        var (userGroupId, to) = message;
+        var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
         if (group is null)
         {
             throw new UserGroupNotFoundException();
         }
 
-        group.SetParent(message.To);
+        group.SetParent(to);
         await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }
