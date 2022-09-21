@@ -7,11 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RoleManagement.Application\RoleManagement.Application.csproj" />
+      <ProjectReference Include="..\Authentication.Domain\Authentication.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Tes.Standard.Web.Requests" Version="1.0.2" />
-    </ItemGroup>
-    
 </Project>

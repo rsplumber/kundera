@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Auth\Authentication\Authentication.Infrastructure\Authentication.Infrastructure.csproj" />
+      <ProjectReference Include="..\Auth\Authorization\Authorization.Infrastructure\Authorization.Infrastructure.csproj" />
+      <ProjectReference Include="..\RoleManagements\RoleManagement.Builder\RoleManagement.Builder.csproj" />
+      <ProjectReference Include="..\Users\Users.Bootstrap\Users.Bootstrap.csproj" />
+      <ProjectReference Include="..\Web.Api\Web.Api.csproj" />
+    </ItemGroup>
+
+</Project>
