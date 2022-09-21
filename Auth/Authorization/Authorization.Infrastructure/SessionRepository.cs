@@ -5,7 +5,7 @@ namespace Authorization.Infrastructure;
 
 internal sealed class SessionRepository : ISessionRepository
 {
-    public async Task CreateAsync(Session entity, CancellationToken cancellationToken = new CancellationToken())
+    public async Task AddAsync(Session entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

@@ -5,7 +5,7 @@ namespace RoleManagement.Data.Scopes;
 
 internal class ScopeRepository : IScopeRepository
 {
-    public async Task CreateAsync(Scope entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Scope entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

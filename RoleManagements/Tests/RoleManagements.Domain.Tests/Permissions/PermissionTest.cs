@@ -29,7 +29,7 @@ public class PermissionTest
         var name = "create_loan";
         var repository = new PermissionRepository();
         var permission = await Permission.CreateAsync("create_loan", repository);
-        await repository.CreateAsync(permission);
+        await repository.AddAsync(permission);
         await Assert.ThrowsAsync<PermissionAlreadyExistsException>(async () => { await Permission.CreateAsync(name, repository); });
     }
 

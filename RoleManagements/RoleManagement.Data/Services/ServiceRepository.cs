@@ -5,7 +5,7 @@ namespace RoleManagement.Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {
-    public async Task CreateAsync(Service entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

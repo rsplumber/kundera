@@ -12,7 +12,8 @@ public class PermissionRepository : IPermissionRepository
         _permissions = new List<Permission>();
     }
 
-    public async Task CreateAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
+
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
     {
         _permissions.Add(entity);
     }

@@ -12,7 +12,8 @@ public class RoleRepository : IRoleRepository
         _roles = new List<Role>();
     }
 
-    public async Task CreateAsync(Role entity, CancellationToken cancellationToken = new())
+
+    public async Task AddAsync(Role entity, CancellationToken cancellationToken = new CancellationToken())
     {
         _roles.Add(entity);
     }

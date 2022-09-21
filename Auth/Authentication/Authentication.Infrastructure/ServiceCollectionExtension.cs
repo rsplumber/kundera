@@ -1,4 +1,5 @@
 ﻿using Authentication.Application;
+using Authentication.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tes.Serializer.Microsoft;
@@ -11,6 +12,7 @@ public static class ServiceCollectionExtension
     {
         services.AddMicrosoftSerializer(configuration);
 
+        services.AddScoped<ICredentialRepository, CredentialRepository>();
         services.AddScoped<IAuthenticateService, AuthenticateService>();
         services.AddScoped<ICredentialService, CredentialService>();
     }

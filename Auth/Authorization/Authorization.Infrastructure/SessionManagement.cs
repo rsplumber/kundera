@@ -30,7 +30,7 @@ internal sealed class SessionManagement : ISessionManagement
             expireDate,
             ipAddress
         );
-        await _sessionRepository.CreateAsync(session, cancellationToken);
+        await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
     public async Task UpdateAsync(Token token, DateTime lastUsageDate, IPAddress ipAddress, CancellationToken cancellationToken = default)

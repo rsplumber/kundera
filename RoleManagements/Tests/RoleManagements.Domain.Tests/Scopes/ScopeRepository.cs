@@ -12,7 +12,8 @@ public class ScopeRepository : IScopeRepository
         _scopes = new List<Scope>();
     }
 
-    public async Task CreateAsync(Scope entity, CancellationToken cancellationToken = new CancellationToken())
+
+    public async Task AddAsync(Scope entity, CancellationToken cancellationToken = new CancellationToken())
     {
         _scopes.Add(entity);
     }

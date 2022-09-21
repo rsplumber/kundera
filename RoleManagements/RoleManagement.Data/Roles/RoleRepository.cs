@@ -5,7 +5,7 @@ namespace RoleManagement.Data.Roles;
 
 internal class RoleRepository : IRoleRepository
 {
-    public async Task CreateAsync(Role entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Role entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

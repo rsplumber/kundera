@@ -36,7 +36,7 @@ public class ScopeTest
         var scopeName = "application";
         var repository = new ScopeRepository();
         var scope = await Scope.CreateAsync(scopeName, repository);
-        await repository.CreateAsync(scope);
+        await repository.AddAsync(scope);
         await Assert.ThrowsAsync<ScopeAlreadyExistsException>(async () => { await Scope.CreateAsync(scopeName, repository); });
     }
 

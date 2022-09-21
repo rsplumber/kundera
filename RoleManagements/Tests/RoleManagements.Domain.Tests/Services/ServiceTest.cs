@@ -15,7 +15,7 @@ public class ServiceTest
     {
         var repository = new ServiceRepository();
         var service = await Service.CreateAsync(ServiceName, repository);
-        await repository.CreateAsync(service);
+        await repository.AddAsync(service);
         Assert.NotNull(service);
         Assert.Equal(ServiceName, service.Id.Value);
     }
@@ -35,10 +35,7 @@ public class ServiceTest
         var repository = new ServiceRepository();
         var service = await Service.CreateAsync(name, repository);
         await repository.CreateAsync(service);
-        await Assert.ThrowsAsync<ServiceAlreadyExistsException>(async () =>
-        {
-            await Service.CreateAsync(name, repository);
-        });
+        await Assert.ThrowsAsync<ServiceAlreadyExistsException>(async () => { await Service.CreateAsync(name, repository); });
     }
 
     [Fact]

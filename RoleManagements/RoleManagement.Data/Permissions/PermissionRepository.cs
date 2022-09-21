@@ -5,7 +5,7 @@ namespace RoleManagement.Data.Permissions;
 
 internal class PermissionRepository : IPermissionRepository 
 {
-    public async Task CreateAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

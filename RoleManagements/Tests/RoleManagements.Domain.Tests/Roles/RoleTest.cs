@@ -31,7 +31,7 @@ public class RoleTest
         var name = "Admin";
         var repository = new RoleRepository();
         var role = await Role.CreateAsync("Admin", repository);
-        await repository.CreateAsync(role);
+        await repository.AddAsync(role);
         await Assert.ThrowsAsync<RoleAlreadyExistsException>(async () => { await Role.CreateAsync(name, repository); });
     }
 

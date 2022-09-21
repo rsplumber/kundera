@@ -12,7 +12,8 @@ public class ServiceRepository : IServiceRepository
         _services = new List<Service>();
     }
 
-    public async Task CreateAsync(Service entity, CancellationToken cancellationToken = new())
+
+    public async Task AddAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
     {
         _services.Add(entity);
     }
