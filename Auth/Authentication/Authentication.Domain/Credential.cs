@@ -1,4 +1,5 @@
-﻿using Authentication.Domain.Exceptions;
+﻿using Authentication.Domain.Events;
+using Authentication.Domain.Exceptions;
 using Authentication.Domain.Types;
 using Tes.Domain.Contracts;
 
@@ -17,6 +18,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     {
         _userId = user;
         _password = password;
+        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier, Password password, UserId user, ICredentialRepository credentialRepository)

@@ -8,21 +8,21 @@ public record UniqueIdentifier : IIdentity
     private readonly string _identifier;
     private readonly string _type;
 
-    private UniqueIdentifier(string identifier)
+    private UniqueIdentifier(string identifier, string? type)
     {
-        _identifier = identifier;
-        _type = DefaultType;
+        _identifier = identifier.ToLower();
+        _type = type is not null ? type.ToLower() : DefaultType;
     }
 
-    private UniqueIdentifier(string identifier, string type)
+    public static UniqueIdentifier From(string identifier, string? type = null) => new(identifier, type);
+
+    public static UniqueIdentifier Parse(string uniqueIdentifier)
     {
-        _identifier = identifier;
-        _type = type;
+        var split = uniqueIdentifier.Split("_");
+        var identifier = split.First();
+        var type = split.LastOrDefault();
+        return new(identifier, type);
     }
-
-    public static UniqueIdentifier From(string identifier) => new(identifier);
-
-    public static UniqueIdentifier From(string identifier, string type) => new(identifier, type);
 
     public static implicit operator string(UniqueIdentifier uniqueIdentifier) => uniqueIdentifier.Value;
 
