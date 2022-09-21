@@ -12,6 +12,9 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     private readonly Password _password;
     private string _lastIpAddress;
     private DateTime _lastLoggedIn;
+    private DateTime? _expiresAt;
+    private int _maxReachCount;
+    private int _reachCount;
 
     protected Credential()
     {
@@ -23,13 +26,29 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         _password = password;
         _lastIpAddress = lastIpAddress is not null ? lastIpAddress.ToString() : IPAddress.None.ToString();
         _lastLoggedIn = DateTime.UtcNow;
+        _reachCount = 0;
         AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
+    }
+
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+        this(uniqueIdentifier, password, user, lastIpAddress)
+    {
+        if (expirationTimeInSeconds > 0)
+        {
+            _expiresAt = DateTime.UtcNow.AddSeconds(expirationTimeInSeconds);
+        }
+    }
+
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, int maxReachCount, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+        this(uniqueIdentifier, password, user, expirationTimeInSeconds, lastIpAddress)
+    {
+        _maxReachCount = maxReachCount;
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
         UserId user,
-        IPAddress ipAddress,
+        IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
         var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
@@ -44,6 +63,8 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
         UserId user,
+        int expirationTimeInSeconds,
+        IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
         var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
@@ -52,7 +73,24 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, user);
+        return new(uniqueIdentifier, password, user, expirationTimeInSeconds, ipAddress);
+    }
+
+    public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
+        Password password,
+        UserId user,
+        int maxReachCount,
+        int expirationTimeInSeconds,
+        IPAddress? ipAddress,
+        ICredentialRepository credentialRepository)
+    {
+        var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
+        if (exists)
+        {
+            throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
+        }
+
+        return new(uniqueIdentifier, password, user, maxReachCount, expirationTimeInSeconds, ipAddress);
     }
 
     public UserId User => _userId;
@@ -62,6 +100,12 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     public IPAddress LastIpAddress => IPAddress.Parse(_lastIpAddress);
 
     public DateTime LastLoggedIn => _lastLoggedIn;
+
+    public DateTime? ExpiresAt => _expiresAt;
+
+    public int MaxReachCount => _maxReachCount;
+
+    public int ReachCount => _reachCount;
 
     public void UpdateActivityInfo(IPAddress ipAddress)
     {
