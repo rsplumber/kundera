@@ -101,11 +101,11 @@ public class User : AggregateRoot<UserId>
         _roles.Remove(role);
     }
 
-    public void Activate() => ChangeStatus(UserStatus.Active);
+    public void Activate(Text? reason = null) => ChangeStatus(UserStatus.Active);
 
-    public void Suspend() => ChangeStatus(UserStatus.Suspend);
+    public void Suspend(Text? reason = null) => ChangeStatus(UserStatus.Suspend);
 
-    public void Block(Text? reason = null) => ChangeStatus(UserStatus.Block, reason);
+    public void Block(Text reason) => ChangeStatus(UserStatus.Block, reason);
 
     private void ChangeStatus(UserStatus status, Text? reason = null)
     {

@@ -4,12 +4,20 @@ using Users.Domain.Users;
 
 namespace Users.Application.Users;
 
-public sealed record ExistUserUsernameCommand(UserId User, Username Username) : Command;
+public sealed record ExistUserUsernameCommand(Username Username) : Command;
 
 internal sealed class ExistUserUsernameCommandHandler : CommandHandler<ExistUserUsernameCommand>
 {
-    public override Task HandleAsync(ExistUserUsernameCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserRepository _userRepository;
+
+    public ExistUserUsernameCommandHandler(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
+    }
+
+    public override async Task<bool> HandleAsync(ExistUserUsernameCommand message, CancellationToken cancellationToken = default)
+    {
+        var existsAsync = await _userRepository.ExistsAsync(message.Username, cancellationToken);
+        return existsAsync;
     }
 }

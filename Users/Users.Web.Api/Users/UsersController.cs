@@ -41,10 +41,10 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{id:required:guid}/usernames/{username:required}/check")]
-    public async Task<IActionResult> ExistUsernameAsync([FromRoute] Guid id, [FromRoute] string username, CancellationToken cancellationToken)
+    [HttpPost("/usernames/{username:required}/check")]
+    public async Task<IActionResult> ExistUsernameAsync([FromRoute] string username, CancellationToken cancellationToken)
     {
-        var command = new ExistUserUsernameCommand(UserId.From(id), username);
+        var command = new ExistUserUsernameCommand(username);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }

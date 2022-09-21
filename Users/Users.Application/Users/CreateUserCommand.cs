@@ -9,8 +9,16 @@ public sealed record CreateUserCommand(Username Username, UserGroupId UserGroup)
 
 internal sealed class CreateUserCommandHandler : CommandHandler<CreateUserCommand>
 {
-    public override Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserRepository _userRepository;
+
+    public CreateUserCommandHandler(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
+    }
+
+    public override async Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
+    {
+        var user = await User.CreateAsync(message.Username, message.UserGroup, _userRepository);
+        await _userRepository.AddAsync(user, cancellationToken);
     }
 }

@@ -2,6 +2,7 @@
 using Tes.CQRS.Contracts;
 using Users.Domain.UserGroups;
 using Users.Domain.Users;
+using Users.Domain.Users.Exception;
 
 namespace Users.Application.Users;
 
@@ -11,16 +12,46 @@ public sealed record RemoveUserFromGroupCommand(UserId User, UserGroupId UserGro
 
 internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToGroupCommand>
 {
-    public override Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserRepository _userRepository;
+
+    public JoinUserToGroupCommandHandler(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
+    }
+
+    public override async Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        user.JoinGroup(message.UserGroup);
+
+        await _userRepository.UpdateAsync(user, cancellationToken);
     }
 }
 
 internal sealed class RemoveUserFromGroupCommandHandler : CommandHandler<RemoveUserFromGroupCommand>
 {
-    public override Task HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IUserRepository _userRepository;
+
+    public RemoveUserFromGroupCommandHandler(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
+    }
+
+    public override async Task HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        user.RemoveFromGroup(message.UserGroup);
+
+        await _userRepository.UpdateAsync(user, cancellationToken);
     }
 }
