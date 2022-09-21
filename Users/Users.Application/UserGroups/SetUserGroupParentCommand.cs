@@ -6,9 +6,9 @@ namespace Users.Application.UserGroups;
 
 public sealed record SetUserGroupParentCommand(UserGroupId UserGroup, UserGroupId Parent) : Command;
 
-internal sealed class SetUserGroupParentCommandHandler : ICommandHandler<SetUserGroupParentCommand, SetUserGroupParentCommandHandler>
+internal sealed class SetUserGroupParentCommandHandler : ICommandHandler<SetUserGroupParentCommand>
 {
-    public Task<SetUserGroupParentCommandHandler> HandleAsync(SetUserGroupParentCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public Task HandleAsync(SetUserGroupParentCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

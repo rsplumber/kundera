@@ -6,9 +6,9 @@ namespace Users.Application.Users;
 
 public sealed record AddUserUsernameCommand(UserId User, Username Username) : Command;
 
-internal sealed class AddUserUsernameCommandHandler : ICommandHandler<AddUserUsernameCommand, AddUserUsernameCommandHandler>
+internal sealed class AddUserUsernameCommandHandler : CommandHandler<AddUserUsernameCommand>
 {
-    public Task<AddUserUsernameCommandHandler> HandleAsync(AddUserUsernameCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(AddUserUsernameCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

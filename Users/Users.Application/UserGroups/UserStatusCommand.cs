@@ -8,17 +8,17 @@ public sealed record EnableUserGroupCommand(UserGroupId UserGroup) : Command;
 
 public sealed record DisableUserGroupCommand(UserGroupId UserGroup) : Command;
 
-internal sealed class DisableUserGroupCommandHandler : ICommandHandler<DisableUserGroupCommand, DisableUserGroupCommandHandler>
+internal sealed class DisableUserGroupCommandHandler : CommandHandler<DisableUserGroupCommand>
 {
-    public Task<DisableUserGroupCommandHandler> HandleAsync(DisableUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(DisableUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
 }
 
-internal sealed class EnableUserGroupCommandHandler : ICommandHandler<EnableUserGroupCommand, EnableUserGroupCommandHandler>
+internal sealed class EnableUserGroupCommandHandler : CommandHandler<EnableUserGroupCommand>
 {
-    public Task<EnableUserGroupCommandHandler> HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

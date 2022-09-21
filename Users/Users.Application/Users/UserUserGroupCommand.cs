@@ -9,17 +9,17 @@ public sealed record JoinUserToGroupCommand(UserId User, UserGroupId UserGroup) 
 
 public sealed record RemoveUserFromGroupCommand(UserId User, UserGroupId UserGroup) : Command;
 
-internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserToGroupCommand, JoinUserToGroupCommandHandler>
+internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToGroupCommand>
 {
-    public Task<JoinUserToGroupCommandHandler> HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
 }
 
-internal sealed class RemoveUserFromGroupCommandHandler : ICommandHandler<RemoveUserFromGroupCommand, RemoveUserFromGroupCommandHandler>
+internal sealed class RemoveUserFromGroupCommandHandler : CommandHandler<RemoveUserFromGroupCommand>
 {
-    public Task<RemoveUserFromGroupCommandHandler> HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

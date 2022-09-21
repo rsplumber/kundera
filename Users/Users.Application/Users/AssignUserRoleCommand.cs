@@ -7,9 +7,9 @@ namespace Users.Application.Users;
 
 public sealed record AssignUserRoleCommand(UserId User, params RoleId[] Roles) : Command;
 
-internal sealed class AssignUserRoleCommandHandler : ICommandHandler<AssignUserRoleCommand, AssignUserRoleCommandHandler>
+internal sealed class AssignUserRoleCommandHandler : CommandHandler<AssignUserRoleCommand>
 {
-    public Task<AssignUserRoleCommandHandler> HandleAsync(AssignUserRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(AssignUserRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

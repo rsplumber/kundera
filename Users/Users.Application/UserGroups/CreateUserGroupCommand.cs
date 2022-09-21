@@ -7,9 +7,9 @@ namespace Users.Application.UserGroups;
 
 public sealed record CreateUserGroupCommand(Name Name) : Command;
 
-internal sealed class CreateUserGroupCommandHandler : ICommandHandler<CreateUserGroupCommand, CreateUserGroupCommandHandler>
+internal sealed class CreateUserGroupCommandHandler : CommandHandler<CreateUserGroupCommand>
 {
-    public Task<CreateUserGroupCommandHandler> HandleAsync(CreateUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(CreateUserGroupCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

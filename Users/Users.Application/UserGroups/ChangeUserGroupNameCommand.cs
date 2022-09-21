@@ -7,9 +7,9 @@ namespace Users.Application.UserGroups;
 
 public sealed record ChangeUserGroupNameCommand(UserGroupId UserGroup, Name Name) : Command;
 
-internal sealed class ChangeUserGroupNameCommandHandler  : ICommandHandler<ChangeUserGroupNameCommand, ChangeUserGroupNameCommandHandler>
+internal sealed class ChangeUserGroupNameCommandHandler  : CommandHandler<ChangeUserGroupNameCommand >
 {
-    public Task<ChangeUserGroupNameCommandHandler> HandleAsync(ChangeUserGroupNameCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(ChangeUserGroupNameCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

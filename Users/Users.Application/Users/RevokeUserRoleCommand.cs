@@ -7,9 +7,9 @@ namespace Users.Application.Users;
 
 public sealed record RevokeUserRoleCommand(UserId User, params RoleId[] Roles) : Command;
 
-internal sealed class RevokeUserRoleCommandHandler : ICommandHandler<RevokeUserRoleCommand, RevokeUserRoleCommandHandler>
+internal sealed class RevokeUserRoleCommandHandler : CommandHandler<RevokeUserRoleCommand>
 {
-    public Task<RevokeUserRoleCommandHandler> HandleAsync(RevokeUserRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(RevokeUserRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

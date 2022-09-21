@@ -7,9 +7,9 @@ namespace Users.Application.UserGroups;
 
 public sealed record ChangeUserGroupDescriptionCommand(UserGroupId UserGroup, Text Description) : Command;
 
-internal sealed class ChangeUserGroupDescriptionCommandHandler : ICommandHandler<ChangeUserGroupDescriptionCommand, ChangeUserGroupDescriptionCommandHandler>
+internal sealed class ChangeUserGroupDescriptionCommandHandler : CommandHandler<ChangeUserGroupDescriptionCommand>
 {
-    public Task<ChangeUserGroupDescriptionCommandHandler> HandleAsync(ChangeUserGroupDescriptionCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(ChangeUserGroupDescriptionCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

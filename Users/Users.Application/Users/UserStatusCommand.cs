@@ -11,25 +11,25 @@ public sealed record SuspendUserCommand(UserId User, Text? Reason) : Command;
 
 public sealed record BlockUserCommand(UserId User, Text Reason) : Command;
 
-internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserCommand, ActiveUserCommandHandler>
+internal sealed class ActiveUserCommandHandler : CommandHandler<ActiveUserCommand>
 {
-    public Task<ActiveUserCommandHandler> HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
 }
 
-internal sealed class SuspendUserCommandHandler : ICommandHandler<SuspendUserCommand, SuspendUserCommandHandler>
+internal sealed class SuspendUserCommandHandler : CommandHandler<SuspendUserCommand >
 {
-    public Task<SuspendUserCommandHandler> HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
 }
 
-internal sealed class BlockUserCommandHandler : ICommandHandler<BlockUserCommand, BlockUserCommandHandler>
+internal sealed class BlockUserCommandHandler : CommandHandler<BlockUserCommand>
 {
-    public Task<BlockUserCommandHandler> HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

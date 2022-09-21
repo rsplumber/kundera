@@ -9,17 +9,17 @@ public sealed record AssignUserGroupRoleCommand(UserGroupId UserGroup, params Ro
 
 public sealed record RevokeUserGroupRoleCommand(UserGroupId UserGroup, params RoleId[] Roles) : Command;
 
-internal sealed class AssignUserGroupRoleCommandHandler : ICommandHandler<AssignUserGroupRoleCommand, AssignUserGroupRoleCommandHandler>
+internal sealed class AssignUserGroupRoleCommandHandler : CommandHandler<AssignUserGroupRoleCommand>
 {
-    public Task<AssignUserGroupRoleCommandHandler> HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
 }
 
-internal sealed class RevokeUserGroupRoleCommandHandler : ICommandHandler<RevokeUserGroupRoleCommand, RevokeUserGroupRoleCommandHandler>
+internal sealed class RevokeUserGroupRoleCommandHandler : CommandHandler<RevokeUserGroupRoleCommand>
 {
-    public Task<RevokeUserGroupRoleCommandHandler> HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public override Task HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }
