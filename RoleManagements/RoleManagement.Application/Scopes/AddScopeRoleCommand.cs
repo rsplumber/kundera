@@ -1,4 +1,6 @@
 ﻿using RoleManagements.Domain.Roles.Types;
+using RoleManagements.Domain.Scopes;
+using RoleManagements.Domain.Scopes.Exceptions;
 using RoleManagements.Domain.Scopes.Types;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
@@ -9,8 +11,25 @@ public sealed record AddScopeRoleCommand(ScopeId Scope, params RoleId[] Roles) :
 
 internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCommand>
 {
-    public override async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IScopeRepository _scopeRepository;
+
+    public AddScopeRoleCommandHandler(IScopeRepository scopeRepository)
     {
-        throw new NotImplementedException();
+        _scopeRepository = scopeRepository;
+    }
+
+    public override async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
+    {
+        var (scopeId, roleIds) = message;
+        var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);
+        if (scope is null)
+        {
+            throw new ScopeNotFoundException();
+        }
+
+        foreach (var role in roleIds)
+        {
+            scope.AddRole(role);
+        }
     }
 }

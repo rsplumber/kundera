@@ -1,4 +1,5 @@
 ﻿using RoleManagements.Domain;
+using RoleManagements.Domain.Scopes;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
 
@@ -8,8 +9,16 @@ public sealed record CreateScopeCommand(Name Name) : Command;
 
 internal sealed class CreateScopeCommandHandler : CommandHandler<CreateScopeCommand>
 {
-    public override async Task HandleAsync(CreateScopeCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IScopeRepository _scopeRepository;
+
+    public CreateScopeCommandHandler(IScopeRepository scopeRepository)
     {
-        throw new NotImplementedException();
+        _scopeRepository = scopeRepository;
+    }
+
+    public override async Task HandleAsync(CreateScopeCommand message, CancellationToken cancellationToken = default)
+    {
+        var scope = await Scope.CreateAsync(message.Name, _scopeRepository);
+        await _scopeRepository.AddAsync(scope, cancellationToken);
     }
 }
