@@ -1,4 +1,5 @@
 ﻿using RoleManagements.Domain;
+using RoleManagements.Domain.Roles;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
 
@@ -8,8 +9,16 @@ public sealed record CreateRoleCommand(Name Name, IDictionary<string, string>? M
 
 internal sealed class CreateRoleCommandHandler : CommandHandler<CreateRoleCommand>
 {
-    public override async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IRoleRepository _roleRepository;
+
+    public CreateRoleCommandHandler(IRoleRepository roleRepository)
     {
-        throw new NotImplementedException();
+        _roleRepository = roleRepository;
+    }
+
+    public override async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
+    {
+        var role = await Role.CreateAsync(message.Name, _roleRepository);
+        await _roleRepository.AddAsync(role, cancellationToken);
     }
 }

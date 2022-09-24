@@ -1,4 +1,6 @@
 ﻿using RoleManagements.Domain.Permissions.Types;
+using RoleManagements.Domain.Roles;
+using RoleManagements.Domain.Roles.Exceptions;
 using RoleManagements.Domain.Roles.Types;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
@@ -9,8 +11,25 @@ public sealed record AddRolePermissionCommand(RoleId Role, params PermissionId[]
 
 internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePermissionCommand>
 {
-    public override async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IRoleRepository _roleRepository;
+
+    public AddRolePermissionCommandHandler(IRoleRepository roleRepository)
     {
-        throw new NotImplementedException();
+        _roleRepository = roleRepository;
+    }
+
+    public override async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
+    {
+        var (roleId, permissions) = message;
+        var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+        if (role is null)
+        {
+            throw new RoleNotFoundException();
+        }
+
+        foreach (var permission in permissions)
+        {
+            role.AddPermission(permission);
+        }
     }
 }

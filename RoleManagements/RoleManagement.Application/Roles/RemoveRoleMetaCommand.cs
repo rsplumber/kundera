@@ -1,4 +1,6 @@
-﻿using RoleManagements.Domain.Roles.Types;
+﻿using RoleManagements.Domain.Roles;
+using RoleManagements.Domain.Roles.Exceptions;
+using RoleManagements.Domain.Roles.Types;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
 
@@ -8,8 +10,25 @@ public sealed record RemoveRoleMetaCommand(RoleId Role, params string[] MetaKeys
 
 internal sealed class RemoveRoleMetaCommandHandler : CommandHandler<RemoveRoleMetaCommand>
 {
-    public override async Task HandleAsync(RemoveRoleMetaCommand message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IRoleRepository _roleRepository;
+
+    public RemoveRoleMetaCommandHandler(IRoleRepository roleRepository)
     {
-        throw new NotImplementedException();
+        _roleRepository = roleRepository;
+    }
+
+    public override async Task HandleAsync(RemoveRoleMetaCommand message, CancellationToken cancellationToken = default)
+    {
+        var (roleId, metaKeys) = message;
+        var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+        if (role is null)
+        {
+            throw new RoleNotFoundException();
+        }
+
+        foreach (var metaKey in metaKeys)
+        {
+            role.RemoveMeta(metaKey);
+        }
     }
 }
