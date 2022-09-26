@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tes.CQRS.InMemory;
 using Tes.Serializer.Microsoft;
 using Users.Data;
+using Users.Data.Redis;
 
 namespace Users.Builder;
 
@@ -15,7 +16,7 @@ public static class ServiceCollectionExtension
         var assemblies = new[]
         {
             Assembly.Load("Users.Application"),
-            Assembly.Load("Users.Data")
+            Assembly.Load("Users.Data.Redis")
         };
         services.AddCqrsInMemory(configuration, assemblies);
         services.AddDataLayer(configuration);

@@ -10,13 +10,19 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Tes.Standard.CQRS.InMemory" Version="1.0.3" />
-        <PackageReference Include="Tes.Standard.Serializer.Microsoft" Version="1.0.0" />
+        <PackageReference Include="Redis.OM" Version="0.2.3" />
+        <PackageReference Include="AutoMapper" Version="11.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RoleManagement.Application\RoleManagement.Application.csproj" />
-      <ProjectReference Include="..\RoleManagement.Data.Redis\RoleManagement.Data.Redis.csproj" />
+        <InternalsVisibleTo Include="RoleManagement.Builder" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\RoleManagement.Application\RoleManagement.Application.csproj" />
+        <ProjectReference Include="..\RoleManagements.Domain\RoleManagements.Domain.csproj" />
     </ItemGroup>
 
 </Project>

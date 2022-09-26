@@ -42,11 +42,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Web.Api", "Users\User
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Builder", "RoleManagements\RoleManagement.Builder\RoleManagement.Builder.csproj", "{D0735AB5-9F74-4BF1-9053-2AE759D5824F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Data", "RoleManagements\RoleManagement.Data\RoleManagement.Data.csproj", "{8B6EFEE0-5DBE-4944-86CD-508A7EA2961F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.Data.Redis", "RoleManagements\RoleManagement.Data.Redis\RoleManagement.Data.Redis.csproj", "{8B6EFEE0-5DBE-4944-86CD-508A7EA2961F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication.Domain", "Auth\Authentication\Authentication.Domain\Authentication.Domain.csproj", "{A12E96B6-E580-4C60-B2B1-23E14EE40F6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Data", "Users\Users.Data\Users.Data.csproj", "{66DD45B0-63BD-47DD-9657-4DB3380F183B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Data.Redis", "Users\Users.Data.Redis\Users.Data.Redis.csproj", "{66DD45B0-63BD-47DD-9657-4DB3380F183B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{55D43B61-188B-4819-A379-60AD231205E4}"
 EndProject

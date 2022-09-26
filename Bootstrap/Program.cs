@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.ConfigureUsers(configuration);
-app.ConfigureRoleManagementWeb(configuration);
+app.ConfigureRoleManagement(configuration);
 app.ConfigureAuthorization(configuration);
 app.ConfigureAuthorization(configuration);
 app.ConfigureKunderaWeb(configuration);

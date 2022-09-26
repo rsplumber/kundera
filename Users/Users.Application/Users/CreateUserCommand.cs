@@ -18,7 +18,8 @@ internal sealed class CreateUserCommandHandler : CommandHandler<CreateUserComman
 
     public override async Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
     {
-        var user = await User.CreateAsync(message.Username, message.UserGroup, _userRepository);
+        var (username, userGroupId) = message;
+        var user = await User.CreateAsync(username, userGroupId, _userRepository);
         await _userRepository.AddAsync(user, cancellationToken);
     }
 }
