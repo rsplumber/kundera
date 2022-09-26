@@ -26,9 +26,12 @@ internal sealed class AddPermissionMetaCommandHandler : CommandHandler<AddPermis
         {
             throw new PermissionNotFoundException();
         }
+
         foreach (var (key, value) in dictionary)
         {
             permission.AddMeta(key, value);
         }
+
+        await _permissionRepository.UpdateAsync(permission, cancellationToken);
     }
 }

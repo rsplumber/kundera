@@ -19,4 +19,9 @@ internal class ServiceRepository : IServiceRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task UpdateAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -27,4 +27,9 @@ public class RoleRepository : IRoleRepository
     {
         return _roles.Exists(role => role.Id == id);
     }
+
+    public Task UpdateAsync(Role entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

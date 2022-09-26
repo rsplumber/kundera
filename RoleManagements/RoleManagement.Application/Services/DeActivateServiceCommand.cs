@@ -26,5 +26,7 @@ internal sealed class DeActivateServiceCommandHandler : CommandHandler<DeActivat
         }
 
         service.DiActivate();
+        await _serviceRepository.UpdateAsync(service, cancellationToken);
+
     }
 }

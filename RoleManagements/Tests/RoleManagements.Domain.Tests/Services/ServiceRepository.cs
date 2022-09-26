@@ -27,4 +27,9 @@ public class ServiceRepository : IServiceRepository
     {
         return _services.Exists(service => service.Id == id);
     }
+
+    public Task UpdateAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -31,5 +31,6 @@ internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCo
         {
             scope.AddRole(role);
         }
+        await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

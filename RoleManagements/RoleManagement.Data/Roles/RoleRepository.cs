@@ -19,4 +19,9 @@ internal class RoleRepository : IRoleRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task UpdateAsync(Role entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

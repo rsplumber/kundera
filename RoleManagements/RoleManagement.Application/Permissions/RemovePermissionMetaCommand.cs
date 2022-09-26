@@ -26,9 +26,12 @@ internal sealed class RemovePermissionMetaCommandHandler : CommandHandler<Remove
         {
             throw new PermissionNotFoundException();
         }
+
         foreach (var meta in metaKeys)
         {
             permission.RemoveMeta(meta);
         }
+
+        await _permissionRepository.UpdateAsync(permission, cancellationToken);
     }
 }

@@ -27,4 +27,9 @@ public class PermissionRepository : IPermissionRepository
     {
         return _permissions.Exists(permission => permission.Id == id);
     }
+
+    public Task UpdateAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

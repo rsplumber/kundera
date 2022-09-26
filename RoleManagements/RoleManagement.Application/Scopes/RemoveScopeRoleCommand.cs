@@ -31,5 +31,6 @@ internal sealed class RemoveScopeRoleCommandHandler : CommandHandler<RemoveScope
         {
             scope.RemoveRole(role);
         }
+        await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

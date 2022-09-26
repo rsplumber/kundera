@@ -27,4 +27,9 @@ public class ScopeRepository : IScopeRepository
     {
         return _scopes.Exists(permission => permission.Id == id);
     }
+
+    public Task UpdateAsync(Scope entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

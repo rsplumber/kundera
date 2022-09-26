@@ -31,5 +31,7 @@ internal sealed class RemoveScopeServiceCommandHandler : CommandHandler<RemoveSc
         {
             scope.RemoveService(service);
         }
+        
+        await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

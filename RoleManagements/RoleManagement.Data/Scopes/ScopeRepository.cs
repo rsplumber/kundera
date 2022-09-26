@@ -19,4 +19,9 @@ internal class ScopeRepository : IScopeRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task UpdateAsync(Scope entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

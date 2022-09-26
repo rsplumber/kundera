@@ -26,5 +26,8 @@ internal sealed class ActivateServiceCommandHandler : CommandHandler<ActivateSer
         }
 
         service.Activate();
+
+        await _serviceRepository.UpdateAsync(service, cancellationToken);
     }
+    
 }

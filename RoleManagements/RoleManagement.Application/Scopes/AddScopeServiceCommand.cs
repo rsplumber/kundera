@@ -31,5 +31,7 @@ internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeSer
         {
             scope.AddService(service);
         }
+        
+        await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

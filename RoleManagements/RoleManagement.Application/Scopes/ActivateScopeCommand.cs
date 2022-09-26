@@ -26,5 +26,7 @@ internal sealed class ActivateScopeCommandHandler : CommandHandler<ActivateScope
         }
 
         scope.Activate();
+
+        await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

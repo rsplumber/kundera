@@ -19,4 +19,9 @@ internal class PermissionRepository : IPermissionRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task UpdateAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

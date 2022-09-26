@@ -3,7 +3,7 @@ using Tes.Domain.Contracts;
 
 namespace RoleManagements.Domain.Roles;
 
-public interface IRoleRepository : IRepository<RoleId, Role>
+public interface IRoleRepository : IRepository<RoleId, Role>, IUpdateService<Role>
 {
     ValueTask<bool> ExistsAsync(RoleId id, CancellationToken cancellationToken = default);
 }

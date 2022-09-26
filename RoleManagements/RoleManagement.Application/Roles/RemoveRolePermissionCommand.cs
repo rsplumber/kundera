@@ -31,5 +31,7 @@ internal sealed class RemoveRolePermissionCommandHandler : CommandHandler<Remove
         {
             role.RemovePermission(permission);
         }
+
+        await _roleRepository.UpdateAsync(role, cancellationToken);
     }
 }

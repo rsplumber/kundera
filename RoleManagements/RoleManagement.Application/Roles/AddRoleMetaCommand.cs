@@ -30,5 +30,7 @@ internal sealed class AddRoleMetaCommandHandler : CommandHandler<AddRoleMetaComm
         {
             role.AddMeta(key, value);
         }
+
+        await _roleRepository.UpdateAsync(role, cancellationToken);
     }
 }

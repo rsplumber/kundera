@@ -31,5 +31,7 @@ internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePe
         {
             role.AddPermission(permission);
         }
+
+        await _roleRepository.UpdateAsync(role, cancellationToken);
     }
 }
