@@ -9,5 +9,5 @@ public class RoleDataModel
 
     public Dictionary<string, string> Meta { get; set; }
 
-    public List<string> Permissions { get; set; }
+    public string[] Permissions { get; set; }
 }

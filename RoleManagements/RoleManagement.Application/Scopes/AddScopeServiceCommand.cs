@@ -1,6 +1,7 @@
 ﻿using RoleManagements.Domain.Scopes;
 using RoleManagements.Domain.Scopes.Exceptions;
 using RoleManagements.Domain.Scopes.Types;
+using RoleManagements.Domain.Services;
 using RoleManagements.Domain.Services.Types;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
@@ -12,10 +13,12 @@ public sealed record AddScopeServiceCommand(ScopeId Scope, params ServiceId[] Se
 internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeServiceCommand>
 {
     private readonly IScopeRepository _scopeRepository;
+    private readonly IServiceRepository _serviceRepository;
 
-    public AddScopeServiceCommandHandler(IScopeRepository scopeRepository)
+    public AddScopeServiceCommandHandler(IScopeRepository scopeRepository, IServiceRepository serviceRepository)
     {
         _scopeRepository = scopeRepository;
+        _serviceRepository = serviceRepository;
     }
 
     public override async Task HandleAsync(AddScopeServiceCommand message, CancellationToken cancellationToken = default)
@@ -29,9 +32,9 @@ internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeSer
 
         foreach (var service in serviceIds)
         {
-            scope.AddService(service);
+            await scope.AddServiceAsync(service, _serviceRepository);
         }
-        
+
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

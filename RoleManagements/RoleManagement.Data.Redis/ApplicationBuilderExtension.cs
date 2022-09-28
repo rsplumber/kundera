@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;
 using RoleManagement.Data.Redis.Permissions;
 using RoleManagement.Data.Redis.Roles;
+using RoleManagement.Data.Redis.Scopes;
 
 namespace RoleManagement.Data.Redis;
 
@@ -23,6 +24,10 @@ internal static class ApplicationBuilderExtension
             if (dbProvider.Connection.GetIndexInfo(typeof(PermissionDataModel)) is null)
             {
                 dbProvider.Connection.CreateIndex(typeof(PermissionDataModel));
+            }
+            if (dbProvider.Connection.GetIndexInfo(typeof(ScopeDataModel)) is null)
+            {
+                dbProvider.Connection.CreateIndex(typeof(ScopeDataModel));
             }
         }
         catch (Exception e)

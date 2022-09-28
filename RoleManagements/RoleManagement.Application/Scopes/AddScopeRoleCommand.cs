@@ -1,4 +1,5 @@
-﻿using RoleManagements.Domain.Roles.Types;
+﻿using RoleManagements.Domain.Roles;
+using RoleManagements.Domain.Roles.Types;
 using RoleManagements.Domain.Scopes;
 using RoleManagements.Domain.Scopes.Exceptions;
 using RoleManagements.Domain.Scopes.Types;
@@ -12,10 +13,12 @@ public sealed record AddScopeRoleCommand(ScopeId Scope, params RoleId[] Roles) :
 internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCommand>
 {
     private readonly IScopeRepository _scopeRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public AddScopeRoleCommandHandler(IScopeRepository scopeRepository)
+    public AddScopeRoleCommandHandler(IScopeRepository scopeRepository, IRoleRepository roleRepository)
     {
         _scopeRepository = scopeRepository;
+        _roleRepository = roleRepository;
     }
 
     public override async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
@@ -29,8 +32,9 @@ internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCo
 
         foreach (var role in roleIds)
         {
-            scope.AddRole(role);
+            await scope.AddRoleAsync(role, _roleRepository);
         }
+
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

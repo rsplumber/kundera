@@ -65,7 +65,7 @@ public class RoleTest
 
         var repository = new RoleRepository();
         var role = await Role.CreateAsync("Admin", repository);
-        role.AddPermission(permission.Id);
+        await role.AddPermissionAsync(permission.Id, permissionRepository);
         Assert.Equal(1, role.Permissions.Count);
         Assert.True(role.HasPermission(permission.Id));
     }
@@ -78,7 +78,7 @@ public class RoleTest
 
         var repository = new RoleRepository();
         var role = await Role.CreateAsync("Admin", repository);
-        role.AddPermission(permission.Id);
+        await role.AddPermissionAsync(permission.Id, permissionRepository);
         Assert.Equal(1, role.Permissions.Count);
 
         role.RemovePermission(permission.Id);

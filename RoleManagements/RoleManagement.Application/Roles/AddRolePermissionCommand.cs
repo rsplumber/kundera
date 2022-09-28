@@ -1,4 +1,5 @@
-﻿using RoleManagements.Domain.Permissions.Types;
+﻿using RoleManagements.Domain.Permissions;
+using RoleManagements.Domain.Permissions.Types;
 using RoleManagements.Domain.Roles;
 using RoleManagements.Domain.Roles.Exceptions;
 using RoleManagements.Domain.Roles.Types;
@@ -12,10 +13,12 @@ public sealed record AddRolePermissionCommand(RoleId Role, params PermissionId[]
 internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePermissionCommand>
 {
     private readonly IRoleRepository _roleRepository;
+    private readonly IPermissionRepository _permissionRepository;
 
-    public AddRolePermissionCommandHandler(IRoleRepository roleRepository)
+    public AddRolePermissionCommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository)
     {
         _roleRepository = roleRepository;
+        _permissionRepository = permissionRepository;
     }
 
     public override async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
@@ -29,7 +32,7 @@ internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePe
 
         foreach (var permission in permissions)
         {
-            role.AddPermission(permission);
+            await role.AddPermissionAsync(permission, _permissionRepository);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

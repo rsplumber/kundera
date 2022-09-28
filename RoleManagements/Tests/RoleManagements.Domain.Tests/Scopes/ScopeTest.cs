@@ -49,7 +49,7 @@ public class ScopeTest
 
         var roleRepository = new RoleRepository();
         var role = await Role.CreateAsync("Admin", roleRepository);
-        scope.AddRole(role.Id);
+        await scope.AddRoleAsync(role.Id, roleRepository);
         Assert.Equal(1, scope.Roles.Count);
         Assert.Contains(scope.Roles, id => id == role.Id);
     }
@@ -64,7 +64,7 @@ public class ScopeTest
 
         var roleRepository = new RoleRepository();
         var role = await Role.CreateAsync("Admin", roleRepository);
-        scope.AddRole(role.Id);
+        await scope.AddRoleAsync(role.Id, roleRepository);
         Assert.Equal(1, scope.Roles.Count);
         scope.RemoveRole(role.Id);
         Assert.Equal(0, scope.Roles.Count);
@@ -79,7 +79,7 @@ public class ScopeTest
 
         var serviceRepository = new ServiceRepository();
         var service = await Service.CreateAsync("Admin", serviceRepository);
-        scope.AddService(service.Id);
+        await scope.AddServiceAsync(service.Id, serviceRepository);
         Assert.Equal(1, scope.Services.Count);
         Assert.Contains(scope.Services, id => id == service.Id);
     }
@@ -94,7 +94,7 @@ public class ScopeTest
 
         var serviceRepository = new ServiceRepository();
         var service = await Service.CreateAsync("Admin", serviceRepository);
-        scope.AddService(service.Id);
+        await scope.AddServiceAsync(service.Id,serviceRepository);
         Assert.Equal(1, scope.Services.Count);
         Assert.Contains(scope.Services, id => id == service.Id);
         scope.RemoveService(service.Id);
