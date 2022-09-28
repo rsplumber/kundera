@@ -1,7 +1,11 @@
-﻿using RoleManagements.Domain.Roles.Types;
+﻿using RoleManagements.Domain.Roles;
+using RoleManagements.Domain.Roles.Exceptions;
+using RoleManagements.Domain.Roles.Types;
 using RoleManagements.Domain.Scopes.Events;
 using RoleManagements.Domain.Scopes.Exceptions;
 using RoleManagements.Domain.Scopes.Types;
+using RoleManagements.Domain.Services;
+using RoleManagements.Domain.Services.Exceptions;
 using RoleManagements.Domain.Services.Types;
 using Tes.Domain.Contracts;
 
@@ -51,8 +55,14 @@ public class Scope : AggregateRoot<ScopeId>
 
     public IReadOnlyCollection<ServiceId> Services => _services.AsReadOnly();
 
-    public void AddService(ServiceId service)
+    public async Task AddServiceAsync(ServiceId service, IServiceRepository serviceRepository)
     {
+        var serviceExist = await serviceRepository.ExistsAsync(service);
+        if (!serviceExist)
+        {
+            throw new ServiceNotFoundException();
+        }
+
         if (HasService(service)) return;
         _services.Add(service);
     }
@@ -70,8 +80,14 @@ public class Scope : AggregateRoot<ScopeId>
 
     public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
 
-    public void AddRole(RoleId role)
+    public async Task AddRoleAsync(RoleId role, IRoleRepository roleRepository)
     {
+        var roleExist = await roleRepository.ExistsAsync(role);
+        if (!roleExist)
+        {
+            throw new RoleNotFoundException();
+        }
+
         if (HasRole(role)) return;
         _roles.Add(role);
     }
