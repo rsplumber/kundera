@@ -26,8 +26,8 @@ internal class ServiceRepository : IServiceRepository
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        var scopeDataModel = await _services.FindByIdAsync(id.Value);
-        return _mapper.Map<Service>(scopeDataModel);
+        var serviceDataModel = await _services.FindByIdAsync(id.Value);
+        return _mapper.Map<Service>(serviceDataModel);
     }
 
     public async ValueTask<bool> ExistsAsync(ServiceId id, CancellationToken cancellationToken = default)
