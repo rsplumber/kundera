@@ -29,7 +29,7 @@ public class User : AggregateRoot<UserId>
 
         _roles = new List<RoleId>();
 
-        _status = UserStatus.Active;
+        ChangeStatus(UserStatus.Active);
 
         AddDomainEvent(new UserCreatedEvent(Id));
     }

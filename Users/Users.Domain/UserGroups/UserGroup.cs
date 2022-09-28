@@ -21,7 +21,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _roles = new List<RoleId>();
         AssignRole(role);
 
-        _status = UserGroupStatus.Enable;
+        ChangeStatus(UserGroupStatus.Enable);
         AddDomainEvent(new UserGroupCreatedEvent(Id));
     }
 

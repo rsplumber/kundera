@@ -11,6 +11,8 @@ public class UserGroupsController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
+    //Todo Api haye Add Remove Move parent ezaf gardad
+    
     public UserGroupsController(IServiceBus serviceBus)
     {
         _serviceBus = serviceBus;
@@ -40,6 +42,7 @@ public class UserGroupsController : ControllerBase
         return Ok();
     }
 
+    //Todo Bazi az data ha Null ast
     [HttpGet]
     public async Task<IActionResult> UserGroupsAsync(CancellationToken cancellationToken)
     {

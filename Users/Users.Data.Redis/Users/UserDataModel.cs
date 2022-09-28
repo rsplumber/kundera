@@ -7,11 +7,11 @@ internal sealed class UserDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
-    [Indexed] [Searchable] public string[] Usernames { get; set; }
+    [Indexed] public string[] Usernames { get; set; }
 
     [Indexed] public string[] UserGroups { get; set; }
 
-    [Indexed] [Searchable] public string[] Roles { get; set; }
+    [Indexed] public string[] Roles { get; set; }
 
     [Indexed] public string Status { get; set; }
 

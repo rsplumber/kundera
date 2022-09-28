@@ -9,6 +9,9 @@ namespace RoleManagement.Web.Api.Permissions;
 [Route("/permissions")]
 public class PermissionsController : ControllerBase
 {
+    
+    //Todo Baraye Add Permission che qalati konim namoosan?
+    
     private readonly IServiceBus _serviceBus;
 
     public PermissionsController(IServiceBus serviceBus)
@@ -16,6 +19,7 @@ public class PermissionsController : ControllerBase
         _serviceBus = serviceBus;
     }
 
+    
     [HttpGet]
     public async Task<IActionResult> PermissionsAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
