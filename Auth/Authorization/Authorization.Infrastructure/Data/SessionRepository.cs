@@ -1,7 +1,7 @@
 ﻿using Authorization.Domain;
 using Authorization.Domain.Types;
 
-namespace Authorization.Infrastructure;
+namespace Authorization.Infrastructure.Data;
 
 internal sealed class SessionRepository : ISessionRepository
 {

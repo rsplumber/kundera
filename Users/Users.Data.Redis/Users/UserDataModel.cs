@@ -13,7 +13,7 @@ internal sealed class UserDataModel
 
     [Indexed] [Searchable] public string[] Roles { get; set; }
 
-    [Indexed(Sortable = true)] public string Status { get; set; }
+    [Indexed] public string Status { get; set; }
 
     public string? StatusChangedReason { get; set; }
 
