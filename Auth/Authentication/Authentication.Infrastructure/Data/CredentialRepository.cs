@@ -1,7 +1,7 @@
 ﻿using Authentication.Domain;
 using Authentication.Domain.Types;
 
-namespace Authentication.Infrastructure;
+namespace Authentication.Infrastructure.Data;
 
 internal class CredentialRepository : ICredentialRepository
 {

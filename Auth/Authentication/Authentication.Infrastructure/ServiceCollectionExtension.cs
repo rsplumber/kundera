@@ -1,5 +1,6 @@
 ﻿using Authentication.Application;
 using Authentication.Domain;
+using Authentication.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tes.Serializer.Microsoft;

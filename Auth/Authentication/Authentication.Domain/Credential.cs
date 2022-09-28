@@ -13,8 +13,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     private string _lastIpAddress;
     private DateTime _lastLoggedIn;
     private DateTime? _expiresAt;
-    private int _maxReachCount;
-    private int _reachCount;
+    private bool _oneTime;
 
     protected Credential()
     {
@@ -26,7 +25,6 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         _password = password;
         _lastIpAddress = lastIpAddress is not null ? lastIpAddress.ToString() : IPAddress.None.ToString();
         _lastLoggedIn = DateTime.UtcNow;
-        _reachCount = 0;
         AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
     }
 
@@ -39,10 +37,10 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         }
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, int maxReachCount, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
         this(uniqueIdentifier, password, user, expirationTimeInSeconds, lastIpAddress)
     {
-        _maxReachCount = maxReachCount;
+        _oneTime = oneTime;
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
@@ -79,7 +77,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
         UserId user,
-        int maxReachCount,
+        bool oneTime,
         int expirationTimeInSeconds,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
@@ -90,7 +88,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, user, maxReachCount, expirationTimeInSeconds, ipAddress);
+        return new(uniqueIdentifier, password, user, oneTime, expirationTimeInSeconds, ipAddress);
     }
 
     public UserId User => _userId;
@@ -103,9 +101,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public DateTime? ExpiresAt => _expiresAt;
 
-    public int MaxReachCount => _maxReachCount;
-
-    public int ReachCount => _reachCount;
+    public bool OneTime => _oneTime;
 
     public void UpdateActivityInfo(IPAddress ipAddress)
     {
