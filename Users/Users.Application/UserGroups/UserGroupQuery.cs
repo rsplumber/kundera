@@ -14,5 +14,5 @@ public sealed record UserGroupResponse(string Id, string Name, string UserGroupS
 
     public DateTime? StatusChangedDate { get; set; }
 
-    public List<string> Roles { get; set; }
+    public IEnumerable<string> Roles { get; set; }
 }

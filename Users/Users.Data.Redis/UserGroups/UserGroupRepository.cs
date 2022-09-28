@@ -1,4 +1,5 @@
-﻿using Redis.OM;
+﻿using AutoMapper;
+using Redis.OM;
 using Redis.OM.Searching;
 using Users.Domain.UserGroups;
 
@@ -6,28 +7,31 @@ namespace Users.Data.Redis.UserGroups;
 
 internal class UserGroupRepository : IUserGroupRepository
 {
-    private readonly RedisConnectionProvider _provider;
-    private readonly RedisCollection<UserGroup> _userGroup;
+    private readonly RedisCollection<UserGroupDataModel> _userGroups;
+    private readonly IMapper _mapper;
 
 
-    public UserGroupRepository(RedisConnectionProvider provider)
+    public UserGroupRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _provider = provider;
-        _userGroup = (RedisCollection<UserGroup>) provider.RedisCollection<UserGroup>();
+        _mapper = mapper;
+        _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }
 
-    public async Task AddAsync(UserGroup userGroup, CancellationToken cancellationToken = default)
+    public async Task AddAsync(UserGroup entity, CancellationToken cancellationToken = default)
     {
-        await _userGroup.InsertAsync(userGroup);
+        var userGroup = _mapper.Map<UserGroupDataModel>(entity);
+        await _userGroups.InsertAsync(userGroup);
     }
 
     public async Task<UserGroup?> FindAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
-        return await _userGroup.FirstOrDefaultAsync(u => u.Id == id);
+        var userGroupDataModel = await _userGroups.FindByIdAsync(id.Value.ToString());
+        return _mapper.Map<UserGroup>(userGroupDataModel);
     }
 
-    public async Task UpdateAsync(UserGroup userGroup, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(UserGroup entity, CancellationToken cancellationToken = default)
     {
-        await _userGroup.UpdateAsync(userGroup);
+        var userGroup = _mapper.Map<UserGroupDataModel>(entity);
+        await _userGroups.UpdateAsync(userGroup);
     }
 }

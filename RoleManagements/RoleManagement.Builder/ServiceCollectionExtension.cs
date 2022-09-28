@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RoleManagement.Data;
 using RoleManagement.Data.Redis;
 using Tes.CQRS.InMemory;
 using Tes.Serializer.Microsoft;
@@ -13,12 +12,11 @@ public static class ServiceCollectionExtension
     public static void AddRoleManagement(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMicrosoftSerializer(configuration);
-        var assemblies = new[]
+        services.AddCqrsInMemory(configuration, new[]
         {
             Assembly.Load("RoleManagement.Application"),
             Assembly.Load("RoleManagement.Data.Redis")
-        };
-        services.AddCqrsInMemory(configuration, assemblies);
+        });
         services.AddDataLayer(configuration);
     }
 }

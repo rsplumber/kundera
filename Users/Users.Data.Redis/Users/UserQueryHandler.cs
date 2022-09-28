@@ -1,12 +1,32 @@
-﻿using Tes.CQRS;
+﻿using Redis.OM;
+using Redis.OM.Searching;
+using Tes.CQRS;
 using Users.Application.Users;
+using Users.Domain.Users.Exception;
 
 namespace Users.Data.Redis.Users;
 
 internal sealed class UserQueryHandler : QueryHandler<UserQuery, UserResponse>
 {
-    public override Task<UserResponse> HandleAsync(UserQuery message, CancellationToken cancellationToken = new CancellationToken())
+    private readonly IRedisCollection<UserDataModel> _users;
+
+    public UserQueryHandler(RedisConnectionProvider provider)
     {
-        throw new NotImplementedException();
+        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
+    }
+
+    public override async Task<UserResponse> HandleAsync(UserQuery message, CancellationToken cancellationToken = default)
+    {
+        var user = await _users.FindByIdAsync(message.User.Value.ToString());
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        return new UserResponse(user.Id, user.Usernames)
+        {
+            Roles = user.Roles,
+            UserGroups = user.UserGroups
+        };
     }
 }

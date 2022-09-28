@@ -1,4 +1,5 @@
-﻿using Redis.OM;
+﻿using AutoMapper;
+using Redis.OM;
 using Redis.OM.Searching;
 using Users.Domain.Users;
 
@@ -6,30 +7,41 @@ namespace Users.Data.Redis.Users;
 
 internal class UserRepository : IUserRepository
 {
-    private readonly RedisCollection<User> _users;
+    private readonly RedisCollection<UserDataModel> _users;
+    private readonly IMapper _mapper;
 
-    public UserRepository(RedisConnectionProvider provider)
+    public UserRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _users = (RedisCollection<User>) provider.RedisCollection<User>();
+        _mapper = mapper;
+        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async Task AddAsync(User user, CancellationToken cancellationToken = default)
+    public async Task AddAsync(User entity, CancellationToken cancellationToken = default)
     {
-        await _users.InsertAsync(user);
+        var userDataModel = _mapper.Map<UserDataModel>(entity);
+        await _users.InsertAsync(userDataModel);
     }
 
     public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
     {
-        return await _users.FirstOrDefaultAsync(u => u.Id == id);
+        var userDataModel = await _users.FindByIdAsync(id.Value.ToString());
+        return _mapper.Map<User>(userDataModel);
     }
 
-    public ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _users.AnyAsync(model => model.Usernames.Any(u => u == username));
     }
 
-    public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<User> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
-        await _users.UpdateAsync(user);
+        var userDataModel = await _users.FirstOrDefaultAsync(model => model.Usernames.Any(u => u == username));
+        return _mapper.Map<User>(userDataModel);
+    }
+
+    public async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
+    {
+        var userDataModel = _mapper.Map<UserDataModel>(entity);
+        await _users.InsertAsync(userDataModel);
     }
 }

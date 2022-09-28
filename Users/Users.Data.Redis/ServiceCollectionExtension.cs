@@ -15,5 +15,6 @@ internal static class ServiceCollectionExtension
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserGroupRepository, UserGroupRepository>();
         services.AddSingleton(new RedisConnectionProvider(configuration.GetConnectionString("Users")));
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }
