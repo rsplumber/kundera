@@ -17,13 +17,13 @@ internal class PermissionRepository : IPermissionRepository
         _mapper = mapper;
     }
 
-    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = new CancellationToken())
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
     {
-        var role = _mapper.Map<PermissionDataModel>(entity);
-        await _permissions.InsertAsync(role);
+        var permission = _mapper.Map<PermissionDataModel>(entity);
+        await _permissions.InsertAsync(permission);
     }
 
-    public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         var roleDataModel = await _permissions.FindByIdAsync(id.Value);
         return _mapper.Map<Permission>(roleDataModel);
@@ -36,7 +36,7 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
     {
-        var role = _mapper.Map<PermissionDataModel>(entity);
-        await _permissions.UpdateAsync(role);
+        var permission = _mapper.Map<PermissionDataModel>(entity);
+        await _permissions.UpdateAsync(permission);
     }
 }

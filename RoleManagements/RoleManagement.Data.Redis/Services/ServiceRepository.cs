@@ -1,27 +1,43 @@
-﻿using RoleManagements.Domain.Services;
+﻿using AutoMapper;
+using Redis.OM;
+using Redis.OM.Searching;
+using RoleManagements.Domain.Services;
 using RoleManagements.Domain.Services.Types;
 
 namespace RoleManagement.Data.Redis.Services;
 
 internal class ServiceRepository : IServiceRepository
 {
-    public async Task AddAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
+    private readonly RedisCollection<ServiceDataModel> _services;
+    private readonly IMapper _mapper;
+
+
+    public ServiceRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        throw new NotImplementedException();
+        _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
+        _mapper = mapper;
+    }
+
+    public async Task AddAsync(Service entity, CancellationToken cancellationToken = default)
+    {
+        var service = _mapper.Map<ServiceDataModel>(entity);
+        await _services.InsertAsync(service);
     }
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var scopeDataModel = await _services.FindByIdAsync(id.Value);
+        return _mapper.Map<Service>(scopeDataModel);
     }
 
     public async ValueTask<bool> ExistsAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _services.AnyAsync(model => model.Id == id.Value);
     }
 
-    public Task UpdateAsync(Service entity, CancellationToken cancellationToken = new CancellationToken())
+    public async Task UpdateAsync(Service entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var service = _mapper.Map<ServiceDataModel>(entity);
+        await _services.UpdateAsync(service);
     }
 }

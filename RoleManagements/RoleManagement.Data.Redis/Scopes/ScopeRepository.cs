@@ -20,8 +20,8 @@ internal class ScopeRepository : IScopeRepository
 
     public async Task AddAsync(Scope entity, CancellationToken cancellationToken = default)
     {
-        var role = _mapper.Map<ScopeDataModel>(entity);
-        await _scopes.InsertAsync(role);
+        var scope = _mapper.Map<ScopeDataModel>(entity);
+        await _scopes.InsertAsync(scope);
     }
 
     public async Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ internal class ScopeRepository : IScopeRepository
 
     public async Task UpdateAsync(Scope entity, CancellationToken cancellationToken = default)
     {
-        var role = _mapper.Map<ScopeDataModel>(entity);
-        await _scopes.UpdateAsync(role);
+        var scope = _mapper.Map<ScopeDataModel>(entity);
+        await _scopes.UpdateAsync(scope);
     }
 }
