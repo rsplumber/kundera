@@ -7,7 +7,7 @@ public sealed record ScopeQuery(ScopeId Scope) : Query<ScopeResponse>;
 
 public sealed record ScopeResponse(string Id, string Status)
 {
-    public List<string>? Roles { get; set; }
+    public IEnumerable<string>? Roles { get; set; }
 
-    public List<string>? Services { get; set; }
+    public IEnumerable<string>? Services { get; set; }
 }
