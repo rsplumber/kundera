@@ -36,11 +36,9 @@ public class PermissionsController : ControllerBase
         return Ok(response);
     }
 
+
     [HttpPost("{id:required}/meta")]
-    public async Task<IActionResult> AddMetaAsync(
-        [FromRoute] string id,
-        [FromBody] AddPermissionMetaRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> AddMetaAsync([FromRoute] string id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -48,10 +46,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpDelete("{id:required}/meta")]
-    public async Task<IActionResult> RemoveMetaAsync(
-        [FromRoute] string id,
-        [FromBody] RemovePermissionMetaRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id, [FromBody] RemovePermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);

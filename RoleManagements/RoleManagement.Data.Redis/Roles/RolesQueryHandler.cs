@@ -18,9 +18,11 @@ internal sealed class RolesQueryHandler : QueryHandler<RolesQuery, IEnumerable<R
     {
         if (message.Name is not null)
         {
-            _roles = _roles.Where(model => model.Id == message.Name);
+            _roles = _roles.Where(model => model.Id.Contains(message.Name));
         }
 
-        return await _roles.Select(model => new RolesResponse(model.Id)).ToListAsync();
+        var rolesDataModel = await _roles.ToListAsync();
+
+        return rolesDataModel.Select(model => new RolesResponse(model.Id));
     }
 }

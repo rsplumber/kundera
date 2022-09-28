@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;
+using RoleManagement.Data.Redis.Permissions;
 using RoleManagement.Data.Redis.Roles;
 
 namespace RoleManagement.Data.Redis;
@@ -18,6 +19,10 @@ internal static class ApplicationBuilderExtension
             if (dbProvider.Connection.GetIndexInfo(typeof(RoleDataModel)) is null)
             {
                 dbProvider.Connection.CreateIndex(typeof(RoleDataModel));
+            }
+            if (dbProvider.Connection.GetIndexInfo(typeof(PermissionDataModel)) is null)
+            {
+                dbProvider.Connection.CreateIndex(typeof(PermissionDataModel));
             }
         }
         catch (Exception e)
