@@ -1,4 +1,6 @@
-﻿using RoleManagements.Domain.Permissions.Types;
+﻿using RoleManagements.Domain.Permissions;
+using RoleManagements.Domain.Permissions.Exceptions;
+using RoleManagements.Domain.Permissions.Types;
 using RoleManagements.Domain.Roles.Events;
 using RoleManagements.Domain.Roles.Exceptions;
 using RoleManagements.Domain.Roles.Types;
@@ -36,8 +38,14 @@ public class Role : AggregateRoot<RoleId>
 
     public IReadOnlyCollection<PermissionId> Permissions => _permissions.AsReadOnly();
 
-    public void AddPermission(PermissionId permission)
+    public async Task AddPermissionAsync(PermissionId permission, IPermissionRepository permissionRepository)
     {
+        var permissionExist = await permissionRepository.ExistsAsync(permission);
+        if (!permissionExist)
+        {
+            throw new PermissionNotFoundException();
+        }
+
         if (HasPermission(permission)) return;
         _permissions.Add(permission);
     }
