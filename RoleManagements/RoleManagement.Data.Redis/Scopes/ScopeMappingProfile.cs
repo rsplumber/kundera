@@ -9,10 +9,10 @@ public class ScopeMappingProfile : Profile
     public ScopeMappingProfile()
     {
         CreateMap<string, ScopeStatus>().ConvertUsing(s => ScopeStatus.From(s));
-        CreateMap<ScopeStatus, string>().ConvertUsing(s => s.ToString());
+        CreateMap<ScopeStatus, string>().ConvertUsing(s => s.Value);
 
         CreateMap<string, ScopeId>().ConvertUsing(s => ScopeId.From(s));
-        CreateMap<ScopeId, string>().ConvertUsing(s => s.ToString());
+        CreateMap<ScopeId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Scope, ScopeDataModel>()
             .ForMember(model => model.Status, expression => expression.MapFrom("_status"))

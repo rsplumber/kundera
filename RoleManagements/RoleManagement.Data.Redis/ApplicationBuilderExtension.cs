@@ -5,6 +5,7 @@ using Redis.OM;
 using RoleManagement.Data.Redis.Permissions;
 using RoleManagement.Data.Redis.Roles;
 using RoleManagement.Data.Redis.Scopes;
+using RoleManagement.Data.Redis.Services;
 
 namespace RoleManagement.Data.Redis;
 
@@ -28,6 +29,10 @@ internal static class ApplicationBuilderExtension
             if (dbProvider.Connection.GetIndexInfo(typeof(ScopeDataModel)) is null)
             {
                 dbProvider.Connection.CreateIndex(typeof(ScopeDataModel));
+            }
+            if (dbProvider.Connection.GetIndexInfo(typeof(ServiceDataModel)) is null)
+            {
+                dbProvider.Connection.CreateIndex(typeof(ServiceDataModel));
             }
         }
         catch (Exception e)

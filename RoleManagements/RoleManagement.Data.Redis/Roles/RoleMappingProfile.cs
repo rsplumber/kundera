@@ -10,7 +10,7 @@ public class RoleMappingProfile : Profile
     public RoleMappingProfile()
     {
         CreateMap<string, RoleId>().ConvertUsing(s => RoleId.From(s));
-        CreateMap<RoleId, string>().ConvertUsing(s => s.ToString());
+        CreateMap<RoleId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Role, RoleDataModel>()
             .ForMember(model => model.Meta, expression => expression.MapFrom("_meta"))

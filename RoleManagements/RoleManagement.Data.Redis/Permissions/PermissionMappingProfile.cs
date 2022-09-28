@@ -9,7 +9,7 @@ public class PermissionMappingProfile : Profile
     public PermissionMappingProfile()
     {
         CreateMap<string, PermissionId>().ConvertUsing(s => PermissionId.From(s));
-        CreateMap<PermissionId, string>().ConvertUsing(s => s.ToString());
+        CreateMap<PermissionId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Permission, PermissionDataModel>()
             .ForMember(model => model.Meta, expression => expression.MapFrom("_meta"))
