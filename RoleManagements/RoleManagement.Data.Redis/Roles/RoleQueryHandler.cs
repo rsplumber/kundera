@@ -25,7 +25,9 @@ internal sealed class RoleQueryHandler : QueryHandler<RoleQuery, RoleResponse>
 
         return new RoleResponse(role.Id)
         {
-            Meta = role.Meta
+            Meta = role.Meta,
+            Permissions = role.Permissions
+            
         };
     }
 }
