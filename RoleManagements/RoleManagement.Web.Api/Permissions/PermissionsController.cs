@@ -36,13 +36,6 @@ public class PermissionsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] CreatePermissionRequest request, CancellationToken cancellationToken)
-    {
-        var command = request.ToCommand();
-        await _serviceBus.SendAsync(command, cancellationToken);
-        return Ok();
-    }
 
     [HttpPost("{id:required}/meta")]
     public async Task<IActionResult> AddMetaAsync([FromRoute] string id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)
