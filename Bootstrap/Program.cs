@@ -1,7 +1,6 @@
 using Authentication.Infrastructure;
 using Authorization.Infrastructure;
 using RoleManagement.Builder;
-using RoleManagement.Web.Api.Extensions;
 using Users.Builder;
 using Web.Api;
 
