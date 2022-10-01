@@ -2,17 +2,14 @@
 
 namespace Authorization.Infrastructure.Data;
 
-[Document(StorageType = StorageType.Json, Prefixes = new[] {"user"})]
+[Document(IndexName = "sessions", StorageType = StorageType.Json, Prefixes = new[] {"session"})]
 internal sealed class SessionDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
     public string RefreshToken { get; set; }
 
-    [Indexed]
-    [Searchable]
-    public string Scope { get; set; }
-
+    [Indexed] [Searchable] public string Scope { get; set; }
 
     [Indexed] public string User { get; set; }
 
