@@ -7,18 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Kundera.Authorization.Abstractions\Kundera.Authorization.Abstractions.csproj" />
-      <ProjectReference Include="..\Authorization.Application\Authorization.Application.csproj" />
+        <ProjectReference Include="..\Kundera.Authorization.Abstractions\Kundera.Authorization.Abstractions.csproj"/>
+        <ProjectReference Include="..\Authorization.Application\Authorization.Application.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-      <PackageReference Include="Tes.Standard.Serializer.Microsoft" Version="1.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+        <PackageReference Include="Tes.Standard.Serializer.Microsoft" Version="1.0.0"/>
         <PackageReference Include="Redis.OM" Version="0.2.3"/>
         <PackageReference Include="AutoMapper" Version="11.0.1"/>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Tes.Standard.Tokens.JWT" Version="1.0.1"/>
     </ItemGroup>
 
 </Project>

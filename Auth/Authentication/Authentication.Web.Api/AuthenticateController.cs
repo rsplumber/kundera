@@ -1,3 +1,4 @@
+using System.Net;
 using Authentication.Application;
 using Authentication.Domain;
 using Authentication.Domain.Types;
@@ -16,13 +17,22 @@ public class AuthenticateController : ControllerBase
         _authenticateService = authenticateService;
     }
 
-    //Todo Add IpAddress
     [HttpPost]
     public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var password = Password.From(request.Password);
-        var oneTimeToken = await _authenticateService.AuthenticateAsync(uniqueIdentifier, password, cancellationToken: cancellationToken);
+        var oneTimeToken = await _authenticateService.AuthenticateAsync(uniqueIdentifier, password, IpAddress(), cancellationToken);
         return Ok(oneTimeToken);
+    }
+
+    private IPAddress IpAddress()
+    {
+        if (Request.Headers.ContainsKey("X-Real-IP"))
+        {
+            return IPAddress.Parse(Request.Headers["X-Real-IP"]);
+        }
+
+        return HttpContext.Connection.RemoteIpAddress?.MapToIPv4() ?? IPAddress.None;
     }
 }

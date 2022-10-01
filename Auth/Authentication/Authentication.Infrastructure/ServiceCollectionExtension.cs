@@ -14,7 +14,13 @@ public static class ServiceCollectionExtension
         services.AddMicrosoftSerializer(configuration);
 
         services.AddScoped<ICredentialRepository, CredentialRepository>();
+
         services.AddScoped<IAuthenticateService, AuthenticateService>();
+
         services.AddScoped<ICredentialService, CredentialService>();
+        services.AddScoped<IOneTimeCredentialService, OneTimeCredentialService>();
+        services.AddScoped<ITimePeriodicCredentialService, TimePeriodicCredentialService>();
+        
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

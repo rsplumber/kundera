@@ -60,7 +60,7 @@ internal sealed class SessionManagement : ISessionManagement
         };
     }
 
-    public async Task<IEnumerable<SessionModel>> GetAllAsync(string? scope = null, Guid? userId = null, DateOnly? expireDate = null, DateOnly? lastUsageDateUtc = null, string? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

@@ -13,11 +13,5 @@ public interface ISessionManagement
 
     Task<SessionModel?> GetAsync(Token token, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SessionModel>> GetAllAsync(
-        string? scope = null,
-        Guid? userId = null,
-        DateOnly? expireDate = null,
-        DateOnly? lastUsageDateUtc = null,
-        string? ipAddress = null,
-        CancellationToken cancellationToken = default);
+    Task<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default);
 }
