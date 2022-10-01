@@ -5,7 +5,7 @@ using Users.Domain.UserGroups.Exception;
 
 namespace Users.Application.UserGroups;
 
-public sealed record MoveUserGroupParentCommand(UserGroupId From, UserGroupId To) : Command;
+public sealed record MoveUserGroupParentCommand(UserGroupId UserGroupId, UserGroupId To) : Command;
 
 internal sealed class MoveUserGroupParentCommandHandler : CommandHandler<MoveUserGroupParentCommand>
 {

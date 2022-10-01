@@ -41,6 +41,30 @@ public class UserGroupsController : ControllerBase
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
+    
+    [HttpPost("{id:required:guid}/parent")]
+    public async Task<IActionResult> SetParent([FromRoute] Guid id,[FromBody] SetUserGroupParentRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpPost("{id:required:guid}/parent/move")]
+    public async Task<IActionResult> MoveParent([FromRoute] Guid id,[FromBody] MoveUserGroupParentRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpDelete("{id:required:guid}/parent")]
+    public async Task<IActionResult> RemoveParent([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new RemoveUserGroupParentCommand(UserGroupId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
 
     //Todo Bazi az data ha Null ast
     [HttpGet]
