@@ -19,5 +19,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IAuthorizeService, AuthorizeService>();
         services.AddScoped<ICertificateService, CertificateService>();
         services.AddScoped<ISessionManagement, SessionManagement>();
+        
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

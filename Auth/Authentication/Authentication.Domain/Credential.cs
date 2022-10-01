@@ -103,9 +103,9 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public bool OneTime => _oneTime;
 
-    public void UpdateActivityInfo(IPAddress ipAddress)
+    public void UpdateActivityInfo(IPAddress? ipAddress)
     {
         _lastLoggedIn = DateTime.UtcNow;
-        _lastIpAddress = ipAddress.ToString();
+        _lastIpAddress = ipAddress is not null ? ipAddress.ToString() : IPAddress.None.ToString();
     }
 }
