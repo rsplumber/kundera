@@ -12,8 +12,9 @@ public class PermissionMappingProfile : Profile
         CreateMap<PermissionId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Permission, PermissionDataModel>()
-            .ForMember(model => model.Meta, expression => expression.MapFrom("_meta"))
             .ReverseMap()
-            .ForMember(permission => permission.Meta, expression => expression.Ignore());
+            .ForMember("_meta", expression => expression.MapFrom(model => model.Meta))
+            .ForMember(group => group.Meta, expression => expression.Ignore());
+        
     }
 }

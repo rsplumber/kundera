@@ -23,17 +23,12 @@ internal sealed class UserMappingProfile : Profile
 
 
         CreateMap<User, UserDataModel>()
-            .ForMember(model => model.Usernames, expression => expression.MapFrom("_usernames"))
-            .ForMember(model => model.UserGroups, expression => expression.MapFrom("_userGroups"))
-            .ForMember(model => model.Roles, expression => expression.MapFrom("_roles"))
-            .ForMember(model => model.Status, expression => expression.MapFrom("_status"))
-            .ForMember(model => model.StatusChangedDate, expression => expression.MapFrom("_statusChangedDate"))
-            .ForMember(model => model.StatusChangedReason, expression => expression.MapFrom("_statusChangedReason"))
             .ReverseMap()
-            .ForMember(user => user.Usernames, expression => expression.Ignore())
-            .ForMember(user => user.Reason, expression => expression.Ignore())
-            .ForMember(user => user.Status, expression => expression.Ignore())
-            .ForMember(user => user.UserGroups, expression => expression.Ignore())
-            .ForMember(user => user.Roles, expression => expression.Ignore());
+            .ForMember("_usernames", expression => expression.MapFrom(model => model.Usernames))
+            .ForMember(group => group.Usernames, expression => expression.Ignore())
+            .ForMember("_userGroups", expression => expression.MapFrom(model => model.UserGroups))
+            .ForMember(group => group.UserGroups, expression => expression.Ignore())
+            .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))
+            .ForMember(group => group.Roles, expression => expression.Ignore());
     }
 }

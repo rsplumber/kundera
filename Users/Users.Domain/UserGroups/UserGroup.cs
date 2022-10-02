@@ -11,8 +11,11 @@ public class UserGroup : AggregateRoot<UserGroupId>
     private UserGroupId? _parent;
     private UserGroupStatus _status;
     private DateTime _statusChangedDate;
-    private readonly ICollection<RoleId> _roles;
+    private readonly List<RoleId> _roles = new();
 
+    protected UserGroup()
+    {
+    }
 
     private UserGroup(string name, RoleId role) : base(UserGroupId.Generate())
     {
@@ -48,7 +51,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public UserGroupStatus UserGroupStatus => _status;
     public DateTime? StatusChangedDate => _statusChangedDate;
 
-    public IReadOnlyCollection<RoleId> Roles => (IReadOnlyCollection<RoleId>) _roles;
+    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
 
     public void ChangeName(Name name)
     {

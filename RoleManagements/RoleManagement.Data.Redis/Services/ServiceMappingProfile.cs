@@ -10,13 +10,10 @@ public class ServiceMappingProfile : Profile
     {
         CreateMap<string, ServiceId>().ConvertUsing(s => ServiceId.From(s));
         CreateMap<ServiceId, string>().ConvertUsing(s => s.Value);
-        
+
         CreateMap<string, ServiceStatus>().ConvertUsing(s => ServiceStatus.From(s));
         CreateMap<ServiceStatus, string>().ConvertUsing(s => s.Value);
 
-        CreateMap<Service, ServiceDataModel>()
-            .ForMember(model => model.Status, expression => expression.MapFrom("_status"))
-            .ReverseMap()
-            .ForMember(role => role.Status, expression => expression.Ignore());
+        CreateMap<Service, ServiceDataModel>().ReverseMap();
     }
 }

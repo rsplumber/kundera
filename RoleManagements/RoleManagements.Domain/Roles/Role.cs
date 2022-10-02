@@ -10,8 +10,8 @@ namespace RoleManagements.Domain.Roles;
 
 public class Role : AggregateRoot<RoleId>
 {
-    private readonly List<PermissionId> _permissions;
-    private readonly Dictionary<string, string> _meta;
+    private readonly List<PermissionId> _permissions = new();
+    private readonly Dictionary<string, string> _meta = new();
 
     protected Role()
     {
@@ -19,8 +19,6 @@ public class Role : AggregateRoot<RoleId>
 
     private Role(RoleId id) : base(id)
     {
-        _permissions = new List<PermissionId>();
-        _meta = new Dictionary<string, string>();
         AddDomainEvent(new RoleCreatedEvent(id));
     }
 

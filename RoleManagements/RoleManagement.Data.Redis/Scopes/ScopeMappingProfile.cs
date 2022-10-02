@@ -15,12 +15,10 @@ public class ScopeMappingProfile : Profile
         CreateMap<ScopeId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Scope, ScopeDataModel>()
-            .ForMember(model => model.Status, expression => expression.MapFrom("_status"))
-            .ForMember(model => model.Services, expression => expression.MapFrom("_services"))
-            .ForMember(model => model.Roles, expression => expression.MapFrom("_roles"))
             .ReverseMap()
-            .ForMember(scope => scope.Services, expression => expression.Ignore())
-            .ForMember(scope => scope.Roles, expression => expression.Ignore())
-            .ForMember(scope => scope.Status, expression => expression.Ignore());
+            .ForMember("_services", expression => expression.MapFrom(model => model.Services))
+            .ForMember(group => group.Services, expression => expression.Ignore())
+            .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))
+            .ForMember(group => group.Roles, expression => expression.Ignore());
     }
 }

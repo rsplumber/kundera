@@ -7,7 +7,7 @@ namespace RoleManagements.Domain.Permissions;
 
 public class Permission : AggregateRoot<PermissionId>
 {
-    private readonly Dictionary<string, string> _meta;
+    private readonly Dictionary<string, string> _meta = new();
 
     protected Permission()
     {
@@ -15,7 +15,6 @@ public class Permission : AggregateRoot<PermissionId>
 
     private Permission(PermissionId id) : base(id)
     {
-        _meta = new Dictionary<string, string>();
         AddDomainEvent(new PermissionCreatedEvent(id));
     }
 

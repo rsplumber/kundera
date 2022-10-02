@@ -13,10 +13,11 @@ public class RoleMappingProfile : Profile
         CreateMap<RoleId, string>().ConvertUsing(s => s.Value);
 
         CreateMap<Role, RoleDataModel>()
-            .ForMember(model => model.Meta, expression => expression.MapFrom("_meta"))
-            .ForMember(model => model.Permissions, expression => expression.MapFrom("_permissions"))
             .ReverseMap()
-            .ForMember(role => role.Meta, expression => expression.Ignore())
-            .ForMember(role => role.Permissions, expression => expression.Ignore());
+            .ForMember("_meta", expression => expression.MapFrom(model => model.Meta))
+            .ForMember(group => group.Meta, expression => expression.Ignore())
+            .ForMember("_permissions", expression => expression.MapFrom(model => model.Permissions))
+            .ForMember(group => group.Permissions, expression => expression.Ignore());
+        
     }
 }

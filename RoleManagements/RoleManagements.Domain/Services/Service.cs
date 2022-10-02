@@ -15,7 +15,7 @@ public class Service : AggregateRoot<ServiceId>
 
     private Service(ServiceId id) : base(id)
     {
-        _status = ServiceStatus.Active;
+        ChangeStatus(ServiceStatus.Active);
         AddDomainEvent(new ServiceCreatedEvent(id));
     }
 

@@ -8,9 +8,9 @@ namespace Users.Domain.Users;
 
 public class User : AggregateRoot<UserId>
 {
-    private readonly List<Username> _usernames;
-    private readonly ICollection<UserGroupId> _userGroups;
-    private readonly ICollection<RoleId> _roles;
+    private readonly List<Username> _usernames = new();
+    private readonly List<UserGroupId> _userGroups = new();
+    private readonly List<RoleId> _roles = new();
     private UserStatus _status;
     private string? _statusChangedReason;
     private DateTime _statusChangedDate;
@@ -21,13 +21,9 @@ public class User : AggregateRoot<UserId>
 
     private User(Username username, UserGroupId userGroupId) : base(UserId.Generate())
     {
-        _usernames = new List<Username>();
         AddUsername(username);
 
-        _userGroups = new List<UserGroupId>();
         JoinGroup(userGroupId);
-
-        _roles = new List<RoleId>();
 
         ChangeStatus(UserStatus.Active);
 
@@ -55,9 +51,9 @@ public class User : AggregateRoot<UserId>
 
     public DateTime StatusChangedDate => _statusChangedDate;
 
-    public IReadOnlyCollection<UserGroupId> UserGroups => (IReadOnlyCollection<UserGroupId>) _userGroups;
+    public IReadOnlyCollection<UserGroupId> UserGroups => _userGroups.AsReadOnly();
 
-    public IReadOnlyCollection<RoleId> Roles => (IReadOnlyCollection<RoleId>) _roles;
+    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
 
     private void ChangeReason(Text? reason) => _statusChangedReason = reason ?? null;
 

@@ -14,8 +14,8 @@ namespace RoleManagements.Domain.Scopes;
 public class Scope : AggregateRoot<ScopeId>
 {
     private ScopeStatus _status;
-    private readonly List<ServiceId> _services;
-    private readonly List<RoleId> _roles;
+    private readonly List<ServiceId> _services = new();
+    private readonly List<RoleId> _roles = new();
 
     protected Scope()
     {
@@ -23,9 +23,7 @@ public class Scope : AggregateRoot<ScopeId>
 
     private Scope(ScopeId id) : base(id)
     {
-        _services = new List<ServiceId>();
-        _roles = new List<RoleId>();
-        _status = ScopeStatus.Active;
+        ChangeStatus(ScopeStatus.Active);
         AddDomainEvent(new ScopeCreatedEvent(id));
     }
 
