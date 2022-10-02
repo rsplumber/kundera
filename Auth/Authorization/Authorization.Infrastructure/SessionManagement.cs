@@ -33,23 +33,16 @@ internal sealed class SessionManagement : ISessionManagement
         await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
-    public async Task UpdateAsync(Token token, DateTime lastUsageDate, IPAddress ipAddress, CancellationToken cancellationToken = default)
-    {
-        var session = await _sessionRepository.FindAsync(token, cancellationToken);
-        if (session is null) return;
-        session.UpdateUsage(lastUsageDate, ipAddress);
-        await _sessionRepository.UpdateAsync(session, cancellationToken);
-    }
-
     public async Task DeleteAsync(Token token, CancellationToken cancellationToken = default)
     {
         await _sessionRepository.DeleteAsync(token, cancellationToken);
     }
 
-    public async Task<SessionModel?> GetAsync(Token token, CancellationToken cancellationToken = default)
+    public async Task<SessionModel?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
         if (session is null) return null;
+        await UpdateAsync(token, ipAddress, cancellationToken);
         return new SessionModel
         {
             Scope = session.Scope,
@@ -63,5 +56,13 @@ internal sealed class SessionManagement : ISessionManagement
     public async Task<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    private async Task UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    {
+        var session = await _sessionRepository.FindAsync(token, cancellationToken);
+        if (session is null) return;
+        session.UpdateUsage(DateTime.UtcNow, ipAddress);
+        await _sessionRepository.UpdateAsync(session, cancellationToken);
     }
 }

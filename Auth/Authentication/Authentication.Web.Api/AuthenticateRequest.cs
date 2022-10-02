@@ -3,7 +3,7 @@ using Tes.Web.Validators;
 
 namespace Authentication.Web.Api;
 
-public record AuthenticateRequest(string Username, string Password, string? Type = null) : IWebRequest;
+public record AuthenticateRequest(string Username, string Password, string? Type = null , string? Scope = null) : IWebRequest;
 
 public class AuthenticateRequestValidator : RequestValidator<AuthenticateRequest>
 {

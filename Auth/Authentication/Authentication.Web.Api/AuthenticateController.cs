@@ -22,8 +22,12 @@ public class AuthenticateController : ControllerBase
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var password = Password.From(request.Password);
-        var oneTimeToken = await _authenticateService.AuthenticateAsync(uniqueIdentifier, password, IpAddress(), cancellationToken);
-        return Ok(oneTimeToken);
+        var certificate = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
+            password,
+            request.Scope,
+            IpAddress(),
+            cancellationToken);
+        return Ok(certificate);
     }
 
     private IPAddress IpAddress()
