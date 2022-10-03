@@ -15,6 +15,11 @@ public class ServiceMappingProfile : Profile
         CreateMap<string, ServiceStatus>().ConvertUsing(s => ServiceStatus.From(s));
         CreateMap<ServiceStatus, string>().ConvertUsing(s => s.Value);
 
-        CreateMap<Service, ServiceDataModel>().ReverseMap();
+        CreateMap<Service, ServiceDataModel>()
+            .IgnoreAllPropertiesWithAnInaccessibleSetter()
+            .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
+            .ForMember(service => service.Id, expression => expression.MapFrom(model => model.Id))
+            .ForMember("_status", expression => expression.MapFrom(model => model.Status))
+            .ReverseMap();
     }
 }
