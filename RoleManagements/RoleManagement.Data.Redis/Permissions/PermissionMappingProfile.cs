@@ -8,6 +8,7 @@ public class PermissionMappingProfile : Profile
 {
     public PermissionMappingProfile()
     {
+        DisableConstructorMapping();
         CreateMap<string, PermissionId>().ConvertUsing(s => PermissionId.From(s));
         CreateMap<PermissionId, string>().ConvertUsing(s => s.Value);
 

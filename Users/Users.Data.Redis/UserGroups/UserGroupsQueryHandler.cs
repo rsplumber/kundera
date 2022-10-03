@@ -16,10 +16,11 @@ internal sealed class UserGroupsQueryHandler : QueryHandler<UserGroupsQuery, IEn
 
     public override async Task<IEnumerable<UserGroupsResponse>> HandleAsync(UserGroupsQuery message, CancellationToken cancellationToken = default)
     {
-        return await _userGroups.Select(model => new UserGroupsResponse(model.Id, model.Name, model.Status)
+        var groups = await _userGroups.ToListAsync();
+        return groups.Select(model => new UserGroupsResponse(model.Id, model.Name, model.Status)
         {
             Description = model.Description,
             Parent = model.Parent,
-        }).ToListAsync();
+        }).ToList();
     }
 }

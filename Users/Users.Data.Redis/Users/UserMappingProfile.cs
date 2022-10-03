@@ -9,6 +9,7 @@ internal sealed class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
+        DisableConstructorMapping();
         CreateMap<string, Username>().ConvertUsing(u => Username.From(u));
         CreateMap<Username, string>().ConvertUsing(u => u.Value);
 

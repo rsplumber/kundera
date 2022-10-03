@@ -9,6 +9,7 @@ public class RoleMappingProfile : Profile
 {
     public RoleMappingProfile()
     {
+        DisableConstructorMapping();
         CreateMap<string, RoleId>().ConvertUsing(s => RoleId.From(s));
         CreateMap<RoleId, string>().ConvertUsing(s => s.Value);
 

@@ -8,6 +8,7 @@ public class ServiceMappingProfile : Profile
 {
     public ServiceMappingProfile()
     {
+        DisableConstructorMapping();
         CreateMap<string, ServiceId>().ConvertUsing(s => ServiceId.From(s));
         CreateMap<ServiceId, string>().ConvertUsing(s => s.Value);
 

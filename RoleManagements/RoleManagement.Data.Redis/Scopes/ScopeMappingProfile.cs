@@ -8,6 +8,7 @@ public class ScopeMappingProfile : Profile
 {
     public ScopeMappingProfile()
     {
+        DisableConstructorMapping();
         CreateMap<string, ScopeStatus>().ConvertUsing(s => ScopeStatus.From(s));
         CreateMap<ScopeStatus, string>().ConvertUsing(s => s.Value);
 

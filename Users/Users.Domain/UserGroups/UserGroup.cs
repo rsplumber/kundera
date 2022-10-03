@@ -78,6 +78,10 @@ public class UserGroup : AggregateRoot<UserGroupId>
 
     public void AssignRole(RoleId role)
     {
+        if (_roles.Contains(role))
+        {
+            throw new DuplicateRoleNotAssignableException(role.Value);
+        }
         _roles.Add(role);
     }
 

@@ -2,10 +2,10 @@
 
 namespace Users.Data.Redis.Users;
 
-[Document(StorageType = StorageType.Json, Prefixes = new[] {"user"})]
+[Document(IndexName = "users", StorageType = StorageType.Json, Prefixes = new[] {"user"})]
 internal sealed class UserDataModel
 {
-    [RedisIdField] [Indexed] public string Id { get; set; }
+    [RedisIdField] [Indexed] public Guid Id { get; set; }
 
     [Indexed] public string[] Usernames { get; set; }
 
