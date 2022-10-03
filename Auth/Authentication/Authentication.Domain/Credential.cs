@@ -12,8 +12,8 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     private readonly Password _password;
     private string _lastIpAddress;
     private DateTime _lastLoggedIn;
-    private DateTime? _expiresAt;
-    private bool _oneTime;
+    private readonly DateTime? _expiresAt;
+    private readonly bool _oneTime;
 
     protected Credential()
     {

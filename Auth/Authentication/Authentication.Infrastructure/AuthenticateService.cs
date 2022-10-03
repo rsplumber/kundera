@@ -21,7 +21,7 @@ internal class AuthenticateService : IAuthenticateService
         _sessionManagement = sessionManagement;
     }
 
-    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, Password password, string? scope = null, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, Password password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
         if (credential is null)
@@ -37,8 +37,8 @@ internal class AuthenticateService : IAuthenticateService
         credential.UpdateActivityInfo(ipAddress);
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
 
-        var certificate = await _certificateService.GenerateAsync(credential.User.ToString(), cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, scope ?? "global", ipAddress ?? IPAddress.None, cancellationToken);
+        var certificate = await _certificateService.GenerateAsync(credential.User.ToString(), scope, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, scope, ipAddress ?? IPAddress.None, cancellationToken);
         return certificate;
     }
 }
