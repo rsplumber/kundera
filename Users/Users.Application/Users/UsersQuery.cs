@@ -4,4 +4,4 @@ namespace Users.Application.Users;
 
 public sealed record UsersQuery : Query<IEnumerable<UsersResponse>>;
 
-public sealed record UsersResponse(string Id, IEnumerable<string> Usernames);
+public sealed record UsersResponse(Guid Id, IEnumerable<string> Usernames);

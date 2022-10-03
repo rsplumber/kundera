@@ -6,7 +6,7 @@ namespace Users.Application.UserGroups;
 
 public sealed record UserGroupQuery(UserGroupId UserGroup) : Query<UserGroupResponse>;
 
-public sealed record UserGroupResponse(string Id, string Name, string UserGroupStatus)
+public sealed record UserGroupResponse(Guid Id, string Name, string UserGroupStatus)
 {
     public string? Description { get; set; }
 

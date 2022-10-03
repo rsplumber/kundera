@@ -16,6 +16,7 @@ internal sealed class UsersQueryHandler : QueryHandler<UsersQuery, IEnumerable<U
 
     public override async Task<IEnumerable<UsersResponse>> HandleAsync(UsersQuery message, CancellationToken cancellationToken = default)
     {
-        return await _users.Select(model => new UsersResponse(model.Id, model.Usernames)).ToListAsync();
+        var users = await _users.ToListAsync();
+        return users.Select(model => new UsersResponse(model.Id, model.Usernames)).ToList();
     }
 }

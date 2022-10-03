@@ -5,7 +5,7 @@ namespace Users.Data.Redis.UserGroups;
 [Document(IndexName = "userGroups", StorageType = StorageType.Json, Prefixes = new[] {"userGroups"})]
 internal sealed class UserGroupDataModel
 {
-    [RedisIdField] [Indexed] public string Id { get; set; }
+    [RedisIdField] [Indexed] public Guid Id { get; set; }
 
     [Searchable] public string Name { get; set; }
 
