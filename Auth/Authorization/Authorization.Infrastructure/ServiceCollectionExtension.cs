@@ -1,7 +1,6 @@
 ﻿using Authorization.Application;
 using Authorization.Domain;
 using Authorization.Infrastructure.Data;
-using Kundera.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tes.Serializer.Microsoft;
