@@ -30,7 +30,7 @@ internal class UserRepository : IUserRepository
 
     public async ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
     {
-        return await _users.AnyAsync(model => model.Usernames.Any(u => u == username));
+        return await _users.AnyAsync(model => model.Usernames.Contains(username));
     }
 
     public async Task<User> FindAsync(Username username, CancellationToken cancellationToken = default)

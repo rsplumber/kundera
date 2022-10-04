@@ -24,7 +24,7 @@ public class Role : AggregateRoot<RoleId>
 
     public static async Task<Role> CreateAsync(Name name, IRoleRepository repository)
     {
-        var id = RoleId.From(name);
+        var id = RoleId.From(name.Value.ToLower());
         var exists = await repository.ExistsAsync(id);
         if (exists)
         {
@@ -63,7 +63,8 @@ public class Role : AggregateRoot<RoleId>
 
     public void AddMeta(string key, string value)
     {
-        _meta.TryAdd(key, value);
+        RemoveMeta(key);
+        _meta.Add(key, value);
     }
 
     public void RemoveMeta(string key)

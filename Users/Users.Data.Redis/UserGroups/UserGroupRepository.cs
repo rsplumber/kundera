@@ -26,7 +26,7 @@ internal class UserGroupRepository : IUserGroupRepository
     public async Task<UserGroup?> FindAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
         var userGroupDataModel = await _userGroups.FindByIdAsync(id.Value.ToString());
-        return _mapper.Map<UserGroup>(userGroupDataModel , options => options.Items["_name"] = "XXXX");
+        return _mapper.Map<UserGroup>(userGroupDataModel );
     }
 
     public async Task UpdateAsync(UserGroup entity, CancellationToken cancellationToken = default)

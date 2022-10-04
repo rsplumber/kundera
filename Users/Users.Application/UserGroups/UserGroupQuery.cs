@@ -10,7 +10,7 @@ public sealed record UserGroupResponse(Guid Id, string Name, string UserGroupSta
 {
     public string? Description { get; set; }
 
-    public string? Parent { get; set; }
+    public Guid? Parent { get; set; }
 
     public DateTime? StatusChangedDate { get; set; }
 

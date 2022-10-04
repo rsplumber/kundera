@@ -8,5 +8,5 @@ public sealed record UserGroupsResponse(Guid Id, string Name, string UserGroupSt
 {
     public string? Description { get; set; }
 
-    public string? Parent { get; set; }
+    public Guid? Parent { get; set; }
 }

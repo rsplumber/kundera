@@ -15,7 +15,7 @@ public class ServiceMappingProfile : Profile
         CreateMap<string, ServiceStatus>().ConvertUsing(s => ServiceStatus.From(s));
         CreateMap<ServiceStatus, string>().ConvertUsing(s => s.Value);
 
-        CreateMap<Service, ServiceDataModel>()
+        CreateMap<ServiceDataModel, Service>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(service => service.Id, expression => expression.MapFrom(model => model.Id))
