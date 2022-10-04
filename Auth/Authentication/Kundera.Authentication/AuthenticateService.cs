@@ -2,7 +2,7 @@
 
 namespace Kundera.Authentication;
 
-public class AuthenticateService : IAuthenticateService
+internal sealed class AuthenticateService : IAuthenticateService
 {
     public async Task<Certificate> AuthenticateAsync(string uniqueIdentifier, string password, string? scope = null, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {

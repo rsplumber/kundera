@@ -11,6 +11,16 @@ internal sealed class SessionMappingProfile : Profile
         CreateMap<string, Token>().ConvertUsing(s => Token.From(s));
         CreateMap<Token, string>().ConvertUsing(token => token.Value);
 
-        CreateMap<Session, SessionDataModel>().ReverseMap();
+        CreateMap<SessionDataModel, Session>()
+            .IgnoreAllPropertiesWithAnInaccessibleSetter()
+            .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
+            .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
+            .ForMember("_refreshToken", expression => expression.MapFrom(model => model.RefreshToken))
+            .ForMember("_scope", expression => expression.MapFrom(model => model.Scope))
+            .ForMember("_userId", expression => expression.MapFrom(model => model.User))
+            .ForMember("_expireDate", expression => expression.MapFrom(model => model.ExpireDate))
+            .ForMember("_lastUsageDate", expression => expression.MapFrom(model => model.LastUsageDate))
+            .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
+            .ReverseMap();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Kundera.Authentication;
 
-public class CredentialService : ICredentialService
+internal sealed class CredentialService : ICredentialService
 {
     public async Task CreateAsync(string uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {

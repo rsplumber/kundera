@@ -3,6 +3,7 @@ using Authentication.Domain;
 using Authentication.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Redis.OM;
 using Tes.Serializer.Microsoft;
 
 namespace Authentication.Infrastructure;
@@ -18,9 +19,9 @@ public static class ServiceCollectionExtension
         services.AddScoped<IAuthenticateService, AuthenticateService>();
 
         services.AddScoped<ICredentialService, CredentialService>();
-        services.AddScoped<IOneTimeCredentialService, OneTimeCredentialService>();
-        services.AddScoped<ITimePeriodicCredentialService, TimePeriodicCredentialService>();
-        
+
+        services.AddSingleton(new RedisConnectionProvider(configuration.GetConnectionString("Authentication")));
+
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

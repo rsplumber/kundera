@@ -12,7 +12,7 @@ public class TypeTests
         Assert.NotEmpty(uniqueIdentifier.Value);
         Assert.NotEmpty(uniqueIdentifier.Type);
 
-        Assert.Equal("123456", uniqueIdentifier.Identifier);
+        Assert.Equal("123456", uniqueIdentifier.Username);
         Assert.Equal("default", uniqueIdentifier.Type);
         Assert.Equal("123456_:_default", uniqueIdentifier.Value);
     }
@@ -25,7 +25,7 @@ public class TypeTests
         Assert.NotEmpty(uniqueIdentifier.Value);
         Assert.NotEmpty(uniqueIdentifier.Type);
 
-        Assert.Equal("plumber@gmail.com", uniqueIdentifier.Identifier);
+        Assert.Equal("plumber@gmail.com", uniqueIdentifier.Username);
         Assert.Equal("app", uniqueIdentifier.Type);
         Assert.Equal("plumber@gmail.com_:_app", uniqueIdentifier.Value);
     }
@@ -63,7 +63,7 @@ public class TypeTests
 
         var uniqueIdentifier = UniqueIdentifier.Parse("123456_:_app");
         Assert.NotNull(uniqueIdentifier);
-        Assert.Equal("123456", uniqueIdentifier.Identifier);
+        Assert.Equal("123456", uniqueIdentifier.Username);
         Assert.Equal("app", uniqueIdentifier.Type);
         Assert.Equal("123456_:_app", uniqueIdentifier.Value);
 
@@ -72,7 +72,7 @@ public class TypeTests
         Assert.True(uniqueIdentifier.Equals(uniqueIdentifier2));
 
         var uniqueIdentifier3 = UniqueIdentifier.Parse("123456");
-        Assert.Equal("123456", uniqueIdentifier3.Identifier);
+        Assert.Equal("123456", uniqueIdentifier3.Username);
         Assert.Equal("default", uniqueIdentifier3.Type);
         Assert.Equal("123456_:_default", uniqueIdentifier3.Value);
     }

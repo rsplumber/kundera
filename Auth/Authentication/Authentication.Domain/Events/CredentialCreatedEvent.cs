@@ -2,4 +2,4 @@
 
 namespace Authentication.Domain.Events;
 
-public record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, UserId UserId) : DomainEvent;
+public record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, Guid UserId) : DomainEvent;
