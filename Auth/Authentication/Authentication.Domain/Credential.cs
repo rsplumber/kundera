@@ -9,7 +9,7 @@ namespace Authentication.Domain;
 public class Credential : AggregateRoot<UniqueIdentifier>
 {
     private readonly Guid _userId;
-    private readonly Password _password;
+    private Password _password;
     private string _lastIpAddress;
     private DateTime _lastLoggedIn;
     private readonly DateTime? _expiresAt;
@@ -19,7 +19,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     {
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, IPAddress? lastIpAddress = null) : base(uniqueIdentifier)
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, Guid user, IPAddress? lastIpAddress = null) : base(uniqueIdentifier)
     {
         _userId = user;
         _password = password;
@@ -28,7 +28,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, Guid user, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
         this(uniqueIdentifier, password, user, lastIpAddress)
     {
         if (expirationTimeInSeconds > 0)
@@ -37,7 +37,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         }
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, Password password, UserId user, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+    private Credential(UniqueIdentifier uniqueIdentifier, Password password, Guid user, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
         this(uniqueIdentifier, password, user, expirationTimeInSeconds, lastIpAddress)
     {
         _oneTime = oneTime;
@@ -45,7 +45,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
-        UserId user,
+        Guid user,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
@@ -60,7 +60,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
-        UserId user,
+        Guid user,
         int expirationTimeInSeconds,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
@@ -76,7 +76,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         Password password,
-        UserId user,
+        Guid user,
         bool oneTime,
         int expirationTimeInSeconds,
         IPAddress? ipAddress,
@@ -90,8 +90,8 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
         return new(uniqueIdentifier, password, user, oneTime, expirationTimeInSeconds, ipAddress);
     }
-
-    public UserId User => _userId;
+    
+    public Guid User => _userId;
 
     public Password Password => _password;
 
@@ -107,5 +107,16 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     {
         _lastLoggedIn = DateTime.UtcNow;
         _lastIpAddress = ipAddress is not null ? ipAddress.ToString() : IPAddress.None.ToString();
+    }
+
+    public void ChangePassword(string password, string newPassword)
+    {
+        var oldPassword = Password.From(password, Password.Salt);
+        if (Password.Equals(oldPassword))
+        {
+            _password = Password.From(newPassword);
+        }
+
+        AddDomainEvent(new CredentialPasswordChangedEvent(Id));
     }
 }

@@ -10,16 +10,10 @@ namespace Authentication.Web.Api;
 public class CredentialController : ControllerBase
 {
     private readonly ICredentialService _credentialService;
-    private readonly IOneTimeCredentialService _oneTimeCredentialService;
-    private readonly ITimePeriodicCredentialService _timePeriodicCredentialService;
 
-    public CredentialController(ICredentialService credentialService,
-        IOneTimeCredentialService oneTimeCredentialService,
-        ITimePeriodicCredentialService timePeriodicCredentialService)
+    public CredentialController(ICredentialService credentialService)
     {
         _credentialService = credentialService;
-        _oneTimeCredentialService = oneTimeCredentialService;
-        _timePeriodicCredentialService = timePeriodicCredentialService;
     }
 
     [HttpPost("users/{id:required:guid}/credentials")]
@@ -27,10 +21,9 @@ public class CredentialController : ControllerBase
         [FromRoute] Guid id,
         [FromBody] CreateCredentialRequest request, CancellationToken cancellationToken)
     {
-        var userId = UserId.From(id);
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var password = Password.From(request.Password);
-        await _credentialService.CreateAsync(uniqueIdentifier, userId, password, IpAddress(), cancellationToken);
+        await _credentialService.CreateAsync(uniqueIdentifier, id, password, IpAddress(), cancellationToken);
         return Ok();
     }
 
@@ -39,10 +32,9 @@ public class CredentialController : ControllerBase
         [FromRoute] Guid id,
         [FromBody] CreateOneTimeCredentialRequest request, CancellationToken cancellationToken)
     {
-        var userId = UserId.From(id);
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var password = Password.From(request.Password);
-        await _oneTimeCredentialService.CreateAsync(uniqueIdentifier, userId, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateOneTimeAsync(uniqueIdentifier, id, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
         return Ok();
     }
 
@@ -51,20 +43,18 @@ public class CredentialController : ControllerBase
         [FromRoute] Guid id,
         [FromBody] CreateTimePeriodicCredentialRequest request, CancellationToken cancellationToken)
     {
-        var userId = UserId.From(id);
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var password = Password.From(request.Password);
-        await _timePeriodicCredentialService.CreateAsync(uniqueIdentifier, userId, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateTimePeriodicAsync(uniqueIdentifier, id, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
         return Ok();
     }
 
-    [HttpPatch("credentials/{uniqueIdentifier:required}")]
-    public async Task<IActionResult> UpdateAsync(
+    [HttpPatch("credentials/{uniqueIdentifier:required}/change-password")]
+    public async Task<IActionResult> ChangePasswordAsync(
         [FromRoute] string uniqueIdentifier,
-        [FromBody] UpdateCredentialRequest request, CancellationToken cancellationToken)
+        [FromBody] CredentialChangePasswordRequest request, CancellationToken cancellationToken)
     {
-        var password = Password.From(request.Password);
-        await _credentialService.UpdateAsync(UniqueIdentifier.Parse(uniqueIdentifier), password, IpAddress(), cancellationToken);
+        await _credentialService.ChangePasswordAsync(UniqueIdentifier.Parse(uniqueIdentifier), request.Password, request.NewPassword, IpAddress(), cancellationToken);
         return Ok();
     }
 

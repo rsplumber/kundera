@@ -6,7 +6,7 @@ namespace Authorization.Domain;
 
 public class Session : AggregateRoot<Token>
 {
-    private readonly string _refreshToken;
+    private readonly Token _refreshToken;
     private readonly string _scope;
     private readonly Guid _userId;
     private readonly DateTime _expireDate;
@@ -19,7 +19,7 @@ public class Session : AggregateRoot<Token>
 
     private Session(Token token, Token refreshToken, string scope, Guid userId, DateTime expireDate, string? lastIpAddress = null) : base(token)
     {
-        _refreshToken = refreshToken.Value;
+        _refreshToken = refreshToken;
         _scope = scope;
         _userId = userId;
         _expireDate = expireDate;
@@ -32,7 +32,7 @@ public class Session : AggregateRoot<Token>
         return new Session(token, refreshToken, scope, userId, expireDate, lastIpAddress?.ToString());
     }
 
-    public string RefreshToken => _refreshToken;
+    public Token RefreshToken => _refreshToken;
 
     public string Scope => _scope;
 
