@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Auth\Auth.Infrastructure\Auth.Infrastructure.csproj" />
-      <ProjectReference Include="..\Auth\Authorization.Infrastructure\Authorization.Infrastructure.csproj" />
       <ProjectReference Include="..\Data.Redis\Data.Redis.csproj" />
     </ItemGroup>
     
