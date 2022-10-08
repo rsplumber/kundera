@@ -1,7 +1,4 @@
-using Authentication.Infrastructure;
-using Authorization.Infrastructure;
-using RoleManagement.Builder;
-using Users.Builder;
+using Builder;
 using Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddUsers(configuration);
-builder.Services.AddRoleManagement(configuration);
-builder.Services.AddAuthorization(configuration);
-builder.Services.AddAuthenticationService(configuration);
+builder.Services.AddKundera(configuration);
 builder.Services.AddKunderaWeb(configuration);
 
 var app = builder.Build();
@@ -25,10 +19,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureUsers(configuration);
-app.ConfigureRoleManagement(configuration);
-app.ConfigureAuthorization(configuration);
-app.ConfigureAuthorization(configuration);
+app.ConfigureKundera();
 app.ConfigureKunderaWeb(configuration);
 
 app.UseHttpsRedirection();
@@ -37,4 +28,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
+
+await app.WaitForShutdownAsync();

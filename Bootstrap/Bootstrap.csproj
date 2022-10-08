@@ -12,10 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Auth\Authentication\Authentication.Infrastructure\Authentication.Infrastructure.csproj" />
-      <ProjectReference Include="..\Auth\Authorization\Authorization.Infrastructure\Authorization.Infrastructure.csproj" />
-      <ProjectReference Include="..\RoleManagements\RoleManagement.Builder\RoleManagement.Builder.csproj" />
-      <ProjectReference Include="..\Users\Users.Builder\Users.Builder.csproj" />
+      <ProjectReference Include="..\Builder\Builder.csproj" />
       <ProjectReference Include="..\Web.Api\Web.Api.csproj" />
     </ItemGroup>
 

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Authentication.Infrastructure</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Domain\Domain.csproj" />
+        <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />
+        <ProjectReference Include="..\Authentication.Data.Redis\Authentication.Data.Redis.csproj" />
+        <ProjectReference Include="..\Authorization.Data.Redis\Authorization.Data.Redis.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Tes.Standard.Serializer.Microsoft" Version="1.0.0" />
+        <PackageReference Include="Tes.Standard.Tokens.JWT" Version="1.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Builder" />
+    </ItemGroup>
+
+</Project>
