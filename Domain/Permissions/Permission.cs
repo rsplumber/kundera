@@ -17,9 +17,9 @@ public class Permission : AggregateRoot<PermissionId>
         AddDomainEvent(new PermissionCreatedEvent(id));
     }
 
-    public static async Task<Permission> CreateAsync(Name name, IPermissionRepository repository)
+    public static async Task<Permission> FromAsync(Name name, IPermissionRepository repository)
     {
-        var id = PermissionId.From(name);
+        var id = PermissionId.From(name.Value.ToLower());
         var exists = await repository.ExistsAsync(id);
         if (exists)
         {
@@ -33,7 +33,8 @@ public class Permission : AggregateRoot<PermissionId>
 
     public void AddMeta(string key, string value)
     {
-        _meta.TryAdd(key, value);
+        RemoveMeta(key);
+        _meta.Add(key, value);
     }
 
     public void RemoveMeta(string key)

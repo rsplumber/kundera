@@ -1,7 +1,7 @@
 ﻿using Domain.Roles;
+using Domain.Roles.Exceptions;
 using Domain.Scopes;
 using Domain.Scopes.Exceptions;
-using Domain.Scopes.Types;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
 
@@ -29,9 +29,15 @@ internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCo
             throw new ScopeNotFoundException();
         }
 
-        foreach (var role in roleIds)
+        foreach (var roleId in roleIds)
         {
-            await scope.AddRoleAsync(role, _roleRepository);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+
+            scope.AddRole(role.Id);
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);

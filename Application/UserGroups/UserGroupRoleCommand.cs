@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Roles;
+﻿using Domain.Roles;
+using Domain.Roles.Exceptions;
 using Domain.UserGroups;
 using Domain.UserGroups.Exception;
 using Tes.CQRS;
@@ -14,10 +14,12 @@ public sealed record RevokeUserGroupRoleCommand(UserGroupId UserGroup, params Ro
 internal sealed class AssignUserGroupRoleCommandHandler : CommandHandler<AssignUserGroupRoleCommand>
 {
     private readonly IUserGroupRepository _userGroupRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public AssignUserGroupRoleCommandHandler(IUserGroupRepository userGroupRepository)
+    public AssignUserGroupRoleCommandHandler(IUserGroupRepository userGroupRepository, IRoleRepository roleRepository)
     {
         _userGroupRepository = userGroupRepository;
+        _roleRepository = roleRepository;
     }
 
     public override async Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = default)
@@ -29,9 +31,15 @@ internal sealed class AssignUserGroupRoleCommandHandler : CommandHandler<AssignU
             throw new UserGroupNotFoundException();
         }
 
-        foreach (var role in roleIds)
+        foreach (var roleId in roleIds)
         {
-            group.AssignRole(role);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+
+            group.AssignRole(role.Id);
         }
 
         await _userGroupRepository.UpdateAsync(group, cancellationToken);

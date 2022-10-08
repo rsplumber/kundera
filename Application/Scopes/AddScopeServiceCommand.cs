@@ -1,8 +1,7 @@
 ﻿using Domain.Scopes;
 using Domain.Scopes.Exceptions;
-using Domain.Scopes.Types;
 using Domain.Services;
-using Domain.Services.Types;
+using Domain.Services.Exceptions;
 using Tes.CQRS;
 using Tes.CQRS.Contracts;
 
@@ -30,9 +29,15 @@ internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeSer
             throw new ScopeNotFoundException();
         }
 
-        foreach (var service in serviceIds)
+        foreach (var serviceId in serviceIds)
         {
-            await scope.AddServiceAsync(service, _serviceRepository);
+            var service = await _serviceRepository.FindAsync(serviceId, cancellationToken);
+            if (service is null)
+            {
+                throw new ServiceNotFoundException();
+            }
+
+            scope.AddService(service.Id);
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);

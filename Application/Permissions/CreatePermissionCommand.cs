@@ -19,7 +19,7 @@ internal sealed class CreatePermissionCommandHandler : CommandHandler<CreatePerm
     public override async Task HandleAsync(CreatePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
-        var permission = await Permission.CreateAsync(name, _permissionRepository);
+        var permission = await Permission.FromAsync(name, _permissionRepository);
         if (meta is not null)
         {
             foreach (var (key, value) in meta)

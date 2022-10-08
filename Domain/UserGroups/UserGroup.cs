@@ -34,12 +34,12 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _parent = parent;
     }
 
-    public static UserGroup Create(Name name, RoleId role)
+    public static UserGroup From(Name name, RoleId role)
     {
         return new UserGroup(name, role);
     }
 
-    public static UserGroup Create(Name name, RoleId role, UserGroupId parent)
+    public static UserGroup From(Name name, RoleId role, UserGroupId parent)
     {
         return new UserGroup(name, role, parent);
     }
@@ -50,6 +50,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
 
     public UserGroupId? Parent => _parent;
     public UserGroupStatus UserGroupStatus => _status;
+
     public DateTime? StatusChangedDate => _statusChangedDate;
 
     public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
@@ -79,17 +80,21 @@ public class UserGroup : AggregateRoot<UserGroupId>
 
     public void AssignRole(RoleId role)
     {
-        if (_roles.Contains(role))
-        {
-            throw new DuplicateRoleNotAssignableException(role.Value);
-        }
-
+        if (Has(role)) return;
         _roles.Add(role);
+        AddDomainEvent(new UserGroupRoleAddedEvent(Id, role));
     }
 
     public void RevokeRole(RoleId role)
     {
+        if (!Has(role)) return;
         _roles.Remove(role);
+        AddDomainEvent(new UserGroupRoleRemovedEvent(Id, role));
+    }
+
+    public bool Has(RoleId role)
+    {
+        return _roles.Any(id => id == role);
     }
 
     public void Enable() => ChangeStatus(UserGroupStatus.Enable);

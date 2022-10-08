@@ -1,11 +1,8 @@
 ﻿using Domain.Roles;
-using Domain.Roles.Exceptions;
 using Domain.Scopes.Events;
 using Domain.Scopes.Exceptions;
 using Domain.Scopes.Types;
 using Domain.Services;
-using Domain.Services.Exceptions;
-using Domain.Services.Types;
 using Tes.Domain.Contracts;
 
 namespace Domain.Scopes;
@@ -26,7 +23,7 @@ public class Scope : AggregateRoot<ScopeId>
         AddDomainEvent(new ScopeCreatedEvent(id));
     }
 
-    public static async Task<Scope> CreateAsync(Name name, IScopeRepository repository)
+    public static async Task<Scope> FromAsync(Name name, IScopeRepository repository)
     {
         var id = ScopeId.From(name);
         var exists = await repository.ExistsAsync(id);
@@ -40,6 +37,10 @@ public class Scope : AggregateRoot<ScopeId>
 
     public ScopeStatus Status => _status;
 
+    public IReadOnlyCollection<ServiceId> Services => _services.AsReadOnly();
+
+    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
+
     public void Activate() => ChangeStatus(ScopeStatus.Active);
 
     public void DeActivate() => ChangeStatus(ScopeStatus.DeActive);
@@ -50,53 +51,42 @@ public class Scope : AggregateRoot<ScopeId>
         AddDomainEvent(new ScopeStatusChangedEvent(Id));
     }
 
-    public IReadOnlyCollection<ServiceId> Services => _services.AsReadOnly();
-
-    public async Task AddServiceAsync(ServiceId service, IServiceRepository serviceRepository)
+    public void AddService(ServiceId service)
     {
-        var serviceExist = await serviceRepository.ExistsAsync(service);
-        if (!serviceExist)
-        {
-            throw new ServiceNotFoundException();
-        }
-
-        if (HasService(service)) return;
+        if (Has(service)) return;
         _services.Add(service);
+        AddDomainEvent(new ScopeServiceAddedEvent(Id, service));
     }
 
     public void RemoveService(ServiceId service)
     {
-        if (!HasService(service)) return;
+        if (!Has(service)) return;
         _services.Remove(service);
+        AddDomainEvent(new ScopeServiceRemovedEvent(Id, service));
     }
 
-    public bool HasService(ServiceId service)
+    public bool Has(ServiceId service)
     {
-        return _services.Exists(id => id == service);
+        return _services.Any(id => id == service);
     }
 
-    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
 
-    public async Task AddRoleAsync(RoleId role, IRoleRepository roleRepository)
+    public void AddRole(RoleId role)
     {
-        var roleExist = await roleRepository.ExistsAsync(role);
-        if (!roleExist)
-        {
-            throw new RoleNotFoundException();
-        }
-
-        if (HasRole(role)) return;
+        if (Has(role)) return;
         _roles.Add(role);
+        AddDomainEvent(new ScopeRoleAddedEvent(Id, role));
     }
 
     public void RemoveRole(RoleId role)
     {
-        if (!HasRole(role)) return;
+        if (!Has(role)) return;
         _roles.Remove(role);
+        AddDomainEvent(new ScopeRoleRemovedEvent(Id, role));
     }
 
-    public bool HasRole(RoleId role)
+    public bool Has(RoleId role)
     {
-        return _roles.Exists(id => id == role);
+        return _roles.Any(id => id == role);
     }
 }

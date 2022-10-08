@@ -25,7 +25,13 @@ internal sealed class MoveUserGroupParentCommandHandler : CommandHandler<MoveUse
             throw new UserGroupNotFoundException();
         }
 
-        group.SetParent(to);
+        var parent = await _userGroupRepository.FindAsync(to, cancellationToken);
+        if (parent is null)
+        {
+            throw new UserGroupNotFoundException();
+        }
+
+        group.SetParent(parent.Id);
         await _userGroupRepository.UpdateAsync(group, cancellationToken);
     }
 }

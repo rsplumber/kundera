@@ -66,36 +66,58 @@ public class User : AggregateRoot<UserId>
         }
 
         _usernames.Add(username);
+
+        AddDomainEvent(new UserUsernameAddedEvent(Id, username));
     }
 
     public void RemoveUsername(Username username)
     {
+        if (!Has(username)) return;
         _usernames.Remove(username);
+        AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
     }
 
     public bool Has(Username username)
     {
-        return _usernames.Exists(u => u == username);
+        return _usernames.Any(u => u == username);
     }
 
     public void JoinGroup(UserGroupId userGroup)
     {
+        if (Has(userGroup)) return;
         _userGroups.Add(userGroup);
+        AddDomainEvent(new UserUserGroupJoinedEvent(Id, userGroup));
     }
 
     public void RemoveFromGroup(UserGroupId userGroup)
     {
+        if (!Has(userGroup)) return;
         _userGroups.Remove(userGroup);
+        AddDomainEvent(new UserUserGroupEventRemovedEvent(Id, userGroup));
+    }
+
+    public bool Has(UserGroupId userGroup)
+    {
+        return _userGroups.Any(id => id == userGroup);
     }
 
     public void AssignRole(RoleId role)
     {
+        if (Has(role)) return;
         _roles.Add(role);
+        AddDomainEvent(new UserRoleAddedEvent(Id, role));
     }
 
     public void RevokeRole(RoleId role)
     {
+        if (!Has(role)) return;
         _roles.Remove(role);
+        AddDomainEvent(new UserRoleRemovedEvent(Id, role));
+    }
+
+    public bool Has(RoleId role)
+    {
+        return _roles.Any(id => id == role);
     }
 
     public void Activate(Text? reason = null) => ChangeStatus(UserStatus.Active);

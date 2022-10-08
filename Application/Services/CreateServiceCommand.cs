@@ -18,7 +18,7 @@ internal sealed class CreateServiceCommandHandler : CommandHandler<CreateService
 
     public override async Task HandleAsync(CreateServiceCommand message, CancellationToken cancellationToken = default)
     {
-        var service = await Service.CreateAsync(message.Name, _serviceRepository);
+        var service = await Service.FromAsync(message.Name, _serviceRepository);
         await _serviceRepository.AddAsync(service, cancellationToken);
     }
 }

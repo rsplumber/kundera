@@ -18,7 +18,7 @@ internal sealed class CreateScopeCommandHandler : CommandHandler<CreateScopeComm
 
     public override async Task HandleAsync(CreateScopeCommand message, CancellationToken cancellationToken = default)
     {
-        var scope = await Scope.CreateAsync(message.Name, _scopeRepository);
+        var scope = await Scope.FromAsync(message.Name, _scopeRepository);
         await _scopeRepository.AddAsync(scope, cancellationToken);
     }
 }

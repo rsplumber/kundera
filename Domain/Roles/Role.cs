@@ -1,5 +1,4 @@
 ﻿using Domain.Permissions;
-using Domain.Permissions.Exceptions;
 using Domain.Roles.Events;
 using Domain.Roles.Exceptions;
 using Tes.Domain.Contracts;
@@ -20,7 +19,7 @@ public class Role : AggregateRoot<RoleId>
         AddDomainEvent(new RoleCreatedEvent(id));
     }
 
-    public static async Task<Role> CreateAsync(Name name, IRoleRepository repository)
+    public static async Task<Role> FromAsync(Name name, IRoleRepository repository)
     {
         var id = RoleId.From(name.Value.ToLower());
         var exists = await repository.ExistsAsync(id);
@@ -32,32 +31,28 @@ public class Role : AggregateRoot<RoleId>
         return new Role(id);
     }
 
-    public IReadOnlyCollection<PermissionId> Permissions => _permissions.AsReadOnly();
+    public IReadOnlyCollection<PermissionId> Permissions => _permissions;
 
-    public async Task AddPermissionAsync(PermissionId permission, IPermissionRepository permissionRepository)
+    public IReadOnlyDictionary<string, string> Meta => _meta;
+
+    public void AddPermission(PermissionId permission)
     {
-        var permissionExist = await permissionRepository.ExistsAsync(permission);
-        if (!permissionExist)
-        {
-            throw new PermissionNotFoundException();
-        }
-
-        if (HasPermission(permission)) return;
+        if (Has(permission)) return;
         _permissions.Add(permission);
+        AddDomainEvent(new RolePermissionAddedEvent(Id, permission));
     }
 
     public void RemovePermission(PermissionId permission)
     {
-        if (!HasPermission(permission)) return;
+        if (!Has(permission)) return;
         _permissions.Remove(permission);
+        AddDomainEvent(new RolePermissionRemovedEvent(Id, permission));
     }
 
-    public bool HasPermission(PermissionId permission)
+    public bool Has(PermissionId permission)
     {
-        return _permissions.Exists(id => id == permission);
+        return _permissions.Any(id => id == permission);
     }
-
-    public IReadOnlyDictionary<string, string> Meta => _meta;
 
     public void AddMeta(string key, string value)
     {

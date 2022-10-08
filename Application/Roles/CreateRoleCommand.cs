@@ -19,7 +19,7 @@ internal sealed class CreateRoleCommandHandler : CommandHandler<CreateRoleComman
     public override async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
-        var role = await Role.CreateAsync(name, _roleRepository);
+        var role = await Role.FromAsync(name, _roleRepository);
         if (meta is not null)
         {
             foreach (var (key, value) in meta)

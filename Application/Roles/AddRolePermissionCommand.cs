@@ -1,4 +1,5 @@
 ﻿using Domain.Permissions;
+using Domain.Permissions.Exceptions;
 using Domain.Roles;
 using Domain.Roles.Exceptions;
 using Tes.CQRS;
@@ -28,9 +29,15 @@ internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePe
             throw new RoleNotFoundException();
         }
 
-        foreach (var permission in permissions)
+        foreach (var permissionId in permissions)
         {
-            await role.AddPermissionAsync(permission, _permissionRepository);
+            var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);
+            if (permission is null)
+            {
+                throw new PermissionNotFoundException();
+            }
+
+            role.AddPermission(permission.Id);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

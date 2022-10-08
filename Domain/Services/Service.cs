@@ -19,7 +19,7 @@ public class Service : AggregateRoot<ServiceId>
         AddDomainEvent(new ServiceCreatedEvent(id));
     }
 
-    public static async Task<Service> CreateAsync(Name name, IServiceRepository repository)
+    public static async Task<Service> FromAsync(Name name, IServiceRepository repository)
     {
         var id = ServiceId.From(name);
         var exists = await repository.ExistsAsync(id);
