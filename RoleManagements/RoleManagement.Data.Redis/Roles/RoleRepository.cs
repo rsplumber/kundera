@@ -39,4 +39,9 @@ internal class RoleRepository : IRoleRepository
         var role = _mapper.Map<RoleDataModel>(entity);
         await _roles.UpdateAsync(role);
     }
+
+    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -32,4 +32,9 @@ public class RoleRepository : IRoleRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

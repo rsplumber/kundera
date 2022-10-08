@@ -44,6 +44,16 @@ public class RolesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpDelete("{id:required}")]
+    public async Task<IActionResult> DeleteAsync(
+        [FromRoute] string id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteRoleCommand(RoleId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
     [HttpPost("{id:required}/meta")]
     public async Task<IActionResult> AddMetaAsync(
         [FromRoute] string id,
