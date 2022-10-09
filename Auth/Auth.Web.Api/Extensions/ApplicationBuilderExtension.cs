@@ -5,7 +5,7 @@ namespace Authentication.Web.Api.Extensions;
 
 public static class ApplicationBuilderExtension
 {
-    public static void ConfigureAuthenticationWeb(this IApplicationBuilder app, IConfiguration configuration)
+    public static void ConfigureAuthWeb(this IApplicationBuilder app, IConfiguration configuration)
     {
         app.UseRouting();
     }
