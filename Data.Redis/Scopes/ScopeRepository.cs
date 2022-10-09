@@ -39,4 +39,9 @@ internal class ScopeRepository : IScopeRepository
         var scope = _mapper.Map<ScopeDataModel>(entity);
         await _scopes.UpdateAsync(scope);
     }
+
+    public Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

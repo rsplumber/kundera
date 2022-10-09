@@ -44,6 +44,15 @@ public class ScopesController : ControllerBase
         return Ok(response);
     }
 
+
+    [HttpDelete("{id:required}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteScopeCommand(ScopeId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
     [HttpPost("{id:required}/services")]
     public async Task<IActionResult> AddServiceAsync(
         [FromRoute] string id,
