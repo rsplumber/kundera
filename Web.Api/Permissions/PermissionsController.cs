@@ -39,6 +39,14 @@ public class PermissionsController : ControllerBase
         return Ok(response);
     }
 
+    [HttpDelete("{id:required}")]
+    public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var command = new DeletePermissionCommand(PermissionId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
 
     [HttpPost("{id:required}/meta")]
     public async Task<IActionResult> AddMetaAsync([FromRoute] string id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)

@@ -38,4 +38,9 @@ internal class PermissionRepository : IPermissionRepository
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.UpdateAsync(permission);
     }
+
+    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }
