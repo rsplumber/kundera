@@ -119,4 +119,12 @@ public class UsersController : ControllerBase
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
         return Ok(response);
     }
+
+    [HttpDelete("{id:required:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteUserCommand(UserId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
 }

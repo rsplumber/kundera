@@ -44,4 +44,9 @@ internal class UserRepository : IUserRepository
         var userDataModel = _mapper.Map<UserDataModel>(entity);
         await _users.InsertAsync(userDataModel);
     }
+
+    public Task DeleteAsync(UserId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }
