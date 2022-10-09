@@ -1,5 +1,5 @@
 using System.Net;
-using Auth.Application;
+using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +20,8 @@ public class AuthenticateController : ControllerBase
     public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        var password = Password.From(request.Password);
         var certificate = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
-            password,
+            request.Password,
             request.Scope,
             IpAddress(),
             cancellationToken);

@@ -1,4 +1,4 @@
-﻿namespace Auth.Application;
+﻿namespace Auth.Application.Authorization;
 
 public sealed record SessionModel
 {
