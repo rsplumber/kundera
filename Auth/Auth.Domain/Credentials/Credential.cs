@@ -7,7 +7,7 @@ namespace Auth.Domain.Credentials;
 
 public class Credential : AggregateRoot<UniqueIdentifier>
 {
-    private readonly Guid _user;
+    private readonly Guid _userId;
     private Password _password;
     private string _lastIpAddress;
     private DateTime _lastLoggedIn;
@@ -20,7 +20,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     private Credential(UniqueIdentifier uniqueIdentifier, Password password, Guid user, IPAddress? lastIpAddress = null) : base(uniqueIdentifier)
     {
-        _user = user;
+        _userId = user;
         _password = password;
         _lastIpAddress = lastIpAddress is not null ? lastIpAddress.ToString() : IPAddress.None.ToString();
         _lastLoggedIn = DateTime.UtcNow;
@@ -90,7 +90,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         return new(uniqueIdentifier, password, user, oneTime, expirationTimeInSeconds, ipAddress);
     }
 
-    public Guid User => _user;
+    public Guid User => _userId;
 
     public Password Password => _password;
 

@@ -7,11 +7,11 @@ internal sealed class CredentialDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
-    [Indexed] public Guid User { get; set; }
+    public Guid UserId { get; set; }
 
     public PasswordType Password { get; set; }
 
-    [Indexed] public string LastIpAddress { get; set; }
+    public string LastIpAddress { get; set; }
 
     public DateTime LastLoggedIn { get; set; }
 
