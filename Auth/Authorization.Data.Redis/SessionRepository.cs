@@ -45,4 +45,10 @@ internal sealed class SessionRepository : ISessionRepository
     {
         return await _sessions.AnyAsync(model => model.Id == id.Value);
     }
+
+    public async ValueTask<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
+    {
+        var dataModels = await _sessions.ToListAsync();
+        return dataModels.Select(model => _mapper.Map<Session>(model));
+    }
 }

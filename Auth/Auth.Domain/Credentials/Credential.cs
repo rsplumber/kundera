@@ -89,7 +89,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
         return new(uniqueIdentifier, password, user, oneTime, expirationTimeInSeconds, ipAddress);
     }
-    
+
     public Guid User => _userId;
 
     public Password Password => _password;
@@ -106,6 +106,11 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     {
         _lastLoggedIn = DateTime.UtcNow;
         _lastIpAddress = ipAddress is not null ? ipAddress.ToString() : IPAddress.None.ToString();
+    }
+
+    public bool CheckPassword(string password)
+    {
+        return Password.Equals(Password.From(password, Password.Salt));
     }
 
     public void ChangePassword(string password, string newPassword)

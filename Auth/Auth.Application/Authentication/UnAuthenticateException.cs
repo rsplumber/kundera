@@ -1,6 +1,6 @@
 ﻿using Tes.Domain.Contracts;
 
-namespace Authentication.Application;
+namespace Auth.Application.Authentication;
 
 public class UnAuthenticateException : DomainException
 {

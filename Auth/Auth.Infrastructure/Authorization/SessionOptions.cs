@@ -1,4 +1,4 @@
-﻿namespace Auth.Application;
+﻿namespace Authentication.Infrastructure.Authorization;
 
 public class SessionOptions
 {

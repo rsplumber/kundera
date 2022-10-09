@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Auth.Application;
+using Auth.Application.Authorization;
 using Auth.Domain.Sessions;
 using Microsoft.Extensions.Options;
 
-namespace Authentication.Infrastructure;
+namespace Authentication.Infrastructure.Authorization;
 
 internal sealed class SessionManagement : ISessionManagement
 {
@@ -16,7 +16,7 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task SaveAsync(Certificate certificate, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask SaveAsync(Certificate certificate, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var userId = Guid.Empty;
         var expireDate = DateTime.Now.AddMinutes(_sessionOptions.ExpireInMinutes);
@@ -32,12 +32,12 @@ internal sealed class SessionManagement : ISessionManagement
         await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
-    public async Task DeleteAsync(Token token, CancellationToken cancellationToken = default)
+    public async ValueTask DeleteAsync(Token token, CancellationToken cancellationToken = default)
     {
         await _sessionRepository.DeleteAsync(token, cancellationToken);
     }
 
-    public async Task<SessionModel?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask<SessionModel?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
         if (session is null) return null;
@@ -52,12 +52,20 @@ internal sealed class SessionManagement : ISessionManagement
         };
     }
 
-    public async Task<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var sessions = await _sessionRepository.FindAsync(cancellationToken);
+        return sessions.Select(session => new SessionModel
+        {
+            Scope = session.Scope,
+            UserId = session.UserId,
+            ExpireDateUtc = session.ExpireDate,
+            LastIpAddress = session.LastIpAddress,
+            LastUsageDateUtc = session.LastUsageDate
+        });
     }
 
-    private async Task UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    private async ValueTask UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
         if (session is null) return;

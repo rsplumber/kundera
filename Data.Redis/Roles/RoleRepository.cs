@@ -12,8 +12,8 @@ internal class RoleRepository : IRoleRepository
 
     public RoleRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _mapper = mapper;
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
+        _mapper = mapper;
     }
 
     public async Task AddAsync(Role entity, CancellationToken cancellationToken = default)
@@ -33,13 +33,20 @@ internal class RoleRepository : IRoleRepository
         return await _roles.AnyAsync(model => model.Id == id.Value);
     }
 
-    public async Task UpdateAsync(Role entity, CancellationToken cancellationToken = new CancellationToken())
+    public async ValueTask<IEnumerable<Role>> FindAsync(RoleId[] roleIds, CancellationToken cancellationToken = default)
+    {
+        var rawRoleIds = roleIds.Select(id => id.Value);
+        var dataModels = await _roles.FindByIdsAsync(rawRoleIds);
+        return dataModels.Values.Select(model => _mapper.Map<Role>(model));
+    }
+
+    public async Task UpdateAsync(Role entity, CancellationToken cancellationToken = default)
     {
         var role = _mapper.Map<RoleDataModel>(entity);
         await _roles.UpdateAsync(role);
     }
 
-    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = new CancellationToken())
+    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

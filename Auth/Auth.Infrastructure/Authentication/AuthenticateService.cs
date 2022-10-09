@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Auth.Application;
+using Auth.Application.Authentication;
+using Auth.Application.Authorization;
 using Auth.Domain.Credentials;
-using Authentication.Application;
 
-namespace Authentication.Infrastructure;
+namespace Authentication.Infrastructure.Authentication;
 
 internal class AuthenticateService : IAuthenticateService
 {
@@ -20,7 +20,7 @@ internal class AuthenticateService : IAuthenticateService
         _sessionManagement = sessionManagement;
     }
 
-    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, Password password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async ValueTask<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
         if (credential is null)
@@ -28,7 +28,7 @@ internal class AuthenticateService : IAuthenticateService
             throw new UnAuthenticateException();
         }
 
-        if (credential.Password != password)
+        if (credential.CheckPassword(password))
         {
             throw new UnAuthenticateException();
         }

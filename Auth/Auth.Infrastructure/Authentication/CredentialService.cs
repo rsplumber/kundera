@@ -1,11 +1,11 @@
 ﻿using System.Net;
-using Auth.Application;
+using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
 using Auth.Domain.Credentials.Exceptions;
 using Domain.Users;
 using Domain.Users.Exception;
 
-namespace Authentication.Infrastructure;
+namespace Authentication.Infrastructure.Authentication;
 
 internal class CredentialService : ICredentialService
 {
@@ -18,25 +18,25 @@ internal class CredentialService : ICredentialService
         _userRepository = userRepository;
     }
 
-    public async Task CreateAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask CreateAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, cancellationToken: cancellationToken);
     }
 
-    public async Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, expirationTimeInSeconds, true, cancellationToken);
     }
 
-    public async Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, expirationTimeInSeconds, cancellationToken: cancellationToken);
     }
 
-    public async Task UpdateUsageAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateUsageAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
         if (credential is null)
@@ -48,7 +48,7 @@ internal class CredentialService : ICredentialService
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
     }
 
-    public async Task ChangePasswordAsync(UniqueIdentifier uniqueIdentifier, string password, string newPassword, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask ChangePasswordAsync(UniqueIdentifier uniqueIdentifier, string password, string newPassword, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
         if (credential is null)
@@ -61,12 +61,12 @@ internal class CredentialService : ICredentialService
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
     }
 
-    public async Task RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
+    public async ValueTask RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
     {
         await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
     }
 
-    private async Task CreateCredential(UniqueIdentifier uniqueIdentifier,
+    private async ValueTask CreateCredential(UniqueIdentifier uniqueIdentifier,
         Password password,
         Guid userId,
         IPAddress? ipAddress = null,
@@ -84,7 +84,7 @@ internal class CredentialService : ICredentialService
         await _credentialRepository.AddAsync(credential, cancellationToken);
     }
 
-    private async Task ValidateUser(UniqueIdentifier uniqueIdentifier, Guid userId, CancellationToken cancellationToken)
+    private async ValueTask ValidateUser(UniqueIdentifier uniqueIdentifier, Guid userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.FindAsync(UserId.From(userId), cancellationToken);
         if (user is null)

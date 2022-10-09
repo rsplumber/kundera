@@ -1,6 +1,6 @@
 ﻿using Auth.Domain.Sessions;
 
-namespace Auth.Application;
+namespace Auth.Application.Authorization;
 
 public record Certificate(Token Token, Token RefreshToken)
 {

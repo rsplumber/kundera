@@ -1,5 +1,6 @@
 using System.Net;
 using Auth.Application;
+using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
 using Microsoft.AspNetCore.Mvc;
 

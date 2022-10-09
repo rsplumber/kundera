@@ -1,6 +1,6 @@
 ﻿using Tes.Domain.Contracts;
 
-namespace Auth.Application;
+namespace Auth.Application.Authorization;
 
 public class UnAuthorizedException : DomainException
 {

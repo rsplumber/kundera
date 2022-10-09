@@ -1,13 +1,14 @@
 ﻿using System.Net;
+using Auth.Application.Authorization;
 using Auth.Domain.Credentials;
 
-namespace Auth.Application;
+namespace Auth.Application.Authentication;
 
 public interface IAuthenticateService
 {
-    Task<Certificate> AuthenticateAsync(
+    ValueTask<Certificate> AuthenticateAsync(
         UniqueIdentifier uniqueIdentifier,
-        Password password,
+        string password,
         string scope = "global",
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
