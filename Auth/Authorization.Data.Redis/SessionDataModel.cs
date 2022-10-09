@@ -13,8 +13,6 @@ internal sealed class SessionDataModel
 
     [Indexed] public string User { get; set; }
 
-    public string? StatusChangedReason { get; set; }
-
     public DateTime ExpireDate { get; set; }
 
     public DateTime LastUsageDate { get; set; }

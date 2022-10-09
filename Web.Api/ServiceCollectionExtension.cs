@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Authentication.Web.Api.Extensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tes.Web.Validators;
 
@@ -8,6 +9,7 @@ public static class ServiceCollectionExtension
 {
     public static void AddKunderaWeb(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAuthWeb(configuration);
         services.AddControllers();
         services.AddRequestValidators(configuration);
     }

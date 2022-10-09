@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Authentication", "Libraries\Kundera.Authentication\Kundera.Authentication.csproj", "{4596F50E-7D3B-43F6-95E7-541180F1D28E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Authorization.Abstractions", "Libraries\Kundera.Authorization.Abstractions\Kundera.Authorization.Abstractions.csproj", "{8D47B7FC-39CB-4A64-A00A-22C81705F1A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Authorization", "Libraries\Kundera.Authorization\Kundera.Authorization.csproj", "{8D47B7FC-39CB-4A64-A00A-22C81705F1A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Domain", "Auth\Auth.Domain\Auth.Domain.csproj", "{A9459A7A-F6D6-4B79-8A30-C6E162228558}"
 EndProject
@@ -33,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Data.Redis", "Auth\Authorization.Data.Redis\Authorization.Data.Redis.csproj", "{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B7F5CCB4-283B-498F-ABBA-2B5A19E41B90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.AspNetCore.Authorization", "Libraries\Kundera.AspNetCore.Authorization\Kundera.AspNetCore.Authorization.csproj", "{B2A74524-0F96-43D3-943B-64D52D178FA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,7 @@ Global
 		{B7F5CCB4-283B-498F-ABBA-2B5A19E41B90} = {D5E43B89-A44B-426D-A5B1-3163DC23487A}
 		{EFE53EB2-C83B-4111-B57B-1A69F19A6056} = {B7F5CCB4-283B-498F-ABBA-2B5A19E41B90}
 		{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285} = {B7F5CCB4-283B-498F-ABBA-2B5A19E41B90}
+		{B2A74524-0F96-43D3-943B-64D52D178FA7} = {1C38CA47-578E-4B1E-A1CC-E031F9184969}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C4D70B0B-7656-4387-8AB2-AFFD9E97185E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -107,5 +110,9 @@ Global
 		{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
