@@ -11,8 +11,6 @@ public class UserGroupsController : ControllerBase
 {
     private readonly IServiceBus _serviceBus;
 
-    //Todo Api haye Add Remove Move parent ezaf gardad
-
     public UserGroupsController(IServiceBus serviceBus)
     {
         _serviceBus = serviceBus;
@@ -81,6 +79,22 @@ public class UserGroupsController : ControllerBase
         var query = new UserGroupQuery(UserGroupId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPost("{id:required:guid}/enable")]
+    public async Task<IActionResult> EnableAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new EnableUserGroupCommand(UserGroupId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPost("{id:required:guid}/disable")]
+    public async Task<IActionResult> DisableAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DisableUserGroupCommand(UserGroupId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
     }
 
     [HttpDelete("{id:required:guid}")]
