@@ -26,12 +26,17 @@ internal class UserGroupRepository : IUserGroupRepository
     public async Task<UserGroup?> FindAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
         var userGroupDataModel = await _userGroups.FindByIdAsync(id.Value.ToString());
-        return _mapper.Map<UserGroup>(userGroupDataModel );
+        return _mapper.Map<UserGroup>(userGroupDataModel);
     }
 
     public async Task UpdateAsync(UserGroup entity, CancellationToken cancellationToken = default)
     {
         var userGroup = _mapper.Map<UserGroupDataModel>(entity);
         await _userGroups.UpdateAsync(userGroup);
+    }
+
+    public Task DeleteAsync(UserGroupId id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

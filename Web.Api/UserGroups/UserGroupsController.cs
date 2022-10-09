@@ -82,4 +82,12 @@ public class UserGroupsController : ControllerBase
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet("{id:required:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteUserGroupCommand(UserGroupId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
 }

@@ -2,6 +2,6 @@
 
 namespace Domain.UserGroups;
 
-public interface IUserGroupRepository : IRepository<UserGroupId, UserGroup>, IUpdateService<UserGroup>
+public interface IUserGroupRepository : IRepository<UserGroupId, UserGroup>, IUpdateService<UserGroup>, IDeleteService<UserGroupId>
 {
 }
