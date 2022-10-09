@@ -83,7 +83,7 @@ public class UserGroupsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required:guid}")]
+    [HttpDelete("{id:required:guid}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserGroupCommand(UserGroupId.From(id));
