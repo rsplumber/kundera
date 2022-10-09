@@ -39,4 +39,9 @@ internal class ServiceRepository : IServiceRepository
         var service = _mapper.Map<ServiceDataModel>(entity);
         await _services.UpdateAsync(service);
     }
+
+    public Task DeleteAsync(ServiceId id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -44,6 +44,16 @@ public class ServicesController : ControllerBase
         return Ok(response);
     }
 
+
+    [HttpDelete("{id:required}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteServiceCommand(ServiceId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
+
     [HttpPatch("{id:required}/activate")]
     public async Task<IActionResult> ActivateAsync([FromRoute] string id, CancellationToken cancellationToken)
     {
