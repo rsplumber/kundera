@@ -7,7 +7,7 @@ internal sealed class CredentialDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
-    [Indexed] public Guid UserId { get; set; }
+    [Indexed] public Guid User { get; set; }
 
     public PasswordType Password { get; set; }
 

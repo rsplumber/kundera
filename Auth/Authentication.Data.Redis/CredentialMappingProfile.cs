@@ -21,7 +21,7 @@ internal sealed class CredentialMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
+            .ForMember("_user", expression => expression.MapFrom(model => model.User))
             .ForMember("_password", expression => expression.MapFrom(model => model.Password))
             .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
             .ForMember("_lastLoggedIn", expression => expression.MapFrom(model => model.LastLoggedIn))
