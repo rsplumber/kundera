@@ -15,7 +15,7 @@ internal sealed class CredentialDataModel
 
     public DateTime LastLoggedIn { get; set; }
 
-    public DateTime ExpiresAt { get; set; }
+    public DateTime? ExpiresAt { get; set; }
 
     [Indexed] public bool OneTime { get; set; }
 }

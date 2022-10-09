@@ -20,7 +20,6 @@ internal sealed class SessionMappingProfile : Profile
             .ForMember("_expireDate", expression => expression.MapFrom(model => model.ExpireDate))
             .ForMember("_lastUsageDate", expression => expression.MapFrom(model => model.LastUsageDate))
             .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
-            .ForMember("_statusChangedReason", expression => expression.MapFrom(model => model.StatusChangedReason))
             .ReverseMap();
     }
 }
