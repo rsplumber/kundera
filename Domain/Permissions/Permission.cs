@@ -19,7 +19,7 @@ public class Permission : AggregateRoot<PermissionId>
 
     public static async Task<Permission> FromAsync(Name name, IPermissionRepository repository)
     {
-        var id = PermissionId.From(name.Value.ToLower());
+        var id = PermissionId.From(name.Value);
         var exists = await repository.ExistsAsync(id);
         if (exists)
         {
@@ -48,4 +48,5 @@ public class Permission : AggregateRoot<PermissionId>
         _meta.TryGetValue(key, out var value);
         return value;
     }
+    
 }
