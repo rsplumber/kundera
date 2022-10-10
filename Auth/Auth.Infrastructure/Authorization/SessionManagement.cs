@@ -18,14 +18,14 @@ internal sealed class SessionManagement : ISessionManagement
 
     public async ValueTask SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
-        var expireDate = DateTime.Now.AddMinutes(_sessionOptions.ExpireInMinutes);
         var (token, refreshToken) = certificate;
+        var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
         var session = Session.Create(
             token,
             refreshToken,
             scope,
             userId,
-            expireDate,
+            expiresAt,
             ipAddress
         );
         await _sessionRepository.AddAsync(session, cancellationToken);
@@ -45,9 +45,10 @@ internal sealed class SessionManagement : ISessionManagement
         {
             Scope = session.Scope,
             UserId = session.UserId,
-            ExpireDateUtc = session.ExpireDate,
+            ExpiresAtUtc = session.ExpiresAt,
             LastIpAddress = session.LastIpAddress,
-            LastUsageDateUtc = session.LastUsageDate
+            LastUsageDateUtc = session.LastUsageDate,
+            CreatedDateUtc = session.CreatedDate
         };
     }
 
@@ -58,9 +59,10 @@ internal sealed class SessionManagement : ISessionManagement
         {
             Scope = session.Scope,
             UserId = session.UserId,
-            ExpireDateUtc = session.ExpireDate,
+            ExpiresAtUtc = session.ExpiresAt,
             LastIpAddress = session.LastIpAddress,
-            LastUsageDateUtc = session.LastUsageDate
+            LastUsageDateUtc = session.LastUsageDate,
+            CreatedDateUtc = session.CreatedDate
         });
     }
 

@@ -1,7 +1,7 @@
 ﻿using Tes.Domain.Contracts;
 using Tes.Events.Contracts;
 
-namespace Auth.Domain.Credentials;
+namespace Auth.Domain;
 
 public record DomainEvent : IDomainEvent
 {

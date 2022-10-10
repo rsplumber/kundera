@@ -17,6 +17,8 @@ internal sealed class CredentialDataModel
 
     public DateTime? ExpiresAt { get; set; }
 
+    public DateTime CreatedDate { get; set; }
+
     [Indexed] public bool OneTime { get; set; }
 }
 

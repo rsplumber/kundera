@@ -13,6 +13,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     private DateTime _lastLoggedIn;
     private DateTime? _expiresAt;
     private bool _oneTime;
+    private DateTime _createdDate;
 
     protected Credential()
     {
@@ -24,6 +25,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         _password = Password.Create(password);
         _lastIpAddress = lastIpAddress is not null ? lastIpAddress.ToString() : IPAddress.None.ToString();
         _lastLoggedIn = DateTime.UtcNow;
+        _createdDate = DateTime.UtcNow;
         AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
     }
 
@@ -101,6 +103,8 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     public DateTime? ExpiresAt => _expiresAt;
 
     public bool OneTime => _oneTime;
+
+    public DateTime CreatedDate => _createdDate;
 
     public void UpdateActivityInfo(IPAddress? ipAddress)
     {

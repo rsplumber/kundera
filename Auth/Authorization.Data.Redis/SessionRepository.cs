@@ -19,17 +19,17 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task AddAsync(Session entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<SessionDataModel>(entity);
-        var test1 = CalculateExpireTimeInMinutes();
-        var test2 = TimeSpan.FromMinutes(42300);
-        await _sessions.InsertAsync(dataModel, CalculateExpireTimeInMinutes());
-
-        TimeSpan CalculateExpireTimeInMinutes() => TimeSpan.FromMinutes((entity.ExpireDate - DateTime.UtcNow).TotalMinutes);
+        await _sessions.InsertAsync(dataModel);
     }
 
     public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
-        return _mapper.Map<Session>(dataModel);
+        if (!Expired()) return _mapper.Map<Session>(dataModel);
+        await DeleteAsync(id, cancellationToken);
+        return null;
+
+        bool Expired() => dataModel is not null && DateTime.UtcNow >= dataModel.ExpiresAt;
     }
 
     public async Task UpdateAsync(Session entity, CancellationToken cancellationToken = default)

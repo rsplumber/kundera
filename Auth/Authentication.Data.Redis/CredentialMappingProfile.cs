@@ -26,6 +26,7 @@ internal sealed class CredentialMappingProfile : Profile
             .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
             .ForMember("_lastLoggedIn", expression => expression.MapFrom(model => model.LastLoggedIn))
             .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt))
+            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate))
             .ForMember("_oneTime", expression => expression.MapFrom(model => model.OneTime))
             .ReverseMap();
     }

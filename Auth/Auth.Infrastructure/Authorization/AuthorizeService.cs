@@ -59,7 +59,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return permissions.Any(action.Equals);
 
-        bool TokenExpired() => session.ExpireDateUtc >= DateTime.UtcNow;
+        bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAtUtc;
 
         bool InvalidScope() => !session.Scope.Equals(scope);
 

@@ -13,7 +13,9 @@ internal sealed class SessionDataModel
 
     [Indexed] public Guid UserId { get; set; }
 
-    public DateTime ExpireDate { get; set; }
+    public DateTime ExpiresAt { get; set; }
+
+    public DateTime CreatedDate { get; set; }
 
     public DateTime LastUsageDate { get; set; }
 
