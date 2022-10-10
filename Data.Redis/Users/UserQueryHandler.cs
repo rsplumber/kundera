@@ -25,6 +25,7 @@ internal sealed class UserQueryHandler : QueryHandler<UserQuery, UserResponse>
 
         return new UserResponse(user.Id, user.Usernames)
         {
+            Status = user.Status,
             Roles = user.Roles,
             UserGroups = user.UserGroups
         };

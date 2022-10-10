@@ -120,9 +120,9 @@ public class User : AggregateRoot<UserId>
         return _roles.Any(id => id == role);
     }
 
-    public void Activate(Text? reason = null) => ChangeStatus(UserStatus.Active);
+    public void Activate() => ChangeStatus(UserStatus.Active, null);
 
-    public void Suspend(Text? reason = null) => ChangeStatus(UserStatus.Suspend);
+    public void Suspend(Text? reason = null) => ChangeStatus(UserStatus.Suspend, reason);
 
     public void Block(Text reason) => ChangeStatus(UserStatus.Block, reason);
 
