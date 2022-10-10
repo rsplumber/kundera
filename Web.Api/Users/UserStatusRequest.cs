@@ -5,11 +5,6 @@ using Tes.Web.Validators;
 
 namespace Web.Api.Users;
 
-public record ActiveUserStatusRequest(string? Reason) : IWebRequest
-{
-    public ActiveUserCommand ToCommand(Guid userId) => new(UserId.From(userId), Text.From(Reason!));
-}
-
 public record SuspendUserStatusRequest(string? Reason) : IWebRequest
 {
     public SuspendUserCommand ToCommand(Guid userId) => new(UserId.From(userId), Text.From(Reason!));

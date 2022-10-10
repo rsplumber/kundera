@@ -6,7 +6,7 @@ using Tes.CQRS.Contracts;
 
 namespace Application.Users;
 
-public sealed record ActiveUserCommand(UserId User, Text? Reason) : Command;
+public sealed record ActiveUserCommand(UserId User) : Command;
 
 internal sealed class ActiveUserCommandHandler : CommandHandler<ActiveUserCommand>
 {
@@ -19,14 +19,13 @@ internal sealed class ActiveUserCommandHandler : CommandHandler<ActiveUserComman
 
     public override async Task HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = default)
     {
-        var (userId, reason) = message;
-        var user = await _userRepository.FindAsync(userId, cancellationToken);
+        var user = await _userRepository.FindAsync(message.User , cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Activate(reason);
+        user.Activate();
 
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

@@ -81,9 +81,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{id:required}/activate")]
-    public async Task<IActionResult> ActivateUserAsync([FromRoute] Guid id, [FromBody] ActiveUserStatusRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> ActivateUserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var command = request.ToCommand(id);
+        var command = new ActiveUserCommand(UserId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
