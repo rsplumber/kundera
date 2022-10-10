@@ -18,6 +18,14 @@ public class PermissionsController : ControllerBase
         _serviceBus = serviceBus;
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] CreatePermissionRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand();
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> PermissionsAsync([FromQuery] string? name, CancellationToken cancellationToken)
