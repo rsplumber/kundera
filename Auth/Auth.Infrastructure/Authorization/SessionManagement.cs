@@ -16,9 +16,8 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async ValueTask SaveAsync(Certificate certificate, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
-        var userId = Guid.Empty;
         var expireDate = DateTime.Now.AddMinutes(_sessionOptions.ExpireInMinutes);
         var (token, refreshToken) = certificate;
         var session = Session.Create(

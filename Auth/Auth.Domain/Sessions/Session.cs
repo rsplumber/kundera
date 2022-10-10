@@ -1,14 +1,15 @@
 ﻿using System.Net;
+using Auth.Domain.Sessions.Events;
 using Tes.Domain.Contracts;
 
 namespace Auth.Domain.Sessions;
 
 public class Session : AggregateRoot<Token>
 {
-    private readonly Token _refreshToken;
-    private readonly string _scope;
-    private readonly Guid _userId;
-    private readonly DateTime _expireDate;
+    private Token _refreshToken;
+    private string _scope;
+    private Guid _userId;
+    private DateTime _expireDate;
     private DateTime _lastUsageDate;
     private string? _lastIpAddress;
 
@@ -24,6 +25,7 @@ public class Session : AggregateRoot<Token>
         _expireDate = expireDate;
         _lastIpAddress = lastIpAddress;
         _lastUsageDate = DateTime.UtcNow;
+        AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
     public static Session Create(Token token, Token refreshToken, string scope, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)

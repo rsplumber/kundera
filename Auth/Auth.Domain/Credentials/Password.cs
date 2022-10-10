@@ -1,10 +1,11 @@
-﻿using Tes.Domain.Contracts;
+﻿using Auth.Domain.Credentials.Exceptions;
+using Tes.Domain.Contracts;
 
 namespace Auth.Domain.Credentials;
 
 public record Password : ValueObject
 {
-    private readonly string _value;
+    private string _value;
     private string _salt = string.Empty;
 
     private Password(string value, string salt)
@@ -13,27 +14,38 @@ public record Password : ValueObject
         _salt = salt;
     }
 
-    public static Password From(string value)
+    public static Password From(string value, string salt) => new(value, salt);
+
+    public static Password Create(string value)
     {
         var salt = BCrypt.Net.BCrypt.GenerateSalt();
         var hashed = BCrypt.Net.BCrypt.HashPassword(value, salt);
         return new Password(hashed, salt);
     }
 
-    public static Password From(string value, string salt)
+    public static Password Create(string value, string salt)
     {
         var hashed = BCrypt.Net.BCrypt.HashPassword(value, salt);
         return new Password(hashed, salt);
     }
 
-    public bool Verify(string value)
-    {
-        return BCrypt.Net.BCrypt.Verify(value , _value);
-    }
-
     public string Value => _value;
 
     public string Salt => _salt;
+
+    public bool Verify(string value)
+    {
+        return BCrypt.Net.BCrypt.Verify(value, _value);
+    }
+
+    public void Check(string password)
+    {
+        if (!Equals(Create(password, Salt)))
+        {
+            throw new WrongPasswordException();
+        }
+    }
+
 
     public virtual bool Equals(Password? other)
     {

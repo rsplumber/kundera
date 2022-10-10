@@ -19,7 +19,11 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task AddAsync(Session entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<SessionDataModel>(entity);
-        await _sessions.InsertAsync(dataModel, TimeSpan.FromTicks(entity.ExpireDate.Ticks));
+        var test1 = CalculateExpireTimeInMinutes();
+        var test2 = TimeSpan.FromMinutes(42300);
+        await _sessions.InsertAsync(dataModel, CalculateExpireTimeInMinutes());
+
+        TimeSpan CalculateExpireTimeInMinutes() => TimeSpan.FromMinutes((entity.ExpireDate - DateTime.UtcNow).TotalMinutes);
     }
 
     public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)

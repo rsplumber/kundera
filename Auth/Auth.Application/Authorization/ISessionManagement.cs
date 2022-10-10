@@ -5,7 +5,7 @@ namespace Auth.Application.Authorization;
 
 public interface ISessionManagement
 {
-    ValueTask SaveAsync(Certificate certificate, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default);
+    ValueTask SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default);
 
     ValueTask DeleteAsync(Token token, CancellationToken cancellationToken = default);
 

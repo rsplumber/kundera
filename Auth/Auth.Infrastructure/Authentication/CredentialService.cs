@@ -18,19 +18,19 @@ internal class CredentialService : ICredentialService
         _userRepository = userRepository;
     }
 
-    public async ValueTask CreateAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask CreateAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, cancellationToken: cancellationToken);
     }
 
-    public async ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expirationTimeInSeconds = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, expirationTimeInSeconds, true, cancellationToken);
     }
 
-    public async ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, Guid userId, Password password, int expirationTimeInSeconds, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expirationTimeInSeconds, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await CreateCredential(uniqueIdentifier, password, userId, ipAddress, expirationTimeInSeconds, cancellationToken: cancellationToken);
@@ -67,7 +67,7 @@ internal class CredentialService : ICredentialService
     }
 
     private async ValueTask CreateCredential(UniqueIdentifier uniqueIdentifier,
-        Password password,
+        string password,
         Guid userId,
         IPAddress? ipAddress = null,
         int expirationTimeInSeconds = 0,

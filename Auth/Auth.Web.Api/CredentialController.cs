@@ -1,5 +1,4 @@
 using System.Net;
-using Auth.Application;
 using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +21,7 @@ public class CredentialController : ControllerBase
         [FromBody] CreateCredentialRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        var password = Password.From(request.Password);
-        await _credentialService.CreateAsync(uniqueIdentifier, id, password, IpAddress(), cancellationToken);
+        await _credentialService.CreateAsync(uniqueIdentifier, request.Password, id, IpAddress(), cancellationToken);
         return Ok();
     }
 
@@ -33,8 +31,7 @@ public class CredentialController : ControllerBase
         [FromBody] CreateOneTimeCredentialRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        var password = Password.From(request.Password);
-        await _credentialService.CreateOneTimeAsync(uniqueIdentifier, id, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateOneTimeAsync(uniqueIdentifier, request.Password, id, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
         return Ok();
     }
 
@@ -44,8 +41,7 @@ public class CredentialController : ControllerBase
         [FromBody] CreateTimePeriodicCredentialRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        var password = Password.From(request.Password);
-        await _credentialService.CreateTimePeriodicAsync(uniqueIdentifier, id, password, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateTimePeriodicAsync(uniqueIdentifier, request.Password, id, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
         return Ok();
     }
 

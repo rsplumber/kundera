@@ -2,12 +2,12 @@
 
 namespace Authentication.Data.Redis;
 
-[Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] {"credential"})]
+[Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] {"credentials"})]
 internal sealed class CredentialDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
-    public Guid UserId { get; set; }
+    [Indexed] public Guid UserId { get; set; }
 
     public PasswordType Password { get; set; }
 

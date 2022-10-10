@@ -20,12 +20,16 @@ public class AuthenticateController : ControllerBase
     public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateRequest request, CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        var certificate = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
+        var (token, refreshToken) = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
             request.Password,
             request.Scope,
             IpAddress(),
             cancellationToken);
-        return Ok(certificate);
+        return Ok(new
+        {
+            Token = token,
+            RefreshToken = refreshToken
+        });
     }
 
     private IPAddress IpAddress()

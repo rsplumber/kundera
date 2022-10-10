@@ -2,16 +2,16 @@
 
 namespace Authorization.Data.Redis;
 
-[Document(IndexName = "sessions", StorageType = StorageType.Json, Prefixes = new[] {"session"})]
+[Document(IndexName = "sessions", StorageType = StorageType.Json, Prefixes = new[] {"sessions"})]
 internal sealed class SessionDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; }
 
     public string RefreshToken { get; set; }
 
-    [Indexed] [Searchable] public string Scope { get; set; }
+    [Searchable] public string Scope { get; set; }
 
-    [Indexed] public string User { get; set; }
+    [Indexed] public Guid UserId { get; set; }
 
     public DateTime ExpireDate { get; set; }
 

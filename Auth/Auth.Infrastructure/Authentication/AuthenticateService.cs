@@ -28,16 +28,13 @@ internal class AuthenticateService : IAuthenticateService
             throw new UnAuthenticateException();
         }
 
-        if (credential.CheckPassword(password))
-        {
-            throw new UnAuthenticateException();
-        }
+        credential.Password.Check(password);
 
         credential.UpdateActivityInfo(ipAddress);
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
 
         var certificate = await _certificateService.GenerateAsync(credential.User.ToString(), scope, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, scope, ipAddress ?? IPAddress.None, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, credential.User, scope, ipAddress ?? IPAddress.None, cancellationToken);
         return certificate;
     }
 }

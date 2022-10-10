@@ -23,6 +23,7 @@ internal static class ServiceCollectionExtension
     {
         services.AddAuthorizationDataRedis(configuration);
         services.AddTokensJwt(configuration);
+        services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
         services.AddScoped<IAuthorizeService, AuthorizeService>();
         services.AddScoped<ICertificateService, CertificateService>();
         services.AddScoped<ISessionManagement, SessionManagement>();
