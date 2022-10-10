@@ -26,7 +26,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _scopeRepository = scopeRepository;
     }
 
-    public async ValueTask<bool> AuthorizeAsync(Token token,
+    public async ValueTask AuthorizeAsync(Token token,
         string action,
         string scope,
         IPAddress? ipAddress,
@@ -57,7 +57,10 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         var permissions = await FetchPermissionsAsync();
 
-        return permissions.Any(action.Equals);
+        if (!permissions.Any(action.ToLower().Equals))
+        {
+            throw new UnAuthorizedException();
+        }
 
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAtUtc;
 

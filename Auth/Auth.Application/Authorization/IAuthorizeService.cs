@@ -5,7 +5,7 @@ namespace Auth.Application.Authorization;
 
 public interface IAuthorizeService
 {
-    ValueTask<bool> AuthorizeAsync(Token token,
+    ValueTask AuthorizeAsync(Token token,
         string action,
         string scope,
         IPAddress? ipAddress,
