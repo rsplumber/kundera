@@ -21,7 +21,7 @@ public class Role : AggregateRoot<RoleId>
 
     public static async Task<Role> FromAsync(Name name, IRoleRepository repository)
     {
-        var id = RoleId.From(name.Value.ToLower());
+        var id = RoleId.From(name.Value);
         var exists = await repository.ExistsAsync(id);
         if (exists)
         {
