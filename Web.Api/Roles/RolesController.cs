@@ -15,7 +15,7 @@ public class RolesController : ControllerBase
     {
         _serviceBus = serviceBus;
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
     {
@@ -50,6 +50,17 @@ public class RolesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new DeleteRoleCommand(RoleId.From(id));
+        await _serviceBus.SendAsync(command, cancellationToken);
+        return Ok();
+    }
+    
+    [HttpPost("{id:required}/permission")]
+    public async Task<IActionResult> AddPermissionAsync(
+        [FromRoute] string id,
+        [FromBody] AddRolePermissionRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
