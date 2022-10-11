@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.UserGroups;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -45,5 +46,11 @@ internal class UserGroupRepository : IUserGroupRepository
         var rawGroupIds = groupIds.Select(id => id.Value.ToString());
         var dataModels = await _userGroups.FindByIdsAsync(rawGroupIds);
         return dataModels.Values.Select(model => _mapper.Map<UserGroup>(model));
+    }
+
+    public async Task<UserGroup?> FindAsync(Name name)
+    {
+        var userGroupDataModel = await _userGroups.FirstOrDefaultAsync(model => model.Name == name);
+        return _mapper.Map<UserGroup>(userGroupDataModel);
     }
 }

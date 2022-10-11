@@ -1,5 +1,6 @@
 ﻿using Domain.Roles;
 using Domain.UserGroups.Events;
+using Domain.UserGroups.Exception;
 using Domain.UserGroups.Types;
 using Tes.Domain.Contracts;
 
@@ -85,10 +86,14 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _roles.Add(role);
         AddDomainEvent(new UserGroupRoleAddedEvent(Id, role));
     }
-
+    
     public void RevokeRole(RoleId role)
     {
         if (!Has(role)) return;
+        if (Roles.Count==1)
+        {
+            throw new UserGroupRoleCouldNotBeEmptyException();
+        }
         _roles.Remove(role);
         AddDomainEvent(new UserGroupRoleRemovedEvent(Id, role));
     }

@@ -73,6 +73,10 @@ public class User : AggregateRoot<UserId>
     public void RemoveUsername(Username username)
     {
         if (!Has(username)) return;
+        if (Usernames.Count ==1)
+        {
+            throw new UsernameCouldNotBeEmptyException();
+        }
         _usernames.Remove(username);
         AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
     }
@@ -92,6 +96,10 @@ public class User : AggregateRoot<UserId>
     public void RemoveFromGroup(UserGroupId userGroup)
     {
         if (!Has(userGroup)) return;
+        if (UserGroups.Count==1)
+        {
+            throw new UsernameUserGroupCouldNotBeEmptyException();
+        }
         _userGroups.Remove(userGroup);
         AddDomainEvent(new UserUserGroupEventRemovedEvent(Id, userGroup));
     }

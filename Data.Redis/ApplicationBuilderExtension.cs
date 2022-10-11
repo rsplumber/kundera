@@ -30,6 +30,8 @@ internal static class ApplicationBuilderExtension
                     dbProvider.Connection.CreateIndex(type);
                 }
             });
+            var seed = serviceScope.ServiceProvider.GetRequiredService<DefaultDataSeeder>();
+            seed.SeedAsync().Wait();
         }
         catch (Exception e)
         {
