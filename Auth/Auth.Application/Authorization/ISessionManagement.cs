@@ -9,7 +9,7 @@ public interface ISessionManagement
 
     ValueTask DeleteAsync(Token token, CancellationToken cancellationToken = default);
 
-    ValueTask<SessionModel?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default);
+    ValueTask<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default);
 
-    ValueTask<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default);
+    ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default);
 }

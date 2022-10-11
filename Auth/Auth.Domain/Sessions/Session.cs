@@ -13,6 +13,7 @@ public class Session : AggregateRoot<Token>
     private DateTime _lastUsageDate;
     private string? _lastIpAddress;
     private DateTime _createdDate;
+    private List<string> _permissions = new();
 
     protected Session()
     {
@@ -48,6 +49,35 @@ public class Session : AggregateRoot<Token>
     public string LastIpAddress => _lastIpAddress;
 
     public DateTime CreatedDate => _createdDate;
+
+    public IReadOnlyCollection<string> Permissions => _permissions.AsReadOnly();
+
+    public void AddPermission(string permissionId)
+    {
+        if (HasPermission(permissionId)) return;
+        _permissions.Add(permissionId);
+    }
+
+    public void RemovePermission(string permissionId)
+    {
+        if (HasPermission(permissionId)) return;
+        _permissions.Remove(permissionId);
+    }
+
+    public bool HasPermission(string permissionId)
+    {
+        return _permissions.Any(id => id == permissionId);
+    }
+
+    public void AddPermissions(IEnumerable<string> permissionIds)
+    {
+        _permissions.AddRange(permissionIds);
+    }
+
+    public void ClearPermissions()
+    {
+        _permissions.Clear();
+    }
 
     public void UpdateUsage(DateTime lastUsageDate, IPAddress ipAddress)
     {

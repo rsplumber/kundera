@@ -66,7 +66,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAtUtc;
+        bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidScope() => !session.Scope.Equals(scope);
 
