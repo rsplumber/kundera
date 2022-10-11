@@ -39,4 +39,11 @@ internal class UserGroupRepository : IUserGroupRepository
     {
         throw new NotImplementedException();
     }
+
+    public async ValueTask<IEnumerable<UserGroup>> FindAsync(UserGroupId[] groupIds, CancellationToken cancellationToken = default)
+    {
+        var rawGroupIds = groupIds.Select(id => id.Value.ToString());
+        var dataModels = await _userGroups.FindByIdsAsync(rawGroupIds);
+        return dataModels.Values.Select(model => _mapper.Map<UserGroup>(model));
+    }
 }
