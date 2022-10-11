@@ -70,10 +70,13 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserUsernameAddedEvent(Id, username));
     }
 
-    //Todo Check kon age yedoone username dasht , natone pak kone yani 0 ta username nashe
     public void RemoveUsername(Username username)
     {
         if (!Has(username)) return;
+        if (Usernames.Count ==1)
+        {
+            throw new UsernameCouldNotBeEmptyException();
+        }
         _usernames.Remove(username);
         AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
     }
@@ -90,10 +93,13 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserUserGroupJoinedEvent(Id, userGroup));
     }
 
-    //Todo Check kon age yedoone UserGroup dasht , natone pak kone yani 0 ta UserGroup nashe
     public void RemoveFromGroup(UserGroupId userGroup)
     {
         if (!Has(userGroup)) return;
+        if (UserGroups.Count==1)
+        {
+            throw new UsernameUserGroupCouldNotBeEmptyException();
+        }
         _userGroups.Remove(userGroup);
         AddDomainEvent(new UserUserGroupEventRemovedEvent(Id, userGroup));
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.UserGroups;
 using Redis.OM;
 using Redis.OM.Searching;

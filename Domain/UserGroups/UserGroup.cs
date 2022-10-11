@@ -1,5 +1,6 @@
 ﻿using Domain.Roles;
 using Domain.UserGroups.Events;
+using Domain.UserGroups.Exception;
 using Domain.UserGroups.Types;
 using Tes.Domain.Contracts;
 
@@ -86,10 +87,13 @@ public class UserGroup : AggregateRoot<UserGroupId>
         AddDomainEvent(new UserGroupRoleAddedEvent(Id, role));
     }
     
-    //Todo Check kon age yedoone Role dasht , natone pak kone yani 0 ta Role nashe
     public void RevokeRole(RoleId role)
     {
         if (!Has(role)) return;
+        if (Roles.Count==1)
+        {
+            throw new UserGroupRoleCouldNotBeEmptyException();
+        }
         _roles.Remove(role);
         AddDomainEvent(new UserGroupRoleRemovedEvent(Id, role));
     }
