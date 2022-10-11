@@ -33,13 +33,19 @@ internal class PermissionRepository : IPermissionRepository
         return await _permissions.AnyAsync(model => model.Id == id.Value);
     }
 
+    public async Task<List<Permission>> FindAllAsync()
+    {
+        var permissionDataModels = await _permissions.ToListAsync();
+        return _mapper.Map<List<Permission>>(permissionDataModels);
+    }
+
     public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.UpdateAsync(permission);
     }
 
-    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = new CancellationToken())
+    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

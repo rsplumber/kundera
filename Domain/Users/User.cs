@@ -70,6 +70,7 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserUsernameAddedEvent(Id, username));
     }
 
+    //Todo Check kon age yedoone username dasht , natone pak kone yani 0 ta username nashe
     public void RemoveUsername(Username username)
     {
         if (!Has(username)) return;
@@ -89,6 +90,7 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserUserGroupJoinedEvent(Id, userGroup));
     }
 
+    //Todo Check kon age yedoone UserGroup dasht , natone pak kone yani 0 ta UserGroup nashe
     public void RemoveFromGroup(UserGroupId userGroup)
     {
         if (!Has(userGroup)) return;

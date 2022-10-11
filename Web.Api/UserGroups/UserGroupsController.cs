@@ -64,7 +64,6 @@ public class UserGroupsController : ControllerBase
         return Ok();
     }
 
-    //Todo Bazi az data ha Null ast
     [HttpGet]
     public async Task<IActionResult> UserGroupsAsync(CancellationToken cancellationToken)
     {

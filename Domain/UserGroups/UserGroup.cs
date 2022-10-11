@@ -84,7 +84,8 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _roles.Add(role);
         AddDomainEvent(new UserGroupRoleAddedEvent(Id, role));
     }
-
+    
+    //Todo Check kon age yedoone Role dasht , natone pak kone yani 0 ta Role nashe
     public void RevokeRole(RoleId role)
     {
         if (!Has(role)) return;

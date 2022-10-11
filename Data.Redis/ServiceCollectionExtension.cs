@@ -27,6 +27,7 @@ internal static class ServiceCollectionExtension
         services.AddScoped<IScopeRepository, ScopeRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddTransient<DefaultDataSeeder>();
 
         services.AddSingleton(new RedisConnectionProvider(configuration.GetConnectionString("Application")));
 

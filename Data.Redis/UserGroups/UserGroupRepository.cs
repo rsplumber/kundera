@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.UserGroups;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -38,5 +39,11 @@ internal class UserGroupRepository : IUserGroupRepository
     public Task DeleteAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<UserGroup?> FindAsync(Name name)
+    {
+        var userGroupDataModel = await _userGroups.FirstOrDefaultAsync(model => model.Name == name);
+        return _mapper.Map<UserGroup>(userGroupDataModel);
     }
 }
