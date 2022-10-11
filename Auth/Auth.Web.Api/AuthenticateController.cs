@@ -27,8 +27,8 @@ public class AuthenticateController : ControllerBase
             cancellationToken);
         return Ok(new
         {
-            Token = token,
-            RefreshToken = refreshToken
+            Token = token.Value,
+            RefreshToken = refreshToken.Value
         });
     }
 
