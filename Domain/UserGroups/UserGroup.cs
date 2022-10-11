@@ -49,6 +49,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public string? Description => _description;
 
     public UserGroupId? Parent => _parent;
+    
     public UserGroupStatus UserGroupStatus => _status;
 
     public DateTime? StatusChangedDate => _statusChangedDate;

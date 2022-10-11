@@ -36,34 +36,17 @@ internal sealed class SessionManagement : ISessionManagement
         await _sessionRepository.DeleteAsync(token, cancellationToken);
     }
 
-    public async ValueTask<SessionModel?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async ValueTask<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
         if (session is null) return null;
         await UpdateAsync(token, ipAddress, cancellationToken);
-        return new SessionModel
-        {
-            Scope = session.Scope,
-            UserId = session.UserId,
-            ExpiresAtUtc = session.ExpiresAt,
-            LastIpAddress = session.LastIpAddress,
-            LastUsageDateUtc = session.LastUsageDate,
-            CreatedDateUtc = session.CreatedDate
-        };
+        return session;
     }
 
-    public async ValueTask<IEnumerable<SessionModel>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var sessions = await _sessionRepository.FindAsync(cancellationToken);
-        return sessions.Select(session => new SessionModel
-        {
-            Scope = session.Scope,
-            UserId = session.UserId,
-            ExpiresAtUtc = session.ExpiresAt,
-            LastIpAddress = session.LastIpAddress,
-            LastUsageDateUtc = session.LastUsageDate,
-            CreatedDateUtc = session.CreatedDate
-        });
+        return await _sessionRepository.FindAsync(cancellationToken);
     }
 
     private async ValueTask UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)

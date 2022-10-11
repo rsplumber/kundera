@@ -95,7 +95,7 @@ internal class CredentialService : ICredentialService
         var requestedUsername = Username.From(uniqueIdentifier.Username);
         if (!user.Has(requestedUsername))
         {
-            throw new UserNotFoundException();
+            throw new UsernameNotFoundException();
         }
     }
 }
