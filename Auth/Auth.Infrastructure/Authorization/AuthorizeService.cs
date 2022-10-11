@@ -3,6 +3,7 @@ using Auth.Application.Authorization;
 using Auth.Domain.Sessions;
 using Domain.Roles;
 using Domain.Scopes;
+using Domain.Services;
 using Domain.UserGroups;
 using Domain.Users;
 using Domain.Users.Types;
@@ -33,6 +34,7 @@ internal sealed class AuthorizeService : IAuthorizeService
     public async ValueTask AuthorizeAsync(Token token,
         string action,
         string scope,
+        string? service,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default)
     {
@@ -54,7 +56,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.Scope), cancellationToken);
-        if (sessionScope is null || UserHasNotScopeRole())
+        if (sessionScope is null || UserHasNotScopeRole() || InvalidService())
         {
             throw new UnAuthorizedException();
         }
@@ -69,6 +71,8 @@ internal sealed class AuthorizeService : IAuthorizeService
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidScope() => !session.Scope.Equals(scope);
+
+        bool InvalidService() => service is null || sessionScope.Services.All(id => id != ServiceId.From(service));
 
         bool UserIsNotActive() => user.Status != UserStatus.Active;
 

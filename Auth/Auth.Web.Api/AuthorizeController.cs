@@ -17,10 +17,13 @@ public class AuthorizeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AuthorizeAsync([FromBody] AuthorizeRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AuthorizeAsync([FromBody] AuthorizeRequest request,
+        [FromHeader] string token,
+        [FromHeader] string scope = "global",
+        [FromHeader] string? service = null,
+        CancellationToken cancellationToken = default)
     {
-        var (token, action, scope) = request;
-        await _authorizeService.AuthorizeAsync(Token.From(token), action, scope, IpAddress(), cancellationToken);
+        await _authorizeService.AuthorizeAsync(Token.From(token), request.Action, scope, service, IpAddress(), cancellationToken);
         return Ok();
     }
 
