@@ -1,6 +1,7 @@
 using System.Net;
 using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
+using Auth.Domain.Sessions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Authentication.Web.Api;
@@ -28,6 +29,17 @@ public class AuthenticateController : ControllerBase
         return Ok(new
         {
             Token = token.Value,
+            RefreshToken = refreshToken.Value
+        });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshAsync([FromHeader] string token, [FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    {
+        var (newToken, refreshToken) = await _authenticateService.RefreshCertificateAsync(Token.From(token), Token.From(request.RefreshToken), IpAddress(), cancellationToken);
+        return Ok(new
+        {
+            Token = newToken.Value,
             RefreshToken = refreshToken.Value
         });
     }

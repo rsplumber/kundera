@@ -8,6 +8,7 @@ public sealed record ScopeId : IIdentity
 
     private ScopeId(string value)
     {
+        if (value == null) throw new ArgumentNullException(nameof(value));
         _value = value.Replace(" ", "").ToLower();
     }
 

@@ -18,3 +18,15 @@ public class AuthenticateRequestValidator : RequestValidator<AuthenticateRequest
             .NotNull().WithMessage("Enter valid Password");
     }
 }
+
+public record RefreshRequest(string RefreshToken) : IWebRequest;
+
+public class RefreshRequestValidator : RequestValidator<RefreshRequest>
+{
+    public RefreshRequestValidator()
+    {
+        RuleFor(request => request.RefreshToken)
+            .NotEmpty().WithMessage("Enter valid RefreshToken")
+            .NotNull().WithMessage("Enter valid RefreshToken");
+    }
+}

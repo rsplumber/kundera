@@ -55,13 +55,15 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
+        var allRoles = await FetchAllRoles();
+
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.Scope), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole() || InvalidService())
         {
             throw new UnAuthorizedException();
         }
 
-        var permissions = await FetchPermissionsAsync();
+        var permissions = allRoles.SelectMany(role => role.Permissions.Select(id => id.Value));
 
         if (!permissions.Any(action.ToLower().Equals))
         {
@@ -72,20 +74,23 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidScope() => !session.Scope.Equals(scope);
 
-        bool InvalidService() => service is null || sessionScope.Services.All(id => id != ServiceId.From(service));
+        bool InvalidService()
+        {
+            return sessionScope.Services.All(id => id != ServiceId.From(service ?? "all"));
+        }
 
         bool UserIsNotActive() => user.Status != UserStatus.Active;
 
-        bool UserHasNotScopeRole() => !user.Roles.Any(id => sessionScope.Has(id));
-
-        async ValueTask<IEnumerable<string>> FetchPermissionsAsync()
+        async Task<IEnumerable<Role>> FetchAllRoles()
         {
             var userRoles = await _roleRepository.FindAsync(user.Roles.ToArray(), cancellationToken);
             var userGroupRoles = await FetchUserGroupsRolesAsync();
             var roles = userRoles.ToList();
             roles.AddRange(userGroupRoles);
-            return roles.SelectMany(role => role.Permissions.Select(id => id.Value));
+            return roles;
         }
+
+        bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
 
         async ValueTask<IEnumerable<Role>> FetchUserGroupsRolesAsync()
         {

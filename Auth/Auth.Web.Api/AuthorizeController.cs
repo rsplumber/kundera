@@ -20,7 +20,7 @@ public class AuthorizeController : ControllerBase
     public async Task<IActionResult> AuthorizeAsync([FromBody] AuthorizeRequest request,
         [FromHeader] string token,
         [FromHeader] string scope = "global",
-        [FromHeader] string? service = null,
+        [FromHeader] string? service = "all",
         CancellationToken cancellationToken = default)
     {
         await _authorizeService.AuthorizeAsync(Token.From(token), request.Action, scope, service, IpAddress(), cancellationToken);

@@ -8,6 +8,7 @@ public sealed record PermissionId : IIdentity
 
     private PermissionId(string value)
     {
+        if (value == null) throw new ArgumentNullException(nameof(value));
         _value = value.Replace(" ", "").ToLower();
     }
 

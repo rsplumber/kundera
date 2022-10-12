@@ -14,14 +14,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace Data.Redis;
 
-public class DefaultDataSeeder 
+public class DefaultDataSeeder
 {
     private const string RoleName = "superadmin";
     private const string Username = "superadmin";
     private const string UserGroupName = "administrator";
     private const string ScopeName = "global";
-    private const string ServiceName = "Kundera";
-    private string adminPassword = string.Empty;
+    private const string ServiceName = "all";
+    private readonly string _adminPassword;
 
     private readonly IRoleRepository _roleRepository;
     private readonly IUserGroupRepository _userGroupRepository;
@@ -44,7 +44,7 @@ public class DefaultDataSeeder
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
-        adminPassword = configuration.GetSection("AdminPassword").Value;
+        _adminPassword = configuration.GetSection("AdminPassword").Value;
     }
 
 
@@ -125,12 +125,20 @@ public class DefaultDataSeeder
         }
 
         scope.AddService(service.Id);
+
+        var role = await _roleRepository.FindAsync(RoleId.From(RoleName));
+        if (role is null)
+        {
+            throw new RoleNotSeededException();
+        }
+
+        scope.AddRole(role.Id);
         await _scopeRepository.AddAsync(scope);
     }
-    
+
     private async Task SeedCredentialAsync()
     {
         var user = await _userRepository.FindAsync(Username);
-        await _credentialService.CreateAsync(UniqueIdentifier.From(Username), adminPassword, user.Id.Value, IPAddress.None );
+        await _credentialService.CreateAsync(UniqueIdentifier.From(Username), _adminPassword, user.Id.Value, IPAddress.None);
     }
 }
