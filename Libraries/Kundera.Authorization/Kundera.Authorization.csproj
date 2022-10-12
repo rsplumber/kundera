@@ -6,8 +6,9 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Kundera.Authorization</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>Kundera.Authorization.Abstractions</Title>
+        <Title>Kundera.Authorization</Title>
         <Authors>Aliasghar Sharifian(Plumber)</Authors>
+        <PackageVersion>0.0.9</PackageVersion>
     </PropertyGroup>
 
 </Project>

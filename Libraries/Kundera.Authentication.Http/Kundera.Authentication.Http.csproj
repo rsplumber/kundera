@@ -4,15 +4,16 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>0.0.9</PackageVersion>
+        <Title>Kundera.Authentication.Http</Title>
+        <Authors>Aliasghar Sharifian(Plumber)</Authors>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Kundera.Authentication" Version="0.0.9" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
         <PackageReference Include="RestSharp" Version="108.0.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Kundera.Authentication\Kundera.Authentication.csproj" />
-    </ItemGroup>
-    
 </Project>

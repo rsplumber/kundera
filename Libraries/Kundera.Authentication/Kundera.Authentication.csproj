@@ -7,6 +7,7 @@
         <PackageVersion>0.0.9</PackageVersion>
         <Title>Kundera.Authentication</Title>
         <Authors>Aliasghar Sharifian(Plumber)</Authors>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
 </Project>
