@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using RestSharp;
 
-namespace Kundera.Authentication;
+namespace Kundera.Authentication.Http;
 
 internal sealed class AuthenticateService : IAuthenticateService
 {
@@ -15,7 +15,7 @@ internal sealed class AuthenticateService : IAuthenticateService
 
     public async Task<Certificate?> AuthenticateAsync(string username, string password, string type = "default", string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + "/authenticate")
+        var request = new RestRequest(_authenticationSettings.BaseUrl + "/authenticate")
             .AddJsonBody(new
             {
                 username,
@@ -30,7 +30,7 @@ internal sealed class AuthenticateService : IAuthenticateService
 
     public async ValueTask<Certificate?> RefreshCertificateAsync(string token, string refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + "/authenticate/refresh")
+        var request = new RestRequest(_authenticationSettings.BaseUrl + "/authenticate/refresh")
             .AddHeader("token", token)
             .AddJsonBody(new
             {

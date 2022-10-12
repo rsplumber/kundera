@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using RestSharp;
 
-namespace Kundera.Authentication;
+namespace Kundera.Authentication.Http;
 
 internal sealed class CredentialService : ICredentialService
 {
@@ -15,7 +15,7 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> CreateAsync(string username, string password, Guid userId, string type, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials")
+        var request = new RestRequest(_authenticationSettings.BaseUrl + $@"/users/{userId}/credentials")
             .AddJsonBody(new
             {
                 username, password, type
@@ -27,7 +27,7 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> CreateOneTimeAsync(string username, string password, Guid userId, string type, int expirationTimeInSeconds = 0, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials/one-time")
+        var request = new RestRequest(_authenticationSettings.BaseUrl + $@"/users/{userId}/credentials/one-time")
             .AddJsonBody(new
             {
                 username, password, type, expirationTimeInSeconds
@@ -39,7 +39,7 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> CreateTimePeriodicAsync(string username, string password, Guid userId, string type, int expirationTimeInSeconds, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials/time-periodic")
+        var request = new RestRequest(_authenticationSettings.BaseUrl + $@"/users/{userId}/credentials/time-periodic")
             .AddJsonBody(new
             {
                 username, password, type, expirationTimeInSeconds
@@ -51,7 +51,7 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> DeleteAsync(string uniqueIdentifier, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest(_authenticationSettings.Url + $@"/credentials/{uniqueIdentifier}");
+        var request = new RestRequest(_authenticationSettings.BaseUrl + $@"/credentials/{uniqueIdentifier}");
         var client = new RestClient();
         var response = await client.DeleteAsync(request, cancellationToken);
         return response.StatusCode == HttpStatusCode.OK;
