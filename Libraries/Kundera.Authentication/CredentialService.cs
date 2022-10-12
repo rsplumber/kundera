@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.Extensions.Options;
 using RestSharp;
 
 namespace Kundera.Authentication;
@@ -7,16 +8,18 @@ internal sealed class CredentialService : ICredentialService
 {
     private readonly AuthenticationSettings _authenticationSettings;
 
+    public CredentialService(IOptions<AuthenticationSettings> authenticationSettings)
+    {
+        _authenticationSettings = authenticationSettings.Value;
+    }
+
     public async Task<bool> CreateAsync(string username, string password, Guid userId, string type, CancellationToken cancellationToken = default)
     {
-        var body = new
-        {
-            username = username,
-            password = password,
-            type = type
-        };
         var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials")
-            .AddJsonBody(body);
+            .AddJsonBody(new
+            {
+                username, password, type
+            });
         var client = new RestClient();
         var response = await client.PostAsync(request, cancellationToken);
         return response.StatusCode == HttpStatusCode.OK;
@@ -24,15 +27,11 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> CreateOneTimeAsync(string username, string password, Guid userId, string type, int expirationTimeInSeconds = 0, CancellationToken cancellationToken = default)
     {
-        var body = new
-        {
-            username = username,
-            password = password,
-            type = type,
-            expirationTimeInSeconds = expirationTimeInSeconds
-        };
         var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials/one-time")
-            .AddJsonBody(body);
+            .AddJsonBody(new
+            {
+                username, password, type, expirationTimeInSeconds
+            });
         var client = new RestClient();
         var response = await client.PostAsync(request, cancellationToken);
         return response.StatusCode == HttpStatusCode.OK;
@@ -40,16 +39,11 @@ internal sealed class CredentialService : ICredentialService
 
     public async Task<bool> CreateTimePeriodicAsync(string username, string password, Guid userId, string type, int expirationTimeInSeconds, CancellationToken cancellationToken = default)
     {
-        var body = new
-        {
-            username = username,
-            password = password,
-            type = type,
-            expirationTimeInSeconds = expirationTimeInSeconds
-        };
-
-        var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials")
-            .AddJsonBody(body);
+        var request = new RestRequest(_authenticationSettings.Url + $@"/users/{userId}/credentials/time-periodic")
+            .AddJsonBody(new
+            {
+                username, password, type, expirationTimeInSeconds
+            });
         var client = new RestClient();
         var response = await client.PostAsync(request, cancellationToken);
         return response.StatusCode == HttpStatusCode.OK;
@@ -59,7 +53,7 @@ internal sealed class CredentialService : ICredentialService
     {
         var request = new RestRequest(_authenticationSettings.Url + $@"/credentials/{uniqueIdentifier}");
         var client = new RestClient();
-        var response = await client.PostAsync(request, cancellationToken);
+        var response = await client.DeleteAsync(request, cancellationToken);
         return response.StatusCode == HttpStatusCode.OK;
     }
 }

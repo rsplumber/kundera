@@ -10,4 +10,6 @@ public interface IAuthenticateService
         string scope = "global",
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
+
+    ValueTask<Certificate?> RefreshCertificateAsync(string token, string refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default);
 }
