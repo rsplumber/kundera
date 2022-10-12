@@ -46,6 +46,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Authentication.Http", "Libraries\Kundera.Authentication.Http\Kundera.Authentication.Http.csproj", "{C1BC797D-D36C-4FC8-8868-641CB5787137}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Management", "Libraries\Kundera.Management\Kundera.Management.csproj", "{6A5AE562-306F-4E92-871F-F2E80F99F6D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Management.Http", "Libraries\Kundera.Management.Http\Kundera.Management.Http.csproj", "{39CCDD11-F2D5-456B-8AF3-B0121DE1F536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,8 @@ Global
 		{4596F50E-7D3B-43F6-95E7-541180F1D28E} = {FFD9CCEA-D13C-42F2-A23A-598BB3506CF0}
 		{8D47B7FC-39CB-4A64-A00A-22C81705F1A5} = {B0C0B269-26A5-41DB-8003-E556F2406B54}
 		{C1BC797D-D36C-4FC8-8868-641CB5787137} = {FFD9CCEA-D13C-42F2-A23A-598BB3506CF0}
+		{6A5AE562-306F-4E92-871F-F2E80F99F6D2} = {1C38CA47-578E-4B1E-A1CC-E031F9184969}
+		{39CCDD11-F2D5-456B-8AF3-B0121DE1F536} = {1C38CA47-578E-4B1E-A1CC-E031F9184969}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C4D70B0B-7656-4387-8AB2-AFFD9E97185E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -137,5 +143,13 @@ Global
 		{C1BC797D-D36C-4FC8-8868-641CB5787137}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1BC797D-D36C-4FC8-8868-641CB5787137}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1BC797D-D36C-4FC8-8868-641CB5787137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A5AE562-306F-4E92-871F-F2E80F99F6D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A5AE562-306F-4E92-871F-F2E80F99F6D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A5AE562-306F-4E92-871F-F2E80F99F6D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A5AE562-306F-4E92-871F-F2E80F99F6D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39CCDD11-F2D5-456B-8AF3-B0121DE1F536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CCDD11-F2D5-456B-8AF3-B0121DE1F536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CCDD11-F2D5-456B-8AF3-B0121DE1F536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CCDD11-F2D5-456B-8AF3-B0121DE1F536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
