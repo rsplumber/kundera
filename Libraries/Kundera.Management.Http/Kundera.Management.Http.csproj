@@ -13,6 +13,7 @@
         <PackageReference Include="Kundera.Authentication" Version="0.0.9" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
       <PackageReference Include="Kundera.Management" Version="0.0.9" />
+      <PackageReference Include="RestSharp" Version="108.0.2" />
     </ItemGroup>
 
 </Project>
