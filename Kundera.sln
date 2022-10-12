@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B7F5CCB4-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.AspNetCore.Authorization", "Libraries\Kundera.AspNetCore.Authorization\Kundera.AspNetCore.Authorization.csproj", "{B2A74524-0F96-43D3-943B-64D52D178FA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kundera.Extensions.Microsoft.DependencyInjection", "Libraries\Kundera.Extensions.Microsoft.DependencyInjection\Kundera.Extensions.Microsoft.DependencyInjection.csproj", "{B0B83E1C-EECC-48B8-B384-93A8B057FBC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,7 @@ Global
 		{EFE53EB2-C83B-4111-B57B-1A69F19A6056} = {B7F5CCB4-283B-498F-ABBA-2B5A19E41B90}
 		{8270E9EB-E9D2-43F2-ACD7-18FBDE8DB285} = {B7F5CCB4-283B-498F-ABBA-2B5A19E41B90}
 		{B2A74524-0F96-43D3-943B-64D52D178FA7} = {1C38CA47-578E-4B1E-A1CC-E031F9184969}
+		{B0B83E1C-EECC-48B8-B384-93A8B057FBC5} = {1C38CA47-578E-4B1E-A1CC-E031F9184969}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C4D70B0B-7656-4387-8AB2-AFFD9E97185E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -114,5 +117,9 @@ Global
 		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2A74524-0F96-43D3-943B-64D52D178FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0B83E1C-EECC-48B8-B384-93A8B057FBC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B83E1C-EECC-48B8-B384-93A8B057FBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B83E1C-EECC-48B8-B384-93A8B057FBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B83E1C-EECC-48B8-B384-93A8B057FBC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
