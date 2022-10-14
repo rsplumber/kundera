@@ -34,9 +34,9 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> RefreshAsync([FromHeader] string token, [FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RefreshAsync([FromHeader] string authorization, [FromBody] RefreshRequest request, CancellationToken cancellationToken)
     {
-        var (newToken, refreshToken) = await _authenticateService.RefreshCertificateAsync(Token.From(token), Token.From(request.RefreshToken), IpAddress(), cancellationToken);
+        var (newToken, refreshToken) = await _authenticateService.RefreshCertificateAsync(Token.From(authorization), Token.From(request.RefreshToken), IpAddress(), cancellationToken);
         return Ok(new
         {
             Token = newToken.Value,
