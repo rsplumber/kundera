@@ -1,6 +1,5 @@
-﻿using Auth.Application;
-using Auth.Application.Authorization;
-using Tes.Standard.Tokens;
+﻿using Auth.Application.Authorization;
+using Kite.Tokens;
 using Token = Auth.Domain.Sessions.Token;
 
 namespace Authentication.Infrastructure.Authorization;
@@ -17,11 +16,12 @@ internal sealed class CertificateService : ICertificateService
 
     public async ValueTask<Certificate> GenerateAsync(string id, string scope = "global", CancellationToken cancellationToken = default)
     {
-        var tokenProperties = new TokenProperties();
-        tokenProperties.Add("id", id);
-        tokenProperties.Add("scope", scope);
-        var token = await _tokenService.GenerateAsync(tokenProperties);
-        var refreshToken = await _tokenService.GenerateAsync(new TokenProperties());
+        var token = await _tokenService.GenerateAsync(TokenProperties.Create()
+                                                                     .Add("id", id)
+                                                                     .Add("scope", scope));
+
+        var refreshToken = await _tokenService.GenerateAsync(TokenProperties.Create());
+
         return new Certificate(Token.From(token.Value), Token.From(refreshToken.Value));
     }
 }

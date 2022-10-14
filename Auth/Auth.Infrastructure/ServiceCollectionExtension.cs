@@ -1,13 +1,12 @@
-﻿using Auth.Application;
-using Auth.Application.Authentication;
+﻿using Auth.Application.Authentication;
 using Auth.Application.Authorization;
 using Authentication.Data.Redis;
 using Authentication.Infrastructure.Authentication;
 using Authentication.Infrastructure.Authorization;
 using Authorization.Data.Redis;
+using Kite.Tokens.JWT;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tes.Standard.Tokens.JWT;
 
 namespace Authentication.Infrastructure;
 

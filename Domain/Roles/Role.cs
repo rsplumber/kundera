@@ -2,7 +2,6 @@
 using Domain.Roles.Events;
 using Domain.Roles.Exceptions;
 using Kite.Domain.Contracts;
-using Tes.Domain.Contracts;
 
 namespace Domain.Roles;
 
@@ -39,6 +38,7 @@ public class Role : AggregateRoot<RoleId>
     public void AddPermission(PermissionId permission)
     {
         if (Has(permission)) return;
+
         _permissions.Add(permission);
         AddDomainEvent(new RolePermissionAddedEvent(Id, permission));
     }
@@ -46,6 +46,7 @@ public class Role : AggregateRoot<RoleId>
     public void RemovePermission(PermissionId permission)
     {
         if (!Has(permission)) return;
+
         _permissions.Remove(permission);
         AddDomainEvent(new RolePermissionRemovedEvent(Id, permission));
     }
@@ -64,12 +65,14 @@ public class Role : AggregateRoot<RoleId>
     public void RemoveMeta(string key)
     {
         if (GetMetaValue(key) is null) return;
+
         _meta.Remove(key);
     }
 
     public string? GetMetaValue(string key)
     {
         _meta.TryGetValue(key, out var value);
+
         return value;
     }
 }

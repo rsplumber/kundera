@@ -46,10 +46,10 @@ public class UsersController : ControllerBase
     [HttpPost("/usernames/{username:required}/check")]
     public async Task<IActionResult> ExistUsernameAsync([FromRoute] string username, CancellationToken cancellationToken)
     {
-        var command = new ExistUserUsernameCommand(username);
-        await _serviceBus.SendAsync(command, cancellationToken);
+        var query = new ExistUserUsernameQuery(username);
+        var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
-        return Ok();
+        return Ok(new {Exists = response});
     }
 
     [HttpPost("{id:required:guid}/roles")]

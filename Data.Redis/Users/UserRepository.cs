@@ -16,13 +16,13 @@ internal class UserRepository : IUserRepository
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async Task AddAsync(User entity, CancellationToken cancellationToken = default)
+    public async ValueTask AddAsync(User entity, CancellationToken cancellationToken = default)
     {
         var userDataModel = _mapper.Map<UserDataModel>(entity);
         await _users.InsertAsync(userDataModel);
     }
 
-    public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
+    public async ValueTask<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
     {
         var userDataModel = await _users.FindByIdAsync(id.Value.ToString());
 
@@ -34,7 +34,7 @@ internal class UserRepository : IUserRepository
         return await _users.AnyAsync(model => model.Usernames.Contains(username.Value));
     }
 
-    public async Task<User> FindAsync(Username username, CancellationToken cancellationToken = default)
+    public async ValueTask<User?> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
         var userDataModel = await _users.Where(model => model.Usernames.Contains(username))
                                         .FirstOrDefaultAsync();
@@ -42,13 +42,13 @@ internal class UserRepository : IUserRepository
         return _mapper.Map<User>(userDataModel);
     }
 
-    public async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateAsync(User entity, CancellationToken cancellationToken = default)
     {
         var userDataModel = _mapper.Map<UserDataModel>(entity);
         await _users.InsertAsync(userDataModel);
     }
 
-    public Task DeleteAsync(UserId id, CancellationToken cancellationToken = new CancellationToken())
+    public ValueTask DeleteAsync(UserId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

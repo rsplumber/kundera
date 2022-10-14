@@ -16,13 +16,13 @@ internal class PermissionRepository : IPermissionRepository
         _mapper = mapper;
     }
 
-    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
+    public async ValueTask AddAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.InsertAsync(permission);
     }
 
-    public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public async ValueTask<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         var permissionDataModel = await _permissions.FindByIdAsync(id.Value);
 
@@ -34,20 +34,20 @@ internal class PermissionRepository : IPermissionRepository
         return await _permissions.AnyAsync(model => model.Id == id.Value);
     }
 
-    public async Task<List<Permission>> FindAllAsync()
+    public async ValueTask<List<Permission>> FindAllAsync()
     {
         var permissionDataModels = await _permissions.ToListAsync();
 
         return _mapper.Map<List<Permission>>(permissionDataModels);
     }
 
-    public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.UpdateAsync(permission);
     }
 
-    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public ValueTask DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

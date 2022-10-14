@@ -5,11 +5,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.Roles;
 
-internal sealed class RolesIQueryHandler : IQueryHandler<RolesQuery, IEnumerable<RolesResponse>>
+internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<RolesResponse>>
 {
     private IRedisCollection<RoleDataModel> _roles;
 
-    public RolesIQueryHandler(RedisConnectionProvider provider)
+    public RolesQueryHandler(RedisConnectionProvider provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }

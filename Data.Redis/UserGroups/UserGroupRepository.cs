@@ -18,26 +18,26 @@ internal class UserGroupRepository : IUserGroupRepository
         _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }
 
-    public async Task AddAsync(UserGroup entity, CancellationToken cancellationToken = default)
+    public async ValueTask AddAsync(UserGroup entity, CancellationToken cancellationToken = default)
     {
         var userGroup = _mapper.Map<UserGroupDataModel>(entity);
         await _userGroups.InsertAsync(userGroup);
     }
 
-    public async Task<UserGroup?> FindAsync(UserGroupId id, CancellationToken cancellationToken = default)
+    public async ValueTask<UserGroup?> FindAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
         var userGroupDataModel = await _userGroups.FindByIdAsync(id.Value.ToString());
 
         return _mapper.Map<UserGroup>(userGroupDataModel);
     }
 
-    public async Task UpdateAsync(UserGroup entity, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateAsync(UserGroup entity, CancellationToken cancellationToken = default)
     {
         var userGroup = _mapper.Map<UserGroupDataModel>(entity);
         await _userGroups.UpdateAsync(userGroup);
     }
 
-    public Task DeleteAsync(UserGroupId id, CancellationToken cancellationToken = default)
+    public ValueTask DeleteAsync(UserGroupId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -50,7 +50,7 @@ internal class UserGroupRepository : IUserGroupRepository
         return dataModels.Values.Select(model => _mapper.Map<UserGroup>(model));
     }
 
-    public async Task<UserGroup?> FindAsync(Name name)
+    public async ValueTask<UserGroup?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
         var userGroupDataModel = await _userGroups.FirstOrDefaultAsync(model => model.Name == name);
 

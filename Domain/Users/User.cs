@@ -73,10 +73,12 @@ public class User : AggregateRoot<UserId>
     public void RemoveUsername(Username username)
     {
         if (!Has(username)) return;
-        if (Usernames.Count ==1)
+
+        if (Usernames.Count == 1)
         {
             throw new UsernameCouldNotBeEmptyException();
         }
+
         _usernames.Remove(username);
         AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
     }
@@ -89,6 +91,7 @@ public class User : AggregateRoot<UserId>
     public void JoinGroup(UserGroupId userGroup)
     {
         if (Has(userGroup)) return;
+
         _userGroups.Add(userGroup);
         AddDomainEvent(new UserUserGroupJoinedEvent(Id, userGroup));
     }
@@ -96,10 +99,12 @@ public class User : AggregateRoot<UserId>
     public void RemoveFromGroup(UserGroupId userGroup)
     {
         if (!Has(userGroup)) return;
-        if (UserGroups.Count==1)
+
+        if (UserGroups.Count == 1)
         {
             throw new UsernameUserGroupCouldNotBeEmptyException();
         }
+
         _userGroups.Remove(userGroup);
         AddDomainEvent(new UserUserGroupEventRemovedEvent(Id, userGroup));
     }
@@ -112,6 +117,7 @@ public class User : AggregateRoot<UserId>
     public void AssignRole(RoleId role)
     {
         if (Has(role)) return;
+
         _roles.Add(role);
         AddDomainEvent(new UserRoleAddedEvent(Id, role));
     }
@@ -119,6 +125,7 @@ public class User : AggregateRoot<UserId>
     public void RevokeRole(RoleId role)
     {
         if (!Has(role)) return;
+
         _roles.Remove(role);
         AddDomainEvent(new UserRoleRemovedEvent(Id, role));
     }

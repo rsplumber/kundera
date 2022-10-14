@@ -5,11 +5,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.UserGroups;
 
-internal sealed class UserGroupsIQueryHandler : IQueryHandler<UserGroupsQuery, IEnumerable<UserGroupsResponse>>
+internal sealed class UserGroupsQueryHandler : IQueryHandler<UserGroupsQuery, IEnumerable<UserGroupsResponse>>
 {
     private readonly IRedisCollection<UserGroupDataModel> _userGroups;
 
-    public UserGroupsIQueryHandler(RedisConnectionProvider provider)
+    public UserGroupsQueryHandler(RedisConnectionProvider provider)
     {
         _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }

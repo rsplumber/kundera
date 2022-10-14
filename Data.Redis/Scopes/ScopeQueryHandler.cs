@@ -6,11 +6,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.Scopes;
 
-internal sealed class ScopeIQueryHandler : IQueryHandler<ScopeQuery, ScopeResponse>
+internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeResponse>
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopeIQueryHandler(RedisConnectionProvider provider)
+    public ScopeQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }

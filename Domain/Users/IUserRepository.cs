@@ -6,5 +6,5 @@ public interface IUserRepository : IRepository<User, UserId>, IUpdateService<Use
 {
     ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default);
 
-    Task<User> FindAsync(Username username, CancellationToken cancellationToken = default);
+    ValueTask<User?> FindAsync(Username username, CancellationToken cancellationToken = default);
 }

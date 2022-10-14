@@ -6,11 +6,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.Users;
 
-internal sealed class UserIQueryHandler : IQueryHandler<UserQuery, UserResponse>
+internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public UserIQueryHandler(RedisConnectionProvider provider)
+    public UserQueryHandler(RedisConnectionProvider provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }

@@ -5,11 +5,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.Permissions;
 
-internal sealed class PermissionsIQueryHandler : IQueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
+internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
-    public PermissionsIQueryHandler(RedisConnectionProvider provider)
+    public PermissionsQueryHandler(RedisConnectionProvider provider)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }

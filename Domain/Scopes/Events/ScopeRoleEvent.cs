@@ -1,5 +1,4 @@
 ﻿using Domain.Roles;
-using Domain.Services;
 
 namespace Domain.Scopes.Events;
 

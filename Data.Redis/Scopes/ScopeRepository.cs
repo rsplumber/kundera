@@ -17,13 +17,13 @@ internal class ScopeRepository : IScopeRepository
         _mapper = mapper;
     }
 
-    public async Task AddAsync(Scope entity, CancellationToken cancellationToken = default)
+    public async ValueTask AddAsync(Scope entity, CancellationToken cancellationToken = default)
     {
         var scope = _mapper.Map<ScopeDataModel>(entity);
         await _scopes.InsertAsync(scope);
     }
 
-    public async Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
+    public async ValueTask<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
     {
         var scopeDataModel = await _scopes.FindByIdAsync(id.Value);
 
@@ -35,13 +35,13 @@ internal class ScopeRepository : IScopeRepository
         return await _scopes.AnyAsync(model => model.Id == id.Value);
     }
 
-    public async Task UpdateAsync(Scope entity, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateAsync(Scope entity, CancellationToken cancellationToken = default)
     {
         var scope = _mapper.Map<ScopeDataModel>(entity);
         await _scopes.UpdateAsync(scope);
     }
 
-    public Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = new CancellationToken())
+    public ValueTask DeleteAsync(ScopeId id, CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
     }

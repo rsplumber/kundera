@@ -6,5 +6,5 @@ public interface IUserGroupRepository : IRepository<UserGroup, UserGroupId>, IUp
 {
     ValueTask<IEnumerable<UserGroup>> FindAsync(UserGroupId[] groupIds, CancellationToken cancellationToken = default);
 
-    Task<UserGroup?> FindAsync(Name name);
+    ValueTask<UserGroup?> FindAsync(Name name, CancellationToken cancellationToken = default);
 }

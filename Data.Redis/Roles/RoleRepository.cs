@@ -16,13 +16,13 @@ internal class RoleRepository : IRoleRepository
         _mapper = mapper;
     }
 
-    public async Task AddAsync(Role entity, CancellationToken cancellationToken = default)
+    public async ValueTask AddAsync(Role entity, CancellationToken cancellationToken = default)
     {
         var role = _mapper.Map<RoleDataModel>(entity);
         await _roles.InsertAsync(role);
     }
 
-    public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
+    public async ValueTask<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
     {
         var roleDataModel = await _roles.FindByIdAsync(id.Value);
 
@@ -42,13 +42,13 @@ internal class RoleRepository : IRoleRepository
         return dataModels.Values.Select(model => _mapper.Map<Role>(model));
     }
 
-    public async Task UpdateAsync(Role entity, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateAsync(Role entity, CancellationToken cancellationToken = default)
     {
         var role = _mapper.Map<RoleDataModel>(entity);
         await _roles.UpdateAsync(role);
     }
 
-    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = default)
+    public ValueTask DeleteAsync(RoleId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

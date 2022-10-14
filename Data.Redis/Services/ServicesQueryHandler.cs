@@ -5,11 +5,11 @@ using Redis.OM.Searching;
 
 namespace Data.Redis.Services;
 
-internal sealed class ServicesIQueryHandler : IQueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
+internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
 {
     private IRedisCollection<ServiceDataModel> _services;
 
-    public ServicesIQueryHandler(RedisConnectionProvider provider)
+    public ServicesQueryHandler(RedisConnectionProvider provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }

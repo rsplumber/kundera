@@ -2,7 +2,6 @@
 using Domain.Services.Exceptions;
 using Domain.Services.Types;
 using Kite.Domain.Contracts;
-using Tes.Domain.Contracts;
 
 namespace Domain.Services;
 

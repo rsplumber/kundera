@@ -4,7 +4,6 @@ using Domain.Scopes.Exceptions;
 using Domain.Scopes.Types;
 using Domain.Services;
 using Kite.Domain.Contracts;
-using Tes.Domain.Contracts;
 
 namespace Domain.Scopes;
 
@@ -55,6 +54,7 @@ public class Scope : AggregateRoot<ScopeId>
     public void AddService(ServiceId service)
     {
         if (Has(service)) return;
+
         _services.Add(service);
         AddDomainEvent(new ScopeServiceAddedEvent(Id, service));
     }
@@ -62,6 +62,7 @@ public class Scope : AggregateRoot<ScopeId>
     public void RemoveService(ServiceId service)
     {
         if (!Has(service)) return;
+
         _services.Remove(service);
         AddDomainEvent(new ScopeServiceRemovedEvent(Id, service));
     }
@@ -75,6 +76,7 @@ public class Scope : AggregateRoot<ScopeId>
     public void AddRole(RoleId role)
     {
         if (Has(role)) return;
+
         _roles.Add(role);
         AddDomainEvent(new ScopeRoleAddedEvent(Id, role));
     }
@@ -82,6 +84,7 @@ public class Scope : AggregateRoot<ScopeId>
     public void RemoveRole(RoleId role)
     {
         if (!Has(role)) return;
+
         _roles.Remove(role);
         AddDomainEvent(new ScopeRoleRemovedEvent(Id, role));
     }
