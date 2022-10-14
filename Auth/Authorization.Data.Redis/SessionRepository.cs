@@ -25,11 +25,8 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
-        if (!Expired()) return _mapper.Map<Session>(dataModel);
-        await DeleteAsync(id, cancellationToken);
-        return null;
 
-        bool Expired() => dataModel is not null && DateTime.UtcNow >= dataModel.ExpiresAt;
+        return _mapper.Map<Session>(dataModel);
     }
 
     public async Task UpdateAsync(Session entity, CancellationToken cancellationToken = default)
@@ -41,7 +38,9 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task DeleteAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
+
         if (dataModel is null) return;
+
         await _sessions.DeleteAsync(dataModel);
     }
 
@@ -53,6 +52,7 @@ internal sealed class SessionRepository : ISessionRepository
     public async ValueTask<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.ToListAsync();
+
         return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 }

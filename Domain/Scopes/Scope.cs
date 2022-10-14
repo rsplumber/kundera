@@ -3,6 +3,7 @@ using Domain.Scopes.Events;
 using Domain.Scopes.Exceptions;
 using Domain.Scopes.Types;
 using Domain.Services;
+using Kite.Domain.Contracts;
 using Tes.Domain.Contracts;
 
 namespace Domain.Scopes;

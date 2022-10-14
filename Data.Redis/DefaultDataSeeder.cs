@@ -33,9 +33,13 @@ public class DefaultDataSeeder
 
 
     public DefaultDataSeeder(IConfiguration configuration,
-        IRoleRepository roleRepository, IUserGroupRepository userGroupRepository,
-        IUserRepository userRepository, IPermissionRepository permissionRepository, IScopeRepository scopeRepository,
-        IServiceRepository serviceRepository, ICredentialService credentialService)
+                             IRoleRepository roleRepository,
+                             IUserGroupRepository userGroupRepository,
+                             IUserRepository userRepository,
+                             IPermissionRepository permissionRepository,
+                             IScopeRepository scopeRepository,
+                             IServiceRepository serviceRepository,
+                             ICredentialService credentialService)
     {
         _roleRepository = roleRepository;
         _userGroupRepository = userGroupRepository;
@@ -44,7 +48,8 @@ public class DefaultDataSeeder
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
-        _adminPassword = configuration.GetSection("AdminPassword").Value;
+        _adminPassword = configuration.GetSection("AdminPassword")
+                                      .Value;
     }
 
 
@@ -61,9 +66,10 @@ public class DefaultDataSeeder
     private async Task SeedRoleAsync()
     {
         var role = await _roleRepository.FindAsync(RoleId.From(RoleName));
-        if (role is not null) return;
-        role = await Role.FromAsync(RoleName, _roleRepository);
 
+        if (role is not null) return;
+
+        role = await Role.FromAsync(RoleName, _roleRepository);
 
         var permissions = await _permissionRepository.FindAllAsync();
         foreach (var permission in permissions)
@@ -84,7 +90,9 @@ public class DefaultDataSeeder
         }
 
         var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
+
         if (userGroup is not null) return;
+
         userGroup = UserGroup.From(UserGroupName, role.Id);
         await _userGroupRepository.AddAsync(userGroup);
     }
@@ -98,7 +106,9 @@ public class DefaultDataSeeder
         }
 
         var exists = await _userRepository.ExistsAsync(Username);
+
         if (exists) return;
+
         var user = await User.CreateAsync(Username, userGroup.Id, _userRepository);
         await _userRepository.AddAsync(user);
     }
@@ -106,6 +116,7 @@ public class DefaultDataSeeder
     private async Task SeedServiceAsync()
     {
         var service = await _serviceRepository.FindAsync(ServiceId.From(ServiceName));
+
         if (service is not null) return;
 
         service = await Service.FromAsync(ServiceName, _serviceRepository);
@@ -115,6 +126,7 @@ public class DefaultDataSeeder
     private async Task SeedScopeAsync()
     {
         var scope = await _scopeRepository.FindAsync(ScopeId.From(ScopeName));
+
         if (scope is not null) return;
 
         scope = await Scope.FromAsync(ScopeName, _scopeRepository);

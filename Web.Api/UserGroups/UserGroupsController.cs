@@ -1,7 +1,7 @@
 using Application.UserGroups;
 using Domain.UserGroups;
+using Kite.CQRS;
 using Microsoft.AspNetCore.Mvc;
-using Tes.CQRS;
 
 namespace Web.Api.UserGroups;
 
@@ -21,6 +21,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -29,6 +30,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -37,6 +39,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -45,6 +48,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -53,6 +57,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -61,6 +66,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = new RemoveUserGroupParentCommand(UserGroupId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -69,6 +75,7 @@ public class UserGroupsController : ControllerBase
     {
         var query = new UserGroupsQuery();
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -77,6 +84,7 @@ public class UserGroupsController : ControllerBase
     {
         var query = new UserGroupQuery(UserGroupId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -85,6 +93,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = new EnableUserGroupCommand(UserGroupId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -93,6 +102,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = new DisableUserGroupCommand(UserGroupId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -101,6 +111,7 @@ public class UserGroupsController : ControllerBase
     {
         var command = new DeleteUserGroupCommand(UserGroupId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 }

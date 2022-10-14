@@ -1,21 +1,21 @@
 ﻿using Application.UserGroups;
 using Domain.UserGroups.Exception;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.UserGroups;
 
-internal sealed class UserGroupQueryHandler : QueryHandler<UserGroupQuery, UserGroupResponse>
+internal sealed class UserGroupIQueryHandler : IQueryHandler<UserGroupQuery, UserGroupResponse>
 {
     private readonly IRedisCollection<UserGroupDataModel> _userGroups;
 
-    public UserGroupQueryHandler(RedisConnectionProvider provider)
+    public UserGroupIQueryHandler(RedisConnectionProvider provider)
     {
         _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }
 
-    public override async Task<UserGroupResponse> HandleAsync(UserGroupQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<UserGroupResponse> HandleAsync(UserGroupQuery message, CancellationToken cancellationToken = default)
     {
         var userGroup = await _userGroups.FindByIdAsync(message.UserGroup.Value.ToString());
         if (userGroup is null)

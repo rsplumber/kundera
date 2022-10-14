@@ -8,7 +8,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />
-      <ProjectReference Include="..\Auth\Auth.Web.Api\Auth.Web.Api.csproj" />
+      <ProjectReference Include="..\Auth\Auth.Application\Auth.Application.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Kite.Web.Requests" Version="0.0.8" />
+    </ItemGroup>
+    
 
 </Project>

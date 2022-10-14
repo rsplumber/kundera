@@ -2,14 +2,14 @@
 using Domain.Roles;
 using Domain.Roles.Exceptions;
 using Domain.UserGroups;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.UserGroups;
 
 public sealed record CreateUserGroupCommand(Name Name, RoleId Role) : Command;
 
-internal sealed class CreateUserGroupCommandHandler : CommandHandler<CreateUserGroupCommand>
+internal sealed class CreateUserGroupCommandHandler : ICommandHandler<CreateUserGroupCommand>
 {
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IRoleRepository _roleRepository;
@@ -20,7 +20,7 @@ internal sealed class CreateUserGroupCommandHandler : CommandHandler<CreateUserG
         _roleRepository = roleRepository;
     }
 
-    public override async Task HandleAsync(CreateUserGroupCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(CreateUserGroupCommand message, CancellationToken cancellationToken = default)
     {
         var (name, roleId) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

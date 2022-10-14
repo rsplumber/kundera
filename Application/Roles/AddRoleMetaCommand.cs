@@ -1,13 +1,13 @@
 ﻿using Domain.Roles;
 using Domain.Roles.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Roles;
 
 public sealed record AddRoleMetaCommand(RoleId Role, IDictionary<string, string> Meta) : Command;
 
-internal sealed class AddRoleMetaCommandHandler : CommandHandler<AddRoleMetaCommand>
+internal sealed class AddRoleMetaCommandHandler : ICommandHandler<AddRoleMetaCommand>
 {
     private readonly IRoleRepository _roleRepository;
 
@@ -16,7 +16,7 @@ internal sealed class AddRoleMetaCommandHandler : CommandHandler<AddRoleMetaComm
         _roleRepository = roleRepository;
     }
 
-    public override async Task HandleAsync(AddRoleMetaCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(AddRoleMetaCommand message, CancellationToken cancellationToken = default)
     {
         var (roleId, dictionary) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

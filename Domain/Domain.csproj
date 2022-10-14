@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Tes.Standard.Domain.Contracts" Version="1.0.11" />
+        <PackageReference Include="Kite.Domain.Contracts" Version="0.0.81" />
+        <PackageReference Include="Kite.CustomType" Version="0.0.9" />
     </ItemGroup>
 
 </Project>

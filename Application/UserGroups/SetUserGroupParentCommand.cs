@@ -1,7 +1,7 @@
 ﻿using Domain.UserGroups;
 using Domain.UserGroups.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.UserGroups;
 
@@ -16,7 +16,7 @@ internal sealed class SetUserGroupParentCommandHandler : ICommandHandler<SetUser
         _userGroupRepository = userGroupRepository;
     }
 
-    public async Task HandleAsync(SetUserGroupParentCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(SetUserGroupParentCommand message, CancellationToken cancellationToken = default)
     {
         var (userGroupId, parentId) = message;
         var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);

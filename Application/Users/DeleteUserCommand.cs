@@ -1,13 +1,13 @@
 ﻿using Domain.Users;
 using Domain.Users.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Users;
 
 public sealed record DeleteUserCommand(UserId UserId) : Command;
 
-internal sealed class DeleteUserCommandHandler : CommandHandler<DeleteUserCommand>
+internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
 {
     private readonly IUserRepository _userRepository;
 
@@ -17,7 +17,7 @@ internal sealed class DeleteUserCommandHandler : CommandHandler<DeleteUserComman
     }
 
 
-    public override async Task HandleAsync(DeleteUserCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(DeleteUserCommand message, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.FindAsync(message.UserId, cancellationToken);
         if (user is null)

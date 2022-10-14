@@ -1,4 +1,4 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Auth.Domain.Credentials.Exceptions;
 

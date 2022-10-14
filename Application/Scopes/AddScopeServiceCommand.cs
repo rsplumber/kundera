@@ -2,14 +2,14 @@
 using Domain.Scopes.Exceptions;
 using Domain.Services;
 using Domain.Services.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Scopes;
 
 public sealed record AddScopeServiceCommand(ScopeId Scope, params ServiceId[] Services) : Command;
 
-internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeServiceCommand>
+internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeServiceCommand>
 {
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
@@ -20,7 +20,7 @@ internal sealed class AddScopeServiceCommandHandler : CommandHandler<AddScopeSer
         _serviceRepository = serviceRepository;
     }
 
-    public override async Task HandleAsync(AddScopeServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(AddScopeServiceCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, serviceIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);

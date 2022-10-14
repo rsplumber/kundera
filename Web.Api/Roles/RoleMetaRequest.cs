@@ -1,7 +1,7 @@
 ﻿using Application.Roles;
 using Domain.Roles;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Roles;
 
@@ -15,8 +15,10 @@ public class AddRoleMetaRequestValidator : RequestValidator<AddRoleMetaRequest>
     public AddRoleMetaRequestValidator()
     {
         RuleFor(request => request.Meta)
-            .NotEmpty().WithMessage("Enter valid Meta")
-            .NotNull().WithMessage("Enter valid Meta");
+            .NotEmpty()
+            .WithMessage("Enter valid Meta")
+            .NotNull()
+            .WithMessage("Enter valid Meta");
     }
 }
 
@@ -30,7 +32,9 @@ public class RemoveRoleMetaRequestValidator : RequestValidator<RemoveRoleMetaReq
     public RemoveRoleMetaRequestValidator()
     {
         RuleFor(request => request.MetaKeys)
-            .NotEmpty().WithMessage("Enter valid Meta")
-            .NotNull().WithMessage("Enter valid Meta");
+            .NotEmpty()
+            .WithMessage("Enter valid Meta")
+            .NotNull()
+            .WithMessage("Enter valid Meta");
     }
 }

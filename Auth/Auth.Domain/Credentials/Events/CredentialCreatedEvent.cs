@@ -1,3 +1,3 @@
 ﻿namespace Auth.Domain.Credentials.Events;
 
-public record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, Guid UserId) : DomainEvent;
+public sealed record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, Guid UserId) : DomainEvent;

@@ -1,5 +1,5 @@
 ﻿using Domain.Users.Exception;
-using Tes.Domain.Contracts;
+using Kite.CustomType;
 
 namespace Domain.UserGroups.Types;
 

@@ -1,20 +1,20 @@
 ﻿using Application.Permissions;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Permissions;
 
-internal sealed class PermissionsQueryHandler : QueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
+internal sealed class PermissionsIQueryHandler : IQueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
-    public PermissionsQueryHandler(RedisConnectionProvider provider)
+    public PermissionsIQueryHandler(RedisConnectionProvider provider)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public override async Task<IEnumerable<PermissionsResponse>> HandleAsync(PermissionsQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<PermissionsResponse>> HandleAsync(PermissionsQuery message, CancellationToken cancellationToken = default)
     {
         if (message.Name is not null)
         {

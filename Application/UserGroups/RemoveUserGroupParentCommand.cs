@@ -1,13 +1,13 @@
 ﻿using Domain.UserGroups;
 using Domain.UserGroups.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.UserGroups;
 
 public sealed record RemoveUserGroupParentCommand(UserGroupId UserGroup) : Command;
 
-internal sealed class RemoveUserGroupParentCommandHandler : CommandHandler<RemoveUserGroupParentCommand>
+internal sealed class RemoveUserGroupParentCommandHandler : ICommandHandler<RemoveUserGroupParentCommand>
 {
     private readonly IUserGroupRepository _userGroupRepository;
 
@@ -16,7 +16,7 @@ internal sealed class RemoveUserGroupParentCommandHandler : CommandHandler<Remov
         _userGroupRepository = userGroupRepository;
     }
 
-    public override async Task HandleAsync(RemoveUserGroupParentCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(RemoveUserGroupParentCommand message, CancellationToken cancellationToken = default)
     {
         var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
         if (group is null)

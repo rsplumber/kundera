@@ -1,13 +1,13 @@
 ﻿using Domain;
 using Domain.Roles;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Roles;
 
 public sealed record CreateRoleCommand(Name Name, IDictionary<string, string>? Meta = null) : Command;
 
-internal sealed class CreateRoleCommandHandler : CommandHandler<CreateRoleCommand>
+internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
 {
     private readonly IRoleRepository _roleRepository;
 
@@ -16,7 +16,7 @@ internal sealed class CreateRoleCommandHandler : CommandHandler<CreateRoleComman
         _roleRepository = roleRepository;
     }
 
-    public override async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
         var role = await Role.FromAsync(name, _roleRepository);

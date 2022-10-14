@@ -2,14 +2,14 @@
 using Domain.Permissions.Exceptions;
 using Domain.Roles;
 using Domain.Roles.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Roles;
 
 public sealed record AddRolePermissionCommand(RoleId Role, params PermissionId[] Permissions) : Command;
 
-internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePermissionCommand>
+internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRolePermissionCommand>
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
@@ -20,7 +20,7 @@ internal sealed class AddRolePermissionCommandHandler : CommandHandler<AddRolePe
         _permissionRepository = permissionRepository;
     }
 
-    public override async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (roleId, permissions) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

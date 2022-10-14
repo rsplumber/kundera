@@ -1,9 +1,8 @@
-﻿using Domain.UserGroups;
-using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Domain.Users;
 
-public interface IUserRepository : IRepository<UserId, User>, IUpdateService<User>, IDeleteService<UserId>
+public interface IUserRepository : IRepository<User, UserId>, IUpdateService<User>, IDeleteService<UserId>
 {
     ValueTask<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default);
 

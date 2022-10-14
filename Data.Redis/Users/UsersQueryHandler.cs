@@ -1,22 +1,24 @@
 ﻿using Application.Users;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Users;
 
-internal sealed class UsersQueryHandler : QueryHandler<UsersQuery, IEnumerable<UsersResponse>>
+internal sealed class UsersIQueryHandler : IQueryHandler<UsersQuery, IEnumerable<UsersResponse>>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public UsersQueryHandler(RedisConnectionProvider provider)
+    public UsersIQueryHandler(RedisConnectionProvider provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public override async Task<IEnumerable<UsersResponse>> HandleAsync(UsersQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<UsersResponse>> HandleAsync(UsersQuery message, CancellationToken cancellationToken = default)
     {
         var users = await _users.ToListAsync();
-        return users.Select(model => new UsersResponse(model.Id, model.Usernames)).ToList();
+
+        return users.Select(model => new UsersResponse(model.Id, model.Usernames))
+                    .ToList();
     }
 }

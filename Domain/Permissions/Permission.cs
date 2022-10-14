@@ -1,6 +1,6 @@
 ﻿using Domain.Permissions.Events;
 using Domain.Permissions.Exceptions;
-using Tes.Domain.Contracts;
+using Kite.Domain.Contracts;
 
 namespace Domain.Permissions;
 
@@ -40,13 +40,14 @@ public class Permission : AggregateRoot<PermissionId>
     public void RemoveMeta(string key)
     {
         if (GetMetaValue(key) is null) return;
+
         _meta.Remove(key);
     }
 
     public string? GetMetaValue(string key)
     {
         _meta.TryGetValue(key, out var value);
+
         return value;
     }
-    
 }

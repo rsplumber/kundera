@@ -2,7 +2,7 @@
 using Domain.UserGroups;
 using Domain.Users;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Users;
 
@@ -16,8 +16,10 @@ public class JoinUserToGroupRequestValidator : RequestValidator<JoinUserToGroupR
     public JoinUserToGroupRequestValidator()
     {
         RuleFor(request => request.UserGroup)
-            .NotEmpty().WithMessage("Enter a valid UserGroup")
-            .NotNull().WithMessage("Enter a valid UserGroup");
+            .NotEmpty()
+            .WithMessage("Enter a valid UserGroup")
+            .NotNull()
+            .WithMessage("Enter a valid UserGroup");
     }
 }
 
@@ -31,7 +33,9 @@ public class RemoveUserFromGroupRequestValidator : RequestValidator<RemoveUserFr
     public RemoveUserFromGroupRequestValidator()
     {
         RuleFor(request => request.UserGroup)
-            .NotEmpty().WithMessage("Enter a valid UserGroup")
-            .NotNull().WithMessage("Enter a valid UserGroup");
+            .NotEmpty()
+            .WithMessage("Enter a valid UserGroup")
+            .NotNull()
+            .WithMessage("Enter a valid UserGroup");
     }
 }

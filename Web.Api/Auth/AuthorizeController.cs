@@ -3,7 +3,7 @@ using Auth.Application.Authorization;
 using Auth.Domain.Sessions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Authentication.Web.Api;
+namespace Web.Api.Auth;
 
 [ApiController]
 [Route("/authorize")]

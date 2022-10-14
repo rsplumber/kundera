@@ -1,8 +1,8 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Auth.Domain.Credentials;
 
-public record UniqueIdentifier : IIdentity
+public record UniqueIdentifier : IEntityIdentity
 {
     private const string DefaultType = "default";
     private readonly string _username;
@@ -26,6 +26,7 @@ public record UniqueIdentifier : IIdentity
 
         var username = split.First();
         var type = split.Length == 2 ? split.Last() : DefaultType;
+
         return new(username, type);
     }
 
@@ -41,6 +42,7 @@ public record UniqueIdentifier : IIdentity
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
+
         return _username == other._username && _type == other._type;
     }
 

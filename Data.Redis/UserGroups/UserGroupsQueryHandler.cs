@@ -1,26 +1,28 @@
 ﻿using Application.UserGroups;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.UserGroups;
 
-internal sealed class UserGroupsQueryHandler : QueryHandler<UserGroupsQuery, IEnumerable<UserGroupsResponse>>
+internal sealed class UserGroupsIQueryHandler : IQueryHandler<UserGroupsQuery, IEnumerable<UserGroupsResponse>>
 {
     private readonly IRedisCollection<UserGroupDataModel> _userGroups;
 
-    public UserGroupsQueryHandler(RedisConnectionProvider provider)
+    public UserGroupsIQueryHandler(RedisConnectionProvider provider)
     {
         _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }
 
-    public override async Task<IEnumerable<UserGroupsResponse>> HandleAsync(UserGroupsQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<UserGroupsResponse>> HandleAsync(UserGroupsQuery message, CancellationToken cancellationToken = default)
     {
         var groups = await _userGroups.ToListAsync();
+
         return groups.Select(model => new UserGroupsResponse(model.Id, model.Name, model.Status)
-        {
-            Description = model.Description,
-            Parent = model.Parent,
-        }).ToList();
+                     {
+                         Description = model.Description,
+                         Parent = model.Parent,
+                     })
+                     .ToList();
     }
 }

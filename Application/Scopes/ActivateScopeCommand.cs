@@ -1,14 +1,13 @@
 ﻿using Domain.Scopes;
 using Domain.Scopes.Exceptions;
-using Domain.Scopes.Types;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Scopes;
 
 public sealed record ActivateScopeCommand(ScopeId Scope) : Command;
 
-internal sealed class ActivateScopeCommandHandler : CommandHandler<ActivateScopeCommand>
+internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScopeCommand>
 {
     private readonly IScopeRepository _scopeRepository;
 
@@ -17,7 +16,7 @@ internal sealed class ActivateScopeCommandHandler : CommandHandler<ActivateScope
         _scopeRepository = scopeRepository;
     }
 
-    public override async Task HandleAsync(ActivateScopeCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(ActivateScopeCommand message, CancellationToken cancellationToken = default)
     {
         var scope = await _scopeRepository.FindAsync(message.Scope, cancellationToken);
         if (scope is null)

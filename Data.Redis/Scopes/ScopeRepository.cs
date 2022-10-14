@@ -26,6 +26,7 @@ internal class ScopeRepository : IScopeRepository
     public async Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
     {
         var scopeDataModel = await _scopes.FindByIdAsync(id.Value);
+
         return _mapper.Map<Scope>(scopeDataModel);
     }
 

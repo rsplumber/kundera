@@ -1,5 +1,5 @@
-﻿using Tes.Domain.Contracts;
-using Tes.Events.Contracts;
+﻿using Kite.Domain.Contracts;
+using Kite.Events.Contracts;
 
 namespace Auth.Domain;
 

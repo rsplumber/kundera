@@ -2,7 +2,7 @@
 using Domain.UserGroups.Events;
 using Domain.UserGroups.Exception;
 using Domain.UserGroups.Types;
-using Tes.Domain.Contracts;
+using Kite.Domain.Contracts;
 
 namespace Domain.UserGroups;
 
@@ -50,7 +50,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public string? Description => _description;
 
     public UserGroupId? Parent => _parent;
-    
+
     public UserGroupStatus UserGroupStatus => _status;
 
     public DateTime? StatusChangedDate => _statusChangedDate;
@@ -83,17 +83,20 @@ public class UserGroup : AggregateRoot<UserGroupId>
     public void AssignRole(RoleId role)
     {
         if (Has(role)) return;
+
         _roles.Add(role);
         AddDomainEvent(new UserGroupRoleAddedEvent(Id, role));
     }
-    
+
     public void RevokeRole(RoleId role)
     {
         if (!Has(role)) return;
-        if (Roles.Count==1)
+
+        if (Roles.Count == 1)
         {
             throw new UserGroupRoleCouldNotBeEmptyException();
         }
+
         _roles.Remove(role);
         AddDomainEvent(new UserGroupRoleRemovedEvent(Id, role));
     }

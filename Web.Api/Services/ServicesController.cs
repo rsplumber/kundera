@@ -1,7 +1,7 @@
 using Application.Services;
 using Domain.Services;
+using Kite.CQRS;
 using Microsoft.AspNetCore.Mvc;
-using Tes.CQRS;
 
 namespace Web.Api.Services;
 
@@ -21,16 +21,14 @@ public class ServicesController : ControllerBase
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
     [HttpGet]
     public async Task<IActionResult> ServicesAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
-        var query = new ServicesQuery
-        {
-            Name = name
-        };
+        var query = new ServicesQuery {Name = name};
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
         return Ok(response);
@@ -41,6 +39,7 @@ public class ServicesController : ControllerBase
     {
         var query = new ServiceQuery(ServiceId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -50,6 +49,7 @@ public class ServicesController : ControllerBase
     {
         var command = new DeleteServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -59,6 +59,7 @@ public class ServicesController : ControllerBase
     {
         var command = new ActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -67,6 +68,7 @@ public class ServicesController : ControllerBase
     {
         var command = new DeActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 }

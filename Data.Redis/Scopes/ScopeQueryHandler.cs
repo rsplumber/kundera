@@ -1,21 +1,21 @@
 ﻿using Application.Scopes;
 using Domain.Roles.Exceptions;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Scopes;
 
-internal sealed class ScopeQueryHandler : QueryHandler<ScopeQuery, ScopeResponse>
+internal sealed class ScopeIQueryHandler : IQueryHandler<ScopeQuery, ScopeResponse>
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopeQueryHandler(RedisConnectionProvider provider)
+    public ScopeIQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public override async Task<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
     {
         var scope = await _scopes.FindByIdAsync(message.Scope.Value);
         if (scope is null)

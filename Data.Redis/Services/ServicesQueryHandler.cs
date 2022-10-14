@@ -1,20 +1,20 @@
 ﻿using Application.Services;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Services;
 
-internal sealed class ServicesQueryHandler : QueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
+internal sealed class ServicesIQueryHandler : IQueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
 {
     private IRedisCollection<ServiceDataModel> _services;
 
-    public ServicesQueryHandler(RedisConnectionProvider provider)
+    public ServicesIQueryHandler(RedisConnectionProvider provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
 
-    public override async Task<IEnumerable<ServicesResponse>> HandleAsync(ServicesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<ServicesResponse>> HandleAsync(ServicesQuery message, CancellationToken cancellationToken = default)
     {
         if (message.Name is not null)
         {

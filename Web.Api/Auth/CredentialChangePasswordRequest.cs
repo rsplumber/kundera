@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
-namespace Authentication.Web.Api;
+namespace Web.Api.Auth;
 
 public record CredentialChangePasswordRequest(string Password, string NewPassword) : IWebRequest;
 
@@ -10,11 +10,15 @@ public class CredentialChangePasswordRequestValidator : RequestValidator<Credent
     public CredentialChangePasswordRequestValidator()
     {
         RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
+            .NotEmpty()
+            .WithMessage("Enter valid Password")
+            .NotNull()
+            .WithMessage("Enter valid Password");
 
         RuleFor(request => request.NewPassword)
-            .NotEmpty().WithMessage("Enter valid NewPassword")
-            .NotNull().WithMessage("Enter valid NewPassword");
+            .NotEmpty()
+            .WithMessage("Enter valid NewPassword")
+            .NotNull()
+            .WithMessage("Enter valid NewPassword");
     }
 }

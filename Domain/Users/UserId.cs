@@ -1,8 +1,8 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Domain.Users;
 
-public sealed record UserId : IIdentity
+public sealed record UserId : IEntityIdentity
 {
     private readonly Guid _value;
 
@@ -21,6 +21,7 @@ public sealed record UserId : IIdentity
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
+
         return _value == other._value;
     }
 

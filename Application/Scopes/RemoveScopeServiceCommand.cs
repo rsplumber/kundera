@@ -1,16 +1,14 @@
 ﻿using Domain.Scopes;
 using Domain.Scopes.Exceptions;
-using Domain.Scopes.Types;
 using Domain.Services;
-using Domain.Services.Types;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Scopes;
 
 public sealed record RemoveScopeServiceCommand(ScopeId Scope, params ServiceId[] Services) : Command;
 
-internal sealed class RemoveScopeServiceCommandHandler : CommandHandler<RemoveScopeServiceCommand>
+internal sealed class RemoveScopeServiceCommandHandler : ICommandHandler<RemoveScopeServiceCommand>
 {
     private readonly IScopeRepository _scopeRepository;
 
@@ -19,7 +17,7 @@ internal sealed class RemoveScopeServiceCommandHandler : CommandHandler<RemoveSc
         _scopeRepository = scopeRepository;
     }
 
-    public override async Task HandleAsync(RemoveScopeServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(RemoveScopeServiceCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, serviceIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);
@@ -32,7 +30,7 @@ internal sealed class RemoveScopeServiceCommandHandler : CommandHandler<RemoveSc
         {
             scope.RemoveService(service);
         }
-        
+
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
     }
 }

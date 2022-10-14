@@ -2,7 +2,7 @@
 using Domain.Scopes;
 using Domain.Services;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Scopes;
 
@@ -10,7 +10,9 @@ public record AddScopeServiceRequest(List<string> ServiceIds) : IWebRequest
 {
     public AddScopeServiceCommand ToCommand(string scopeId)
     {
-        var services = ServiceIds.Select(ServiceId.From).ToArray();
+        var services = ServiceIds.Select(ServiceId.From)
+                                 .ToArray();
+
         return new(ScopeId.From(scopeId), services);
     }
 }
@@ -20,8 +22,10 @@ public class AddScopeServiceRequestValidator : RequestValidator<AddScopeServiceR
     public AddScopeServiceRequestValidator()
     {
         RuleFor(request => request.ServiceIds)
-            .NotEmpty().WithMessage("Enter valid Service")
-            .NotNull().WithMessage("Enter valid Service");
+            .NotEmpty()
+            .WithMessage("Enter valid Service")
+            .NotNull()
+            .WithMessage("Enter valid Service");
     }
 }
 
@@ -29,7 +33,9 @@ public record RemoveScopeServiceRequest(List<string> ServiceIds) : IWebRequest
 {
     public RemoveScopeServiceCommand ToCommand(string scopeId)
     {
-        var services = ServiceIds.Select(ServiceId.From).ToArray();
+        var services = ServiceIds.Select(ServiceId.From)
+                                 .ToArray();
+
         return new(ScopeId.From(scopeId), services);
     }
 }
@@ -39,7 +45,9 @@ public class RemoveScopeServiceRequestValidator : RequestValidator<RemoveScopeSe
     public RemoveScopeServiceRequestValidator()
     {
         RuleFor(request => request.ServiceIds)
-            .NotEmpty().WithMessage("Enter valid Service")
-            .NotNull().WithMessage("Enter valid Service");
+            .NotEmpty()
+            .WithMessage("Enter valid Service")
+            .NotNull()
+            .WithMessage("Enter valid Service");
     }
 }

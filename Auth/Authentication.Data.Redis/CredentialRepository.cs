@@ -25,28 +25,16 @@ internal class CredentialRepository : ICredentialRepository
     public async Task<Credential?> FindAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
-        if (dataModel is null) return null;
-
-        if (Expired())
-        {
-            await DeleteAsync(id, cancellationToken);
-            return null;
-        }
-
-        if (dataModel.OneTime)
-        {
-            await DeleteAsync(id, cancellationToken);
-        }
 
         return _mapper.Map<Credential>(dataModel);
-
-        bool Expired() => DateTime.UtcNow >= dataModel.ExpiresAt;
     }
 
     public async Task DeleteAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
+
         if (dataModel is null) return;
+
         await _credentials.DeleteAsync(dataModel);
     }
 

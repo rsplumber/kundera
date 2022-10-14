@@ -9,11 +9,17 @@ public class ServiceMappingProfile : Profile
     public ServiceMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<string, ServiceId>().ConvertUsing(s => ServiceId.From(s));
-        CreateMap<ServiceId, string>().ConvertUsing(s => s.Value);
+        CreateMap<string, ServiceId>()
+            .ConvertUsing(s => ServiceId.From(s));
 
-        CreateMap<string, ServiceStatus>().ConvertUsing(s => ServiceStatus.From(s));
-        CreateMap<ServiceStatus, string>().ConvertUsing(s => s.Value);
+        CreateMap<ServiceId, string>()
+            .ConvertUsing(s => s.Value);
+
+        CreateMap<string, ServiceStatus>()
+            .ConvertUsing(s => ServiceStatus.From(s));
+
+        CreateMap<ServiceStatus, string>()
+            .ConvertUsing(s => s.Value);
 
         CreateMap<ServiceDataModel, Service>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

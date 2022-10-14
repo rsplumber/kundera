@@ -1,5 +1,5 @@
 ﻿using Domain.Users.Exception;
-using Tes.Domain.Contracts;
+using Kite.CustomType;
 
 namespace Domain.Users.Types;
 
@@ -11,11 +11,7 @@ public class UserStatus : CustomType<string, UserStatus>
 
     protected override void Validate()
     {
-        if (Value is not (
-            nameof(Active)
-            or nameof(Suspend)
-            or nameof(Block))
-           )
+        if (Value is not (nameof(Active) or nameof(Suspend) or nameof(Block)))
         {
             throw new UserStatusNotSupportedException(Value);
         }

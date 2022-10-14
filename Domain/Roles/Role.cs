@@ -1,6 +1,7 @@
 ﻿using Domain.Permissions;
 using Domain.Roles.Events;
 using Domain.Roles.Exceptions;
+using Kite.Domain.Contracts;
 using Tes.Domain.Contracts;
 
 namespace Domain.Roles;

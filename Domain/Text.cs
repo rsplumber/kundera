@@ -1,4 +1,4 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.CustomType;
 
 namespace Domain;
 

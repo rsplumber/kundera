@@ -1,8 +1,6 @@
-﻿using Tes.Domain.Contracts;
+﻿namespace Domain.Users;
 
-namespace Domain.Users;
-
-public record Username : ValueObject
+public record Username
 {
     private readonly string _value;
 
@@ -23,6 +21,7 @@ public record Username : ValueObject
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
+
         return base.Equals(other) && _value == other._value;
     }
 

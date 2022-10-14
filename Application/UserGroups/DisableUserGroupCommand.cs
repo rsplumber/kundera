@@ -1,22 +1,22 @@
 ﻿using Domain.UserGroups;
 using Domain.UserGroups.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.UserGroups;
 
 public sealed record DisableUserGroupCommand(UserGroupId UserGroup) : Command;
 
-internal sealed class EnableUserGroupCommandHandler : CommandHandler<EnableUserGroupCommand>
+internal sealed class DisableUserGroupCommandHandler : ICommandHandler<EnableUserGroupCommand>
 {
     private readonly IUserGroupRepository _userGroupRepository;
 
-    public EnableUserGroupCommandHandler(IUserGroupRepository userGroupRepository)
+    public DisableUserGroupCommandHandler(IUserGroupRepository userGroupRepository)
     {
         _userGroupRepository = userGroupRepository;
     }
 
-    public override async Task HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = default)
     {
         var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
         if (group is null)

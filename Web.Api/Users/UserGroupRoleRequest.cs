@@ -2,13 +2,15 @@
 using Domain.Roles;
 using Domain.Users;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Users;
 
 public record AssignUserRoleRequest(List<string> RoleIds) : IWebRequest
 {
-    public AssignUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId), RoleIds.Select(RoleId.From).ToArray());
+    public AssignUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId),
+                                                               RoleIds.Select(RoleId.From)
+                                                                      .ToArray());
 }
 
 public class AssignUserRoleRequestValidator : RequestValidator<AssignUserRoleRequest>
@@ -16,14 +18,18 @@ public class AssignUserRoleRequestValidator : RequestValidator<AssignUserRoleReq
     public AssignUserRoleRequestValidator()
     {
         RuleFor(request => request.RoleIds)
-            .NotEmpty().WithMessage("Enter a valid User")
-            .NotNull().WithMessage("Enter a valid User");
+            .NotEmpty()
+            .WithMessage("Enter a valid User")
+            .NotNull()
+            .WithMessage("Enter a valid User");
     }
 }
 
 public record RevokeUserRoleRequest(List<string> RoleIds) : IWebRequest
 {
-    public RevokeUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId), RoleIds.Select(RoleId.From).ToArray());
+    public RevokeUserRoleCommand ToCommand(Guid userId) => new(UserId.From(userId),
+                                                               RoleIds.Select(RoleId.From)
+                                                                      .ToArray());
 }
 
 public class RevokeUserRoleRequestValidator : RequestValidator<RevokeUserRoleRequest>
@@ -31,7 +37,9 @@ public class RevokeUserRoleRequestValidator : RequestValidator<RevokeUserRoleReq
     public RevokeUserRoleRequestValidator()
     {
         RuleFor(request => request.RoleIds)
-            .NotEmpty().WithMessage("Enter a valid User")
-            .NotNull().WithMessage("Enter a valid User");
+            .NotEmpty()
+            .WithMessage("Enter a valid User")
+            .NotNull()
+            .WithMessage("Enter a valid User");
     }
 }

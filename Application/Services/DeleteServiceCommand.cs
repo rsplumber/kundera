@@ -1,13 +1,13 @@
 ﻿using Domain.Services;
 using Domain.Services.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Services;
 
 public sealed record DeleteServiceCommand(ServiceId Id) : Command;
 
-internal sealed class DeleteServiceCommandHandler : CommandHandler<DeleteServiceCommand>
+internal sealed class DeleteServiceCommandHandler : ICommandHandler<DeleteServiceCommand>
 {
     private readonly IServiceRepository _serviceRepository;
 
@@ -16,7 +16,7 @@ internal sealed class DeleteServiceCommandHandler : CommandHandler<DeleteService
         _serviceRepository = serviceRepository;
     }
 
-    public override async Task HandleAsync(DeleteServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(DeleteServiceCommand message, CancellationToken cancellationToken = default)
     {
         var service = await _serviceRepository.FindAsync(message.Id, cancellationToken);
         if (service is null)

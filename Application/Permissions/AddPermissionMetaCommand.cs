@@ -1,22 +1,22 @@
 ﻿using Domain.Permissions;
 using Domain.Permissions.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Permissions;
 
 public sealed record AddPermissionMetaCommand(PermissionId Permission, IDictionary<string, string> Meta) : Command;
 
-internal sealed class AddPermissionMetaCommandHandler : CommandHandler<AddPermissionMetaCommand>
+internal sealed class AddPermissionMetaICommandHandler : ICommandHandler<AddPermissionMetaCommand>
 {
     private readonly IPermissionRepository _permissionRepository;
 
-    public AddPermissionMetaCommandHandler(IPermissionRepository permissionRepository)
+    public AddPermissionMetaICommandHandler(IPermissionRepository permissionRepository)
     {
         _permissionRepository = permissionRepository;
     }
 
-    public override async Task HandleAsync(AddPermissionMetaCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(AddPermissionMetaCommand message, CancellationToken cancellationToken = default)
     {
         var (permissionId, dictionary) = message;
         var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);

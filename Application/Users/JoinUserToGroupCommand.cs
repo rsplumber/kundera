@@ -2,14 +2,14 @@
 using Domain.UserGroups.Exception;
 using Domain.Users;
 using Domain.Users.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Users;
 
 public sealed record JoinUserToGroupCommand(UserId User, UserGroupId UserGroup) : Command;
 
-internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToGroupCommand>
+internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserToGroupCommand>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserGroupRepository _userGroupRepository;
@@ -20,7 +20,7 @@ internal sealed class JoinUserToGroupCommandHandler : CommandHandler<JoinUserToG
         _userGroupRepository = userGroupRepository;
     }
 
-    public override async Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, userGroupId) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

@@ -25,6 +25,7 @@ internal class RoleRepository : IRoleRepository
     public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
     {
         var roleDataModel = await _roles.FindByIdAsync(id.Value);
+
         return _mapper.Map<Role>(roleDataModel);
     }
 
@@ -37,6 +38,7 @@ internal class RoleRepository : IRoleRepository
     {
         var rawRoleIds = roleIds.Select(id => id.Value);
         var dataModels = await _roles.FindByIdsAsync(rawRoleIds);
+
         return dataModels.Values.Select(model => _mapper.Map<Role>(model));
     }
 

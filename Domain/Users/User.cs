@@ -3,7 +3,7 @@ using Domain.UserGroups;
 using Domain.Users.Events;
 using Domain.Users.Exception;
 using Domain.Users.Types;
-using Tes.Domain.Contracts;
+using Kite.Domain.Contracts;
 
 namespace Domain.Users;
 

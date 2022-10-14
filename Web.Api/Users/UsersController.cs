@@ -1,7 +1,7 @@
 using Application.Users;
 using Domain.Users;
+using Kite.CQRS;
 using Microsoft.AspNetCore.Mvc;
-using Tes.CQRS;
 
 namespace Web.Api.Users;
 
@@ -21,6 +21,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -29,6 +30,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -37,6 +39,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -45,6 +48,7 @@ public class UsersController : ControllerBase
     {
         var command = new ExistUserUsernameCommand(username);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -53,6 +57,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -61,6 +66,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -69,6 +75,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -77,6 +84,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -85,6 +93,7 @@ public class UsersController : ControllerBase
     {
         var command = new ActiveUserCommand(UserId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -93,6 +102,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -101,6 +111,7 @@ public class UsersController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -109,6 +120,7 @@ public class UsersController : ControllerBase
     {
         var query = new UsersQuery();
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -117,6 +129,7 @@ public class UsersController : ControllerBase
     {
         var query = new UserQuery(UserId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -125,6 +138,7 @@ public class UsersController : ControllerBase
     {
         var command = new DeleteUserCommand(UserId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 }

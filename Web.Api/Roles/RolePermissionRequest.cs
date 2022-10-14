@@ -2,7 +2,7 @@
 using Domain.Permissions;
 using Domain.Roles;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Roles;
 
@@ -10,7 +10,9 @@ public record AddRolePermissionRequest(List<string> PermissionIds) : IWebRequest
 {
     public AddRolePermissionCommand ToCommand(string roleId)
     {
-        var permissions = PermissionIds.Select(PermissionId.From).ToArray();
+        var permissions = PermissionIds.Select(PermissionId.From)
+                                       .ToArray();
+
         return new(RoleId.From(roleId), permissions);
     }
 }
@@ -20,8 +22,10 @@ public class AddRolePermissionRequestValidator : RequestValidator<AddRolePermiss
     public AddRolePermissionRequestValidator()
     {
         RuleFor(request => request.PermissionIds)
-            .NotEmpty().WithMessage("Enter valid Permission")
-            .NotNull().WithMessage("Enter valid Permission");
+            .NotEmpty()
+            .WithMessage("Enter valid Permission")
+            .NotNull()
+            .WithMessage("Enter valid Permission");
     }
 }
 
@@ -29,7 +33,9 @@ public record RemoveRolePermissionRequest(List<string> PermissionIds) : IWebRequ
 {
     public RemoveRolePermissionCommand ToCommand(string roleId)
     {
-        var permissions = PermissionIds.Select(PermissionId.From).ToArray();
+        var permissions = PermissionIds.Select(PermissionId.From)
+                                       .ToArray();
+
         return new(RoleId.From(roleId), permissions);
     }
 }
@@ -39,7 +45,9 @@ public class RemoveRolePermissionRequestValidator : RequestValidator<RemoveRoleP
     public RemoveRolePermissionRequestValidator()
     {
         RuleFor(request => request.PermissionIds)
-            .NotEmpty().WithMessage("Enter valid Permission")
-            .NotNull().WithMessage("Enter valid Permission");
+            .NotEmpty()
+            .WithMessage("Enter valid Permission")
+            .NotNull()
+            .WithMessage("Enter valid Permission");
     }
 }

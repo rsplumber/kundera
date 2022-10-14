@@ -1,15 +1,17 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Domain.Scopes;
 
-public sealed record ScopeId : IIdentity
+public sealed record ScopeId : IEntityIdentity
 {
     private readonly string _value;
 
     private ScopeId(string value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
-        _value = value.Replace(" ", "").ToLower();
+
+        _value = value.Replace(" ", "")
+                      .ToLower();
     }
 
     public static ScopeId From(string value) => new(value);
@@ -20,6 +22,7 @@ public sealed record ScopeId : IIdentity
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
+
         return _value == other._value;
     }
 

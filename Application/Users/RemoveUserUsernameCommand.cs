@@ -1,13 +1,13 @@
 ﻿using Domain.Users;
 using Domain.Users.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Users;
 
 public sealed record RemoveUserUsernameCommand(UserId User, Username Username) : Command;
 
-internal sealed class RemoveUserUsernameCommandHandler : CommandHandler<RemoveUserUsernameCommand>
+internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveUserUsernameCommand>
 {
     private readonly IUserRepository _userRepository;
 
@@ -16,7 +16,7 @@ internal sealed class RemoveUserUsernameCommandHandler : CommandHandler<RemoveUs
         _userRepository = userRepository;
     }
 
-    public override async Task HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, username) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);
@@ -27,6 +27,5 @@ internal sealed class RemoveUserUsernameCommandHandler : CommandHandler<RemoveUs
 
         user.RemoveUsername(username);
         await _userRepository.UpdateAsync(user, cancellationToken);
-
     }
 }

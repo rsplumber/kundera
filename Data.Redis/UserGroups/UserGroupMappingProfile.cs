@@ -10,14 +10,23 @@ internal sealed class UserGroupMappingProfile : Profile
     public UserGroupMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, UserGroupId>().ConvertUsing(u => UserGroupId.From(u));
-        CreateMap<UserGroupId, Guid>().ConvertUsing(u => u.Value);
+        CreateMap<Guid, UserGroupId>()
+            .ConvertUsing(u => UserGroupId.From(u));
 
-        CreateMap<string, RoleId>().ConvertUsing(u => RoleId.From(u));
-        CreateMap<RoleId, string>().ConvertUsing(u => u.Value);
+        CreateMap<UserGroupId, Guid>()
+            .ConvertUsing(u => u.Value);
 
-        CreateMap<string, UserGroupStatus>().ConvertUsing(u => UserGroupStatus.From(u));
-        CreateMap<UserGroupStatus, string>().ConvertUsing(u => u.Value);
+        CreateMap<string, RoleId>()
+            .ConvertUsing(u => RoleId.From(u));
+
+        CreateMap<RoleId, string>()
+            .ConvertUsing(u => u.Value);
+
+        CreateMap<string, UserGroupStatus>()
+            .ConvertUsing(u => UserGroupStatus.From(u));
+
+        CreateMap<UserGroupStatus, string>()
+            .ConvertUsing(u => u.Value);
 
         CreateMap<UserGroupDataModel, UserGroup>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

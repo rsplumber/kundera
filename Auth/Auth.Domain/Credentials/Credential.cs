@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Auth.Domain.Credentials.Events;
 using Auth.Domain.Credentials.Exceptions;
-using Tes.Domain.Contracts;
+using Kite.Domain.Contracts;
 
 namespace Auth.Domain.Credentials;
 
@@ -45,10 +45,10 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
-        string password,
-        Guid user,
-        IPAddress? ipAddress,
-        ICredentialRepository credentialRepository)
+                                                     string password,
+                                                     Guid user,
+                                                     IPAddress? ipAddress,
+                                                     ICredentialRepository credentialRepository)
     {
         var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
         if (exists)
@@ -60,11 +60,11 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
-        string password,
-        Guid user,
-        int expirationTimeInSeconds,
-        IPAddress? ipAddress,
-        ICredentialRepository credentialRepository)
+                                                     string password,
+                                                     Guid user,
+                                                     int expirationTimeInSeconds,
+                                                     IPAddress? ipAddress,
+                                                     ICredentialRepository credentialRepository)
     {
         var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
         if (exists)
@@ -76,12 +76,12 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
-        string password,
-        Guid user,
-        bool oneTime,
-        int expirationTimeInSeconds,
-        IPAddress? ipAddress,
-        ICredentialRepository credentialRepository)
+                                                     string password,
+                                                     Guid user,
+                                                     bool oneTime,
+                                                     int expirationTimeInSeconds,
+                                                     IPAddress? ipAddress,
+                                                     ICredentialRepository credentialRepository)
     {
         var exists = await credentialRepository.ExistsAsync(uniqueIdentifier);
         if (exists)

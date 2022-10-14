@@ -1,13 +1,13 @@
 ﻿using Domain;
 using Domain.Services;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Services;
 
 public sealed record CreateServiceCommand(Name Name) : Command;
 
-internal sealed class CreateServiceCommandHandler : CommandHandler<CreateServiceCommand>
+internal sealed class CreateServiceCommandHandler : ICommandHandler<CreateServiceCommand>
 {
     private readonly IServiceRepository _serviceRepository;
 
@@ -16,7 +16,7 @@ internal sealed class CreateServiceCommandHandler : CommandHandler<CreateService
         _serviceRepository = serviceRepository;
     }
 
-    public override async Task HandleAsync(CreateServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(CreateServiceCommand message, CancellationToken cancellationToken = default)
     {
         var service = await Service.FromAsync(message.Name, _serviceRepository);
         await _serviceRepository.AddAsync(service, cancellationToken);

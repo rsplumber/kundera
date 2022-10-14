@@ -1,14 +1,14 @@
 ﻿using Domain;
 using Domain.Users;
 using Domain.Users.Exception;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Users;
 
 public sealed record SuspendUserCommand(UserId User, Text? Reason) : Command;
 
-internal sealed class SuspendUserCommandHandler : CommandHandler<SuspendUserCommand>
+internal sealed class SuspendUserCommandHandler : ICommandHandler<SuspendUserCommand>
 {
     private readonly IUserRepository _userRepository;
 
@@ -17,7 +17,7 @@ internal sealed class SuspendUserCommandHandler : CommandHandler<SuspendUserComm
         _userRepository = userRepository;
     }
 
-    public override async Task HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, reason) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

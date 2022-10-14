@@ -9,11 +9,17 @@ public class ScopeMappingProfile : Profile
     public ScopeMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<string, ScopeId>().ConvertUsing(s => ScopeId.From(s));
-        CreateMap<ScopeId, string>().ConvertUsing(s => s.Value);
+        CreateMap<string, ScopeId>()
+            .ConvertUsing(s => ScopeId.From(s));
 
-        CreateMap<string, ScopeStatus>().ConvertUsing(s => ScopeStatus.From(s));
-        CreateMap<ScopeStatus, string>().ConvertUsing(s => s.Value);
+        CreateMap<ScopeId, string>()
+            .ConvertUsing(s => s.Value);
+
+        CreateMap<string, ScopeStatus>()
+            .ConvertUsing(s => ScopeStatus.From(s));
+
+        CreateMap<ScopeStatus, string>()
+            .ConvertUsing(s => s.Value);
 
         CreateMap<ScopeDataModel, Scope>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

@@ -1,7 +1,7 @@
 ﻿using Application.UserGroups;
 using Domain.UserGroups;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.UserGroups;
 
@@ -15,7 +15,9 @@ public class MoveUserGroupParentRequestValidator : RequestValidator<MoveUserGrou
     public MoveUserGroupParentRequestValidator()
     {
         RuleFor(request => request.To)
-            .NotEmpty().WithMessage("Enter a valid UserGroupId")
-            .NotNull().WithMessage("Enter a valid UserGroupId");
+            .NotEmpty()
+            .WithMessage("Enter a valid UserGroupId")
+            .NotNull()
+            .WithMessage("Enter a valid UserGroupId");
     }
 }

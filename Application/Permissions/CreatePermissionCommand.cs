@@ -1,13 +1,13 @@
 ﻿using Domain;
 using Domain.Permissions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Permissions;
 
 public sealed record CreatePermissionCommand(Name Name, IDictionary<string, string>? Meta = null) : Command;
 
-internal sealed class CreatePermissionCommandHandler : CommandHandler<CreatePermissionCommand>
+internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePermissionCommand>
 {
     private readonly IPermissionRepository _permissionRepository;
 
@@ -16,7 +16,7 @@ internal sealed class CreatePermissionCommandHandler : CommandHandler<CreatePerm
         _permissionRepository = permissionRepository;
     }
 
-    public override async Task HandleAsync(CreatePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(CreatePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
         var permission = await Permission.FromAsync(name, _permissionRepository);

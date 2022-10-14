@@ -20,14 +20,13 @@ internal sealed class SessionManagement : ISessionManagement
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
-        var session = Session.Create(
-            token,
-            refreshToken,
-            scope,
-            userId,
-            expiresAt,
-            ipAddress
-        );
+        var session = Session.Create(token,
+                                     refreshToken,
+                                     scope,
+                                     userId,
+                                     expiresAt,
+                                     ipAddress);
+
         await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
@@ -39,9 +38,21 @@ internal sealed class SessionManagement : ISessionManagement
     public async ValueTask<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
+
         if (session is null) return null;
-        await UpdateAsync(token, ipAddress, cancellationToken);
-        return session;
+
+        if (!Expired())
+        {
+            await UpdateAsync(token, ipAddress, cancellationToken);
+
+            return session;
+        }
+
+        await DeleteAsync(token, cancellationToken);
+
+        return null;
+
+        bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
     }
 
     public async ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -52,7 +63,9 @@ internal sealed class SessionManagement : ISessionManagement
     private async ValueTask UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
+
         if (session is null) return;
+
         session.UpdateUsage(DateTime.UtcNow, ipAddress);
         await _sessionRepository.UpdateAsync(session, cancellationToken);
     }

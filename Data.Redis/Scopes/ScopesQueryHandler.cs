@@ -1,20 +1,20 @@
 ﻿using Application.Scopes;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Scopes;
 
-internal sealed class ScopesQueryHandler : QueryHandler<ScopesQuery, IEnumerable<ScopesResponse>>
+internal sealed class ScopesIQueryHandler : IQueryHandler<ScopesQuery, IEnumerable<ScopesResponse>>
 {
     private IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopesQueryHandler(RedisConnectionProvider provider)
+    public ScopesIQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public override async Task<IEnumerable<ScopesResponse>> HandleAsync(ScopesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<ScopesResponse>> HandleAsync(ScopesQuery message, CancellationToken cancellationToken = default)
     {
         if (message.Name is not null)
         {

@@ -1,5 +1,5 @@
 ﻿using Domain.UserGroups;
-using Tes.CQRS.Contracts;
+using Kite.CQRS.Contracts;
 
 namespace Application.UserGroups;
 

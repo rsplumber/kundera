@@ -1,7 +1,7 @@
 ﻿using Application.Users;
 using Domain.Users;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Users;
 
@@ -15,9 +15,12 @@ public class AddUserUsernameRequestValidator : RequestValidator<AddUserUsernameR
     public AddUserUsernameRequestValidator()
     {
         RuleFor(request => request.Username)
-            .MinimumLength(3).WithMessage("Minimum username length : 3")
-            .NotEmpty().WithMessage("Enter a valid Username")
-            .NotNull().WithMessage("Enter a valid Username");
+            .MinimumLength(3)
+            .WithMessage("Minimum username length : 3")
+            .NotEmpty()
+            .WithMessage("Enter a valid Username")
+            .NotNull()
+            .WithMessage("Enter a valid Username");
     }
 }
 
@@ -31,8 +34,11 @@ public class RemoveUserUsernameRequestValidator : RequestValidator<RemoveUserUse
     public RemoveUserUsernameRequestValidator()
     {
         RuleFor(request => request.Username)
-            .MinimumLength(3).WithMessage("Minimum username length : 3")
-            .NotEmpty().WithMessage("Enter a valid Username")
-            .NotNull().WithMessage("Enter a valid Username");
+            .MinimumLength(3)
+            .WithMessage("Minimum username length : 3")
+            .NotEmpty()
+            .WithMessage("Enter a valid Username")
+            .NotNull()
+            .WithMessage("Enter a valid Username");
     }
 }

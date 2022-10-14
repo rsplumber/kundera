@@ -1,8 +1,8 @@
-﻿using Tes.Domain.Contracts;
+﻿using Kite.Domain.Contracts;
 
 namespace Domain.Roles;
 
-public interface IRoleRepository : IRepository<RoleId, Role>, IUpdateService<Role>, IDeleteService<RoleId>
+public interface IRoleRepository : IRepository<Role, RoleId>, IUpdateService<Role>, IDeleteService<RoleId>
 {
     ValueTask<bool> ExistsAsync(RoleId id, CancellationToken cancellationToken = default);
 

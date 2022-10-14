@@ -2,14 +2,14 @@
 using Domain.Roles.Exceptions;
 using Domain.Scopes;
 using Domain.Scopes.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Scopes;
 
 public sealed record AddScopeRoleCommand(ScopeId Scope, params RoleId[] Roles) : Command;
 
-internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCommand>
+internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleCommand>
 {
     private readonly IScopeRepository _scopeRepository;
     private readonly IRoleRepository _roleRepository;
@@ -20,7 +20,7 @@ internal sealed class AddScopeRoleCommandHandler : CommandHandler<AddScopeRoleCo
         _roleRepository = roleRepository;
     }
 
-    public override async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, roleIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);

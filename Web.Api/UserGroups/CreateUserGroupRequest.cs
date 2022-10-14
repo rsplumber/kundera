@@ -1,6 +1,6 @@
 ﻿using Application.UserGroups;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.UserGroups;
 
@@ -14,8 +14,11 @@ public class CreateUserGroupRequestValidator : RequestValidator<CreateUserGroupR
     public CreateUserGroupRequestValidator()
     {
         RuleFor(request => request.Name)
-            .MinimumLength(6).WithMessage("UserGroup name minimum length 3")
-            .NotEmpty().WithMessage("Enter a valid UserGroup name")
-            .NotNull().WithMessage("Enter a valid UserGroup name");
+            .MinimumLength(6)
+            .WithMessage("UserGroup name minimum length 3")
+            .NotEmpty()
+            .WithMessage("Enter a valid UserGroup name")
+            .NotNull()
+            .WithMessage("Enter a valid UserGroup name");
     }
 }

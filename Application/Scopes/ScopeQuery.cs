@@ -1,6 +1,5 @@
 ﻿using Domain.Scopes;
-using Domain.Scopes.Types;
-using Tes.CQRS.Contracts;
+using Kite.CQRS.Contracts;
 
 namespace Application.Scopes;
 

@@ -25,6 +25,7 @@ internal class UserRepository : IUserRepository
     public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
     {
         var userDataModel = await _users.FindByIdAsync(id.Value.ToString());
+
         return _mapper.Map<User>(userDataModel);
     }
 
@@ -35,7 +36,9 @@ internal class UserRepository : IUserRepository
 
     public async Task<User> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
-        var userDataModel = await _users.Where(model => model.Usernames.Contains(username)).FirstOrDefaultAsync();
+        var userDataModel = await _users.Where(model => model.Usernames.Contains(username))
+                                        .FirstOrDefaultAsync();
+
         return _mapper.Map<User>(userDataModel);
     }
 

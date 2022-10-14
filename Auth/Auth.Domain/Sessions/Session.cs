@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Auth.Domain.Sessions.Events;
-using Tes.Domain.Contracts;
+using Kite.Domain.Contracts;
 
 namespace Auth.Domain.Sessions;
 
@@ -55,12 +55,14 @@ public class Session : AggregateRoot<Token>
     public void AddPermission(string permissionId)
     {
         if (HasPermission(permissionId)) return;
+
         _permissions.Add(permissionId);
     }
 
     public void RemovePermission(string permissionId)
     {
         if (HasPermission(permissionId)) return;
+
         _permissions.Remove(permissionId);
     }
 

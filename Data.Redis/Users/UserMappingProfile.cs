@@ -10,17 +10,29 @@ internal sealed class UserMappingProfile : Profile
     public UserMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, UserId>().ConvertUsing(u => UserId.From(u));
-        CreateMap<UserId, Guid>().ConvertUsing(u => u.Value);
+        CreateMap<Guid, UserId>()
+            .ConvertUsing(u => UserId.From(u));
 
-        CreateMap<string, Username>().ConvertUsing(u => Username.From(u));
-        CreateMap<Username, string>().ConvertUsing(u => u.Value);
+        CreateMap<UserId, Guid>()
+            .ConvertUsing(u => u.Value);
 
-        CreateMap<string, RoleId>().ConvertUsing(u => RoleId.From(u));
-        CreateMap<RoleId, string>().ConvertUsing(u => u.Value);
+        CreateMap<string, Username>()
+            .ConvertUsing(u => Username.From(u));
 
-        CreateMap<string, UserStatus>().ConvertUsing(u => UserStatus.From(u));
-        CreateMap<UserStatus, string>().ConvertUsing(u => u.Value);
+        CreateMap<Username, string>()
+            .ConvertUsing(u => u.Value);
+
+        CreateMap<string, RoleId>()
+            .ConvertUsing(u => RoleId.From(u));
+
+        CreateMap<RoleId, string>()
+            .ConvertUsing(u => u.Value);
+
+        CreateMap<string, UserStatus>()
+            .ConvertUsing(u => UserStatus.From(u));
+
+        CreateMap<UserStatus, string>()
+            .ConvertUsing(u => u.Value);
 
         CreateMap<UserDataModel, User>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

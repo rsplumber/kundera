@@ -1,4 +1,4 @@
-﻿using Tes.CQRS.Contracts;
+﻿using Kite.CQRS.Contracts;
 
 namespace Application.Services;
 

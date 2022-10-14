@@ -1,7 +1,7 @@
 ﻿using Application.Permissions;
 using Domain.Permissions;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Permissions;
 
@@ -15,8 +15,10 @@ public class AddPermissionMetaRequestValidator : RequestValidator<AddPermissionM
     public AddPermissionMetaRequestValidator()
     {
         RuleFor(request => request.Meta)
-            .NotEmpty().WithMessage("Enter valid Meta")
-            .NotNull().WithMessage("Enter valid Meta");
+            .NotEmpty()
+            .WithMessage("Enter valid Meta")
+            .NotNull()
+            .WithMessage("Enter valid Meta");
     }
 }
 
@@ -30,7 +32,9 @@ public class RemovePermissionMetaRequestValidator : RequestValidator<RemovePermi
     public RemovePermissionMetaRequestValidator()
     {
         RuleFor(request => request.MetaKeys)
-            .NotEmpty().WithMessage("Enter valid Meta")
-            .NotNull().WithMessage("Enter valid Meta");
+            .NotEmpty()
+            .WithMessage("Enter valid Meta")
+            .NotNull()
+            .WithMessage("Enter valid Meta");
     }
 }

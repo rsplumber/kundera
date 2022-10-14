@@ -1,13 +1,13 @@
 ﻿using Domain.Permissions;
 using Domain.Permissions.Exceptions;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Permissions;
 
 public sealed record DeletePermissionCommand(PermissionId PermissionId) : Command;
 
-internal sealed class DeletePermissionCommandHandler : CommandHandler<DeletePermissionCommand>
+internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePermissionCommand>
 {
     private readonly IPermissionRepository _permissionRepository;
 
@@ -16,7 +16,7 @@ internal sealed class DeletePermissionCommandHandler : CommandHandler<DeletePerm
         _permissionRepository = permissionRepository;
     }
 
-    public override async Task HandleAsync(DeletePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(DeletePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var permission = await _permissionRepository.FindAsync(message.PermissionId, cancellationToken);
         if (permission is null)

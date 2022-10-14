@@ -14,15 +14,22 @@ internal static class ApplicationBuilderExtension
 {
     public static void ConfigureDataRedis(this IApplicationBuilder app)
     {
-        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
+        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()
+                                    ?.CreateScope();
+
         if (serviceScope is null) return;
+
         try
         {
             var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionProvider>();
             new List<Type>
             {
-                typeof(UserGroupDataModel), typeof(UserDataModel), typeof(RoleDataModel),
-                typeof(PermissionDataModel), typeof(ScopeDataModel), typeof(ServiceDataModel)
+                typeof(UserGroupDataModel),
+                typeof(UserDataModel),
+                typeof(RoleDataModel),
+                typeof(PermissionDataModel),
+                typeof(ScopeDataModel),
+                typeof(ServiceDataModel)
             }.ForEach(type =>
             {
                 if (dbProvider.Connection.GetIndexInfo(type) is null)
@@ -30,8 +37,10 @@ internal static class ApplicationBuilderExtension
                     dbProvider.Connection.CreateIndex(type);
                 }
             });
+
             var seed = serviceScope.ServiceProvider.GetRequiredService<DefaultDataSeeder>();
-            seed.SeedAsync().Wait();
+            seed.SeedAsync()
+                .Wait();
         }
         catch (Exception e)
         {

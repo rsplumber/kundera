@@ -1,7 +1,7 @@
 using Application.Permissions;
 using Domain.Permissions;
+using Kite.CQRS;
 using Microsoft.AspNetCore.Mvc;
-using Tes.CQRS;
 
 namespace Web.Api.Permissions;
 
@@ -23,6 +23,7 @@ public class PermissionsController : ControllerBase
     {
         var command = request.ToCommand();
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -30,10 +31,7 @@ public class PermissionsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> PermissionsAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
-        var query = new PermissionsQuery
-        {
-            Name = name
-        };
+        var query = new PermissionsQuery {Name = name};
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
 
         return Ok(response);
@@ -44,6 +42,7 @@ public class PermissionsController : ControllerBase
     {
         var query = new PermissionQuery(PermissionId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
         return Ok(response);
     }
 
@@ -52,6 +51,7 @@ public class PermissionsController : ControllerBase
     {
         var command = new DeletePermissionCommand(PermissionId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -61,6 +61,7 @@ public class PermissionsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 
@@ -69,6 +70,7 @@ public class PermissionsController : ControllerBase
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
+
         return Ok();
     }
 }

@@ -1,20 +1,20 @@
 ﻿using Application.Roles;
+using Kite.CQRS;
 using Redis.OM;
 using Redis.OM.Searching;
-using Tes.CQRS;
 
 namespace Data.Redis.Roles;
 
-internal sealed class RolesQueryHandler : QueryHandler<RolesQuery, IEnumerable<RolesResponse>>
+internal sealed class RolesIQueryHandler : IQueryHandler<RolesQuery, IEnumerable<RolesResponse>>
 {
     private IRedisCollection<RoleDataModel> _roles;
 
-    public RolesQueryHandler(RedisConnectionProvider provider)
+    public RolesIQueryHandler(RedisConnectionProvider provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public override async Task<IEnumerable<RolesResponse>> HandleAsync(RolesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<RolesResponse>> HandleAsync(RolesQuery message, CancellationToken cancellationToken = default)
     {
         if (message.Name is not null)
         {

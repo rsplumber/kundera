@@ -1,9 +1,8 @@
 ﻿using Auth.Domain.Credentials.Exceptions;
-using Tes.Domain.Contracts;
 
 namespace Auth.Domain.Credentials;
 
-public record Password : ValueObject
+public record Password
 {
     private string _value;
     private string _salt = string.Empty;
@@ -20,12 +19,14 @@ public record Password : ValueObject
     {
         var salt = BCrypt.Net.BCrypt.GenerateSalt();
         var hashed = BCrypt.Net.BCrypt.HashPassword(value, salt);
+
         return new Password(hashed, salt);
     }
 
     public static Password Create(string value, string salt)
     {
         var hashed = BCrypt.Net.BCrypt.HashPassword(value, salt);
+
         return new Password(hashed, salt);
     }
 
@@ -51,6 +52,7 @@ public record Password : ValueObject
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
+
         return base.Equals(other) && _value == other._value;
     }
 

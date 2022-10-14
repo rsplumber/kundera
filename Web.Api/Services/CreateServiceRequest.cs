@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
 namespace Web.Api.Services;
 
@@ -14,9 +14,13 @@ public class CreateServiceRequestValidator : RequestValidator<CreateServiceReque
     public CreateServiceRequestValidator()
     {
         RuleFor(request => request.Name)
-            .MinimumLength(4).WithMessage("Name minimum length is 4")
-            .MaximumLength(30).WithMessage("Name Maximum length is 30")
-            .NotEmpty().WithMessage("Enter a valid name")
-            .NotNull().WithMessage("Enter a valid name");
+            .MinimumLength(4)
+            .WithMessage("Name minimum length is 4")
+            .MaximumLength(30)
+            .WithMessage("Name Maximum length is 30")
+            .NotEmpty()
+            .WithMessage("Enter a valid name")
+            .NotNull()
+            .WithMessage("Enter a valid name");
     }
 }

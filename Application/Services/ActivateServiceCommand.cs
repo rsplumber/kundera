@@ -1,14 +1,13 @@
 ﻿using Domain.Services;
 using Domain.Services.Exceptions;
-using Domain.Services.Types;
-using Tes.CQRS;
-using Tes.CQRS.Contracts;
+using Kite.CQRS;
+using Kite.CQRS.Contracts;
 
 namespace Application.Services;
 
 public sealed record ActivateServiceCommand(ServiceId Service) : Command;
 
-internal sealed class ActivateServiceCommandHandler : CommandHandler<ActivateServiceCommand>
+internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateServiceCommand>
 {
     private readonly IServiceRepository _serviceRepository;
 
@@ -17,7 +16,7 @@ internal sealed class ActivateServiceCommandHandler : CommandHandler<ActivateSer
         _serviceRepository = serviceRepository;
     }
 
-    public override async Task HandleAsync(ActivateServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask HandleAsync(ActivateServiceCommand message, CancellationToken cancellationToken = default)
     {
         var service = await _serviceRepository.FindAsync(message.Service, cancellationToken);
         if (service is null)

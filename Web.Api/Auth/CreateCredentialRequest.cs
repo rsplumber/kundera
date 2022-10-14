@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Tes.Web.Validators;
+using Kite.Web.Requests;
 
-namespace Authentication.Web.Api;
+namespace Web.Api.Auth;
 
 public record CreateCredentialRequest(string Username, string Password, string? Type = null) : IWebRequest;
 
@@ -10,12 +10,16 @@ public class CreateCredentialRequestValidator : RequestValidator<CreateCredentia
     public CreateCredentialRequestValidator()
     {
         RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
+            .NotEmpty()
+            .WithMessage("Enter valid Username")
+            .NotNull()
+            .WithMessage("Enter valid Username");
 
         RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
+            .NotEmpty()
+            .WithMessage("Enter valid Password")
+            .NotNull()
+            .WithMessage("Enter valid Password");
     }
 }
 
@@ -26,12 +30,16 @@ public class CreateOneTimeCredentialRequestValidator : RequestValidator<CreateOn
     public CreateOneTimeCredentialRequestValidator()
     {
         RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
+            .NotEmpty()
+            .WithMessage("Enter valid Username")
+            .NotNull()
+            .WithMessage("Enter valid Username");
 
         RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
+            .NotEmpty()
+            .WithMessage("Enter valid Password")
+            .NotNull()
+            .WithMessage("Enter valid Password");
     }
 }
 
@@ -42,16 +50,23 @@ public class CreateTimePeriodicCredentialRequestValidator : RequestValidator<Cre
     public CreateTimePeriodicCredentialRequestValidator()
     {
         RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
+            .NotEmpty()
+            .WithMessage("Enter valid Username")
+            .NotNull()
+            .WithMessage("Enter valid Username");
 
         RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
+            .NotEmpty()
+            .WithMessage("Enter valid Password")
+            .NotNull()
+            .WithMessage("Enter valid Password");
 
         RuleFor(request => request.ExpirationTimeInSeconds)
-            .NotEmpty().WithMessage("Enter valid ExpirationTimeInSeconds")
-            .NotNull().WithMessage("Enter valid ExpirationTimeInSeconds")
-            .LessThanOrEqualTo(0).WithMessage("Enter valid ExpirationTimeInSeconds");
+            .NotEmpty()
+            .WithMessage("Enter valid ExpirationTimeInSeconds")
+            .NotNull()
+            .WithMessage("Enter valid ExpirationTimeInSeconds")
+            .LessThanOrEqualTo(0)
+            .WithMessage("Enter valid ExpirationTimeInSeconds");
     }
 }
