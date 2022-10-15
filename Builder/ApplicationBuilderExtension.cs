@@ -8,7 +8,7 @@ public static class ApplicationBuilderExtension
 {
     public static void ConfigureKundera(this IApplicationBuilder app)
     {
-        app.ConfigureDataRedis();
         app.ConfigureAuth();
+        app.ConfigureDataRedis();
     }
 }

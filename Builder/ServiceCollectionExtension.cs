@@ -14,7 +14,7 @@ public static class ServiceCollectionExtension
     {
         services.AddMicrosoftSerializer();
         services.AddCqrsInMemory(Assembly.Load("Application"), Assembly.Load("Data.Redis"));
-        services.AddDataRedis(configuration);
         services.AddAuth(configuration);
+        services.AddDataRedis(configuration);
     }
 }
