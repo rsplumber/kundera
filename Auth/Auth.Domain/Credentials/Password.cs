@@ -53,7 +53,7 @@ public record Password
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
 
-        return base.Equals(other) && _value == other._value;
+        return _value == other._value;
     }
 
     public override int GetHashCode()
