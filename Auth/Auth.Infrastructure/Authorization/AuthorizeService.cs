@@ -31,9 +31,9 @@ internal sealed class AuthorizeService : IAuthorizeService
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask AuthorizeAsync(Token token,
+    public async ValueTask<Guid> AuthorizeAsync(Token token,
         string action,
-        string scope,
+        string? scope,
         string? service,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default)
@@ -69,6 +69,8 @@ internal sealed class AuthorizeService : IAuthorizeService
         {
             throw new UnAuthorizedException();
         }
+
+        return user.Id.Value;
 
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 

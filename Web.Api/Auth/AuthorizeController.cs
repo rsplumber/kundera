@@ -19,12 +19,12 @@ public class AuthorizeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AuthorizeAsync([FromBody] AuthorizeRequest request,
         [FromHeader] string authorization,
-        [FromHeader] string scope = "global",
+        [FromHeader] string? scope = "global",
         [FromHeader] string? service = "all",
         CancellationToken cancellationToken = default)
     {
-        await _authorizeService.AuthorizeAsync(Token.From(authorization), request.Action, scope, service, IpAddress(), cancellationToken);
-        return Ok();
+        var response = await _authorizeService.AuthorizeAsync(Token.From(authorization), request.Action, scope, service, IpAddress(), cancellationToken);
+        return Ok(response);
     }
 
     private IPAddress IpAddress()

@@ -36,7 +36,7 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
         _cacheManager = cacheManager;
     }
 
-    public async ValueTask AuthorizeAsync(Token token,
+    public async ValueTask<Guid> AuthorizeAsync(Token token,
         string action,
         string scope,
         string? service,
@@ -48,6 +48,8 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
         {
             throw new UnAuthorizedException();
         }
+
+        return session.UserId;
     }
 
     private async ValueTask<SessionCache> FetchSessionAsync(Token token,
@@ -87,10 +89,10 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
 
         var permissions = allRoles.SelectMany(role => role.Permissions.Select(id => id.Value))
             .ToList();
-        var cache = new SessionCache(permissions);
+        var cache = new SessionCache(user.Id.Value, permissions);
         await _cacheManager.SetAsync(cacheKey, cache, HalfDayCacheExpireTime, cancellationToken);
         return cache;
-        
+
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidScope() => !session.Scope.Equals(scope);
