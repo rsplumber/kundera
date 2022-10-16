@@ -13,5 +13,7 @@ public static class ApplicationBuilderExtension
             .AllowAnyMethod()
             .SetIsOriginAllowed(_ => true)
             .AllowCredentials());
+
+        app.UseMiddleware<ExceptionMiddleware>();
     }
 }

@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Kite.Serializer.Abstractions" Version="0.0.8" />
         <PackageReference Include="Kite.Web.Requests" Version="0.0.8" />
     </ItemGroup>
     

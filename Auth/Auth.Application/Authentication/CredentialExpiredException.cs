@@ -1,8 +1,6 @@
-﻿using Kite.Domain.Contracts;
+﻿namespace Auth.Application.Authentication;
 
-namespace Auth.Application.Authentication;
-
-public class CredentialExpiredException : DomainException
+public class CredentialExpiredException : ApplicationException
 {
     private const string DefaultMessage = "Credential expired";
 

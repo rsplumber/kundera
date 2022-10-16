@@ -1,8 +1,6 @@
-﻿using Kite.Domain.Contracts;
+﻿namespace Auth.Application.Authorization;
 
-namespace Auth.Application.Authorization;
-
-public class UnAuthorizedException : DomainException
+public class UnAuthorizedException : ApplicationException
 {
     private const string DefaultMessage = "UnAuthorized";
 

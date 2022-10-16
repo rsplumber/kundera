@@ -1,8 +1,6 @@
-﻿using Kite.Domain.Contracts;
+﻿namespace Auth.Application.Authentication;
 
-namespace Auth.Application.Authentication;
-
-public class UnAuthenticateException : DomainException
+public class UnAuthenticateException : ApplicationException
 {
     private const string DefaultMessage = "UnAuthenticate";
 
