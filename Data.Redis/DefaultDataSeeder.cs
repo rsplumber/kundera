@@ -33,13 +33,13 @@ public class DefaultDataSeeder
 
 
     public DefaultDataSeeder(IConfiguration configuration,
-                             IRoleRepository roleRepository,
-                             IUserGroupRepository userGroupRepository,
-                             IUserRepository userRepository,
-                             IPermissionRepository permissionRepository,
-                             IScopeRepository scopeRepository,
-                             IServiceRepository serviceRepository,
-                             ICredentialService credentialService)
+        IRoleRepository roleRepository,
+        IUserGroupRepository userGroupRepository,
+        IUserRepository userRepository,
+        IPermissionRepository permissionRepository,
+        IScopeRepository scopeRepository,
+        IServiceRepository serviceRepository,
+        ICredentialService credentialService)
     {
         _roleRepository = roleRepository;
         _userGroupRepository = userGroupRepository;
@@ -49,7 +49,7 @@ public class DefaultDataSeeder
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
         _adminPassword = configuration.GetSection("AdminPassword")
-                                      .Value;
+            .Value;
     }
 
 

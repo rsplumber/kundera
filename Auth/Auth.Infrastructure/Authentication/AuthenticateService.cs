@@ -8,50 +8,33 @@ namespace Authentication.Infrastructure.Authentication;
 
 internal class AuthenticateService : IAuthenticateService
 {
-    private readonly ICredentialRepository _credentialRepository;
+    private readonly ICredentialService _credentialService;
     private readonly ICertificateService _certificateService;
     private readonly ISessionManagement _sessionManagement;
 
-    public AuthenticateService(ICredentialRepository credentialRepository,
-                               ICertificateService certificateService,
-                               ISessionManagement sessionManagement)
+    public AuthenticateService(ICertificateService certificateService,
+        ISessionManagement sessionManagement,
+        ICredentialService credentialService)
     {
-        _credentialRepository = credentialRepository;
         _certificateService = certificateService;
         _sessionManagement = sessionManagement;
+        _credentialService = credentialService;
     }
 
     public async ValueTask<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
+        var credential = await _credentialService.FindAsync(uniqueIdentifier, ipAddress, cancellationToken);
         if (credential is null)
         {
             throw new UnAuthenticateException();
         }
 
-        if (Expired())
-        {
-            await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
-
-            throw new CredentialExpiredException();
-        }
-
         credential.Password.Check(password);
-
-        credential.UpdateActivityInfo(ipAddress);
-        await _credentialRepository.UpdateAsync(credential, cancellationToken);
-
-        if (credential.OneTime)
-        {
-            await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
-        }
 
         var certificate = await _certificateService.GenerateAsync(credential.User.ToString(), scope, cancellationToken);
         await _sessionManagement.SaveAsync(certificate, credential.User, scope, ipAddress ?? IPAddress.None, cancellationToken);
 
         return certificate;
-
-        bool Expired() => DateTime.UtcNow >= credential.ExpiresAt;
     }
 
     public async ValueTask<Certificate> RefreshCertificateAsync(Token token, Token refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)

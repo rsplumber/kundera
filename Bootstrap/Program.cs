@@ -2,14 +2,15 @@ using Builder;
 using Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var configuration = builder.Configuration;
+
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddKundera(configuration);
-builder.Services.AddKunderaWeb(configuration);
+builder.Services.AddKunderaWeb();
 
 var app = builder.Build();
 
@@ -19,8 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureKundera();
-app.ConfigureKunderaWeb(configuration);
+app.UseKundera();
+app.UseKunderaWeb();
 
 app.UseHttpsRedirection();
 

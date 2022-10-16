@@ -12,14 +12,14 @@ public interface ICredentialService
         CancellationToken cancellationToken = default);
 
 
-    ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, 
+    ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         int expirationTimeInSeconds = 0,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
-    ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, 
+    ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         int expirationTimeInSeconds,
@@ -33,4 +33,6 @@ public interface ICredentialService
         CancellationToken cancellationToken = default);
 
     ValueTask RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
+
+    ValueTask<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default);
 }

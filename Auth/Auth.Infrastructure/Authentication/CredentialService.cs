@@ -65,6 +65,31 @@ internal class CredentialService : ICredentialService
     {
         await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
     }
+    
+    public async ValueTask<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default)
+    {
+        var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
+        if (credential is null) return null;
+
+        if (Expired())
+        {
+            await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
+            return null;
+        }
+
+        if (credential.OneTime)
+        {
+            await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
+            return credential;
+        }
+
+        credential.UpdateActivityInfo(ipAddress);
+        await _credentialRepository.UpdateAsync(credential, cancellationToken);
+
+        return credential;
+
+        bool Expired() => DateTime.UtcNow >= credential.ExpiresAt;
+    }
 
     private async ValueTask CreateCredential(UniqueIdentifier uniqueIdentifier,
         string password,

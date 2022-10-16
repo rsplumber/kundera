@@ -43,7 +43,7 @@ internal sealed class UserMappingProfile : Profile
             .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))
             .ForMember("_status", expression => expression.MapFrom(model => model.Status))
             .ForMember("_statusChangedReason", expression => expression.MapFrom(model => model.StatusChangedReason))
-            .ForMember("_statusChangedDate", expression => expression.MapFrom(model => model.StatusChangedDate))
+            .ForMember("_statusChangedDate", expression => expression.MapFrom(model => model.StatusChangedDate.ToUniversalTime()))
             .ReverseMap();
     }
 }

@@ -24,9 +24,9 @@ internal sealed class CredentialMappingProfile : Profile
             .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
             .ForMember("_password", expression => expression.MapFrom(model => model.Password))
             .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
-            .ForMember("_lastLoggedIn", expression => expression.MapFrom(model => model.LastLoggedIn))
-            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt))
-            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate))
+            .ForMember("_lastLoggedIn", expression => expression.MapFrom(model => model.LastLoggedIn.ToUniversalTime()))
+            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt == null ? model.ExpiresAt : model.ExpiresAt.Value.ToUniversalTime()))
+            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
             .ForMember("_oneTime", expression => expression.MapFrom(model => model.OneTime))
             .ReverseMap();
     }

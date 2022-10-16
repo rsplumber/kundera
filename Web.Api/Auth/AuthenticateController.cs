@@ -1,4 +1,3 @@
-using System.Net;
 using Auth.Application.Authentication;
 using Auth.Domain.Credentials;
 using Auth.Domain.Sessions;
@@ -8,7 +7,7 @@ namespace Web.Api.Auth;
 
 [ApiController]
 [Route("/authenticate")]
-public class AuthenticateController : ControllerBase
+public class AuthenticateController : AbstractAuthController
 {
     private readonly IAuthenticateService _authenticateService;
 
@@ -42,15 +41,5 @@ public class AuthenticateController : ControllerBase
             Token = newToken.Value,
             RefreshToken = refreshToken.Value
         });
-    }
-
-    private IPAddress IpAddress()
-    {
-        if (Request.Headers.ContainsKey("X-Real-IP"))
-        {
-            return IPAddress.Parse(Request.Headers["X-Real-IP"]);
-        }
-
-        return HttpContext.Connection.RemoteIpAddress?.MapToIPv4() ?? IPAddress.None;
     }
 }

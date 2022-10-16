@@ -6,7 +6,7 @@ namespace Builder;
 
 public static class ApplicationBuilderExtension
 {
-    public static void ConfigureKundera(this IApplicationBuilder app)
+    public static void UseKundera(this IApplicationBuilder app)
     {
         app.ConfigureAuth();
         app.ConfigureDataRedis();

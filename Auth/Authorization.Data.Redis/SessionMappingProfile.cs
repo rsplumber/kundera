@@ -17,9 +17,9 @@ internal sealed class SessionMappingProfile : Profile
             .ForMember("_refreshToken", expression => expression.MapFrom(model => model.RefreshToken))
             .ForMember("_scope", expression => expression.MapFrom(model => model.Scope))
             .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
-            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt))
-            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate))
-            .ForMember("_lastUsageDate", expression => expression.MapFrom(model => model.LastUsageDate))
+            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt.ToUniversalTime()))
+            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
+            .ForMember("_lastUsageDate", expression => expression.MapFrom(model => model.LastUsageDate.ToUniversalTime()))
             .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
             .ReverseMap();
     }

@@ -6,9 +6,11 @@ namespace Web.Api;
 
 public static class ServiceCollectionExtension
 {
-    public static void AddKunderaWeb(this IServiceCollection services, IConfiguration configuration)
+    public static void AddKunderaWeb(this IServiceCollection services, IConfiguration? configuration = default)
     {
         services.AddControllers();
         services.AddRequestValidators();
+        services.AddCors();
+        services.AddHealthChecks();
     }
 }
