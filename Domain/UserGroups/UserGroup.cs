@@ -35,16 +35,27 @@ public class UserGroup : AggregateRoot<UserGroupId>
         _parent = parent;
     }
 
-    public static UserGroup From(Name name, RoleId role)
+    public static async Task<UserGroup> FromAsync(Name name, RoleId role, IUserGroupRepository userGroupRepository)
     {
+        var group = await userGroupRepository.FindAsync(name);
+        if (group is not null)
+        {
+            throw new UserGroupNameDuplicateException();
+        }
         return new UserGroup(name, role);
     }
 
-    public static UserGroup From(Name name, RoleId role, UserGroupId parent)
+    public static async Task<UserGroup> FromAsync(Name name, RoleId role, UserGroupId parent, IUserGroupRepository userGroupRepository)
     {
+        var group = await userGroupRepository.FindAsync(name);
+        if (group is not null)
+        {
+            throw new UserGroupNameDuplicateException();
+        }
+        
         return new UserGroup(name, role, parent);
     }
-
+    
     public string Name => _name;
 
     public string? Description => _description;

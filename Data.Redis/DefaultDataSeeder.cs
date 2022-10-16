@@ -93,7 +93,7 @@ public class DefaultDataSeeder
 
         if (userGroup is not null) return;
 
-        userGroup = UserGroup.From(UserGroupName, role.Id);
+        userGroup = await UserGroup.FromAsync(UserGroupName, role.Id, _userGroupRepository);
         await _userGroupRepository.AddAsync(userGroup);
     }
 
