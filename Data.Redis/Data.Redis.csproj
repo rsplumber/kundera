@@ -10,7 +10,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Redis.OM" Version="0.2.3" />
+        <PackageReference Include="Redis.OM" Version="0.3.1" />
         <ProjectReference Include="..\Application\Application.csproj" />
         <ProjectReference Include="..\Auth\Auth.Application\Auth.Application.csproj" />
         <ProjectReference Include="..\Domain\Domain.csproj" />
