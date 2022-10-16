@@ -21,11 +21,11 @@ internal sealed class SessionManagement : ISessionManagement
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
         var session = Session.Create(token,
-                                     refreshToken,
-                                     scope,
-                                     userId,
-                                     expiresAt,
-                                     ipAddress);
+            refreshToken,
+            scope,
+            userId,
+            expiresAt,
+            ipAddress);
 
         await _sessionRepository.AddAsync(session, cancellationToken);
     }
@@ -58,6 +58,11 @@ internal sealed class SessionManagement : ISessionManagement
     public async ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _sessionRepository.FindAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _sessionRepository.FindAsync(userId, cancellationToken);
     }
 
     private async ValueTask UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)

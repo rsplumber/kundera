@@ -12,4 +12,6 @@ public interface ISessionManagement
     ValueTask<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default);
 
     ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default);
 }

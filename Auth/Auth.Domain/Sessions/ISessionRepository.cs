@@ -7,4 +7,6 @@ public interface ISessionRepository : IRepository<Session, Token>, IUpdateServic
     ValueTask<bool> ExistsAsync(Token id, CancellationToken cancellationToken = default);
 
     ValueTask<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default);
 }
