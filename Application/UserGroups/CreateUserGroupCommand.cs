@@ -29,7 +29,7 @@ internal sealed class CreateUserGroupCommandHandler : ICommandHandler<CreateUser
             throw new RoleNotFoundException();
         }
 
-        var userGroup = UserGroup.From(name, role.Id);
+        var userGroup = await UserGroup.FromAsync(name, role.Id, _userGroupRepository);
         await _userGroupRepository.AddAsync(userGroup, cancellationToken);
     }
 }
