@@ -1,8 +1,8 @@
-﻿using Application.Permissions;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Permissions;
 
-namespace Web.Api.Permissions;
+namespace Web.Apix.Permissions;
 
 public record CreatePermissionRequest(string Name) : IWebRequest
 {

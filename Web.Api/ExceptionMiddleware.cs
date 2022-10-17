@@ -1,15 +1,14 @@
-﻿using Auth.Application.Authentication;
-using Auth.Application.Authorization;
+﻿using Auth.Core.Exceptions;
+using Auth.Core.Services;
 using FluentValidation;
 using Kite.Domain.Contracts;
 using Kite.Serializer;
-using Microsoft.AspNetCore.Http;
 
 namespace Web.Api;
 
 internal sealed class ExceptionMiddleware : IMiddleware
 {
-    private const string InternalServerErrorMessage = "Whoops! something wnet wrong :(";
+    private const string InternalServerErrorMessage = "Whoops! something went wrong :(";
     private readonly ISerializerService _jsonSerializer;
 
     public ExceptionMiddleware(ISerializerService jsonSerializer)

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Kite.Web.Requests;
 
-namespace Web.Api.Auth;
+namespace Web.Apix.Auth;
 
 public record AuthenticateRequest(string Username, string Password, string? Type = null, string Scope = "global") : IWebRequest;
 

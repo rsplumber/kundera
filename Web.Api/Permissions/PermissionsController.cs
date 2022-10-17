@@ -1,9 +1,9 @@
-using Application.Permissions;
-using Domain.Permissions;
 using Kite.CQRS;
+using Managements.Application.Permissions;
+using Managements.Domain.Permissions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Permissions;
+namespace Web.Apix.Permissions;
 
 [ApiController]
 [Route("/permissions")]

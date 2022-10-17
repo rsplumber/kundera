@@ -1,20 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Application\Application.csproj" />
-      <ProjectReference Include="..\Auth\Auth.Application\Auth.Application.csproj" />
+        <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
+        <ProjectReference Include="..\Auth\Auth.Services\Auth.Services.csproj" />
+        <ProjectReference Include="..\Builder\Builder.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Kite.Serializer.Abstractions" Version="0.0.8" />
         <PackageReference Include="Kite.Web.Requests" Version="0.0.8" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
-    
 
 </Project>

@@ -1,9 +1,9 @@
-using Application.Services;
-using Domain.Services;
 using Kite.CQRS;
+using Managements.Application.Services;
+using Managements.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Services;
+namespace Web.Apix.Services;
 
 [ApiController]
 [Route("/services")]

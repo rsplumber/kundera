@@ -1,9 +1,9 @@
-﻿using Application.Permissions;
-using Domain.Permissions;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Permissions;
+using Managements.Domain.Permissions;
 
-namespace Web.Api.Permissions;
+namespace Web.Apix.Permissions;
 
 public record AddPermissionMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {

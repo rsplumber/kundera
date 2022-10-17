@@ -1,9 +1,9 @@
-﻿using Application.Users;
-using Domain;
-using Domain.Users;
-using Kite.Web.Requests;
+﻿using Kite.Web.Requests;
+using Managements.Application.Users;
+using Managements.Domain;
+using Managements.Domain.Users;
 
-namespace Web.Api.Users;
+namespace Web.Apix.Users;
 
 public record SuspendUserStatusRequest(string? Reason) : IWebRequest
 {

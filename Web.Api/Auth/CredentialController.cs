@@ -1,8 +1,8 @@
-using Auth.Application.Authentication;
-using Auth.Domain.Credentials;
+using Auth.Core.Domains;
+using Auth.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Auth;
+namespace Web.Apix.Auth;
 
 [ApiController]
 public class CredentialController : AbstractAuthController

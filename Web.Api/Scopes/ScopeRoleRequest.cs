@@ -1,10 +1,10 @@
-﻿using Application.Scopes;
-using Domain.Roles;
-using Domain.Scopes;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Scopes;
+using Managements.Domain.Roles;
+using Managements.Domain.Scopes;
 
-namespace Web.Api.Scopes;
+namespace Web.Apix.Scopes;
 
 public record AddScopeRoleRequest(List<string> RoleIds) : IWebRequest
 {

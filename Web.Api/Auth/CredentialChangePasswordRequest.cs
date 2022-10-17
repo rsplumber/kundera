@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Kite.Web.Requests;
 
-namespace Web.Api.Auth;
+namespace Web.Apix.Auth;
 
 public record CredentialChangePasswordRequest(string Password, string NewPassword) : IWebRequest;
 

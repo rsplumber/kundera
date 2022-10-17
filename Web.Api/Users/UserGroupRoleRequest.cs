@@ -1,10 +1,10 @@
-﻿using Application.Users;
-using Domain.Roles;
-using Domain.Users;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Users;
+using Managements.Domain.Roles;
+using Managements.Domain.Users;
 
-namespace Web.Api.Users;
+namespace Web.Apix.Users;
 
 public record AssignUserRoleRequest(List<string> RoleIds) : IWebRequest
 {

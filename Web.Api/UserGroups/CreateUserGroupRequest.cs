@@ -1,12 +1,12 @@
-﻿using Application.UserGroups;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.UserGroups;
 
-namespace Web.Api.UserGroups;
+namespace Web.Apix.UserGroups;
 
 public record CreateUserGroupRequest(string Name, string RoleId) : IWebRequest
 {
-    public CreateUserGroupCommand ToCommand() => new(Name, Domain.Roles.RoleId.From(RoleId));
+    public CreateUserGroupCommand ToCommand() => new(Name, Managements.Domain.Roles.RoleId.From(RoleId));
 }
 
 public class CreateUserGroupRequestValidator : RequestValidator<CreateUserGroupRequest>

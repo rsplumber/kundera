@@ -1,9 +1,9 @@
-using Application.UserGroups;
-using Domain.UserGroups;
 using Kite.CQRS;
+using Managements.Application.UserGroups;
+using Managements.Domain.UserGroups;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.UserGroups;
+namespace Web.Apix.UserGroups;
 
 [ApiController]
 [Route("/user-groups")]

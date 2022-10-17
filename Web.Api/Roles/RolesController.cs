@@ -1,9 +1,9 @@
-using Application.Roles;
-using Domain.Roles;
 using Kite.CQRS;
+using Managements.Application.Roles;
+using Managements.Domain.Roles;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Roles;
+namespace Web.Apix.Roles;
 
 [ApiController]
 [Route("/roles")]

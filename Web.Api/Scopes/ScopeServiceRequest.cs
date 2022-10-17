@@ -1,10 +1,10 @@
-﻿using Application.Scopes;
-using Domain.Scopes;
-using Domain.Services;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Scopes;
+using Managements.Domain.Scopes;
+using Managements.Domain.Services;
 
-namespace Web.Api.Scopes;
+namespace Web.Apix.Scopes;
 
 public record AddScopeServiceRequest(List<string> ServiceIds) : IWebRequest
 {

@@ -1,9 +1,9 @@
-using Application.Users;
-using Domain.Users;
 using Kite.CQRS;
+using Managements.Application.Users;
+using Managements.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Users;
+namespace Web.Apix.Users;
 
 [ApiController]
 [Route("/users")]

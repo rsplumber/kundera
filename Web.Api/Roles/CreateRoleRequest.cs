@@ -1,8 +1,8 @@
-﻿using Application.Roles;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Roles;
 
-namespace Web.Api.Roles;
+namespace Web.Apix.Roles;
 
 public record CreateRoleRequest(string Name) : IWebRequest
 {

@@ -1,9 +1,9 @@
-﻿using Application.UserGroups;
-using Domain.UserGroups;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.UserGroups;
+using Managements.Domain.UserGroups;
 
-namespace Web.Api.UserGroups;
+namespace Web.Apix.UserGroups;
 
 public record MoveUserGroupParentRequest(Guid To) : IWebRequest
 {

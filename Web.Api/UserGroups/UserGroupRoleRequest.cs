@@ -1,9 +1,9 @@
-﻿using Application.UserGroups;
-using Domain.Roles;
-using Domain.UserGroups;
-using Kite.Web.Requests;
+﻿using Kite.Web.Requests;
+using Managements.Application.UserGroups;
+using Managements.Domain.Roles;
+using Managements.Domain.UserGroups;
 
-namespace Web.Api.UserGroups;
+namespace Web.Apix.UserGroups;
 
 public record AssignUserGroupRoleRequest(List<string> RoleIds) : IWebRequest
 {

@@ -1,0 +1,8 @@
+﻿using Kite.Domain.Contracts;
+
+namespace Managements.Domain.Services;
+
+public interface IServiceRepository : IRepository<Service, ServiceId>, IUpdateService<Service>, IDeleteService<ServiceId>
+{
+    ValueTask<bool> ExistsAsync(ServiceId id, CancellationToken cancellationToken = default);
+}

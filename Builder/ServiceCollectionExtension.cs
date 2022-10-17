@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Authentication.Infrastructure;
-using Data.Redis;
-using Kite.CQRS.InMemory;
+﻿using Auth.Builder;
+using Kite.Cache.InMemory;
 using Kite.Serializer.Microsoft;
+using Kite.Tokens.JWT;
+using Managements.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +13,10 @@ public static class ServiceCollectionExtension
     public static void AddKundera(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMicrosoftSerializer();
-        services.AddCqrsInMemory(Assembly.Load("Application"), Assembly.Load("Data.Redis"));
+        services.AddCacheInMemory();
+        services.AddTokensJwt(configuration);
+
         services.AddAuth(configuration);
-        services.AddDataRedis(configuration);
+        services.AddManagements(configuration);
     }
 }

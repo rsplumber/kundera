@@ -1,9 +1,9 @@
-﻿using Application.Users;
-using Domain.UserGroups;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Users;
+using Managements.Domain.UserGroups;
 
-namespace Web.Api.Users;
+namespace Web.Apix.Users;
 
 public record CreateUserRequest(string Username, Guid UserGroup) : IWebRequest
 {

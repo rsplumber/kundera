@@ -1,9 +1,9 @@
-using Application.Scopes;
-using Domain.Scopes;
 using Kite.CQRS;
+using Managements.Application.Scopes;
+using Managements.Domain.Scopes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Scopes;
+namespace Web.Apix.Scopes;
 
 [ApiController]
 [Route("/scopes")]

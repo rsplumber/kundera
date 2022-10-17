@@ -1,8 +1,8 @@
-using Auth.Application.Authorization;
-using Auth.Domain.Sessions;
+using Auth.Core.Domains;
+using Auth.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Api.Auth;
+namespace Web.Apix.Auth;
 
 [ApiController]
 public class SessionsController : AbstractAuthController

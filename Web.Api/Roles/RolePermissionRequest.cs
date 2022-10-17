@@ -1,10 +1,10 @@
-﻿using Application.Roles;
-using Domain.Permissions;
-using Domain.Roles;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Roles;
+using Managements.Domain.Permissions;
+using Managements.Domain.Roles;
 
-namespace Web.Api.Roles;
+namespace Web.Apix.Roles;
 
 public record AddRolePermissionRequest(List<string> PermissionIds) : IWebRequest
 {

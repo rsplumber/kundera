@@ -1,8 +1,8 @@
-﻿using Application.Services;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Services;
 
-namespace Web.Api.Services;
+namespace Web.Apix.Services;
 
 public record CreateServiceRequest(string Name) : IWebRequest
 {

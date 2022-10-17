@@ -1,8 +1,8 @@
-﻿using Application.Scopes;
-using FluentValidation;
+﻿using FluentValidation;
 using Kite.Web.Requests;
+using Managements.Application.Scopes;
 
-namespace Web.Api.Scopes;
+namespace Web.Apix.Scopes;
 
 public record CreateScopeRequest(string Name) : IWebRequest
 {
