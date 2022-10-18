@@ -1,6 +1,6 @@
 ﻿using Kite.Domain.Contracts;
 
-namespace Auth.Core.Domains;
+namespace Auth.Core;
 
 public sealed record Token : IEntityIdentity
 {

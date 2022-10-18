@@ -20,7 +20,7 @@ internal sealed class RemoveUserFromGroupCommandHandler : ICommandHandler<Remove
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RemoveUserFromGroupCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, userGroupId) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

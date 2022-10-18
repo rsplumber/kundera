@@ -3,7 +3,7 @@ using Managements.Application.Services;
 using Managements.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Services;
+namespace Web.Api.Services;
 
 [ApiController]
 [Route("/services")]

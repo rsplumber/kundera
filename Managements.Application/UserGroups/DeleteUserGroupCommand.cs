@@ -16,7 +16,7 @@ internal sealed class DeleteUserGroupCommandHandler : ICommandHandler<DeleteUser
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(DeleteUserGroupCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(DeleteUserGroupCommand message, CancellationToken cancellationToken = default)
     {
         var userGroup = await _userGroupRepository.FindAsync(message.UserGroupId, cancellationToken);
         if (userGroup is null)

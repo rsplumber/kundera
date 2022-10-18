@@ -11,7 +11,7 @@ public sealed record ServiceId : IEntityIdentity
         if (value == null) throw new ArgumentNullException(nameof(value));
 
         _value = value.Replace(" ", "")
-                      .ToLower();
+            .ToLower();
     }
 
     public static ServiceId From(string value) => new(value);

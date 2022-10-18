@@ -42,6 +42,7 @@ public class UserGroup : AggregateRoot<UserGroupId>
         {
             throw new UserGroupNameDuplicateException();
         }
+
         return new UserGroup(name, role);
     }
 
@@ -52,10 +53,10 @@ public class UserGroup : AggregateRoot<UserGroupId>
         {
             throw new UserGroupNameDuplicateException();
         }
-        
+
         return new UserGroup(name, role, parent);
     }
-    
+
     public string Name => _name;
 
     public string? Description => _description;

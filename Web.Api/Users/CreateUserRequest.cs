@@ -3,7 +3,7 @@ using Kite.Web.Requests;
 using Managements.Application.Users;
 using Managements.Domain.UserGroups;
 
-namespace Web.Apix.Users;
+namespace Web.Api.Users;
 
 public record CreateUserRequest(string Username, Guid UserGroup) : IWebRequest
 {

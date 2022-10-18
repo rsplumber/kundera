@@ -14,7 +14,7 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
 
-    public async ValueTask<IEnumerable<ServicesResponse>> HandleAsync(ServicesQuery message, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ServicesResponse>> HandleAsync(ServicesQuery message, CancellationToken cancellationToken = default)
     {
         if (message.Name is not null)
         {

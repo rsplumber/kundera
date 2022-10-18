@@ -16,7 +16,7 @@ internal sealed class AddRoleMetaCommandHandler : ICommandHandler<AddRoleMetaCom
         _roleRepository = roleRepository;
     }
 
-    public async ValueTask HandleAsync(AddRoleMetaCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddRoleMetaCommand message, CancellationToken cancellationToken = default)
     {
         var (roleId, dictionary) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

@@ -1,6 +1,6 @@
 ﻿using Auth.Core.Exceptions;
 
-namespace Auth.Core.Domains;
+namespace Auth.Core;
 
 public record Password
 {

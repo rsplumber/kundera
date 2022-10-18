@@ -19,7 +19,7 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
     {
         var (username, userGroupId) = message;
         var userGroup = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);

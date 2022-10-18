@@ -9,7 +9,7 @@ public sealed record SessionModel
     public DateTime ExpiresAtUtc { get; init; }
 
     public DateTime LastUsageDateUtc { get; init; }
-    
+
     public DateTime CreatedDateUtc { get; init; }
 
     public string LastIpAddress { get; init; } = string.Empty;

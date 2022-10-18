@@ -2,7 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.Scopes;
 
-namespace Web.Apix.Scopes;
+namespace Web.Api.Scopes;
 
 public record CreateScopeRequest(string Name) : IWebRequest
 {

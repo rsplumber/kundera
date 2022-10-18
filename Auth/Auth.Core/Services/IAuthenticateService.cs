@@ -1,18 +1,17 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
 
 namespace Auth.Core.Services;
 
 public interface IAuthenticateService
 {
-    ValueTask<Certificate> AuthenticateAsync(
+    Task<Certificate> AuthenticateAsync(
         UniqueIdentifier uniqueIdentifier,
         string password,
         string scope = "global",
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
-    ValueTask<Certificate> RefreshCertificateAsync(Token token,
+    Task<Certificate> RefreshCertificateAsync(Token token,
         Token refreshToken,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);

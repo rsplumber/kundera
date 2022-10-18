@@ -16,7 +16,7 @@ internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveU
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, username) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

@@ -3,7 +3,7 @@ using Kite.Web.Requests;
 using Managements.Application.UserGroups;
 using Managements.Domain.UserGroups;
 
-namespace Web.Apix.UserGroups;
+namespace Web.Api.UserGroups;
 
 public record SetUserGroupParentRequest(Guid ParentId) : IWebRequest
 {

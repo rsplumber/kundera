@@ -15,7 +15,7 @@ internal sealed class UserGroupQueryHandler : IQueryHandler<UserGroupQuery, User
         _userGroups = (RedisCollection<UserGroupDataModel>) provider.RedisCollection<UserGroupDataModel>();
     }
 
-    public async ValueTask<UserGroupResponse> HandleAsync(UserGroupQuery message, CancellationToken cancellationToken = default)
+    public async Task<UserGroupResponse> HandleAsync(UserGroupQuery message, CancellationToken cancellationToken = default)
     {
         var userGroup = await _userGroups.FindByIdAsync(message.UserGroup.Value.ToString());
         if (userGroup is null)

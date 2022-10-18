@@ -16,7 +16,7 @@ internal sealed class DisableUserGroupCommandHandler : ICommandHandler<EnableUse
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(EnableUserGroupCommand message, CancellationToken cancellationToken = default)
     {
         var group = await _userGroupRepository.FindAsync(message.UserGroup, cancellationToken);
         if (group is null)

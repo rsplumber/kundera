@@ -1,8 +1,8 @@
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Auth;
+namespace Web.Api.Auth;
 
 [ApiController]
 [Route("/authorize")]

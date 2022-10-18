@@ -2,7 +2,7 @@
 using Auth.Core.Events;
 using Kite.Domain.Contracts;
 
-namespace Auth.Core.Domains;
+namespace Auth.Core;
 
 public class Session : AggregateRoot<Token>
 {

@@ -17,7 +17,7 @@ internal sealed class BlockUserCommandHandler : ICommandHandler<BlockUserCommand
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, reason) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

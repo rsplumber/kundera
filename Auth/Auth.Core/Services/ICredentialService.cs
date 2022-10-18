@@ -1,38 +1,37 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
 
 namespace Auth.Core.Services;
 
 public interface ICredentialService
 {
-    ValueTask CreateAsync(UniqueIdentifier uniqueIdentifier,
+    Task CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default);
 
 
-    ValueTask CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier,
+    Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         int expirationTimeInSeconds = 0,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
-    ValueTask CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier,
+    Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         int expirationTimeInSeconds,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
-    ValueTask ChangePasswordAsync(UniqueIdentifier uniqueIdentifier,
+    Task ChangePasswordAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         string newPassword,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
-    ValueTask RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
+    Task RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
 
-    ValueTask<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default);
+    Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default);
 }

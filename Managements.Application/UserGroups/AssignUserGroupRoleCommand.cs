@@ -20,7 +20,7 @@ internal sealed class AssignUserGroupRoleCommandHandler : ICommandHandler<Assign
         _roleRepository = roleRepository;
     }
 
-    public async ValueTask HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AssignUserGroupRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (userGroupId, roleIds) = message;
         var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);

@@ -2,7 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.UserGroups;
 
-namespace Web.Apix.UserGroups;
+namespace Web.Api.UserGroups;
 
 public record CreateUserGroupRequest(string Name, string RoleId) : IWebRequest
 {

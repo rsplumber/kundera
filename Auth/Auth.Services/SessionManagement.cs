@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Services;
 using Microsoft.Extensions.Options;
 
@@ -16,7 +16,7 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async ValueTask SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
@@ -30,12 +30,12 @@ internal sealed class SessionManagement : ISessionManagement
         await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
-    public async ValueTask DeleteAsync(Token token, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Token token, CancellationToken cancellationToken = default)
     {
         await _sessionRepository.DeleteAsync(token, cancellationToken);
     }
 
-    public async ValueTask<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async Task<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
 
@@ -55,17 +55,17 @@ internal sealed class SessionManagement : ISessionManagement
         bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
     }
 
-    public async ValueTask<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _sessionRepository.FindAsync(cancellationToken);
     }
 
-    public async ValueTask<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await _sessionRepository.FindAsync(userId, cancellationToken);
     }
 
-    private async ValueTask UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    private async Task UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
 

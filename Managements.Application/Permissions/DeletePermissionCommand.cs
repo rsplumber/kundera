@@ -16,7 +16,7 @@ internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePer
         _permissionRepository = permissionRepository;
     }
 
-    public async ValueTask HandleAsync(DeletePermissionCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(DeletePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var permission = await _permissionRepository.FindAsync(message.PermissionId, cancellationToken);
         if (permission is null)

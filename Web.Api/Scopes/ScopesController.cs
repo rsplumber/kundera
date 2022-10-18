@@ -3,7 +3,7 @@ using Managements.Application.Scopes;
 using Managements.Domain.Scopes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Scopes;
+namespace Web.Api.Scopes;
 
 [ApiController]
 [Route("/scopes")]

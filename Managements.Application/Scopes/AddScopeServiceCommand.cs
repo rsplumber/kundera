@@ -20,7 +20,7 @@ internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeSe
         _serviceRepository = serviceRepository;
     }
 
-    public async ValueTask HandleAsync(AddScopeServiceCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddScopeServiceCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, serviceIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);

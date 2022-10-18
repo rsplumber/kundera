@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Exceptions;
 using Auth.Core.Services;
 
@@ -20,7 +20,7 @@ internal class AuthenticateService : IAuthenticateService
         _credentialService = credentialService;
     }
 
-    public async ValueTask<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialService.FindAsync(uniqueIdentifier, ipAddress, cancellationToken);
         if (credential is null)
@@ -36,7 +36,7 @@ internal class AuthenticateService : IAuthenticateService
         return certificate;
     }
 
-    public async ValueTask<Certificate> RefreshCertificateAsync(Token token, Token refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task<Certificate> RefreshCertificateAsync(Token token, Token refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var session = await _sessionManagement.GetAsync(token, ipAddress ?? IPAddress.None, cancellationToken);
         if (session is null)

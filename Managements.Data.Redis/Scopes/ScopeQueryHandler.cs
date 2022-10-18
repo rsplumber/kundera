@@ -15,7 +15,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public async ValueTask<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
+    public async Task<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
     {
         var scope = await _scopes.FindByIdAsync(message.Scope.Value);
         if (scope is null)

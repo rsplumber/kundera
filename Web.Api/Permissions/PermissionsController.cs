@@ -3,7 +3,7 @@ using Managements.Application.Permissions;
 using Managements.Domain.Permissions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Permissions;
+namespace Web.Api.Permissions;
 
 [ApiController]
 [Route("/permissions")]

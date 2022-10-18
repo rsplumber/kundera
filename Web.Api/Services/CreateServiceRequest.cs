@@ -2,7 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.Services;
 
-namespace Web.Apix.Services;
+namespace Web.Api.Services;
 
 public record CreateServiceRequest(string Name) : IWebRequest
 {

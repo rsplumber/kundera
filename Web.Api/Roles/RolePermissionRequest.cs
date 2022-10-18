@@ -4,14 +4,14 @@ using Managements.Application.Roles;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 
-namespace Web.Apix.Roles;
+namespace Web.Api.Roles;
 
 public record AddRolePermissionRequest(List<string> PermissionIds) : IWebRequest
 {
     public AddRolePermissionCommand ToCommand(string roleId)
     {
         var permissions = PermissionIds.Select(PermissionId.From)
-                                       .ToArray();
+            .ToArray();
 
         return new(RoleId.From(roleId), permissions);
     }
@@ -34,7 +34,7 @@ public record RemoveRolePermissionRequest(List<string> PermissionIds) : IWebRequ
     public RemoveRolePermissionCommand ToCommand(string roleId)
     {
         var permissions = PermissionIds.Select(PermissionId.From)
-                                       .ToArray();
+            .ToArray();
 
         return new(RoleId.From(roleId), permissions);
     }

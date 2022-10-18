@@ -17,7 +17,7 @@ internal sealed class RevokeUserGroupRoleICommandHandler : ICommandHandler<Revok
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RevokeUserGroupRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (userGroupId, roleIds) = message;
         var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);

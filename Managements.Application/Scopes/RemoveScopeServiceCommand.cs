@@ -17,7 +17,7 @@ internal sealed class RemoveScopeServiceCommandHandler : ICommandHandler<RemoveS
         _scopeRepository = scopeRepository;
     }
 
-    public async ValueTask HandleAsync(RemoveScopeServiceCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RemoveScopeServiceCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, serviceIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);

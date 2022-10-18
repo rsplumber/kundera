@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Kite.Domain.Contracts" Version="0.0.82" />
+        <PackageReference Include="Kite.Domain.Contracts" Version="0.0.83" />
         <PackageReference Include="Kite.CustomType" Version="0.0.9" />
     </ItemGroup>
 

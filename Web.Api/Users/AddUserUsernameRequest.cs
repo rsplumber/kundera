@@ -3,7 +3,7 @@ using Kite.Web.Requests;
 using Managements.Application.Users;
 using Managements.Domain.Users;
 
-namespace Web.Apix.Users;
+namespace Web.Api.Users;
 
 public record AddUserUsernameRequest(string Username) : IWebRequest
 {

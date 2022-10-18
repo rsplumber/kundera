@@ -4,14 +4,14 @@ using Managements.Application.Scopes;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 
-namespace Web.Apix.Scopes;
+namespace Web.Api.Scopes;
 
 public record AddScopeRoleRequest(List<string> RoleIds) : IWebRequest
 {
     public AddScopeRoleCommand ToCommand(string scopeId)
     {
         var roles = RoleIds.Select(RoleId.From)
-                           .ToArray();
+            .ToArray();
 
         return new(ScopeId.From(scopeId), roles);
     }
@@ -34,7 +34,7 @@ public record RemoveScopeRoleRequest(List<string> RoleIds) : IWebRequest
     public RemoveScopeRoleCommand ToCommand(string scopeId)
     {
         var roles = RoleIds.Select(RoleId.From)
-                           .ToArray();
+            .ToArray();
 
         return new(ScopeId.From(scopeId), roles);
     }

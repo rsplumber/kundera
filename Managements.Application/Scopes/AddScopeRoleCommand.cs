@@ -20,7 +20,7 @@ internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleC
         _roleRepository = roleRepository;
     }
 
-    public async ValueTask HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (scopeId, roleIds) = message;
         var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);

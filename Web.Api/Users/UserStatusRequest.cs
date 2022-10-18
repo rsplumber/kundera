@@ -3,7 +3,7 @@ using Managements.Application.Users;
 using Managements.Domain;
 using Managements.Domain.Users;
 
-namespace Web.Apix.Users;
+namespace Web.Api.Users;
 
 public record SuspendUserStatusRequest(string? Reason) : IWebRequest
 {

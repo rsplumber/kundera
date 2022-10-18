@@ -16,7 +16,7 @@ internal sealed class DeActivateServiceCommandHandler : ICommandHandler<DeActiva
         _serviceRepository = serviceRepository;
     }
 
-    public async ValueTask HandleAsync(DeActivateServiceCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(DeActivateServiceCommand message, CancellationToken cancellationToken = default)
     {
         var service = await _serviceRepository.FindAsync(message.Service, cancellationToken);
         if (service is null)

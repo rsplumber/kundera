@@ -17,7 +17,7 @@ internal sealed class RevokeUserRoleCommandHandler : ICommandHandler<RevokeUserR
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(RevokeUserRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RevokeUserRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, roleIds) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

@@ -16,7 +16,7 @@ internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScop
         _scopeRepository = scopeRepository;
     }
 
-    public async ValueTask HandleAsync(ActivateScopeCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(ActivateScopeCommand message, CancellationToken cancellationToken = default)
     {
         var scope = await _scopeRepository.FindAsync(message.Scope, cancellationToken);
         if (scope is null)

@@ -16,7 +16,7 @@ internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleComma
         _roleRepository = roleRepository;
     }
 
-    public async ValueTask HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
         var role = await Role.FromAsync(name, _roleRepository);

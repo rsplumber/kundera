@@ -17,7 +17,7 @@ internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserComma
     }
 
 
-    public async ValueTask HandleAsync(DeleteUserCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(DeleteUserCommand message, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.FindAsync(message.UserId, cancellationToken);
         if (user is null)

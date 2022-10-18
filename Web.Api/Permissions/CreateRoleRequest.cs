@@ -2,7 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.Permissions;
 
-namespace Web.Apix.Permissions;
+namespace Web.Api.Permissions;
 
 public record CreatePermissionRequest(string Name) : IWebRequest
 {

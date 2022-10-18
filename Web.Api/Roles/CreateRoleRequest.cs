@@ -2,7 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.Roles;
 
-namespace Web.Apix.Roles;
+namespace Web.Api.Roles;
 
 public record CreateRoleRequest(string Name) : IWebRequest
 {

@@ -1,4 +1,4 @@
-﻿using Auth.Core.Domains;
+﻿using Auth.Core;
 using AutoMapper;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -16,26 +16,26 @@ internal sealed class SessionRepository : ISessionRepository
         _mapper = mapper;
     }
 
-    public async ValueTask AddAsync(Session entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Session entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<SessionDataModel>(entity);
         await _sessions.InsertAsync(dataModel);
     }
 
-    public async ValueTask<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
+    public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
 
         return _mapper.Map<Session>(dataModel);
     }
 
-    public async ValueTask UpdateAsync(Session entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Session entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<SessionDataModel>(entity);
         await _sessions.UpdateAsync(dataModel);
     }
 
-    public async ValueTask DeleteAsync(Token id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
 
@@ -44,19 +44,19 @@ internal sealed class SessionRepository : ISessionRepository
         await _sessions.DeleteAsync(dataModel);
     }
 
-    public async ValueTask<bool> ExistsAsync(Token id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Token id, CancellationToken cancellationToken = default)
     {
         return await _sessions.AnyAsync(model => model.Id == id.Value);
     }
 
-    public async ValueTask<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.ToListAsync();
 
         return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 
-    public async ValueTask<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.Where(model => model.UserId == userId).ToListAsync();
         return dataModels.Select(model => _mapper.Map<Session>(model));

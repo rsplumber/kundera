@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="Kite.Domain.Contracts" Version="0.0.82" />
+        <PackageReference Include="Kite.Domain.Contracts" Version="0.0.83" />
 
     </ItemGroup>
     

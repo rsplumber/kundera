@@ -3,7 +3,7 @@ using Managements.Application.Users;
 using Managements.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Users;
+namespace Web.Api.Users;
 
 [ApiController]
 [Route("/users")]

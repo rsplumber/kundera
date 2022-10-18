@@ -17,7 +17,7 @@ internal sealed class AssignUserRoleCommandHandler : ICommandHandler<AssignUserR
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(AssignUserRoleCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AssignUserRoleCommand message, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.FindAsync(message.User, cancellationToken);
         if (user is null)

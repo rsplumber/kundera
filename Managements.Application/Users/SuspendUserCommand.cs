@@ -17,7 +17,7 @@ internal sealed class SuspendUserCommandHandler : ICommandHandler<SuspendUserCom
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, reason) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

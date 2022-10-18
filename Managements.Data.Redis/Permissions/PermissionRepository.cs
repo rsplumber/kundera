@@ -16,38 +16,38 @@ internal class PermissionRepository : IPermissionRepository
         _mapper = mapper;
     }
 
-    public async ValueTask AddAsync(Permission entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.InsertAsync(permission);
     }
 
-    public async ValueTask<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         var permissionDataModel = await _permissions.FindByIdAsync(id.Value);
 
         return _mapper.Map<Permission>(permissionDataModel);
     }
 
-    public async ValueTask<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         return await _permissions.AnyAsync(model => model.Id == id.Value);
     }
 
-    public async ValueTask<List<Permission>> FindAllAsync()
+    public async Task<List<Permission>> FindAllAsync(CancellationToken cancellationToken = default)
     {
         var permissionDataModels = await _permissions.ToListAsync();
 
         return _mapper.Map<List<Permission>>(permissionDataModels);
     }
 
-    public async ValueTask UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.UpdateAsync(permission);
     }
 
-    public ValueTask DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

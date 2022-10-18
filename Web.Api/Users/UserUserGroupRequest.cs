@@ -4,7 +4,7 @@ using Managements.Application.Users;
 using Managements.Domain.UserGroups;
 using Managements.Domain.Users;
 
-namespace Web.Apix.Users;
+namespace Web.Api.Users;
 
 public record JoinUserToGroupRequest(Guid UserGroup) : IWebRequest
 {

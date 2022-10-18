@@ -2,6 +2,5 @@
 
 public interface ICertificateService
 {
-    ValueTask<Certificate> GenerateAsync(string id, string scope = "global", CancellationToken cancellationToken = default);
-    
+    Task<Certificate> GenerateAsync(string id, string scope = "global", CancellationToken cancellationToken = default);
 }

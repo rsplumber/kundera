@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Kite.Web.Requests;
 
-namespace Web.Apix.Auth;
+namespace Web.Api.Auth;
 
 public record CreateCredentialRequest(string Username, string Password, string? Type = null) : IWebRequest;
 

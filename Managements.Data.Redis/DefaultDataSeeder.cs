@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Services;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
@@ -17,7 +17,7 @@ namespace Managements.Data.Redis;
 public class DefaultDataSeeder
 {
     private const string RoleName = "superadmin";
-    private const string Username = "superadmin";
+    private const string Username = "admin";
     private const string UserGroupName = "administrator";
     private const string ScopeName = "global";
     private const string ServiceName = "all";
@@ -48,8 +48,7 @@ public class DefaultDataSeeder
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
-        _adminPassword = configuration.GetSection("AdminPassword")
-            .Value;
+        _adminPassword = configuration.GetSection("AdminPassword").Value;
     }
 
 

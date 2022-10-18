@@ -11,7 +11,7 @@ public sealed record PermissionId : IEntityIdentity
         if (value == null) throw new ArgumentNullException(nameof(value));
 
         _value = value.Replace(" ", "")
-                      .ToLower();
+            .ToLower();
     }
 
     public static PermissionId From(string value) => new(value);

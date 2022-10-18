@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Auth;
+namespace Web.Api.Auth;
 
 public abstract class AbstractAuthController : ControllerBase
 {

@@ -16,7 +16,7 @@ internal sealed class AddPermissionMetaICommandHandler : ICommandHandler<AddPerm
         _permissionRepository = permissionRepository;
     }
 
-    public async ValueTask HandleAsync(AddPermissionMetaCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddPermissionMetaCommand message, CancellationToken cancellationToken = default)
     {
         var (permissionId, dictionary) = message;
         var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);

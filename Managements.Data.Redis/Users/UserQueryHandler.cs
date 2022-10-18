@@ -15,7 +15,7 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async ValueTask<UserResponse> HandleAsync(UserQuery message, CancellationToken cancellationToken = default)
+    public async Task<UserResponse> HandleAsync(UserQuery message, CancellationToken cancellationToken = default)
     {
         var user = await _users.FindByIdAsync(message.User.Value.ToString());
         if (user is null)

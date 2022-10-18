@@ -4,14 +4,14 @@ using Managements.Application.Scopes;
 using Managements.Domain.Scopes;
 using Managements.Domain.Services;
 
-namespace Web.Apix.Scopes;
+namespace Web.Api.Scopes;
 
 public record AddScopeServiceRequest(List<string> ServiceIds) : IWebRequest
 {
     public AddScopeServiceCommand ToCommand(string scopeId)
     {
         var services = ServiceIds.Select(ServiceId.From)
-                                 .ToArray();
+            .ToArray();
 
         return new(ScopeId.From(scopeId), services);
     }
@@ -34,7 +34,7 @@ public record RemoveScopeServiceRequest(List<string> ServiceIds) : IWebRequest
     public RemoveScopeServiceCommand ToCommand(string scopeId)
     {
         var services = ServiceIds.Select(ServiceId.From)
-                                 .ToArray();
+            .ToArray();
 
         return new(ScopeId.From(scopeId), services);
     }

@@ -16,7 +16,7 @@ internal sealed class RemovePermissionMetaCommandHandler : ICommandHandler<Remov
         _permissionRepository = permissionRepository;
     }
 
-    public async ValueTask HandleAsync(RemovePermissionMetaCommand message, CancellationToken cancellationToken = new CancellationToken())
+    public async Task HandleAsync(RemovePermissionMetaCommand message, CancellationToken cancellationToken = new CancellationToken())
     {
         var (permissionId, metaKeys) = message;
         var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);

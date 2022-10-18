@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Services;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
@@ -31,7 +31,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask<Guid> AuthorizeAsync(Token token,
+    public async Task<Guid> AuthorizeAsync(Token token,
         string action,
         string? scope,
         string? service,
@@ -94,7 +94,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
 
-        async ValueTask<IEnumerable<Role>> FetchUserGroupsRolesAsync()
+        async Task<IEnumerable<Role>> FetchUserGroupsRolesAsync()
         {
             var groups = await _userGroupRepository.FindAsync(user.UserGroups.ToArray(), cancellationToken);
             var groupList = groups.ToHashSet();

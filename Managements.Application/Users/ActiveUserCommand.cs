@@ -16,7 +16,7 @@ internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserComma
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.FindAsync(message.User, cancellationToken);
         if (user is null)

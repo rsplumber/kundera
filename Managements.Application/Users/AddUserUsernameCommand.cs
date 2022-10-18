@@ -16,7 +16,7 @@ internal sealed class AddUserUsernameCommandHandler : ICommandHandler<AddUserUse
         _userRepository = userRepository;
     }
 
-    public async ValueTask HandleAsync(AddUserUsernameCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddUserUsernameCommand message, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.FindAsync(message.User, cancellationToken);
         if (user is null)

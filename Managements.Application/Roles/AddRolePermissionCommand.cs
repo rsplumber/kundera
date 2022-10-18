@@ -20,7 +20,7 @@ internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRoleP
         _permissionRepository = permissionRepository;
     }
 
-    public async ValueTask HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (roleId, permissions) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

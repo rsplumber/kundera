@@ -14,7 +14,7 @@ internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUse
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async ValueTask<bool> HandleAsync(ExistUserUsernameQuery message, CancellationToken cancellationToken = default)
+    public async Task<bool> HandleAsync(ExistUserUsernameQuery message, CancellationToken cancellationToken = default)
     {
         return await _users.AnyAsync(model => model.Usernames.Contains(message.Username));
     }

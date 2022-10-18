@@ -18,7 +18,7 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public async ValueTask<RoleResponse> HandleAsync(RoleQuery message, CancellationToken cancellationToken = default)
+    public async Task<RoleResponse> HandleAsync(RoleQuery message, CancellationToken cancellationToken = default)
     {
         var roles = await _roleRepository.FindAsync(message.RoleId, cancellationToken);
         var role = await _roles.FindByIdAsync(message.RoleId.Value);

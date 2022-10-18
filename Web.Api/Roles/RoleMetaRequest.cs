@@ -3,7 +3,7 @@ using Kite.Web.Requests;
 using Managements.Application.Roles;
 using Managements.Domain.Roles;
 
-namespace Web.Apix.Roles;
+namespace Web.Api.Roles;
 
 public record AddRoleMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {

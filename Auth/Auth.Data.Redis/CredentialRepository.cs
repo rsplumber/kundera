@@ -1,4 +1,4 @@
-﻿using Auth.Core.Domains;
+﻿using Auth.Core;
 using AutoMapper;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -16,20 +16,20 @@ internal class CredentialRepository : ICredentialRepository
         _mapper = mapper;
     }
 
-    public async ValueTask AddAsync(Credential entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Credential entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<CredentialDataModel>(entity);
         await _credentials.InsertAsync(dataModel);
     }
 
-    public async ValueTask<Credential?> FindAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
+    public async Task<Credential?> FindAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
 
         return _mapper.Map<Credential>(dataModel);
     }
 
-    public async ValueTask DeleteAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
 
@@ -38,12 +38,12 @@ internal class CredentialRepository : ICredentialRepository
         await _credentials.DeleteAsync(dataModel);
     }
 
-    public async ValueTask<bool> ExistsAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
     {
         return await _credentials.AnyAsync(model => model.Id == uniqueIdentifier.Value);
     }
 
-    public async ValueTask UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<CredentialDataModel>(entity);
         await _credentials.UpdateAsync(dataModel);

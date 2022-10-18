@@ -20,7 +20,7 @@ internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserTo
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
     {
         var (userId, userGroupId) = message;
         var user = await _userRepository.FindAsync(userId, cancellationToken);

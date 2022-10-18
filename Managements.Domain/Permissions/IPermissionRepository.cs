@@ -4,7 +4,7 @@ namespace Managements.Domain.Permissions;
 
 public interface IPermissionRepository : IRepository<Permission, PermissionId>, IUpdateService<Permission>, IDeleteService<PermissionId>
 {
-    ValueTask<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default);
 
-    ValueTask<List<Permission>> FindAllAsync();
+    Task<List<Permission>> FindAllAsync(CancellationToken cancellationToken = default);
 }

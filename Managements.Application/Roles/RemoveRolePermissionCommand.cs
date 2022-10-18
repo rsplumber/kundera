@@ -17,7 +17,7 @@ internal sealed class RemoveRolePermissionCommandHandler : ICommandHandler<Remov
         _roleRepository = roleRepository;
     }
 
-    public async ValueTask HandleAsync(RemoveRolePermissionCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(RemoveRolePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (roleId, permissions) = message;
         var role = await _roleRepository.FindAsync(roleId, cancellationToken);

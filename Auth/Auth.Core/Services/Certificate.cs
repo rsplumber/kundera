@@ -1,6 +1,4 @@
-﻿using Auth.Core.Domains;
-
-namespace Auth.Core.Services;
+﻿namespace Auth.Core.Services;
 
 public record Certificate(Token Token, Token RefreshToken)
 {

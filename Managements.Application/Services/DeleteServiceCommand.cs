@@ -16,7 +16,7 @@ internal sealed class DeleteServiceCommandHandler : ICommandHandler<DeleteServic
         _serviceRepository = serviceRepository;
     }
 
-    public async ValueTask HandleAsync(DeleteServiceCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(DeleteServiceCommand message, CancellationToken cancellationToken = default)
     {
         var service = await _serviceRepository.FindAsync(message.Id, cancellationToken);
         if (service is null)

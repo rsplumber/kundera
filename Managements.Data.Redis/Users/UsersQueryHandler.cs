@@ -14,11 +14,11 @@ internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async ValueTask<IEnumerable<UsersResponse>> HandleAsync(UsersQuery message, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<UsersResponse>> HandleAsync(UsersQuery message, CancellationToken cancellationToken = default)
     {
         var users = await _users.ToListAsync();
 
         return users.Select(model => new UsersResponse(model.Id, model.Usernames))
-                    .ToList();
+            .ToList();
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Auth.Core.Domains;
+using Auth.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;

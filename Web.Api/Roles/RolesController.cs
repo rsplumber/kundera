@@ -3,7 +3,7 @@ using Managements.Application.Roles;
 using Managements.Domain.Roles;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.Roles;
+namespace Web.Api.Roles;
 
 [ApiController]
 [Route("/roles")]
@@ -45,7 +45,7 @@ public class RolesController : ControllerBase
 
     [HttpDelete("{id:required}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] string id,
-                                                 CancellationToken cancellationToken)
+        CancellationToken cancellationToken)
     {
         var command = new DeleteRoleCommand(RoleId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -55,15 +55,15 @@ public class RolesController : ControllerBase
 
     [HttpPost("{id:required}/permission")]
     public async Task<IActionResult> AddPermissionAsync([FromRoute] string id,
-                                                        [FromBody] AddRolePermissionRequest request,
-                                                        CancellationToken cancellationToken)
+        [FromBody] AddRolePermissionRequest request,
+        CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
 
         return Ok();
     }
-    
+
     [HttpDelete("{id:required}/permission")]
     public async Task<IActionResult> RemovePermissionAsync([FromRoute] string id,
         [FromBody] RemoveRolePermissionRequest request,
@@ -77,8 +77,8 @@ public class RolesController : ControllerBase
 
     [HttpPost("{id:required}/meta")]
     public async Task<IActionResult> AddMetaAsync([FromRoute] string id,
-                                                  [FromBody] AddRoleMetaRequest request,
-                                                  CancellationToken cancellationToken)
+        [FromBody] AddRoleMetaRequest request,
+        CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -88,8 +88,8 @@ public class RolesController : ControllerBase
 
     [HttpDelete("{id:required}/meta")]
     public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id,
-                                                     [FromBody] RemoveRoleMetaRequest request,
-                                                     CancellationToken cancellationToken)
+        [FromBody] RemoveRoleMetaRequest request,
+        CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);

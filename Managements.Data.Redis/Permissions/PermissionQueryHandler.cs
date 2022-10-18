@@ -15,7 +15,7 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async ValueTask<PermissionResponse> HandleAsync(PermissionQuery message, CancellationToken cancellationToken = default)
+    public async Task<PermissionResponse> HandleAsync(PermissionQuery message, CancellationToken cancellationToken = default)
     {
         var permission = await _permissions.FindByIdAsync(message.Permission.Value);
         if (permission is null)

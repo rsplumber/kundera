@@ -1,4 +1,4 @@
-﻿using Auth.Core.Domains;
+﻿using Auth.Core;
 using AutoMapper;
 
 namespace Auth.Data.Redis;

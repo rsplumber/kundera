@@ -3,7 +3,7 @@ using Managements.Application.UserGroups;
 using Managements.Domain.UserGroups;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Apix.UserGroups;
+namespace Web.Api.UserGroups;
 
 [ApiController]
 [Route("/user-groups")]

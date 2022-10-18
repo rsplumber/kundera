@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Auth.Core.Domains;
+using Auth.Core;
 using Auth.Core.Services;
 using Kite.Cache;
 using Managements.Domain.Roles;
@@ -36,7 +36,7 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
         _cacheManager = cacheManager;
     }
 
-    public async ValueTask<Guid> AuthorizeAsync(Token token,
+    public async Task<Guid> AuthorizeAsync(Token token,
         string action,
         string scope,
         string? service,
@@ -52,7 +52,7 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
         return session.UserId;
     }
 
-    private async ValueTask<SessionCache> FetchSessionAsync(Token token,
+    private async Task<SessionCache> FetchSessionAsync(Token token,
         string scope,
         string? service,
         IPAddress? ipAddress,
@@ -115,7 +115,7 @@ internal sealed class CachedAuthorizeService : IAuthorizeService
 
         bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
 
-        async ValueTask<IEnumerable<Role>> FetchUserGroupsRolesAsync()
+        async Task<IEnumerable<Role>> FetchUserGroupsRolesAsync()
         {
             var groups = await _userGroupRepository.FindAsync(user.UserGroups.ToArray(), cancellationToken);
             var groupList = groups.ToHashSet();

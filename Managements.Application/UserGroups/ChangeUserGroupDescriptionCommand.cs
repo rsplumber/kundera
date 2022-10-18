@@ -17,7 +17,7 @@ internal sealed class ChangeUserGroupDescriptionCommandHandler : ICommandHandler
         _userGroupRepository = userGroupRepository;
     }
 
-    public async ValueTask HandleAsync(ChangeUserGroupDescriptionCommand message, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(ChangeUserGroupDescriptionCommand message, CancellationToken cancellationToken = default)
     {
         var (userGroupId, description) = message;
         var group = await _userGroupRepository.FindAsync(userGroupId, cancellationToken);
