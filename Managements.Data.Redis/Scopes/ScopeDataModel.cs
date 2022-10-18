@@ -5,7 +5,9 @@ namespace Managements.Data.Redis.Scopes;
 [Document(IndexName = "scopes", StorageType = StorageType.Json, Prefixes = new[] {"scope"})]
 public class ScopeDataModel
 {
-    [RedisIdField] [Indexed] public string Id { get; set; }
+    [RedisIdField] [Indexed] public Guid Id { get; set; }
+
+    [Indexed] public string Name { get; set; }
 
     [Indexed] public string Status { get; set; }
 

@@ -5,7 +5,7 @@ namespace Managements.Application.Roles;
 
 public sealed record RoleQuery(RoleId RoleId) : Query<RoleResponse>;
 
-public sealed record RoleResponse(string Id)
+public sealed record RoleResponse(Guid Id, string Name)
 {
     public IEnumerable<string>? Permissions { get; set; }
 

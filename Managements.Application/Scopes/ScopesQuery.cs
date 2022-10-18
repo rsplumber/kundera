@@ -7,4 +7,4 @@ public sealed record ScopesQuery : Query<IEnumerable<ScopesResponse>>
     public string? Name { get; set; }
 }
 
-public sealed record ScopesResponse(string Id, string Status);
+public sealed record ScopesResponse(Guid Id, string Name, string Status);

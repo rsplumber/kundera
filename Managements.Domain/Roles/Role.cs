@@ -7,6 +7,7 @@ namespace Managements.Domain.Roles;
 
 public class Role : AggregateRoot<RoleId>
 {
+    private string _name;
     private readonly List<PermissionId> _permissions = new();
     private readonly Dictionary<string, string> _meta = new();
 
@@ -14,26 +15,30 @@ public class Role : AggregateRoot<RoleId>
     {
     }
 
-    private Role(RoleId id) : base(id)
+    private Role(Name name) : base(RoleId.Generate())
     {
-        AddDomainEvent(new RoleCreatedEvent(id));
+        _name = name;
+        AddDomainEvent(new RoleCreatedEvent(Id));
     }
 
     public static async Task<Role> FromAsync(Name name, IRoleRepository repository)
     {
-        var id = RoleId.From(name.Value);
-        var exists = await repository.ExistsAsync(id);
+        var exists = await repository.ExistsAsync(name);
         if (exists)
         {
             throw new RoleAlreadyExistsException(name);
         }
 
-        return new Role(id);
+        return new Role(name);
     }
+
+    public string Name => _name;
 
     public IReadOnlyCollection<PermissionId> Permissions => _permissions;
 
     public IReadOnlyDictionary<string, string> Meta => _meta;
+
+    public void ChangeName(Name name) => _name = name;
 
     public void AddPermission(PermissionId permission)
     {

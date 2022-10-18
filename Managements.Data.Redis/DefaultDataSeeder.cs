@@ -22,6 +22,8 @@ public class DefaultDataSeeder
     private const string ScopeName = "global";
     private const string ServiceName = "all";
     private readonly string _adminPassword;
+    private RoleId generatedRole;
+    private RoleId generatedScope;
 
     private readonly IRoleRepository _roleRepository;
     private readonly IUserGroupRepository _userGroupRepository;
@@ -64,11 +66,11 @@ public class DefaultDataSeeder
 
     private async Task SeedRoleAsync()
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(RoleName));
+        var exists = await _roleRepository.ExistsAsync(RoleName);
 
-        if (role is not null) return;
+        if (exists) return;
 
-        role = await Role.FromAsync(RoleName, _roleRepository);
+        var role = await Role.FromAsync(RoleName, _roleRepository);
 
         var permissions = await _permissionRepository.FindAllAsync();
         foreach (var permission in permissions)
@@ -77,12 +79,14 @@ public class DefaultDataSeeder
         }
 
         await _roleRepository.AddAsync(role);
+
+        generatedRole = role.Id;
     }
 
 
     private async Task SeedUserGroupAsync()
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(RoleName));
+        var role = await _roleRepository.FindAsync(generatedRole);
         if (role is null)
         {
             throw new RoleNotSeededException();
@@ -114,22 +118,22 @@ public class DefaultDataSeeder
 
     private async Task SeedServiceAsync()
     {
-        var service = await _serviceRepository.FindAsync(ServiceId.From(ServiceName));
+        var exists = await _serviceRepository.ExistsAsync(ServiceName);
 
-        if (service is not null) return;
+        if (exists) return;
 
-        service = await Service.FromAsync(ServiceName, _serviceRepository);
+        var service = await Service.FromAsync(ServiceName, _serviceRepository);
         await _serviceRepository.AddAsync(service);
     }
 
     private async Task SeedScopeAsync()
     {
-        var scope = await _scopeRepository.FindAsync(ScopeId.From(ScopeName));
+        var exists = await _scopeRepository.ExistsAsync(ScopeName);
 
-        if (scope is not null) return;
+        if (exists) return;
 
-        scope = await Scope.FromAsync(ScopeName, _scopeRepository);
-        var service = await _serviceRepository.FindAsync(ServiceId.From(ServiceName));
+        var scope = await Scope.FromAsync(ScopeName, _scopeRepository);
+        var service = await _serviceRepository.FindAsync(ServiceName);
         if (service is null)
         {
             throw new ServiceNotSeededException();

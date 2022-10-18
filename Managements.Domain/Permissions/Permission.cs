@@ -6,30 +6,35 @@ namespace Managements.Domain.Permissions;
 
 public class Permission : AggregateRoot<PermissionId>
 {
+    private string _name;
     private readonly Dictionary<string, string> _meta = new();
 
     protected Permission()
     {
     }
 
-    private Permission(PermissionId id) : base(id)
+    private Permission(Name name) : base(PermissionId.Generate())
     {
-        AddDomainEvent(new PermissionCreatedEvent(id));
+        _name = name;
+        AddDomainEvent(new PermissionCreatedEvent(Id));
     }
 
     public static async Task<Permission> FromAsync(Name name, IPermissionRepository repository)
     {
-        var id = PermissionId.From(name.Value);
-        var exists = await repository.ExistsAsync(id);
+        var exists = await repository.ExistsAsync(name);
         if (exists)
         {
             throw new PermissionAlreadyExistsException(name);
         }
 
-        return new Permission(id);
+        return new Permission(name);
     }
 
+    public string Name => _name;
+
     public IReadOnlyDictionary<string, string> Meta => _meta;
+
+    public void ChangeName(Name name) => _name = name;
 
     public void AddMeta(string key, string value)
     {

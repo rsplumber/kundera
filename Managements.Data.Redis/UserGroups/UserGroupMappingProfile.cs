@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Managements.Domain.Roles;
 using Managements.Domain.UserGroups;
 using Managements.Domain.UserGroups.Types;
 
@@ -14,12 +13,6 @@ internal sealed class UserGroupMappingProfile : Profile
             .ConvertUsing(u => UserGroupId.From(u));
 
         CreateMap<UserGroupId, Guid>()
-            .ConvertUsing(u => u.Value);
-
-        CreateMap<string, RoleId>()
-            .ConvertUsing(u => RoleId.From(u));
-
-        CreateMap<RoleId, string>()
             .ConvertUsing(u => u.Value);
 
         CreateMap<string, UserGroupStatus>()

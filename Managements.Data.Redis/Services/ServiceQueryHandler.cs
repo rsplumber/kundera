@@ -17,12 +17,12 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
 
     public async Task<ServiceResponse> HandleAsync(ServiceQuery message, CancellationToken cancellationToken = default)
     {
-        var service = await _services.FindByIdAsync(message.Service.Value);
+        var service = await _services.FindByIdAsync(message.Service.ToString());
         if (service is null)
         {
             throw new ServiceNotFoundException();
         }
 
-        return new ServiceResponse(service.Id, service.Status);
+        return new ServiceResponse(service.Id, service.Name, service.Status);
     }
 }

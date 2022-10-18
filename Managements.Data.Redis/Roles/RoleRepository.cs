@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Managements.Domain;
 using Managements.Domain.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -24,19 +25,19 @@ internal class RoleRepository : IRoleRepository
 
     public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
     {
-        var roleDataModel = await _roles.FindByIdAsync(id.Value);
+        var roleDataModel = await _roles.FindByIdAsync(id.ToString());
 
         return _mapper.Map<Role>(roleDataModel);
     }
 
-    public async Task<bool> ExistsAsync(RoleId id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _roles.AnyAsync(model => model.Id == id.Value);
+        return await _roles.AnyAsync(model => model.Name == name.Value);
     }
 
     public async Task<IEnumerable<Role>> FindAsync(IEnumerable<RoleId> roleIds, CancellationToken cancellationToken = default)
     {
-        var rawRoleIds = roleIds.Select(id => id.Value);
+        var rawRoleIds = roleIds.Select(id => id.ToString());
         var dataModels = await _roles.FindByIdsAsync(rawRoleIds);
 
         return dataModels.Values.Select(model => _mapper.Map<Role>(model));

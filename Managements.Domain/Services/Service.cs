@@ -7,31 +7,37 @@ namespace Managements.Domain.Services;
 
 public class Service : AggregateRoot<ServiceId>
 {
+    private string _name;
     private ServiceStatus _status;
 
     protected Service()
     {
     }
 
-    private Service(ServiceId id) : base(id)
+    private Service(Name name) : base(ServiceId.Generate())
     {
+        _name = name;
         ChangeStatus(ServiceStatus.Active);
-        AddDomainEvent(new ServiceCreatedEvent(id));
+        AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
     public static async Task<Service> FromAsync(Name name, IServiceRepository repository)
     {
-        var id = ServiceId.From(name);
-        var exists = await repository.ExistsAsync(id);
+        var exists = await repository.ExistsAsync(name);
         if (exists)
         {
             throw new ServiceAlreadyExistsException(name);
         }
 
-        return new Service(id);
+        return new Service(name);
     }
 
+
+    public string Name => _name;
+
     public ServiceStatus Status => _status;
+
+    public void ChangeName(Name name) => _name = name;
 
     public void Activate() => ChangeStatus(ServiceStatus.Active);
 

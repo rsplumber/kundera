@@ -9,10 +9,10 @@ public class ScopeMappingProfile : Profile
     public ScopeMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<string, ScopeId>()
+        CreateMap<Guid, ScopeId>()
             .ConvertUsing(s => ScopeId.From(s));
 
-        CreateMap<ScopeId, string>()
+        CreateMap<ScopeId, Guid>()
             .ConvertUsing(s => s.Value);
 
         CreateMap<string, ScopeStatus>()
@@ -25,6 +25,7 @@ public class ScopeMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(scope => scope.Id, expression => expression.MapFrom(model => model.Id))
+            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
             .ForMember("_services", expression => expression.MapFrom(model => model.Services))
             .ForMember("_status", expression => expression.MapFrom(model => model.Status))
             .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))

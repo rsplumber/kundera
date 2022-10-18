@@ -4,19 +4,20 @@ namespace Managements.Domain.Scopes;
 
 public sealed record ScopeId : IEntityIdentity
 {
-    private readonly string _value;
+    private readonly Guid _value;
 
-    private ScopeId(string value)
+    private ScopeId(Guid value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
 
-        _value = value.Replace(" ", "")
-            .ToLower();
+        _value = value;
     }
 
-    public static ScopeId From(string value) => new(value);
+    public static ScopeId From(Guid value) => new(value);
 
-    public string Value => _value;
+    public static ScopeId Generate() => From(Guid.NewGuid());
+
+    public Guid Value => _value;
 
     public bool Equals(ScopeId? other)
     {
@@ -33,6 +34,6 @@ public sealed record ScopeId : IEntityIdentity
 
     public override string ToString()
     {
-        return _value;
+        return _value.ToString();
     }
 }

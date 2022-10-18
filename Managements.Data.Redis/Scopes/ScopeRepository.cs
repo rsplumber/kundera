@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Managements.Domain;
 using Managements.Domain.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -25,14 +26,14 @@ internal class ScopeRepository : IScopeRepository
 
     public async Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
     {
-        var scopeDataModel = await _scopes.FindByIdAsync(id.Value);
+        var scopeDataModel = await _scopes.FindByIdAsync(id.ToString());
 
         return _mapper.Map<Scope>(scopeDataModel);
     }
 
-    public async Task<bool> ExistsAsync(ScopeId id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _scopes.AnyAsync(model => model.Id == id.Value);
+        return await _scopes.AnyAsync(model => model.Name == name);
     }
 
     public async Task UpdateAsync(Scope entity, CancellationToken cancellationToken = default)
@@ -41,7 +42,7 @@ internal class ScopeRepository : IScopeRepository
         await _scopes.UpdateAsync(scope);
     }
 
-    public Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = new CancellationToken())
+    public Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

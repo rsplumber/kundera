@@ -17,13 +17,13 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
 
     public async Task<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
     {
-        var scope = await _scopes.FindByIdAsync(message.Scope.Value);
+        var scope = await _scopes.FindByIdAsync(message.Scope.ToString());
         if (scope is null)
         {
             throw new RoleNotFoundException();
         }
 
-        return new ScopeResponse(scope.Id, scope.Status)
+        return new ScopeResponse(scope.Id, scope.Name, scope.Status)
         {
             Roles = scope.Roles,
             Services = scope.Services

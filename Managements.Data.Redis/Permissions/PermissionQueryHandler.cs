@@ -17,13 +17,13 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
 
     public async Task<PermissionResponse> HandleAsync(PermissionQuery message, CancellationToken cancellationToken = default)
     {
-        var permission = await _permissions.FindByIdAsync(message.Permission.Value);
+        var permission = await _permissions.FindByIdAsync(message.Permission.ToString());
         if (permission is null)
         {
             throw new PermissionNotFoundException();
         }
 
-        return new PermissionResponse(permission.Id)
+        return new PermissionResponse(permission.Id, permission.Name)
         {
             Meta = permission.Meta,
         };

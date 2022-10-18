@@ -9,10 +9,10 @@ public class ServiceMappingProfile : Profile
     public ServiceMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<string, ServiceId>()
+        CreateMap<Guid, ServiceId>()
             .ConvertUsing(s => ServiceId.From(s));
 
-        CreateMap<ServiceId, string>()
+        CreateMap<ServiceId, Guid>()
             .ConvertUsing(s => s.Value);
 
         CreateMap<string, ServiceStatus>()
@@ -25,6 +25,7 @@ public class ServiceMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(service => service.Id, expression => expression.MapFrom(model => model.Id))
+            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
             .ForMember("_status", expression => expression.MapFrom(model => model.Status))
             .ReverseMap();
     }

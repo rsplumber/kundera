@@ -8,16 +8,17 @@ public class PermissionMappingProfile : Profile
     public PermissionMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<string, PermissionId>()
+        CreateMap<Guid, PermissionId>()
             .ConvertUsing(s => PermissionId.From(s));
 
-        CreateMap<PermissionId, string>()
+        CreateMap<PermissionId, Guid>()
             .ConvertUsing(s => s.Value);
 
         CreateMap<PermissionDataModel, Permission>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(permission => permission.Id, expression => expression.MapFrom(model => model.Id))
+            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
             .ForMember("_meta", expression => expression.MapFrom(model => model.Meta))
             .ReverseMap();
     }

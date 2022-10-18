@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Managements.Domain.Roles;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
 
@@ -20,12 +19,6 @@ internal sealed class UserMappingProfile : Profile
             .ConvertUsing(u => Username.From(u));
 
         CreateMap<Username, string>()
-            .ConvertUsing(u => u.Value);
-
-        CreateMap<string, RoleId>()
-            .ConvertUsing(u => RoleId.From(u));
-
-        CreateMap<RoleId, string>()
             .ConvertUsing(u => u.Value);
 
         CreateMap<string, UserStatus>()

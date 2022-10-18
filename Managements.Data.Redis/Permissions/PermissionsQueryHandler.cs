@@ -18,11 +18,11 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
     {
         if (message.Name is not null)
         {
-            _permissions = _permissions.Where(model => model.Id.Contains(message.Name));
+            _permissions = _permissions.Where(model => model.Name.Contains(message.Name));
         }
 
         var permissionsDataModel = await _permissions.ToListAsync();
 
-        return permissionsDataModel.Select(model => new PermissionsResponse(model.Id));
+        return permissionsDataModel.Select(model => new PermissionsResponse(model.Id, model.Name));
     }
 }

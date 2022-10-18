@@ -4,19 +4,21 @@ namespace Managements.Domain.Services;
 
 public sealed record ServiceId : IEntityIdentity
 {
-    private readonly string _value;
+    private readonly Guid _value;
 
-    private ServiceId(string value)
+    private ServiceId(Guid value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
 
-        _value = value.Replace(" ", "")
-            .ToLower();
+        _value = value;
     }
 
-    public static ServiceId From(string value) => new(value);
+    public static ServiceId From(Guid value) => new(value);
 
-    public string Value => _value;
+    public static ServiceId Generate() => From(Guid.NewGuid());
+
+
+    public Guid Value => _value;
 
     public bool Equals(ServiceId? other)
     {
@@ -33,6 +35,6 @@ public sealed record ServiceId : IEntityIdentity
 
     public override string ToString()
     {
-        return _value;
+        return _value.ToString();
     }
 }

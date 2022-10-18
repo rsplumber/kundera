@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Managements.Domain;
 using Managements.Domain.Services;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -25,14 +26,14 @@ internal class ServiceRepository : IServiceRepository
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        var serviceDataModel = await _services.FindByIdAsync(id.Value);
+        var serviceDataModel = await _services.FindByIdAsync(id.ToString());
 
         return _mapper.Map<Service>(serviceDataModel);
     }
 
-    public async Task<bool> ExistsAsync(ServiceId id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _services.AnyAsync(model => model.Id == id.Value);
+        return await _services.AnyAsync(model => model.Name == name);
     }
 
     public async Task UpdateAsync(Service entity, CancellationToken cancellationToken = default)
@@ -41,7 +42,7 @@ internal class ServiceRepository : IServiceRepository
         await _services.UpdateAsync(service);
     }
 
-    public Task DeleteAsync(ServiceId id, CancellationToken cancellationToken = new CancellationToken())
+    public Task DeleteAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

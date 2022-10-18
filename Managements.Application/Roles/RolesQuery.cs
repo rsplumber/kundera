@@ -7,4 +7,4 @@ public sealed record RolesQuery : Query<IEnumerable<RolesResponse>>
     public string? Name { get; set; }
 }
 
-public sealed record RolesResponse(string Id);
+public sealed record RolesResponse(Guid Id, string Name);

@@ -4,19 +4,21 @@ namespace Managements.Domain.Permissions;
 
 public sealed record PermissionId : IEntityIdentity
 {
-    private readonly string _value;
+    private readonly Guid _value;
 
-    private PermissionId(string value)
+    private PermissionId(Guid value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
 
-        _value = value.Replace(" ", "")
-            .ToLower();
+        _value = value;
     }
 
-    public static PermissionId From(string value) => new(value);
+    public static PermissionId From(Guid value) => new(value);
 
-    public string Value => _value;
+    public static PermissionId Generate() => From(Guid.NewGuid());
+
+
+    public Guid Value => _value;
 
     public bool Equals(PermissionId? other)
     {
@@ -33,6 +35,6 @@ public sealed record PermissionId : IEntityIdentity
 
     public override string ToString()
     {
-        return _value;
+        return _value.ToString();
     }
 }

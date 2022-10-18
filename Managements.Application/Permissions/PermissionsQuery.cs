@@ -7,4 +7,4 @@ public sealed record PermissionsQuery : Query<IEnumerable<PermissionsResponse>>
     public string? Name { get; set; }
 }
 
-public sealed record PermissionsResponse(string Id);
+public sealed record PermissionsResponse(Guid Id, string Name);

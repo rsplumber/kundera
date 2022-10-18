@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Managements.Domain;
 using Managements.Domain.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -24,14 +25,14 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
-        var permissionDataModel = await _permissions.FindByIdAsync(id.Value);
+        var permissionDataModel = await _permissions.FindByIdAsync(id.ToString());
 
         return _mapper.Map<Permission>(permissionDataModel);
     }
 
-    public async Task<bool> ExistsAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _permissions.AnyAsync(model => model.Id == id.Value);
+        return await _permissions.AnyAsync(model => model.Name == name.Value);
     }
 
     public async Task<List<Permission>> FindAllAsync(CancellationToken cancellationToken = default)

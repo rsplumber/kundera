@@ -18,11 +18,11 @@ internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerabl
     {
         if (message.Name is not null)
         {
-            _scopes = _scopes.Where(model => model.Id.Contains(message.Name));
+            _scopes = _scopes.Where(model => model.Name.Contains(message.Name));
         }
 
         var rolesDataModel = await _scopes.ToListAsync();
 
-        return rolesDataModel.Select(model => new ScopesResponse(model.Id, model.Status));
+        return rolesDataModel.Select(model => new ScopesResponse(model.Id, model.Name, model.Status));
     }
 }

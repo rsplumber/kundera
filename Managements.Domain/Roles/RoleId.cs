@@ -4,19 +4,20 @@ namespace Managements.Domain.Roles;
 
 public sealed record RoleId : IEntityIdentity
 {
-    private readonly string _value;
+    private readonly Guid _value;
 
-    private RoleId(string value)
+    private RoleId(Guid value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
 
-        _value = value.Replace(" ", "")
-            .ToLower();
+        _value = value;
     }
 
-    public static RoleId From(string value) => new(value);
+    public static RoleId From(Guid value) => new(value);
 
-    public string Value => _value;
+    public static RoleId Generate() => From(Guid.NewGuid());
+
+    public Guid Value => _value;
 
     public bool Equals(RoleId? other)
     {
@@ -33,6 +34,6 @@ public sealed record RoleId : IEntityIdentity
 
     public override string ToString()
     {
-        return _value;
+        return _value.ToString();
     }
 }

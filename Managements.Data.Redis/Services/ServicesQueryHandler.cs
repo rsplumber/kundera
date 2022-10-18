@@ -18,11 +18,11 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
     {
         if (message.Name is not null)
         {
-            _services = _services.Where(model => model.Id.Contains(message.Name));
+            _services = _services.Where(model => model.Name.Contains(message.Name));
         }
 
         var serviceDataModels = await _services.ToListAsync();
 
-        return serviceDataModels.Select(model => new ServicesResponse(model.Id, model.Status));
+        return serviceDataModels.Select(model => new ServicesResponse(model.Id, model.Name, model.Status));
     }
 }
