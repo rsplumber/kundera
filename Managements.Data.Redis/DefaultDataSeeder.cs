@@ -15,10 +15,10 @@ namespace Managements.Data.Redis;
 public class DefaultDataSeeder
 {
     private const string RoleName = "superadmin";
-    private const string Username = "admin";
     private const string UserGroupName = "administrator";
     private const string ScopeName = "identity";
     private const string ServiceName = "kundera";
+    private readonly string _adminUsername;
     private readonly string _adminPassword;
     private RoleId _generatedRoleId;
     private ServiceId _generatedServiceId;
@@ -52,6 +52,7 @@ public class DefaultDataSeeder
         _credentialService = credentialService;
         _hashService = hashService;
         _adminPassword = configuration.GetSection("AdminPassword").Value;
+        _adminUsername = configuration.GetSection("AdminUsername").Value;
     }
 
 
@@ -103,11 +104,11 @@ public class DefaultDataSeeder
         var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
         if (userGroup is null) return;
 
-        var exists = await _userRepository.ExistsAsync(Username);
+        var exists = await _userRepository.ExistsAsync(_adminUsername);
 
         if (exists) return;
 
-        var user = await User.CreateAsync(Username, userGroup.Id, _userRepository);
+        var user = await User.CreateAsync(_adminUsername, userGroup.Id, _userRepository);
         await _userRepository.AddAsync(user);
     }
 
@@ -143,8 +144,8 @@ public class DefaultDataSeeder
 
     private async Task SeedCredentialAsync()
     {
-        var user = await _userRepository.FindAsync(Username);
+        var user = await _userRepository.FindAsync(_adminUsername);
         if (user is null) return;
-        await _credentialService.CreateAsync(UniqueIdentifier.From(Username), _adminPassword, user.Id.Value, IPAddress.None);
+        await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
     }
 }

@@ -13,7 +13,7 @@ public class ScopeDataModel
 
     [Indexed] public string Status { get; set; }
 
-    [Indexed] public string[] Services { get; set; }
+    [Indexed] public List<Guid> Services { get; set; }
 
-    [Indexed] public string[] Roles { get; set; }
+    [Indexed] public List<Guid> Roles { get; set; }
 }

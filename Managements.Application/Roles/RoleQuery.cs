@@ -7,7 +7,7 @@ public sealed record RoleQuery(RoleId RoleId) : Query<RoleResponse>;
 
 public sealed record RoleResponse(Guid Id, string Name)
 {
-    public IEnumerable<string>? Permissions { get; set; }
+    public IEnumerable<Guid>? Permissions { get; set; }
 
     public Dictionary<string, string>? Meta { get; set; }
 }

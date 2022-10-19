@@ -7,9 +7,7 @@ internal sealed class SessionMappingProfile : Profile
 {
     public SessionMappingProfile()
     {
-        CreateMap<string, Token>().ConvertUsing(s => Token.From(s));
-        CreateMap<Token, string>().ConvertUsing(token => token.Value);
-
+        DisableConstructorMapping();
         CreateMap<SessionDataModel, Session>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()

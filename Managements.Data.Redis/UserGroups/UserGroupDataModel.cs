@@ -7,7 +7,7 @@ internal sealed class UserGroupDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 
-    [Searchable] public string Name { get; set; }
+    [Indexed] public string Name { get; set; }
 
     public string Description { get; set; }
 

@@ -11,5 +11,5 @@ public class RoleDataModel
 
     public Dictionary<string, string> Meta { get; set; }
 
-    public string[] Permissions { get; set; }
+    [Indexed] public List<Guid> Permissions { get; set; }
 }
