@@ -6,9 +6,9 @@ using Managements.Domain.Services;
 
 namespace Web.Api.Scopes;
 
-public record AddScopeServiceRequest(List<string> ServiceIds) : IWebRequest
+public record AddScopeServiceRequest(List<Guid> ServiceIds) : IWebRequest
 {
-    public AddScopeServiceCommand ToCommand(string scopeId)
+    public AddScopeServiceCommand ToCommand(Guid scopeId)
     {
         var services = ServiceIds.Select(ServiceId.From)
             .ToArray();
@@ -29,9 +29,9 @@ public class AddScopeServiceRequestValidator : RequestValidator<AddScopeServiceR
     }
 }
 
-public record RemoveScopeServiceRequest(List<string> ServiceIds) : IWebRequest
+public record RemoveScopeServiceRequest(List<Guid> ServiceIds) : IWebRequest
 {
-    public RemoveScopeServiceCommand ToCommand(string scopeId)
+    public RemoveScopeServiceCommand ToCommand(Guid scopeId)
     {
         var services = ServiceIds.Select(ServiceId.From)
             .ToArray();

@@ -6,9 +6,9 @@ using Managements.Domain.Roles;
 
 namespace Web.Api.Roles;
 
-public record AddRolePermissionRequest(List<string> PermissionIds) : IWebRequest
+public record AddRolePermissionRequest(List<Guid> PermissionIds) : IWebRequest
 {
-    public AddRolePermissionCommand ToCommand(string roleId)
+    public AddRolePermissionCommand ToCommand(Guid roleId)
     {
         var permissions = PermissionIds.Select(PermissionId.From)
             .ToArray();
@@ -29,9 +29,9 @@ public class AddRolePermissionRequestValidator : RequestValidator<AddRolePermiss
     }
 }
 
-public record RemoveRolePermissionRequest(List<string> PermissionIds) : IWebRequest
+public record RemoveRolePermissionRequest(List<Guid> PermissionIds) : IWebRequest
 {
-    public RemoveRolePermissionCommand ToCommand(string roleId)
+    public RemoveRolePermissionCommand ToCommand(Guid roleId)
     {
         var permissions = PermissionIds.Select(PermissionId.From)
             .ToArray();

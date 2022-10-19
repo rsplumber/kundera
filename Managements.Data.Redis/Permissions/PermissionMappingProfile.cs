@@ -8,11 +8,6 @@ public class PermissionMappingProfile : Profile
     public PermissionMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, PermissionId>()
-            .ConvertUsing(s => PermissionId.From(s));
-
-        CreateMap<PermissionId, Guid>()
-            .ConvertUsing(s => s.Value);
 
         CreateMap<PermissionDataModel, Permission>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

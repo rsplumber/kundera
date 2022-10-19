@@ -6,9 +6,9 @@ using Managements.Domain.Scopes;
 
 namespace Web.Api.Scopes;
 
-public record AddScopeRoleRequest(List<string> RoleIds) : IWebRequest
+public record AddScopeRoleRequest(List<Guid> RoleIds) : IWebRequest
 {
-    public AddScopeRoleCommand ToCommand(string scopeId)
+    public AddScopeRoleCommand ToCommand(Guid scopeId)
     {
         var roles = RoleIds.Select(RoleId.From)
             .ToArray();
@@ -29,9 +29,9 @@ public class AddScopeRoleRequestValidator : RequestValidator<AddScopeRoleRequest
     }
 }
 
-public record RemoveScopeRoleRequest(List<string> RoleIds) : IWebRequest
+public record RemoveScopeRoleRequest(List<Guid> RoleIds) : IWebRequest
 {
-    public RemoveScopeRoleCommand ToCommand(string scopeId)
+    public RemoveScopeRoleCommand ToCommand(Guid scopeId)
     {
         var roles = RoleIds.Select(RoleId.From)
             .ToArray();

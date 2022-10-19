@@ -15,7 +15,7 @@ internal sealed class SessionMappingProfile : Profile
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
             .ForMember("_refreshToken", expression => expression.MapFrom(model => model.RefreshToken))
-            .ForMember("_scope", expression => expression.MapFrom(model => model.Scope))
+            .ForMember("_scopeId", expression => expression.MapFrom(model => model.ScopeId))
             .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
             .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt.ToUniversalTime()))
             .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))

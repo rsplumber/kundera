@@ -6,5 +6,7 @@ public interface IPermissionRepository : IRepository<Permission, PermissionId>, 
 {
     Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
 
-    Task<List<Permission>> FindAllAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Permission>> FindAsync(IEnumerable<PermissionId> permissionIds, CancellationToken cancellationToken = default);
 }

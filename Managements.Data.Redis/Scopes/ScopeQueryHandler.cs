@@ -23,7 +23,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
             throw new RoleNotFoundException();
         }
 
-        return new ScopeResponse(scope.Id, scope.Name, scope.Status)
+        return new ScopeResponse(scope.Id, scope.Name, scope.Secret, scope.Status)
         {
             Roles = scope.Roles,
             Services = scope.Services

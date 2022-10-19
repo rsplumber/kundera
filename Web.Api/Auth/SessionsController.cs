@@ -27,7 +27,7 @@ public class SessionsController : AbstractAuthController
         var sessions = await _sessionManagement.GetAllAsync(id, cancellationToken);
         var response = sessions.Select(session => new
         {
-            session.Id, session.Scope, session.ExpiresAt, session.UserId, session.LastIpAddress, session.LastUsageDate
+            session.Id, Scope = session.ScopeId, session.ExpiresAt, session.UserId, session.LastIpAddress, session.LastUsageDate
         });
         return Ok(response);
     }

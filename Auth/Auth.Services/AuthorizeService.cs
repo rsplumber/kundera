@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
+using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 using Managements.Domain.Services;
+using Managements.Domain.Services.Types;
 using Managements.Domain.UserGroups;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
@@ -16,25 +18,30 @@ internal sealed class AuthorizeService : IAuthorizeService
     private readonly IRoleRepository _roleRepository;
     private readonly IUserRepository _userRepository;
     private readonly IScopeRepository _scopeRepository;
+    private readonly IServiceRepository _serviceRepository;
     private readonly IUserGroupRepository _userGroupRepository;
+    private readonly IPermissionRepository _permissionRepository;
 
     public AuthorizeService(ISessionManagement sessionManagement,
         IRoleRepository roleRepository,
         IUserRepository userRepository,
         IScopeRepository scopeRepository,
-        IUserGroupRepository userGroupRepository)
+        IUserGroupRepository userGroupRepository,
+        IServiceRepository serviceRepository,
+        IPermissionRepository permissionRepository)
     {
         _sessionManagement = sessionManagement;
         _roleRepository = roleRepository;
         _userRepository = userRepository;
         _scopeRepository = scopeRepository;
         _userGroupRepository = userGroupRepository;
+        _serviceRepository = serviceRepository;
+        _permissionRepository = permissionRepository;
     }
 
     public async Task<Guid> AuthorizeAsync(Token token,
         string action,
-        string? scope,
-        string? service,
+        string serviceSecret,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default)
     {
@@ -44,44 +51,49 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        if (TokenExpired() || InvalidScope())
+        if (TokenExpired())
         {
             throw new UnAuthorizedException();
         }
 
         var user = await _userRepository.FindAsync(UserId.From(session.UserId), cancellationToken);
-        if (user is null || UserIsNotActive())
+        if (InvalidUser())
         {
             throw new UnAuthorizedException();
         }
 
-        var allRoles = await FetchAllRoles();
+        var userRoles = await FetchAllRoles();
 
-        var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.Scope), cancellationToken);
-        if (sessionScope is null || UserHasNotScopeRole() || InvalidService())
+        var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
+        if (sessionScope is null || UserHasNotScopeRole())
         {
             throw new UnAuthorizedException();
         }
 
-        var permissions = allRoles.SelectMany(role => role.Permissions.Select(id => id.Value));
-
-        if (!permissions.Any(action.ToLower().Equals))
+        var service = await _serviceRepository.FindAsync(ServiceSecret.From(serviceSecret), cancellationToken);
+        if (InvalidService())
         {
             throw new UnAuthorizedException();
         }
 
-        return user.Id.Value;
+
+        var permissionIds = userRoles.SelectMany(role => role.Permissions.Select(id => id));
+        var permissions = await _permissionRepository.FindAsync(permissionIds, cancellationToken);
+        if (!permissions.Any(permission => permission.Name.Value.Equals(action.ToLower())))
+        {
+            throw new UnAuthorizedException();
+        }
+
+        return user!.Id.Value;
 
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
-        bool InvalidScope() => !session.Scope.Equals(scope);
-
         bool InvalidService()
         {
-            return sessionScope.Services.All(id => id != ServiceId.From(service ?? "all"));
+            return service is null || sessionScope.Services.All(id => id != service.Id);
         }
 
-        bool UserIsNotActive() => user.Status != UserStatus.Active;
+        bool InvalidUser() => user is null || user.Status != UserStatus.Active;
 
         async Task<IEnumerable<Role>> FetchAllRoles()
         {
@@ -92,7 +104,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             return roles;
         }
 
-        bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
+        bool UserHasNotScopeRole() => !userRoles.Any(role => sessionScope.Has(role.Id));
 
         async Task<IEnumerable<Role>> FetchUserGroupsRolesAsync()
         {

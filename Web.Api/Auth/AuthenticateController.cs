@@ -16,12 +16,14 @@ public class AuthenticateController : AbstractAuthController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AuthenticateAsync([FromHeader] string scopeSecret,
+        [FromBody] AuthenticateRequest request,
+        CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
         var (token, refreshToken) = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
             request.Password,
-            request.Scope,
+            scopeSecret,
             IpAddress(),
             cancellationToken);
         return Ok(new

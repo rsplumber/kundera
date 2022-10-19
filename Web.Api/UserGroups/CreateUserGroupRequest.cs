@@ -4,7 +4,7 @@ using Managements.Application.UserGroups;
 
 namespace Web.Api.UserGroups;
 
-public record CreateUserGroupRequest(string Name, string RoleId) : IWebRequest
+public record CreateUserGroupRequest(string Name, Guid RoleId) : IWebRequest
 {
     public CreateUserGroupCommand ToCommand() => new(Name, Managements.Domain.Roles.RoleId.From(RoleId));
 }

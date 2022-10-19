@@ -34,8 +34,8 @@ public class ServicesController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
-    public async Task<IActionResult> ServiceAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpGet("{id:required:guid}")]
+    public async Task<IActionResult> ServiceAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new ServiceQuery(ServiceId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
@@ -44,8 +44,8 @@ public class ServicesController : ControllerBase
     }
 
 
-    [HttpDelete("{id:required}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -54,8 +54,8 @@ public class ServicesController : ControllerBase
     }
 
 
-    [HttpPatch("{id:required}/activate")]
-    public async Task<IActionResult> ActivateAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpPatch("{id:required:guid}/activate")]
+    public async Task<IActionResult> ActivateAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new ActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -63,8 +63,8 @@ public class ServicesController : ControllerBase
         return Ok();
     }
 
-    [HttpPatch("{id:required}/de-activate")]
-    public async Task<IActionResult> DeActivateAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpPatch("{id:required:guid}/de-activate")]
+    public async Task<IActionResult> DeActivateAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeActivateServiceCommand(ServiceId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);

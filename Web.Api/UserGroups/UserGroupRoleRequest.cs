@@ -5,14 +5,14 @@ using Managements.Domain.UserGroups;
 
 namespace Web.Api.UserGroups;
 
-public record AssignUserGroupRoleRequest(List<string> RoleIds) : IWebRequest
+public record AssignUserGroupRoleRequest(List<Guid> RoleIds) : IWebRequest
 {
     public AssignUserGroupRoleCommand ToCommand(Guid userId) => new(UserGroupId.From(userId),
         RoleIds.Select(RoleId.From)
             .ToArray());
 }
 
-public record RevokeUserGroupRoleRequest(List<string> RoleIds) : IWebRequest
+public record RevokeUserGroupRoleRequest(List<Guid> RoleIds) : IWebRequest
 {
     public RevokeUserGroupRoleCommand ToCommand(Guid userId) => new(UserGroupId.From(userId),
         RoleIds.Select(RoleId.From)

@@ -34,8 +34,8 @@ public class ScopesController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
-    public async Task<IActionResult> ScopeAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpGet("{id:required:guid}")]
+    public async Task<IActionResult> ScopeAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new ScopeQuery(ScopeId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
@@ -44,8 +44,8 @@ public class ScopesController : ControllerBase
     }
 
 
-    [HttpDelete("{id:required}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteScopeCommand(ScopeId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -53,24 +53,24 @@ public class ScopesController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{id:required}/active")]
-    public async Task<IActionResult> ActiveAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/active")]
+    public async Task<IActionResult> ActiveAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new ActivateScopeCommand(ScopeId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost("{id:required}/de-active")]
-    public async Task<IActionResult> DeActiveAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/de-active")]
+    public async Task<IActionResult> DeActiveAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeActivateScopeCommand(ScopeId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
         return Ok();
     }
 
-    [HttpPost("{id:required}/services")]
-    public async Task<IActionResult> AddServiceAsync([FromRoute] string id,
+    [HttpPost("{id:required:guid}/services")]
+    public async Task<IActionResult> AddServiceAsync([FromRoute] Guid id,
         [FromBody] AddScopeServiceRequest request,
         CancellationToken cancellationToken)
     {
@@ -80,8 +80,8 @@ public class ScopesController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id:required}/services")]
-    public async Task<IActionResult> RemoveServiceAsync([FromRoute] string id,
+    [HttpDelete("{id:required:guid}/services")]
+    public async Task<IActionResult> RemoveServiceAsync([FromRoute] Guid id,
         [FromBody] RemoveScopeServiceRequest request,
         CancellationToken cancellationToken)
     {
@@ -92,8 +92,8 @@ public class ScopesController : ControllerBase
     }
 
 
-    [HttpPost("{id:required}/roles")]
-    public async Task<IActionResult> AddRoleAsync([FromRoute] string id,
+    [HttpPost("{id:required:guid}/roles")]
+    public async Task<IActionResult> AddRoleAsync([FromRoute] Guid id,
         [FromBody] AddScopeRoleRequest request,
         CancellationToken cancellationToken)
     {
@@ -103,8 +103,8 @@ public class ScopesController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id:required}/roles")]
-    public async Task<IActionResult> RemoveRoleAsync([FromRoute] string id,
+    [HttpDelete("{id:required:guid}/roles")]
+    public async Task<IActionResult> RemoveRoleAsync([FromRoute] Guid id,
         [FromBody] RemoveScopeRoleRequest request,
         CancellationToken cancellationToken)
     {

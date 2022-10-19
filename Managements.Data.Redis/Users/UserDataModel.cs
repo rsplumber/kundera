@@ -11,7 +11,7 @@ internal sealed class UserDataModel
 
     [Indexed] public List<Guid> UserGroups { get; set; }
 
-    [Indexed] public List<string> Roles { get; set; }
+    [Indexed] public List<Guid> Roles { get; set; }
 
     [Indexed] public string Status { get; set; }
 

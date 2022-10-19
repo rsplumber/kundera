@@ -9,7 +9,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 {
     private Guid _userId;
     private Password _password;
-    private string _lastIpAddress;
+    private IPAddress? _lastIpAddress;
     private DateTime _lastLoggedIn;
     private DateTime? _expiresAt;
     private bool _oneTime;
@@ -19,14 +19,14 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     {
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, IPAddress? lastIpAddress = null) : base(uniqueIdentifier)
+    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? lastIpAddress = null) : base(uniqueIdentifier)
     {
-        _userId = user;
+        _userId = userId;
         _password = Password.Create(password);
-        _lastIpAddress = lastIpAddress is not null ? lastIpAddress.ToString() : IPAddress.None.ToString();
+        _lastIpAddress = lastIpAddress;
         _lastLoggedIn = DateTime.UtcNow;
         _createdDate = DateTime.UtcNow;
-        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
+        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, userId));
     }
 
     private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
@@ -38,15 +38,15 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         }
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
-        this(uniqueIdentifier, password, user, expirationTimeInSeconds, lastIpAddress)
+    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+        this(uniqueIdentifier, password, userId, expirationTimeInSeconds, lastIpAddress)
     {
         _oneTime = oneTime;
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
-        Guid user,
+        Guid userId,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
@@ -56,12 +56,12 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, user, ipAddress);
+        return new(uniqueIdentifier, password, userId, ipAddress);
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
-        Guid user,
+        Guid userId,
         int expirationTimeInSeconds,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
@@ -72,12 +72,12 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, user, expirationTimeInSeconds, ipAddress);
+        return new(uniqueIdentifier, password, userId, expirationTimeInSeconds, ipAddress);
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
-        Guid user,
+        Guid userId,
         bool oneTime,
         int expirationTimeInSeconds,
         IPAddress? ipAddress,
@@ -89,14 +89,14 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, user, oneTime, expirationTimeInSeconds, ipAddress);
+        return new(uniqueIdentifier, password, userId, oneTime, expirationTimeInSeconds, ipAddress);
     }
 
-    public Guid User => _userId;
+    public Guid UserId => _userId;
 
     public Password Password => _password;
 
-    public IPAddress LastIpAddress => IPAddress.Parse(_lastIpAddress);
+    public IPAddress? LastIpAddress => _lastIpAddress;
 
     public DateTime LastLoggedIn => _lastLoggedIn;
 
@@ -108,8 +108,8 @@ public class Credential : AggregateRoot<UniqueIdentifier>
 
     public void UpdateActivityInfo(IPAddress? ipAddress)
     {
+        _lastIpAddress = ipAddress;
         _lastLoggedIn = DateTime.UtcNow;
-        _lastIpAddress = ipAddress is not null ? ipAddress.ToString() : IPAddress.None.ToString();
     }
 
     public void ChangePassword(string password, string newPassword)

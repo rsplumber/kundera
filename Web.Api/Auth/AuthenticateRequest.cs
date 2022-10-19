@@ -3,7 +3,7 @@ using Kite.Web.Requests;
 
 namespace Web.Api.Auth;
 
-public record AuthenticateRequest(string Username, string Password, string? Type = null, string Scope = "global") : IWebRequest;
+public record AuthenticateRequest(string Username, string Password, string? Type = null) : IWebRequest;
 
 public class AuthenticateRequestValidator : RequestValidator<AuthenticateRequest>
 {

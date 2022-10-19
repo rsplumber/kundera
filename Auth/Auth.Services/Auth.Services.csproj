@@ -7,16 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Managements.Domain\Managements.Domain.csproj" />
-      <ProjectReference Include="..\Auth.Core\Auth.Core.csproj" />
+        <ProjectReference Include="..\..\Managements.Domain\Managements.Domain.csproj"/>
+        <ProjectReference Include="..\Auth.Core\Auth.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Kite.Cache.Abstractions" Version="0.0.8" />
-      <PackageReference Include="Kite.Tokens.Abstractions" Version="0.0.8" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="Kite.Cache.Abstractions" Version="0.0.8"/>
+        <PackageReference Include="Kite.Hashing.Abstractions" Version="0.0.8"/>
+        <PackageReference Include="Kite.Extensions.Random" Version="0.0.8"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
     </ItemGroup>
     <ItemGroup>
-        <InternalsVisibleTo Include="Auth.Builder" />
+        <InternalsVisibleTo Include="Auth.Builder"/>
     </ItemGroup>
 </Project>

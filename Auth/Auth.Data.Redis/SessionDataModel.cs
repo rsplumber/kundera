@@ -1,4 +1,5 @@
-﻿using Redis.OM.Modeling;
+﻿using System.Runtime.InteropServices;
+using Redis.OM.Modeling;
 
 namespace Auth.Data.Redis;
 
@@ -9,7 +10,7 @@ internal sealed class SessionDataModel
 
     public string RefreshToken { get; set; }
 
-    [Searchable] public string Scope { get; set; }
+    [Indexed] public Guid ScopeId { get; set; }
 
     [Indexed] public Guid UserId { get; set; }
 

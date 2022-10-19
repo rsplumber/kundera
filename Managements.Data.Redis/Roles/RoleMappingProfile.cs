@@ -8,11 +8,6 @@ public class RoleMappingProfile : Profile
     public RoleMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, RoleId>()
-            .ConvertUsing(s => RoleId.From(s));
-
-        CreateMap<RoleId, Guid>()
-            .ConvertUsing(s => s.Value);
 
         CreateMap<RoleDataModel, Role>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

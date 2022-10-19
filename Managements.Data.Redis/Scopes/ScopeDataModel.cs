@@ -9,6 +9,8 @@ public class ScopeDataModel
 
     [Indexed] public string Name { get; set; }
 
+    [Indexed] public string Secret { get; set; }
+
     [Indexed] public string Status { get; set; }
 
     [Indexed] public string[] Services { get; set; }

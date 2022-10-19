@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain;
 using Managements.Domain.Scopes;
+using Managements.Domain.Scopes.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -34,6 +35,14 @@ internal class ScopeRepository : IScopeRepository
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
         return await _scopes.AnyAsync(model => model.Name == name);
+    }
+
+    public async Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _scopes.Where(model => model.Secret.Contains(secret.Value))
+            .FirstOrDefaultAsync();
+
+        return _mapper.Map<Scope>(dataModel);
     }
 
     public async Task UpdateAsync(Scope entity, CancellationToken cancellationToken = default)

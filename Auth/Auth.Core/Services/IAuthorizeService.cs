@@ -6,8 +6,7 @@ public interface IAuthorizeService
 {
     Task<Guid> AuthorizeAsync(Token token,
         string action,
-        string? scope,
-        string? service,
+        string serviceSecret,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default);
 }

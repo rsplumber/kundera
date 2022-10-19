@@ -7,21 +7,21 @@ namespace Auth.Core;
 public class Session : AggregateRoot<Token>
 {
     private Token _refreshToken;
-    private string _scope;
+    private Guid _scopeId;
     private Guid _userId;
     private DateTime _expiresAt;
     private DateTime _lastUsageDate;
-    private string? _lastIpAddress;
+    private IPAddress? _lastIpAddress;
     private DateTime _createdDate;
 
     protected Session()
     {
     }
 
-    private Session(Token token, Token refreshToken, string scope, Guid userId, DateTime expireDate, string? lastIpAddress = null) : base(token)
+    private Session(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null) : base(token)
     {
         _refreshToken = refreshToken;
-        _scope = scope;
+        _scopeId = scopeId;
         _userId = userId;
         _expiresAt = expireDate;
         _lastIpAddress = lastIpAddress;
@@ -30,14 +30,14 @@ public class Session : AggregateRoot<Token>
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
-    public static Session Create(Token token, Token refreshToken, string scope, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
+    public static Session Create(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
     {
-        return new Session(token, refreshToken, scope, userId, expireDate, lastIpAddress?.ToString());
+        return new Session(token, refreshToken, scopeId, userId, expireDate, lastIpAddress);
     }
 
     public Token RefreshToken => _refreshToken;
 
-    public string Scope => _scope;
+    public Guid ScopeId => _scopeId;
 
     public Guid UserId => _userId;
 
@@ -45,14 +45,14 @@ public class Session : AggregateRoot<Token>
 
     public DateTime ExpiresAt => _expiresAt;
 
-    public string LastIpAddress => _lastIpAddress;
+    public IPAddress? LastIpAddress => _lastIpAddress;
 
     public DateTime CreatedDate => _createdDate;
 
 
     public void UpdateUsage(DateTime lastUsageDate, IPAddress ipAddress)
     {
-        _lastIpAddress = ipAddress.ToString();
+        _lastIpAddress = ipAddress;
         _lastUsageDate = lastUsageDate;
     }
 }

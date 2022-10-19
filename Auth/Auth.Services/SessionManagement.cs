@@ -16,13 +16,13 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task SaveAsync(Certificate certificate, Guid userId, string scope, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Certificate certificate, Guid userId, Guid scopeId, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
         var session = Session.Create(token,
             refreshToken,
-            scope,
+            scopeId,
             userId,
             expiresAt,
             ipAddress);

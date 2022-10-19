@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Managements.Domain.Users;
-using Managements.Domain.Users.Types;
 
 namespace Managements.Data.Redis.Users;
 
@@ -9,24 +8,6 @@ internal sealed class UserMappingProfile : Profile
     public UserMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, UserId>()
-            .ConvertUsing(u => UserId.From(u));
-
-        CreateMap<UserId, Guid>()
-            .ConvertUsing(u => u.Value);
-
-        CreateMap<string, Username>()
-            .ConvertUsing(u => Username.From(u));
-
-        CreateMap<Username, string>()
-            .ConvertUsing(u => u.Value);
-
-        CreateMap<string, UserStatus>()
-            .ConvertUsing(u => UserStatus.From(u));
-
-        CreateMap<UserStatus, string>()
-            .ConvertUsing(u => u.Value);
-
         CreateMap<UserDataModel, User>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()

@@ -9,5 +9,7 @@ public class ServiceDataModel
 
     [Indexed] public string Name { get; set; }
 
+    [Indexed] public string Secret { get; set; }
+
     [Indexed] public string Status { get; set; }
 }

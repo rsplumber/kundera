@@ -16,13 +16,12 @@ public class AuthorizeController : AbstractAuthController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AuthorizeAsync([FromBody] AuthorizeRequest request,
-        [FromHeader] string authorization,
-        [FromHeader] string? scope = "global",
-        [FromHeader] string? service = "all",
+    public async Task<IActionResult> AuthorizeAsync([FromHeader] string authorization,
+        [FromHeader] string action,
+        [FromHeader] string serviceSecret,
         CancellationToken cancellationToken = default)
     {
-        var response = await _authorizeService.AuthorizeAsync(Token.From(authorization), request.Action, scope, service, IpAddress(), cancellationToken);
+        var response = await _authorizeService.AuthorizeAsync(Token.From(authorization), action, serviceSecret, IpAddress(), cancellationToken);
         return Ok(response);
     }
 }

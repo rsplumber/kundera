@@ -7,7 +7,7 @@ namespace Web.Api.Roles;
 
 public record AddRoleMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {
-    public AddRoleMetaCommand ToCommand(string roleId) => new(RoleId.From(roleId), Meta);
+    public AddRoleMetaCommand ToCommand(Guid roleId) => new(RoleId.From(roleId), Meta);
 }
 
 public class AddRoleMetaRequestValidator : RequestValidator<AddRoleMetaRequest>
@@ -24,7 +24,7 @@ public class AddRoleMetaRequestValidator : RequestValidator<AddRoleMetaRequest>
 
 public record RemoveRoleMetaRequest(string[] MetaKeys) : IWebRequest
 {
-    public RemoveRoleMetaCommand ToCommand(string roleId) => new(RoleId.From(roleId), MetaKeys);
+    public RemoveRoleMetaCommand ToCommand(Guid roleId) => new(RoleId.From(roleId), MetaKeys);
 }
 
 public class RemoveRoleMetaRequestValidator : RequestValidator<RemoveRoleMetaRequest>

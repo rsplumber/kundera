@@ -7,7 +7,7 @@ public interface IAuthenticateService
     Task<Certificate> AuthenticateAsync(
         UniqueIdentifier uniqueIdentifier,
         string password,
-        string scope = "global",
+        string scopeSecret,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 

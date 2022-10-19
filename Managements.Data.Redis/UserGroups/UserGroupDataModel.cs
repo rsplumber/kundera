@@ -17,5 +17,5 @@ internal sealed class UserGroupDataModel
 
     public DateTime StatusChangedDate { get; set; }
 
-    [Indexed] public string[] Roles { get; set; }
+    [Indexed] public List<Guid> Roles { get; set; }
 }

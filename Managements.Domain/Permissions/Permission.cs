@@ -30,7 +30,7 @@ public class Permission : AggregateRoot<PermissionId>
         return new Permission(name);
     }
 
-    public string Name => _name;
+    public Name Name => _name;
 
     public IReadOnlyDictionary<string, string> Meta => _meta;
 

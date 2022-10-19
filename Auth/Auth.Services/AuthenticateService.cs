@@ -2,6 +2,8 @@
 using Auth.Core;
 using Auth.Core.Exceptions;
 using Auth.Core.Services;
+using Managements.Domain.Scopes;
+using Managements.Domain.Scopes.Types;
 
 namespace Auth.Services;
 
@@ -10,17 +12,20 @@ internal class AuthenticateService : IAuthenticateService
     private readonly ICredentialService _credentialService;
     private readonly ICertificateService _certificateService;
     private readonly ISessionManagement _sessionManagement;
+    private readonly IScopeRepository _scopeRepository;
 
     public AuthenticateService(ICertificateService certificateService,
         ISessionManagement sessionManagement,
-        ICredentialService credentialService)
+        ICredentialService credentialService,
+        IScopeRepository scopeRepository)
     {
         _certificateService = certificateService;
         _sessionManagement = sessionManagement;
         _credentialService = credentialService;
+        _scopeRepository = scopeRepository;
     }
 
-    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scope = "global", IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scopeSecret, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialService.FindAsync(uniqueIdentifier, ipAddress, cancellationToken);
         if (credential is null)
@@ -28,10 +33,18 @@ internal class AuthenticateService : IAuthenticateService
             throw new UnAuthenticateException();
         }
 
+        var scope = await _scopeRepository.FindAsync(ScopeSecret.From(scopeSecret), cancellationToken);
+        if (scope is null)
+        {
+            throw new UnAuthenticateException();
+        }
+
+
         credential.Password.Check(password);
 
-        var certificate = await _certificateService.GenerateAsync(credential.User.ToString(), scope, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, credential.User, scope, ipAddress ?? IPAddress.None, cancellationToken);
+
+        var certificate = await _certificateService.GenerateAsync(credential.UserId, scope.Id.Value, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, credential.UserId, scope.Id.Value, ipAddress ?? IPAddress.None, cancellationToken);
 
         return certificate;
     }
@@ -50,9 +63,9 @@ internal class AuthenticateService : IAuthenticateService
         }
 
         var userId = session.UserId;
-        var scope = session.Scope;
-        var certificate = await _certificateService.GenerateAsync(userId.ToString(), scope, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, userId, scope, ipAddress ?? IPAddress.None, cancellationToken);
+        var scopeId = session.ScopeId;
+        var certificate = await _certificateService.GenerateAsync(userId, scopeId, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, userId, scopeId, ipAddress ?? IPAddress.None, cancellationToken);
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 
         return certificate;

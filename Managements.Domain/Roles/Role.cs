@@ -32,7 +32,7 @@ public class Role : AggregateRoot<RoleId>
         return new Role(name);
     }
 
-    public string Name => _name;
+    public Name Name => _name;
 
     public IReadOnlyCollection<PermissionId> Permissions => _permissions;
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Managements.Domain.UserGroups;
-using Managements.Domain.UserGroups.Types;
 
 namespace Managements.Data.Redis.UserGroups;
 
@@ -9,17 +8,6 @@ internal sealed class UserGroupMappingProfile : Profile
     public UserGroupMappingProfile()
     {
         DisableConstructorMapping();
-        CreateMap<Guid, UserGroupId>()
-            .ConvertUsing(u => UserGroupId.From(u));
-
-        CreateMap<UserGroupId, Guid>()
-            .ConvertUsing(u => u.Value);
-
-        CreateMap<string, UserGroupStatus>()
-            .ConvertUsing(u => UserGroupStatus.From(u));
-
-        CreateMap<UserGroupStatus, string>()
-            .ConvertUsing(u => u.Value);
 
         CreateMap<UserGroupDataModel, UserGroup>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

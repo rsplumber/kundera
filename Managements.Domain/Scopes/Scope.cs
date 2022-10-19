@@ -1,4 +1,5 @@
 ﻿using Kite.Domain.Contracts;
+using Kite.Hashing;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes.Events;
 using Managements.Domain.Scopes.Exceptions;
@@ -10,6 +11,7 @@ namespace Managements.Domain.Scopes;
 public class Scope : AggregateRoot<ScopeId>
 {
     private string _name;
+    private string _secret;
     private ScopeStatus _status;
     private readonly List<ServiceId> _services = new();
     private readonly List<RoleId> _roles = new();
@@ -18,14 +20,15 @@ public class Scope : AggregateRoot<ScopeId>
     {
     }
 
-    private Scope(Name name) : base(ScopeId.Generate())
+    private Scope(Name name, IHashService hashService) : base(ScopeId.Generate())
     {
         _name = name;
+        _secret = hashService.Hash(Id.ToString());
         ChangeStatus(ScopeStatus.Active);
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    public static async Task<Scope> FromAsync(Name name, IScopeRepository repository)
+    public static async Task<Scope> FromAsync(Name name, IHashService hashService, IScopeRepository repository)
     {
         var exists = await repository.ExistsAsync(name);
         if (exists)
@@ -33,10 +36,12 @@ public class Scope : AggregateRoot<ScopeId>
             throw new ScopeAlreadyExistsException(name);
         }
 
-        return new Scope(name);
+        return new Scope(name, hashService);
     }
 
-    public string Name => _name;
+    public Name Name => _name;
+
+    public ScopeSecret Secret => ScopeSecret.From(_secret);
 
     public ScopeStatus Status => _status;
 

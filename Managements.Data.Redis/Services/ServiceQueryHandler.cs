@@ -23,6 +23,6 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
             throw new ServiceNotFoundException();
         }
 
-        return new ServiceResponse(service.Id, service.Name, service.Status);
+        return new ServiceResponse(service.Id, service.Name, service.Secret, service.Status);
     }
 }

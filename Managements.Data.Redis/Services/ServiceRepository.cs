@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain;
 using Managements.Domain.Services;
+using Managements.Domain.Services.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -34,6 +35,14 @@ internal class ServiceRepository : IServiceRepository
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
         return await _services.AnyAsync(model => model.Name == name);
+    }
+
+    public async Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _services.Where(model => model.Secret.Contains(secret.Value))
+            .FirstOrDefaultAsync();
+
+        return _mapper.Map<Service>(dataModel);
     }
 
     public async Task UpdateAsync(Service entity, CancellationToken cancellationToken = default)

@@ -1,7 +1,7 @@
 ﻿using Auth.Builder;
 using Kite.Cache.InMemory;
+using Kite.Hashing.HMAC;
 using Kite.Serializer.Microsoft;
-using Kite.Tokens.JWT;
 using Managements.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ public static class ServiceCollectionExtension
     {
         services.AddMicrosoftSerializer();
         services.AddCacheInMemory();
-        services.AddTokensJwt(configuration);
+        services.AddHashHmac();
 
         services.AddAuth(configuration);
         services.AddManagements(configuration);

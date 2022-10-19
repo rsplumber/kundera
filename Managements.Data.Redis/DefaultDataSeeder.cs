@@ -1,14 +1,12 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
+using Kite.Hashing;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
-using Managements.Domain.Roles.Exceptions;
 using Managements.Domain.Scopes;
 using Managements.Domain.Services;
-using Managements.Domain.Services.Exceptions;
 using Managements.Domain.UserGroups;
-using Managements.Domain.UserGroups.Exception;
 using Managements.Domain.Users;
 using Microsoft.Extensions.Configuration;
 
@@ -19,11 +17,11 @@ public class DefaultDataSeeder
     private const string RoleName = "superadmin";
     private const string Username = "admin";
     private const string UserGroupName = "administrator";
-    private const string ScopeName = "global";
-    private const string ServiceName = "all";
+    private const string ScopeName = "identity";
+    private const string ServiceName = "kundera";
     private readonly string _adminPassword;
-    private RoleId generatedRole;
-    private RoleId generatedScope;
+    private RoleId _generatedRoleId;
+    private ServiceId _generatedServiceId;
 
     private readonly IRoleRepository _roleRepository;
     private readonly IUserGroupRepository _userGroupRepository;
@@ -32,6 +30,7 @@ public class DefaultDataSeeder
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ICredentialService _credentialService;
+    private readonly IHashService _hashService;
 
 
     public DefaultDataSeeder(IConfiguration configuration,
@@ -41,7 +40,8 @@ public class DefaultDataSeeder
         IPermissionRepository permissionRepository,
         IScopeRepository scopeRepository,
         IServiceRepository serviceRepository,
-        ICredentialService credentialService)
+        ICredentialService credentialService,
+        IHashService hashService)
     {
         _roleRepository = roleRepository;
         _userGroupRepository = userGroupRepository;
@@ -50,6 +50,7 @@ public class DefaultDataSeeder
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
+        _hashService = hashService;
         _adminPassword = configuration.GetSection("AdminPassword").Value;
     }
 
@@ -72,7 +73,7 @@ public class DefaultDataSeeder
 
         var role = await Role.FromAsync(RoleName, _roleRepository);
 
-        var permissions = await _permissionRepository.FindAllAsync();
+        var permissions = await _permissionRepository.FindAsync();
         foreach (var permission in permissions)
         {
             role.AddPermission(permission.Id);
@@ -80,17 +81,14 @@ public class DefaultDataSeeder
 
         await _roleRepository.AddAsync(role);
 
-        generatedRole = role.Id;
+        _generatedRoleId = role.Id;
     }
 
 
     private async Task SeedUserGroupAsync()
     {
-        var role = await _roleRepository.FindAsync(generatedRole);
-        if (role is null)
-        {
-            throw new RoleNotSeededException();
-        }
+        var role = await _roleRepository.FindAsync(_generatedRoleId);
+        if (role is null) return;
 
         var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
 
@@ -103,10 +101,7 @@ public class DefaultDataSeeder
     private async Task SeedUserAsync()
     {
         var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
-        if (userGroup is null)
-        {
-            throw new UserGroupNotSeededException();
-        }
+        if (userGroup is null) return;
 
         var exists = await _userRepository.ExistsAsync(Username);
 
@@ -122,8 +117,9 @@ public class DefaultDataSeeder
 
         if (exists) return;
 
-        var service = await Service.FromAsync(ServiceName, _serviceRepository);
+        var service = await Service.FromAsync(ServiceName, _hashService, _serviceRepository);
         await _serviceRepository.AddAsync(service);
+        _generatedServiceId = service.Id;
     }
 
     private async Task SeedScopeAsync()
@@ -132,20 +128,14 @@ public class DefaultDataSeeder
 
         if (exists) return;
 
-        var scope = await Scope.FromAsync(ScopeName, _scopeRepository);
-        var service = await _serviceRepository.FindAsync(ServiceName);
-        if (service is null)
-        {
-            throw new ServiceNotSeededException();
-        }
+        var scope = await Scope.FromAsync(ScopeName, _hashService, _scopeRepository);
+        var service = await _serviceRepository.FindAsync(_generatedServiceId);
+        if (service is null) return;
 
         scope.AddService(service.Id);
 
-        var role = await _roleRepository.FindAsync(RoleId.From(RoleName));
-        if (role is null)
-        {
-            throw new RoleNotSeededException();
-        }
+        var role = await _roleRepository.FindAsync(_generatedRoleId);
+        if (role is null) return;
 
         scope.AddRole(role.Id);
         await _scopeRepository.AddAsync(scope);
@@ -154,6 +144,7 @@ public class DefaultDataSeeder
     private async Task SeedCredentialAsync()
     {
         var user = await _userRepository.FindAsync(Username);
+        if (user is null) return;
         await _credentialService.CreateAsync(UniqueIdentifier.From(Username), _adminPassword, user.Id.Value, IPAddress.None);
     }
 }

@@ -1,27 +1,25 @@
-﻿using Auth.Core.Services;
-using Kite.Tokens;
-using Token = Auth.Core.Token;
+﻿using Auth.Core;
+using Auth.Core.Services;
+using Kite.Extensions.Random;
+using Kite.Hashing;
 
 namespace Auth.Services;
 
 internal sealed class CertificateService : ICertificateService
 {
-    private readonly ITokenService _tokenService;
+    private readonly IHashService _hashService;
 
-    public CertificateService(ITokenService tokenService)
+    public CertificateService(IHashService hashService)
     {
-        _tokenService = tokenService;
+        _hashService = hashService;
     }
 
-
-    public async Task<Certificate> GenerateAsync(string id, string scope = "global", CancellationToken cancellationToken = default)
+    public Task<Certificate> GenerateAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
     {
-        var token = await _tokenService.GenerateAsync(TokenProperties.Create()
-            .Add("id", id)
-            .Add("scope", scope));
+        var token = _hashService.Hash(userId.ToString(), scopeId.ToString());
+        var refreshToken = _hashService.Hash(new Random().RandomCharsNums(6));
 
-        var refreshToken = await _tokenService.GenerateAsync(TokenProperties.Create());
-
-        return new Certificate(Token.From(token.Value), Token.From(refreshToken.Value));
+        var certificate = new Certificate(Token.From(token), Token.From(refreshToken));
+        return Task.FromResult(certificate);
     }
 }

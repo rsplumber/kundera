@@ -9,8 +9,6 @@ namespace Web.Api.Permissions;
 [Route("/permissions")]
 public class PermissionsController : ControllerBase
 {
-    //Todo Baraye Add Permission che qalati konim namoosan?
-
     private readonly IServiceBus _serviceBus;
 
     public PermissionsController(IServiceBus serviceBus)
@@ -37,8 +35,8 @@ public class PermissionsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
-    public async Task<IActionResult> PermissionAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpGet("{id:required:guid}")]
+    public async Task<IActionResult> PermissionAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new PermissionQuery(PermissionId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
@@ -46,8 +44,8 @@ public class PermissionsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{id:required}")]
-    public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpDelete("{id:required:guid}")]
+    public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeletePermissionCommand(PermissionId.From(id));
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -56,8 +54,8 @@ public class PermissionsController : ControllerBase
     }
 
 
-    [HttpPost("{id:required}/meta")]
-    public async Task<IActionResult> AddMetaAsync([FromRoute] string id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)
+    [HttpPost("{id:required:guid}/meta")]
+    public async Task<IActionResult> AddMetaAsync([FromRoute] Guid id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);
@@ -66,7 +64,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpDelete("{id:required}/meta")]
-    public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id, [FromBody] RemovePermissionMetaRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id, [FromBody] RemovePermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
         await _serviceBus.SendAsync(command, cancellationToken);

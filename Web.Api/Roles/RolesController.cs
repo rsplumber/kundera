@@ -34,8 +34,8 @@ public class RolesController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:required}")]
-    public async Task<IActionResult> RoleAsync([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpGet("{id:required:guid}")]
+    public async Task<IActionResult> RoleAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new RoleQuery(RoleId.From(id));
         var response = await _serviceBus.QueryAsync(query, cancellationToken);
@@ -43,8 +43,8 @@ public class RolesController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{id:required}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] string id,
+    [HttpDelete("{id:required:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
         var command = new DeleteRoleCommand(RoleId.From(id));
@@ -53,8 +53,8 @@ public class RolesController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{id:required}/permission")]
-    public async Task<IActionResult> AddPermissionAsync([FromRoute] string id,
+    [HttpPost("{id:required:guid}/permission")]
+    public async Task<IActionResult> AddPermissionAsync([FromRoute] Guid id,
         [FromBody] AddRolePermissionRequest request,
         CancellationToken cancellationToken)
     {
@@ -64,8 +64,8 @@ public class RolesController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id:required}/permission")]
-    public async Task<IActionResult> RemovePermissionAsync([FromRoute] string id,
+    [HttpDelete("{id:required:guid}/permission")]
+    public async Task<IActionResult> RemovePermissionAsync([FromRoute] Guid id,
         [FromBody] RemoveRolePermissionRequest request,
         CancellationToken cancellationToken)
     {
@@ -75,8 +75,8 @@ public class RolesController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{id:required}/meta")]
-    public async Task<IActionResult> AddMetaAsync([FromRoute] string id,
+    [HttpPost("{id:required:guid}/meta")]
+    public async Task<IActionResult> AddMetaAsync([FromRoute] Guid id,
         [FromBody] AddRoleMetaRequest request,
         CancellationToken cancellationToken)
     {
@@ -86,8 +86,8 @@ public class RolesController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id:required}/meta")]
-    public async Task<IActionResult> RemoveMetaAsync([FromRoute] string id,
+    [HttpDelete("{id:required:guid}/meta")]
+    public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id,
         [FromBody] RemoveRoleMetaRequest request,
         CancellationToken cancellationToken)
     {

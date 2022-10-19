@@ -7,7 +7,7 @@ namespace Web.Api.Permissions;
 
 public record AddPermissionMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {
-    public AddPermissionMetaCommand ToCommand(string permissionId) => new(PermissionId.From(permissionId), Meta);
+    public AddPermissionMetaCommand ToCommand(Guid permissionId) => new(PermissionId.From(permissionId), Meta);
 }
 
 public class AddPermissionMetaRequestValidator : RequestValidator<AddPermissionMetaRequest>
@@ -24,7 +24,7 @@ public class AddPermissionMetaRequestValidator : RequestValidator<AddPermissionM
 
 public record RemovePermissionMetaRequest(string[] MetaKeys) : IWebRequest
 {
-    public RemovePermissionMetaCommand ToCommand(string permissionId) => new(PermissionId.From(permissionId), MetaKeys);
+    public RemovePermissionMetaCommand ToCommand(Guid permissionId) => new(PermissionId.From(permissionId), MetaKeys);
 }
 
 public class RemovePermissionMetaRequestValidator : RequestValidator<RemovePermissionMetaRequest>
