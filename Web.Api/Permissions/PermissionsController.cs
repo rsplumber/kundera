@@ -29,6 +29,7 @@ public class PermissionsController : ControllerBase
 
 
     [HttpGet]
+    [Authorize("permissions_list")]
     public async Task<IActionResult> PermissionsAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
         var query = new PermissionsQuery {Name = name};
@@ -38,6 +39,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpGet("{id:required:guid}")]
+    [Authorize("permissions_get")]
     public async Task<IActionResult> PermissionAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new PermissionQuery(PermissionId.From(id));
@@ -47,6 +49,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpDelete("{id:required:guid}")]
+    [Authorize("permissions_delete")]
     public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeletePermissionCommand(PermissionId.From(id));
@@ -57,6 +60,7 @@ public class PermissionsController : ControllerBase
 
 
     [HttpPost("{id:required:guid}/meta")]
+    [Authorize("permissions_add_meta")]
     public async Task<IActionResult> AddMetaAsync([FromRoute] Guid id, [FromBody] AddPermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);
@@ -66,6 +70,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpDelete("{id:required}/meta")]
+    [Authorize("permissions_remove_meta")]
     public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id, [FromBody] RemovePermissionMetaRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand(id);

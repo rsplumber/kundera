@@ -1,4 +1,5 @@
 using Kite.CQRS;
+using KunderaNet.AspNetCore.Authorization;
 using Managements.Application.Services;
 using Managements.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize("services_create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateServiceRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
@@ -26,6 +28,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize("services_list")]
     public async Task<IActionResult> ServicesAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
         var query = new ServicesQuery {Name = name};
@@ -35,6 +38,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet("{id:required:guid}")]
+    [Authorize("services_get")]
     public async Task<IActionResult> ServiceAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new ServiceQuery(ServiceId.From(id));
@@ -45,6 +49,7 @@ public class ServicesController : ControllerBase
 
 
     [HttpDelete("{id:required:guid}")]
+    [Authorize("services_delete")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteServiceCommand(ServiceId.From(id));
@@ -55,6 +60,7 @@ public class ServicesController : ControllerBase
 
 
     [HttpPatch("{id:required:guid}/activate")]
+    [Authorize("services_activate")]
     public async Task<IActionResult> ActivateAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new ActivateServiceCommand(ServiceId.From(id));
@@ -64,6 +70,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpPatch("{id:required:guid}/de-activate")]
+    [Authorize("services_de-activate")]
     public async Task<IActionResult> DeActivateAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeActivateServiceCommand(ServiceId.From(id));
