@@ -37,6 +37,15 @@ builder.Services.AddSwaggerGen(c =>
             }
         });
 
+    c.AddSecurityDefinition("KunderaToken",
+        new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Description = "Input your token to access this API",
+        });
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -45,10 +54,9 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Token",
+                    Id = "KunderaToken",
                 },
-                Scheme = "Token",
-                Name = "Token",
+                Name = "KunderaToken",
                 In = ParameterLocation.Header,
             },
             new List<string>()
