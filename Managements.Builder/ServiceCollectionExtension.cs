@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Kite.CQRS.InMemory;
+using Kite.CQRS.InMemory.Microsoft.DependencyInjection;
 using Managements.Data.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +11,7 @@ public static class ServiceCollectionExtension
     public static void AddManagements(this IServiceCollection services, IConfiguration configuration)
     {
         var dataAssembly = services.AddManagementsData(configuration);
-        services.AddCqrsInMemory(Assembly.Load("Managements.Application"), dataAssembly);
+        var applicationAssembly = Assembly.Load("Managements.Application");
+        services.AddCqrsInMemory(applicationAssembly, dataAssembly);
     }
 }

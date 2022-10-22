@@ -14,14 +14,14 @@ public interface ICredentialService
     Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
-        int expirationTimeInSeconds = 0,
+        int expireInMinutes = 0,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 
     Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
-        int expirationTimeInSeconds,
+        int expireInMinutes,
         IPAddress? ipAddress = null,
         CancellationToken cancellationToken = default);
 

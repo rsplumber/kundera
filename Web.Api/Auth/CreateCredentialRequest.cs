@@ -23,7 +23,7 @@ public class CreateCredentialRequestValidator : RequestValidator<CreateCredentia
     }
 }
 
-public record CreateOneTimeCredentialRequest(string Username, string Password, string? Type = null, int ExpirationTimeInSeconds = 0) : IWebRequest;
+public record CreateOneTimeCredentialRequest(string Username, string Password, string? Type = null, int ExpireInMinutes = 0) : IWebRequest;
 
 public class CreateOneTimeCredentialRequestValidator : RequestValidator<CreateOneTimeCredentialRequest>
 {
@@ -43,7 +43,7 @@ public class CreateOneTimeCredentialRequestValidator : RequestValidator<CreateOn
     }
 }
 
-public record CreateTimePeriodicCredentialRequest(string Username, string Password, int ExpirationTimeInSeconds, string? Type = null) : IWebRequest;
+public record CreateTimePeriodicCredentialRequest(string Username, string Password, int ExpireInMinutes, string? Type = null) : IWebRequest;
 
 public class CreateTimePeriodicCredentialRequestValidator : RequestValidator<CreateTimePeriodicCredentialRequest>
 {
@@ -61,12 +61,12 @@ public class CreateTimePeriodicCredentialRequestValidator : RequestValidator<Cre
             .NotNull()
             .WithMessage("Enter valid Password");
 
-        RuleFor(request => request.ExpirationTimeInSeconds)
+        RuleFor(request => request.ExpireInMinutes)
             .NotEmpty()
-            .WithMessage("Enter valid ExpirationTimeInSeconds")
+            .WithMessage("Enter valid ExpireInMinutes")
             .NotNull()
-            .WithMessage("Enter valid ExpirationTimeInSeconds")
+            .WithMessage("Enter valid ExpireInMinutes")
             .LessThanOrEqualTo(0)
-            .WithMessage("Enter valid ExpirationTimeInSeconds");
+            .WithMessage("Enter valid ExpireInMinutes");
     }
 }

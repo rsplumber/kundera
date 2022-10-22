@@ -1,4 +1,5 @@
 using Kite.CQRS;
+using KunderaNet.AspNetCore.Authorization;
 using Managements.Application.Permissions;
 using Managements.Domain.Permissions;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize("permissions_create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePermissionRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();

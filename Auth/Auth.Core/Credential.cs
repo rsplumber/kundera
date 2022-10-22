@@ -29,17 +29,17 @@ public class Credential : AggregateRoot<UniqueIdentifier>
         AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, userId));
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
+    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
         this(uniqueIdentifier, password, user, lastIpAddress)
     {
-        if (expirationTimeInSeconds > 0)
+        if (expireInMinutes > 0)
         {
-            _expiresAt = DateTime.UtcNow.AddSeconds(expirationTimeInSeconds);
+            _expiresAt = DateTime.UtcNow.AddMinutes(expireInMinutes);
         }
     }
 
-    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, bool oneTime, int expirationTimeInSeconds = 0, IPAddress? lastIpAddress = null) :
-        this(uniqueIdentifier, password, userId, expirationTimeInSeconds, lastIpAddress)
+    private Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, bool oneTime, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
+        this(uniqueIdentifier, password, userId, expireInMinutes, lastIpAddress)
     {
         _oneTime = oneTime;
     }
@@ -62,7 +62,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
-        int expirationTimeInSeconds,
+        int expireInMinutes,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
@@ -72,14 +72,14 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, userId, expirationTimeInSeconds, ipAddress);
+        return new(uniqueIdentifier, password, userId, expireInMinutes, ipAddress);
     }
 
     public static async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
         Guid userId,
         bool oneTime,
-        int expirationTimeInSeconds,
+        int expireInMinutes,
         IPAddress? ipAddress,
         ICredentialRepository credentialRepository)
     {
@@ -89,7 +89,7 @@ public class Credential : AggregateRoot<UniqueIdentifier>
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        return new(uniqueIdentifier, password, userId, oneTime, expirationTimeInSeconds, ipAddress);
+        return new(uniqueIdentifier, password, userId, oneTime, expireInMinutes, ipAddress);
     }
 
     public Guid UserId => _userId;

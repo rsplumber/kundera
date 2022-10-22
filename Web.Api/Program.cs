@@ -1,5 +1,6 @@
 using Builder;
 using Kite.Web.Requests;
+using KunderaNet.Authorization.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Web.Api;
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddKundera(builder.Configuration);
 builder.Services.AddSingleton<ExceptionMiddleware>();
+builder.Services.AddKunderaAuthorization(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddRequestValidators();

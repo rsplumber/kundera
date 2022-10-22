@@ -58,12 +58,18 @@ public class DefaultDataSeeder
 
     public async Task SeedAsync()
     {
+        await SeedPermissions();
         await SeedRoleAsync();
         await SeedUserGroupAsync();
         await SeedUserAsync();
         await SeedServiceAsync();
         await SeedScopeAsync();
         await SeedCredentialAsync();
+    }
+
+    private async Task SeedPermissions()
+    {
+        await _permissionRepository.AddAsync(await Permission.FromAsync("", _permissionRepository));
     }
 
     private async Task SeedRoleAsync()

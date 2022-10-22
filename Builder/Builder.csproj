@@ -12,7 +12,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Include="Kite.Serializer.Microsoft" Version="0.0.8" />
         <PackageReference Include="Kite.Cache.InMemory" Version="0.0.8" />
-        <PackageReference Include="Kite.Hashing.HMAC" Version="0.0.8" />
+        <PackageReference Include="Kite.Hashing.HMAC" Version="0.0.81" />
     </ItemGroup>
 
     <ItemGroup>

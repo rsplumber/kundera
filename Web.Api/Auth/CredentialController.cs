@@ -31,7 +31,7 @@ public class CredentialController : AbstractAuthController
         CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        await _credentialService.CreateOneTimeAsync(uniqueIdentifier, request.Password, id, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateOneTimeAsync(uniqueIdentifier, request.Password, id, request.ExpireInMinutes, IpAddress(), cancellationToken);
 
         return Ok();
     }
@@ -42,7 +42,7 @@ public class CredentialController : AbstractAuthController
         CancellationToken cancellationToken)
     {
         var uniqueIdentifier = UniqueIdentifier.From(request.Username, request.Type);
-        await _credentialService.CreateTimePeriodicAsync(uniqueIdentifier, request.Password, id, request.ExpirationTimeInSeconds, IpAddress(), cancellationToken);
+        await _credentialService.CreateTimePeriodicAsync(uniqueIdentifier, request.Password, id, request.ExpireInMinutes, IpAddress(), cancellationToken);
 
         return Ok();
     }

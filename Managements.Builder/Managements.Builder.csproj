@@ -9,7 +9,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Kite.CQRS.InMemory" Version="0.0.81" />
+        <PackageReference Include="Kite.CQRS.InMemory.Extensions.Microsoft.DependencyInjection" Version="0.0.85" />
     </ItemGroup>
     
     <ItemGroup>
