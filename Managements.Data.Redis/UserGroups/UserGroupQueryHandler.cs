@@ -4,7 +4,7 @@ using Managements.Domain.UserGroups.Exception;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.UserGroups;
+namespace Managements.Data.UserGroups;
 
 internal sealed class UserGroupQueryHandler : IQueryHandler<UserGroupQuery, UserGroupResponse>
 {

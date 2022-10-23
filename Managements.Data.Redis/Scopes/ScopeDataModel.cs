@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Redis.Scopes;
+namespace Managements.Data.Scopes;
 
 [Document(IndexName = "scopes", StorageType = StorageType.Json, Prefixes = new[] {"scope"})]
 public class ScopeDataModel

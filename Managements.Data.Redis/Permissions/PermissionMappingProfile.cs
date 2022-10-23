@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.Permissions;
 
-namespace Managements.Data.Redis.Permissions;
+namespace Managements.Data.Permissions;
 
 public class PermissionMappingProfile : Profile
 {

@@ -1,7 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using Redis.OM.Modeling;
+﻿using Redis.OM.Modeling;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 [Document(IndexName = "sessions", StorageType = StorageType.Json, Prefixes = new[] {"sessions"})]
 internal sealed class SessionDataModel

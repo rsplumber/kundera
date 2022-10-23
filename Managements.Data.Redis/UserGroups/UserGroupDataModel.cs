@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Redis.UserGroups;
+namespace Managements.Data.UserGroups;
 
 [Document(IndexName = "groups", StorageType = StorageType.Json, Prefixes = new[] {"groups"})]
 internal sealed class UserGroupDataModel

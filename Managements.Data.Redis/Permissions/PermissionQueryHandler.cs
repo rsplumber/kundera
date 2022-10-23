@@ -4,7 +4,7 @@ using Managements.Domain.Permissions.Exceptions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Permissions;
+namespace Managements.Data.Permissions;
 
 internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, PermissionResponse>
 {

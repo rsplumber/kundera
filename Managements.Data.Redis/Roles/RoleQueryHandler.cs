@@ -4,7 +4,7 @@ using Managements.Domain.Roles.Exceptions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Roles;
+namespace Managements.Data.Roles;
 
 internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
 {

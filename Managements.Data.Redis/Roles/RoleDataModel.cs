@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Redis.Roles;
+namespace Managements.Data.Roles;
 
 [Document(IndexName = "roles", StorageType = StorageType.Json, Prefixes = new[] {"role"})]
 public class RoleDataModel

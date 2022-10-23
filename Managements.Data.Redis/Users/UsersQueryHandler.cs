@@ -3,7 +3,7 @@ using Managements.Application.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Users;
+namespace Managements.Data.Users;
 
 internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<UsersResponse>>
 {

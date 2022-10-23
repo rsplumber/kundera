@@ -3,7 +3,7 @@ using Managements.Application.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Roles;
+namespace Managements.Data.Roles;
 
 internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<RolesResponse>>
 {

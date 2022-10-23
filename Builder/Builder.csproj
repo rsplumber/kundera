@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Auth\Auth.Builder\Auth.Builder.csproj" />
+      <ProjectReference Include="..\Data.Seeder\Data.Seeder.csproj" />
       <ProjectReference Include="..\Managements.Builder\Managements.Builder.csproj" />
     </ItemGroup>
     

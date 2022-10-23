@@ -5,7 +5,7 @@ using Managements.Domain.Scopes.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Scopes;
+namespace Managements.Data.Scopes;
 
 internal class ScopeRepository : IScopeRepository
 {

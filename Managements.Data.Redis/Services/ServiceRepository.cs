@@ -5,7 +5,7 @@ using Managements.Domain.Services.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Services;
+namespace Managements.Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {

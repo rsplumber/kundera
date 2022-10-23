@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.Services;
 
-namespace Managements.Data.Redis.Services;
+namespace Managements.Data.Services;
 
 public class ServiceMappingProfile : Profile
 {

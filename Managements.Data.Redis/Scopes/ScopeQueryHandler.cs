@@ -4,7 +4,7 @@ using Managements.Domain.Roles.Exceptions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Scopes;
+namespace Managements.Data.Scopes;
 
 internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeResponse>
 {

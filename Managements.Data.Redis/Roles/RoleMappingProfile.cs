@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.Roles;
 
-namespace Managements.Data.Redis.Roles;
+namespace Managements.Data.Roles;
 
 public class RoleMappingProfile : Profile
 {

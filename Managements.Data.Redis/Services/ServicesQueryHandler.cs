@@ -3,7 +3,7 @@ using Managements.Application.Services;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Services;
+namespace Managements.Data.Services;
 
 internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
 {

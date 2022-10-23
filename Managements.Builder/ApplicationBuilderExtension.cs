@@ -1,5 +1,5 @@
 using System.Reflection;
-using Managements.Data.Redis;
+using Managements.Data;
 using Microsoft.AspNetCore.Builder;
 
 namespace Managements.Builder;

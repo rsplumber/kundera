@@ -4,7 +4,7 @@ using Managements.Domain.Users.Exception;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Users;
+namespace Managements.Data.Users;
 
 internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 {

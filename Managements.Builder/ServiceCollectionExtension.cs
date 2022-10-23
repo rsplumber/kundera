@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Kite.CQRS.InMemory.Microsoft.DependencyInjection;
-using Managements.Data.Redis;
+using Managements.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

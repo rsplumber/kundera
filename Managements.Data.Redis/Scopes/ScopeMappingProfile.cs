@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.Scopes;
 
-namespace Managements.Data.Redis.Scopes;
+namespace Managements.Data.Scopes;
 
 public class ScopeMappingProfile : Profile
 {

@@ -1,5 +1,5 @@
 ﻿using Auth.Core.Services;
-using Auth.Data.Redis;
+using Auth.Data;
 using Auth.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

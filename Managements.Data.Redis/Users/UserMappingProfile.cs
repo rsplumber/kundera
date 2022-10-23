@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.Users;
 
-namespace Managements.Data.Redis.Users;
+namespace Managements.Data.Users;
 
 internal sealed class UserMappingProfile : Profile
 {

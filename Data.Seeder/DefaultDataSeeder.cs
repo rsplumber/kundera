@@ -10,7 +10,7 @@ using Managements.Domain.UserGroups;
 using Managements.Domain.Users;
 using Microsoft.Extensions.Configuration;
 
-namespace Managements.Data.Redis;
+namespace Data.Seeder;
 
 public class DefaultDataSeeder
 {

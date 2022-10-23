@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 internal static class ServiceCollectionExtension
 {

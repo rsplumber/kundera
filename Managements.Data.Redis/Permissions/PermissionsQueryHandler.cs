@@ -3,7 +3,7 @@ using Managements.Application.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Permissions;
+namespace Managements.Data.Permissions;
 
 internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
 {

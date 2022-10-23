@@ -4,7 +4,7 @@ using Managements.Domain.Services.Exceptions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Services;
+namespace Managements.Data.Services;
 
 internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceResponse>
 {

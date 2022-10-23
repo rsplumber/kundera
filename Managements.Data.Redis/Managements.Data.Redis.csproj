@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Managements.Data</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,7 +13,6 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Include="Redis.OM" Version="0.3.1" />
         <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
-        <ProjectReference Include="..\Auth\Auth.Services\Auth.Services.csproj" />
         <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
         <PackageReference Include="AutoMapper" Version="12.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />

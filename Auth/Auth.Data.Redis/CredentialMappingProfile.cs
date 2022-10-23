@@ -1,7 +1,7 @@
 ﻿using Auth.Core;
 using AutoMapper;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 internal sealed class CredentialMappingProfile : Profile
 {

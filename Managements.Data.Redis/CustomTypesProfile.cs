@@ -11,7 +11,7 @@ using Managements.Domain.UserGroups.Types;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
 
-namespace Managements.Data.Redis;
+namespace Managements.Data;
 
 internal sealed class CustomTypesProfile : Profile
 {

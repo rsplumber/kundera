@@ -3,7 +3,7 @@ using Managements.Application.UserGroups;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.UserGroups;
+namespace Managements.Data.UserGroups;
 
 internal sealed class UserGroupsQueryHandler : IQueryHandler<UserGroupsQuery, IEnumerable<UserGroupsResponse>>
 {

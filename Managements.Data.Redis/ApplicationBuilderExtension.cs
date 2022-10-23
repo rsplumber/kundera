@@ -1,15 +1,15 @@
 using System.Reflection;
-using Managements.Data.Redis.Permissions;
-using Managements.Data.Redis.Roles;
-using Managements.Data.Redis.Scopes;
-using Managements.Data.Redis.Services;
-using Managements.Data.Redis.UserGroups;
-using Managements.Data.Redis.Users;
+using Managements.Data.Permissions;
+using Managements.Data.Roles;
+using Managements.Data.Scopes;
+using Managements.Data.Services;
+using Managements.Data.UserGroups;
+using Managements.Data.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;
 
-namespace Managements.Data.Redis;
+namespace Managements.Data;
 
 internal static class ApplicationBuilderExtension
 {
@@ -38,10 +38,6 @@ internal static class ApplicationBuilderExtension
                     dbProvider.Connection.CreateIndex(type);
                 }
             });
-
-            var seed = serviceScope.ServiceProvider.GetRequiredService<DefaultDataSeeder>();
-            seed.SeedAsync()
-                .Wait();
         }
         catch (Exception e)
         {

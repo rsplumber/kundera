@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managements.Builder", "Mana
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Api", "Web.Api\Web.Api.csproj", "{EC0D41CA-76D1-42D6-9C66-93777E42E850}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Seeder", "Data.Seeder\Data.Seeder.csproj", "{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,5 +82,9 @@ Global
 		{EC0D41CA-76D1-42D6-9C66-93777E42E850}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC0D41CA-76D1-42D6-9C66-93777E42E850}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC0D41CA-76D1-42D6-9C66-93777E42E850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

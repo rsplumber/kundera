@@ -2,7 +2,7 @@
 using Auth.Core;
 using AutoMapper;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 internal sealed class TypesMappingProfile : Profile
 {

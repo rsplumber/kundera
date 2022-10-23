@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 [Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] {"credentials"})]
 internal sealed class CredentialDataModel

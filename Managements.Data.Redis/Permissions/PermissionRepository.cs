@@ -4,7 +4,7 @@ using Managements.Domain.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Permissions;
+namespace Managements.Data.Permissions;
 
 internal class PermissionRepository : IPermissionRepository
 {

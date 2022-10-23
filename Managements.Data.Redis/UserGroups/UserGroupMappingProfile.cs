@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Managements.Domain.UserGroups;
 
-namespace Managements.Data.Redis.UserGroups;
+namespace Managements.Data.UserGroups;
 
 internal sealed class UserGroupMappingProfile : Profile
 {

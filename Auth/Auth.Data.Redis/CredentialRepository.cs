@@ -3,7 +3,7 @@ using AutoMapper;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Auth.Data.Redis;
+namespace Auth.Data;
 
 internal class CredentialRepository : ICredentialRepository
 {

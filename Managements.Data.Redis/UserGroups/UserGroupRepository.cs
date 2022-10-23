@@ -4,7 +4,7 @@ using Managements.Domain.UserGroups;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.UserGroups;
+namespace Managements.Data.UserGroups;
 
 internal class UserGroupRepository : IUserGroupRepository
 {

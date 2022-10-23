@@ -3,7 +3,7 @@ using Managements.Domain.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Redis.Users;
+namespace Managements.Data.Users;
 
 internal class UserRepository : IUserRepository
 {

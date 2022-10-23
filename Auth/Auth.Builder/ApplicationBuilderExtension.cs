@@ -1,4 +1,4 @@
-using Auth.Data.Redis;
+using Auth.Data;
 using Microsoft.AspNetCore.Builder;
 
 namespace Auth.Builder;
