@@ -1,4 +1,5 @@
 using Kite.CQRS;
+using KunderaNet.AspNetCore.Authorization;
 using Managements.Application.Roles;
 using Managements.Domain.Roles;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize("roles_create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
     {
         var command = request.ToCommand();
@@ -26,6 +28,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize("roles_list")]
     public async Task<IActionResult> RolesAsync([FromQuery] string? name, CancellationToken cancellationToken)
     {
         var query = new RolesQuery {Name = name};
@@ -35,6 +38,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{id:required:guid}")]
+    [Authorize("roles_get")]
     public async Task<IActionResult> RoleAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new RoleQuery(RoleId.From(id));
@@ -44,6 +48,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpDelete("{id:required:guid}")]
+    [Authorize("roles_delete")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
@@ -54,6 +59,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost("{id:required:guid}/permission")]
+    [Authorize("roles_add_permission")]
     public async Task<IActionResult> AddPermissionAsync([FromRoute] Guid id,
         [FromBody] AddRolePermissionRequest request,
         CancellationToken cancellationToken)
@@ -65,6 +71,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpDelete("{id:required:guid}/permission")]
+    [Authorize("roles_remove_permission")]
     public async Task<IActionResult> RemovePermissionAsync([FromRoute] Guid id,
         [FromBody] RemoveRolePermissionRequest request,
         CancellationToken cancellationToken)
@@ -76,6 +83,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost("{id:required:guid}/meta")]
+    [Authorize("roles_add_meta")]
     public async Task<IActionResult> AddMetaAsync([FromRoute] Guid id,
         [FromBody] AddRoleMetaRequest request,
         CancellationToken cancellationToken)
@@ -87,6 +95,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpDelete("{id:required:guid}/meta")]
+    [Authorize("roles_remove_meta")]
     public async Task<IActionResult> RemoveMetaAsync([FromRoute] Guid id,
         [FromBody] RemoveRoleMetaRequest request,
         CancellationToken cancellationToken)
