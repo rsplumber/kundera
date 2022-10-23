@@ -42,6 +42,12 @@ internal class PermissionRepository : IPermissionRepository
         return _mapper.Map<List<Permission>>(permissionDataModels);
     }
 
+    public async Task<Permission> FindAsync(Name name, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _permissions.FirstOrDefaultAsync(model => model.Name == name.Value);
+        return _mapper.Map<Permission>(dataModel);
+    }
+
     public async Task<IEnumerable<Permission>> FindAsync(IEnumerable<PermissionId> permissionIds, CancellationToken cancellationToken = default)
     {
         var rawPermissionIds = permissionIds.Select(id => id.ToString());
