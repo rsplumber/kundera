@@ -52,7 +52,7 @@ internal class UserGroupRepository : IUserGroupRepository
 
     public async Task<UserGroup?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
-        var userGroupDataModel = await _userGroups.FirstOrDefaultAsync(model => model.Name == name);
+        var userGroupDataModel = await _userGroups.FirstOrDefaultAsync(model => model.Name == name.Value);
 
         return _mapper.Map<UserGroup>(userGroupDataModel);
     }

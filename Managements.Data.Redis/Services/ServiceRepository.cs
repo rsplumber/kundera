@@ -34,7 +34,7 @@ internal class ServiceRepository : IServiceRepository
 
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _services.AnyAsync(model => model.Name == name);
+        return await _services.AnyAsync(model => model.Name == name.Value);
     }
 
     public async Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default)

@@ -28,6 +28,14 @@ public class Scope : AggregateRoot<ScopeId>
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
+    private Scope(Name name, ScopeSecret scopeSecret) : base(ScopeId.Generate())
+    {
+        _name = name;
+        _secret = scopeSecret;
+        ChangeStatus(ScopeStatus.Active);
+        AddDomainEvent(new ScopeCreatedEvent(Id));
+    }
+
     public static async Task<Scope> FromAsync(Name name, IHashService hashService, IScopeRepository repository)
     {
         var exists = await repository.ExistsAsync(name);
@@ -37,6 +45,18 @@ public class Scope : AggregateRoot<ScopeId>
         }
 
         return new Scope(name, hashService);
+    }
+
+    public static async Task<Scope> CreateKunderaScopeAsync(ScopeSecret scopeSecret, IScopeRepository repository)
+    {
+        const string kunderaScopeName = "kundera";
+        var exists = await repository.ExistsAsync(kunderaScopeName);
+        if (exists)
+        {
+            throw new ScopeAlreadyExistsException(kunderaScopeName);
+        }
+
+        return new Scope(kunderaScopeName, scopeSecret);
     }
 
     public Name Name => _name;

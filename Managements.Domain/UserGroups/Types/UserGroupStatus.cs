@@ -1,23 +1,49 @@
-﻿using Kite.CustomType;
-using Managements.Domain.Users.Exception;
+﻿using Managements.Domain.Users.Exception;
 
 namespace Managements.Domain.UserGroups.Types;
 
-public class UserGroupStatus : CustomType<string, UserGroupStatus>
+public sealed class UserGroupStatus
 {
     public static readonly UserGroupStatus Enable = From(nameof(Enable));
     public static readonly UserGroupStatus Disable = From(nameof(Disable));
 
-    protected override void Validate()
+    private readonly string _value;
+
+    private UserGroupStatus(string value)
     {
-        if (Value is not (
-            nameof(Enable)
-            or nameof(Disable))
-           )
+        _value = value;
+        Validate();
+    }
+
+    public static UserGroupStatus From(string value) => new(value);
+
+    private void Validate()
+    {
+        if (Value is not (nameof(Enable) or nameof(Disable)))
         {
             throw new UserStatusNotSupportedException(Value);
         }
+    }
 
-        base.Validate();
+    public string Value => _value;
+
+    private bool Equals(UserGroupStatus other)
+    {
+        return _value == other._value;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is UserGroupStatus other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return _value.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return _value;
     }
 }

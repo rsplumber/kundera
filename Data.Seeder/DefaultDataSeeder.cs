@@ -20,8 +20,9 @@ public class DefaultDataSeeder
     private const string ServiceName = "kundera";
     private readonly string _adminUsername;
     private readonly string _adminPassword;
-    private RoleId _generatedRoleId;
-    private ServiceId _generatedServiceId;
+    private readonly string _kunderaScopeSecret;
+    private RoleId? _generatedRoleId;
+    private ServiceId? _generatedServiceId;
 
     private readonly IRoleRepository _roleRepository;
     private readonly IUserGroupRepository _userGroupRepository;
@@ -53,6 +54,7 @@ public class DefaultDataSeeder
         _hashService = hashService;
         _adminPassword = configuration.GetSection("AdminPassword").Value;
         _adminUsername = configuration.GetSection("AdminUsername").Value;
+        _kunderaScopeSecret = configuration.GetSection("KunderaScopeSecret").Value;
     }
 
 
@@ -161,20 +163,19 @@ public class DefaultDataSeeder
 
     private async Task SeedRoleAsync()
     {
-        var exists = await _roleRepository.ExistsAsync(RoleName);
+        var roleExists = await _roleRepository.ExistsAsync(RoleName);
 
-        if (exists) return;
-
-        var role = await Role.FromAsync(RoleName, _roleRepository);
+        if (roleExists) return;
 
         var permissions = await _permissionRepository.FindAsync();
+
+        var role = await Role.FromAsync(RoleName, _roleRepository);
         foreach (var permission in permissions)
         {
             role.AddPermission(permission.Id);
         }
 
         await _roleRepository.AddAsync(role);
-
         _generatedRoleId = role.Id;
     }
 
@@ -197,9 +198,9 @@ public class DefaultDataSeeder
         var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
         if (userGroup is null) return;
 
-        var exists = await _userRepository.ExistsAsync(_adminUsername);
+        var userExists = await _userRepository.ExistsAsync(_adminUsername);
 
-        if (exists) return;
+        if (userExists) return;
 
         var user = await User.CreateAsync(_adminUsername, userGroup.Id, _userRepository);
         await _userRepository.AddAsync(user);
@@ -222,15 +223,14 @@ public class DefaultDataSeeder
 
         if (exists) return;
 
-        var scope = await Scope.FromAsync(ScopeName, _hashService, _scopeRepository);
         var service = await _serviceRepository.FindAsync(_generatedServiceId);
         if (service is null) return;
-
-        scope.AddService(service.Id);
 
         var role = await _roleRepository.FindAsync(_generatedRoleId);
         if (role is null) return;
 
+        var scope = await Scope.CreateKunderaScopeAsync(_kunderaScopeSecret, _scopeRepository);
+        scope.AddService(service.Id);
         scope.AddRole(role.Id);
         await _scopeRepository.AddAsync(scope);
     }

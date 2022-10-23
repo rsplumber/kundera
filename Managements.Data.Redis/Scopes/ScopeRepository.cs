@@ -34,7 +34,7 @@ internal class ScopeRepository : IScopeRepository
 
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
     {
-        return await _scopes.AnyAsync(model => model.Name == name);
+        return await _scopes.AnyAsync(model => model.Name == name.Value);
     }
 
     public async Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default)

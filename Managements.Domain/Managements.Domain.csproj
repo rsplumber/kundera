@@ -8,7 +8,6 @@
 
     <ItemGroup>
         <PackageReference Include="Kite.Domain.Contracts" Version="0.0.83" />
-        <PackageReference Include="Kite.CustomType" Version="0.0.9" />
         <PackageReference Include="Kite.Hashing.Abstractions" Version="0.0.8" />
     </ItemGroup>
 
