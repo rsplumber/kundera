@@ -24,7 +24,7 @@ public static class ServiceCollectionExtension
     {
         services.AddMicrosoftSerializer();
         services.AddCacheInMemory();
-        services.AddHashHmac();
+        services.AddHashHmac(HashingType.HMACSHA512);
     }
 
     private static void AddModules(this IServiceCollection services, IConfiguration configuration)

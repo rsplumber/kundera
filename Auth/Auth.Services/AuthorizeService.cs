@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
+using Managements.Domain;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
@@ -21,7 +22,6 @@ internal sealed class AuthorizeService : IAuthorizeService
     private readonly IServiceRepository _serviceRepository;
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IPermissionRepository _permissionRepository;
-    private const string SuperAdmin = "superadmin";
 
     public AuthorizeService(ISessionManagement sessionManagement,
         IRoleRepository roleRepository,
@@ -72,7 +72,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var service = await _serviceRepository.FindAsync(ServiceSecret.From(serviceSecret), cancellationToken);
-        if (!userRoles.Any(role => role.Name == SuperAdmin) && InvalidService())
+        if (!userRoles.Any(role => role.Name == EntityBaseValues.SuperAdminRole) && InvalidService())
         {
             throw new UnAuthorizedException();
         }

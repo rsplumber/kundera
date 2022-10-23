@@ -2,6 +2,7 @@
 using Auth.Core;
 using Auth.Core.Services;
 using Kite.Hashing;
+using Managements.Domain;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
@@ -14,10 +15,6 @@ namespace Data.Seeder;
 
 public class DefaultDataSeeder
 {
-    private const string RoleName = "superadmin";
-    private const string UserGroupName = "administrator";
-    private const string ScopeName = "identity";
-    private const string ServiceName = "kundera";
     private readonly string _adminUsername;
     private readonly string _adminPassword;
     private readonly string _kunderaScopeSecret;
@@ -163,13 +160,13 @@ public class DefaultDataSeeder
 
     private async Task SeedRoleAsync()
     {
-        var roleExists = await _roleRepository.ExistsAsync(RoleName);
+        var roleExists = await _roleRepository.ExistsAsync(EntityBaseValues.SuperAdminRole);
 
         if (roleExists) return;
 
         var permissions = await _permissionRepository.FindAsync();
 
-        var role = await Role.FromAsync(RoleName, _roleRepository);
+        var role = await Role.FromAsync(EntityBaseValues.SuperAdminRole, _roleRepository);
         foreach (var permission in permissions)
         {
             role.AddPermission(permission.Id);
@@ -185,17 +182,17 @@ public class DefaultDataSeeder
         var role = await _roleRepository.FindAsync(_generatedRoleId);
         if (role is null) return;
 
-        var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
+        var userGroup = await _userGroupRepository.FindAsync(EntityBaseValues.AdministratorUserGroup);
 
         if (userGroup is not null) return;
 
-        userGroup = await UserGroup.FromAsync(UserGroupName, role.Id, _userGroupRepository);
+        userGroup = await UserGroup.FromAsync(EntityBaseValues.AdministratorUserGroup, role.Id, _userGroupRepository);
         await _userGroupRepository.AddAsync(userGroup);
     }
 
     private async Task SeedUserAsync()
     {
-        var userGroup = await _userGroupRepository.FindAsync(UserGroupName);
+        var userGroup = await _userGroupRepository.FindAsync(EntityBaseValues.AdministratorUserGroup);
         if (userGroup is null) return;
 
         var userExists = await _userRepository.ExistsAsync(_adminUsername);
@@ -208,18 +205,18 @@ public class DefaultDataSeeder
 
     private async Task SeedServiceAsync()
     {
-        var exists = await _serviceRepository.ExistsAsync(ServiceName);
+        var exists = await _serviceRepository.ExistsAsync(EntityBaseValues.KunderaServiceName);
 
         if (exists) return;
 
-        var service = await Service.FromAsync(ServiceName, _hashService, _serviceRepository);
+        var service = await Service.FromAsync(EntityBaseValues.KunderaServiceName, _hashService, _serviceRepository);
         await _serviceRepository.AddAsync(service);
         _generatedServiceId = service.Id;
     }
 
     private async Task SeedScopeAsync()
     {
-        var exists = await _scopeRepository.ExistsAsync(ScopeName);
+        var exists = await _scopeRepository.ExistsAsync(EntityBaseValues.IdentityScopeName);
 
         if (exists) return;
 

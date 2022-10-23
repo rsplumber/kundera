@@ -49,14 +49,13 @@ public class Scope : AggregateRoot<ScopeId>
 
     public static async Task<Scope> CreateKunderaScopeAsync(ScopeSecret scopeSecret, IScopeRepository repository)
     {
-        const string kunderaScopeName = "kundera";
-        var exists = await repository.ExistsAsync(kunderaScopeName);
+        var exists = await repository.ExistsAsync(EntityBaseValues.IdentityScopeName);
         if (exists)
         {
-            throw new ScopeAlreadyExistsException(kunderaScopeName);
+            throw new ScopeAlreadyExistsException(EntityBaseValues.IdentityScopeName);
         }
 
-        return new Scope(kunderaScopeName, scopeSecret);
+        return new Scope(EntityBaseValues.IdentityScopeName, scopeSecret);
     }
 
     public Name Name => _name;
