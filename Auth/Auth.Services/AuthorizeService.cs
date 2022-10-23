@@ -63,7 +63,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var userRoles = await FetchAllRoles();
+        var userRoles = await user!.RolesWithParentRolesAsync(_userGroupRepository, _roleRepository);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole())
@@ -85,7 +85,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        return user!.Id.Value;
+        return user.Id.Value;
 
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
@@ -96,46 +96,6 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active;
 
-        async Task<IEnumerable<Role>> FetchAllRoles()
-        {
-            var userRoles = await _roleRepository.FindAsync(user.Roles.ToArray(), cancellationToken);
-            var userGroupRoles = await FetchUserGroupsRolesAsync();
-            var roles = userRoles.ToList();
-            roles.AddRange(userGroupRoles);
-            return roles;
-        }
-
         bool UserHasNotScopeRole() => !userRoles.Any(role => sessionScope.Has(role.Id));
-
-        async Task<IEnumerable<Role>> FetchUserGroupsRolesAsync()
-        {
-            var groups = await _userGroupRepository.FindAsync(user.UserGroups.ToArray(), cancellationToken);
-            var groupList = groups.ToHashSet();
-            foreach (var userGroup in groups)
-            {
-                FetchOrganizationParents(userGroup);
-            }
-
-            var roleIds = groupList.SelectMany(group => group.Roles.Select(id => id)).ToArray();
-
-            return await _roleRepository.FindAsync(roleIds, cancellationToken);
-
-            void FetchOrganizationParents(UserGroup userGroup)
-            {
-                while (true)
-                {
-                    if (userGroup.Parent is not null)
-                    {
-                        var org = _userGroupRepository.FindAsync(userGroup.Parent, cancellationToken).Result;
-                        if (org is null) continue;
-                        userGroup = org;
-                        groupList.Add(org);
-                        continue;
-                    }
-
-                    break;
-                }
-            }
-        }
     }
 }

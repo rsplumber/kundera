@@ -118,6 +118,42 @@ public class UserGroup : AggregateRoot<UserGroupId>
         return _roles.Any(id => id == role);
     }
 
+    public bool HasParent() => _parent is not null;
+
+    public async Task<IEnumerable<UserGroup>> ParentsAsync(IUserGroupRepository userGroupRepository)
+    {
+        var groups = new List<UserGroup>();
+        groups.Add(this);
+        await FetchParentsAsync(this);
+        return groups;
+
+        async Task FetchParentsAsync(UserGroup userGroup)
+        {
+            while (true)
+            {
+                if (userGroup.HasParent())
+                {
+                    var org = await userGroupRepository.FindAsync(userGroup.Parent!);
+                    if (org is null) continue;
+                    userGroup = org;
+                    groups.Add(org);
+                    continue;
+                }
+
+                break;
+            }
+        }
+    }
+
+    public async Task<IEnumerable<Role>> AllWithParentRolesAsync(IUserGroupRepository userGroupRepository, IRoleRepository roleRepository)
+    {
+        var groups = await ParentsAsync(userGroupRepository);
+
+        var roleIds = groups.SelectMany(group => group.Roles.Select(id => id)).ToArray();
+
+        return await roleRepository.FindAsync(roleIds);
+    }
+
     public void Enable() => ChangeStatus(UserGroupStatus.Enable);
 
     public void Disable() => ChangeStatus(UserGroupStatus.Disable);
