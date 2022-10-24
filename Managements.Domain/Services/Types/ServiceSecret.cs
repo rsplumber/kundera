@@ -13,8 +13,6 @@ public sealed record ServiceSecret
 
     public static implicit operator string(ServiceSecret secret) => secret.Value;
 
-    public static implicit operator ServiceSecret(string secret) => From(secret);
-
     public string Value => _value;
 
     public bool Equals(ServiceSecret? other)

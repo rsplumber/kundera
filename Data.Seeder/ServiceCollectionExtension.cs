@@ -6,6 +6,6 @@ internal static class ServiceCollectionExtension
 {
     public static void AddDataSeeder(this IServiceCollection services)
     {
-        services.AddTransient<DefaultDataSeeder>();
+        services.AddTransient<DataSeeder>();
     }
 }

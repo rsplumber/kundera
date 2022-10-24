@@ -13,8 +13,6 @@ public sealed record ScopeSecret
 
     public static implicit operator string(ScopeSecret secret) => secret.Value;
 
-    public static implicit operator ScopeSecret(string secret) => From(secret);
-
     public string Value => _value;
 
     public bool Equals(ScopeSecret? other)

@@ -37,6 +37,13 @@ internal class ScopeRepository : IScopeRepository
         return await _scopes.AnyAsync(model => model.Name == name.Value);
     }
 
+    public async Task<Scope?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Name == name.Value);
+
+        return _mapper.Map<Scope>(dataModel);
+    }
+
     public async Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default)
     {
         var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Secret == secret.Value);

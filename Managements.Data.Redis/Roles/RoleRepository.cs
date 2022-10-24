@@ -35,6 +35,12 @@ internal class RoleRepository : IRoleRepository
         return await _roles.AnyAsync(model => model.Name == name.Value);
     }
 
+    public async Task<Role?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _roles.FirstOrDefaultAsync(model => model.Name == name.Value);
+        return _mapper.Map<Role>(dataModel);
+    }
+
     public async Task<IEnumerable<Role>> FindAsync(IEnumerable<RoleId> roleIds, CancellationToken cancellationToken = default)
     {
         var rawRoleIds = roleIds.Select(id => id.ToString());
