@@ -2,11 +2,11 @@
 
 namespace Managements.Domain.Users.Exception;
 
-public class UsernameUserGroupCouldNotBeEmptyException : DomainException
+public class UsernameGroupCouldNotBeEmptyException : DomainException
 {
-    private const string DefaultMessage = "Username's usergroup could not be empty";
+    private const string DefaultMessage = "Username's group could not be empty";
 
-    public UsernameUserGroupCouldNotBeEmptyException() : base(DefaultMessage)
+    public UsernameGroupCouldNotBeEmptyException() : base(DefaultMessage)
     {
     }
 }

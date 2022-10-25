@@ -1,41 +1,41 @@
 ﻿using FluentValidation;
 using Kite.Web.Requests;
 using Managements.Application.Users;
-using Managements.Domain.UserGroups;
+using Managements.Domain.Groups;
 using Managements.Domain.Users;
 
 namespace Web.Api.Users;
 
-public record JoinUserToGroupRequest(Guid UserGroup) : IWebRequest
+public record JoinUserToGroupRequest(Guid Group) : IWebRequest
 {
-    public JoinUserToGroupCommand ToCommand(Guid userId) => new(UserId.From(userId), UserGroupId.From(UserGroup));
+    public JoinUserToGroupCommand ToCommand(Guid userId) => new(UserId.From(userId), GroupId.From(Group));
 }
 
 public class JoinUserToGroupRequestValidator : RequestValidator<JoinUserToGroupRequest>
 {
     public JoinUserToGroupRequestValidator()
     {
-        RuleFor(request => request.UserGroup)
+        RuleFor(request => request.Group)
             .NotEmpty()
-            .WithMessage("Enter a valid UserGroup")
+            .WithMessage("Enter a valid Group")
             .NotNull()
-            .WithMessage("Enter a valid UserGroup");
+            .WithMessage("Enter a valid Group");
     }
 }
 
-public record RemoveUserFromGroupRequest(Guid UserGroup) : IWebRequest
+public record RemoveUserFromGroupRequest(Guid Group) : IWebRequest
 {
-    public RemoveUserFromGroupCommand ToCommand(Guid userId) => new(UserId.From(userId), UserGroupId.From(UserGroup));
+    public RemoveUserFromGroupCommand ToCommand(Guid userId) => new(UserId.From(userId), GroupId.From(Group));
 }
 
 public class RemoveUserFromGroupRequestValidator : RequestValidator<RemoveUserFromGroupRequest>
 {
     public RemoveUserFromGroupRequestValidator()
     {
-        RuleFor(request => request.UserGroup)
+        RuleFor(request => request.Group)
             .NotEmpty()
-            .WithMessage("Enter a valid UserGroup")
+            .WithMessage("Enter a valid Group")
             .NotNull()
-            .WithMessage("Enter a valid UserGroup");
+            .WithMessage("Enter a valid Group");
     }
 }

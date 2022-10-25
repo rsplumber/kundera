@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Managements.Domain;
+using Managements.Domain.Groups;
+using Managements.Domain.Groups.Types;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Types;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
-using Managements.Domain.UserGroups;
-using Managements.Domain.UserGroups.Types;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
 
@@ -42,16 +42,16 @@ internal sealed class CustomTypesProfile : Profile
         CreateMap<UserStatus, string>()
             .ConvertUsing(u => u.Value);
 
-        CreateMap<Guid, UserGroupId>()
-            .ConvertUsing(u => UserGroupId.From(u));
+        CreateMap<Guid, GroupId>()
+            .ConvertUsing(u => GroupId.From(u));
 
-        CreateMap<UserGroupId, Guid>()
+        CreateMap<GroupId, Guid>()
             .ConvertUsing(u => u.Value);
 
-        CreateMap<string, UserGroupStatus>()
-            .ConvertUsing(u => UserGroupStatus.From(u));
+        CreateMap<string, GroupStatus>()
+            .ConvertUsing(u => GroupStatus.From(u));
 
-        CreateMap<UserGroupStatus, string>()
+        CreateMap<GroupStatus, string>()
             .ConvertUsing(u => u.Value);
 
         CreateMap<Guid, ServiceId>()

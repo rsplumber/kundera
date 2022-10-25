@@ -2,12 +2,12 @@
 using Auth.Core;
 using Auth.Core.Services;
 using Managements.Domain;
+using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
-using Managements.Domain.UserGroups;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
 
@@ -20,14 +20,14 @@ internal sealed class AuthorizeService : IAuthorizeService
     private readonly IUserRepository _userRepository;
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
-    private readonly IUserGroupRepository _userGroupRepository;
+    private readonly IGroupRepository _groupRepository;
     private readonly IPermissionRepository _permissionRepository;
 
     public AuthorizeService(ISessionManagement sessionManagement,
         IRoleRepository roleRepository,
         IUserRepository userRepository,
         IScopeRepository scopeRepository,
-        IUserGroupRepository userGroupRepository,
+        IGroupRepository groupRepository,
         IServiceRepository serviceRepository,
         IPermissionRepository permissionRepository)
     {
@@ -35,7 +35,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _roleRepository = roleRepository;
         _userRepository = userRepository;
         _scopeRepository = scopeRepository;
-        _userGroupRepository = userGroupRepository;
+        _groupRepository = groupRepository;
         _serviceRepository = serviceRepository;
         _permissionRepository = permissionRepository;
     }
@@ -63,7 +63,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var userRoles = await user!.RolesWithParentRolesAsync(_userGroupRepository, _roleRepository);
+        var userRoles = await user!.RolesWithParentRolesAsync(_groupRepository, _roleRepository);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole())

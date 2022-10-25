@@ -27,7 +27,7 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
         {
             Status = user.Status,
             Roles = user.Roles,
-            UserGroups = user.UserGroups
+            Groups = user.Groups
         };
     }
 }

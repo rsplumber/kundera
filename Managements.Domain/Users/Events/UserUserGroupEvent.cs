@@ -1,7 +1,7 @@
-﻿using Managements.Domain.UserGroups;
+﻿using Managements.Domain.Groups;
 
 namespace Managements.Domain.Users.Events;
 
-public record UserUserGroupJoinedEvent(UserId Id, UserGroupId UserGroup) : DomainEvent;
+public record UserJoinedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
 
-public record UserUserGroupEventRemovedEvent(UserId Id, UserGroupId UserGroup) : DomainEvent;
+public record UserRemovedGroupEvent(UserId Id, GroupId Group) : DomainEvent;

@@ -9,7 +9,7 @@ internal sealed class UserDataModel
 
     [Indexed] public List<string> Usernames { get; set; }
 
-    [Indexed] public List<Guid> UserGroups { get; set; }
+    [Indexed] public List<Guid> Groups { get; set; }
 
     [Indexed] public List<Guid> Roles { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using Kite.Domain.Contracts;
+using Managements.Domain.Groups;
 using Managements.Domain.Roles;
-using Managements.Domain.UserGroups;
 using Managements.Domain.Users.Events;
 using Managements.Domain.Users.Exception;
 using Managements.Domain.Users.Types;
@@ -10,7 +10,7 @@ namespace Managements.Domain.Users;
 public class User : AggregateRoot<UserId>
 {
     private readonly List<Username> _usernames = new();
-    private readonly List<UserGroupId> _userGroups = new();
+    private readonly List<GroupId> _groups = new();
     private readonly List<RoleId> _roles = new();
     private UserStatus _status;
     private string? _statusChangedReason;
@@ -20,11 +20,11 @@ public class User : AggregateRoot<UserId>
     {
     }
 
-    private User(Username username, UserGroupId userGroupId) : base(UserId.Generate())
+    private User(Username username, GroupId groupId) : base(UserId.Generate())
     {
         AddUsername(username);
 
-        JoinGroup(userGroupId);
+        JoinGroup(groupId);
 
         ChangeStatus(UserStatus.Active);
 
@@ -32,7 +32,7 @@ public class User : AggregateRoot<UserId>
     }
 
 
-    public static async Task<User> CreateAsync(Username username, UserGroupId userGroupId, IUserRepository userRepository)
+    public static async Task<User> CreateAsync(Username username, GroupId groupId, IUserRepository userRepository)
     {
         var exists = await userRepository.ExistsAsync(username);
         if (exists)
@@ -40,7 +40,7 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(username);
         }
 
-        return new User(username, userGroupId);
+        return new User(username, groupId);
     }
 
 
@@ -52,7 +52,7 @@ public class User : AggregateRoot<UserId>
 
     public DateTime StatusChangedDate => _statusChangedDate;
 
-    public IReadOnlyCollection<UserGroupId> UserGroups => _userGroups.AsReadOnly();
+    public IReadOnlyCollection<GroupId> Groups => _groups.AsReadOnly();
 
     public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
 
@@ -88,55 +88,55 @@ public class User : AggregateRoot<UserId>
         return _usernames.Any(u => u == username);
     }
 
-    public void JoinGroup(UserGroupId userGroup)
+    public void JoinGroup(GroupId group)
     {
-        if (Has(userGroup)) return;
+        if (Has(group)) return;
 
-        _userGroups.Add(userGroup);
-        AddDomainEvent(new UserUserGroupJoinedEvent(Id, userGroup));
+        _groups.Add(group);
+        AddDomainEvent(new UserJoinedGroupEvent(Id, group));
     }
 
-    public void RemoveFromGroup(UserGroupId userGroup)
+    public void RemoveFromGroup(GroupId group)
     {
-        if (!Has(userGroup)) return;
+        if (!Has(group)) return;
 
-        if (UserGroups.Count == 1)
+        if (Groups.Count == 1)
         {
-            throw new UsernameUserGroupCouldNotBeEmptyException();
+            throw new UsernameGroupCouldNotBeEmptyException();
         }
 
-        _userGroups.Remove(userGroup);
-        AddDomainEvent(new UserUserGroupEventRemovedEvent(Id, userGroup));
+        _groups.Remove(group);
+        AddDomainEvent(new UserRemovedGroupEvent(Id, group));
     }
 
-    public async Task<IEnumerable<UserGroup>> ParentsAsync(IUserGroupRepository userGroupRepository)
+    public async Task<IEnumerable<Group>> ParentsAsync(IGroupRepository groupRepository)
     {
-        var userGroups = await userGroupRepository.FindAsync(UserGroups);
-        var parentGroups = new List<UserGroup>();
-        foreach (var userGroup in userGroups)
+        var groups = await groupRepository.FindAsync(Groups);
+        var parentGroups = new List<Group>();
+        foreach (var group in groups)
         {
-            parentGroups.AddRange(await userGroup.ParentsAsync(userGroupRepository));
+            parentGroups.AddRange(await group.ParentsAsync(groupRepository));
         }
 
         return parentGroups;
     }
 
-    public async Task<IEnumerable<Role>> RolesWithParentRolesAsync(IUserGroupRepository userGroupRepository, IRoleRepository roleRepository)
+    public async Task<IEnumerable<Role>> RolesWithParentRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
     {
         var roles = new List<Role>();
         roles.AddRange(await roleRepository.FindAsync(Roles));
-        var userGroups = await ParentsAsync(userGroupRepository);
-        foreach (var userGroup in userGroups)
+        var groups = await ParentsAsync(groupRepository);
+        foreach (var group in groups)
         {
-            roles.AddRange(await userGroup.AllWithParentRolesAsync(userGroupRepository, roleRepository));
+            roles.AddRange(await group.AllWithParentRolesAsync(groupRepository, roleRepository));
         }
 
         return roles;
     }
 
-    public bool Has(UserGroupId userGroup)
+    public bool Has(GroupId group)
     {
-        return _userGroups.Any(id => id == userGroup);
+        return _groups.Any(id => id == group);
     }
 
     public void AssignRole(RoleId role)

@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Kite.Web.Requests;
 using Managements.Application.Users;
-using Managements.Domain.UserGroups;
+using Managements.Domain.Groups;
 
 namespace Web.Api.Users;
 
-public record CreateUserRequest(string Username, Guid UserGroup) : IWebRequest
+public record CreateUserRequest(string Username, Guid Group) : IWebRequest
 {
-    public CreateUserCommand ToCommand() => new(Username, UserGroupId.From(UserGroup));
+    public CreateUserCommand ToCommand() => new(Username, GroupId.From(Group));
 }
 
 public class CreateUserRequestValidator : RequestValidator<CreateUserRequest>
@@ -24,10 +24,10 @@ public class CreateUserRequestValidator : RequestValidator<CreateUserRequest>
             .NotNull()
             .WithMessage("Enter a valid Username");
 
-        RuleFor(request => request.UserGroup)
+        RuleFor(request => request.Group)
             .NotEmpty()
-            .WithMessage("Enter a valid UserGroup")
+            .WithMessage("Enter a valid Group")
             .NotNull()
-            .WithMessage("Enter a valid UserGroup");
+            .WithMessage("Enter a valid Group");
     }
 }

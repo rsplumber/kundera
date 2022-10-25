@@ -4,7 +4,6 @@ using Auth.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace Auth.Builder;
 
 internal static class ServiceCollectionExtension

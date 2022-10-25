@@ -1,9 +1,9 @@
 using System.Reflection;
+using Managements.Data.Groups;
 using Managements.Data.Permissions;
 using Managements.Data.Roles;
 using Managements.Data.Scopes;
 using Managements.Data.Services;
-using Managements.Data.UserGroups;
 using Managements.Data.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +25,7 @@ internal static class ApplicationBuilderExtension
             var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionProvider>();
             new List<Type>
             {
-                typeof(UserGroupDataModel),
+                typeof(GroupDataModel),
                 typeof(UserDataModel),
                 typeof(RoleDataModel),
                 typeof(PermissionDataModel),

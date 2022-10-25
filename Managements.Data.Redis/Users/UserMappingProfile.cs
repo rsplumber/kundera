@@ -13,7 +13,7 @@ internal sealed class UserMappingProfile : Profile
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(user => user.Id, expression => expression.MapFrom(model => model.Id))
             .ForMember("_usernames", expression => expression.MapFrom(model => model.Usernames))
-            .ForMember("_userGroups", expression => expression.MapFrom(model => model.UserGroups))
+            .ForMember("_groups", expression => expression.MapFrom(model => model.Groups))
             .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))
             .ForMember("_status", expression => expression.MapFrom(model => model.Status))
             .ForMember("_statusChangedReason", expression => expression.MapFrom(model => model.StatusChangedReason))

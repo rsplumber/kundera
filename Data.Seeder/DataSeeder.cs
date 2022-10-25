@@ -3,12 +3,12 @@ using Auth.Core;
 using Auth.Core.Services;
 using Kite.Hashing;
 using Managements.Domain;
+using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Types;
 using Managements.Domain.Services;
-using Managements.Domain.UserGroups;
 using Managements.Domain.Users;
 using Microsoft.Extensions.Configuration;
 
@@ -21,7 +21,7 @@ public class DataSeeder
     private readonly string _kunderaScopeSecret;
 
     private readonly IRoleRepository _roleRepository;
-    private readonly IUserGroupRepository _userGroupRepository;
+    private readonly IGroupRepository _groupRepository;
     private readonly IUserRepository _userRepository;
     private readonly IPermissionRepository _permissionRepository;
     private readonly IScopeRepository _scopeRepository;
@@ -32,7 +32,7 @@ public class DataSeeder
 
     public DataSeeder(IConfiguration configuration,
         IRoleRepository roleRepository,
-        IUserGroupRepository userGroupRepository,
+        IGroupRepository groupRepository,
         IUserRepository userRepository,
         IPermissionRepository permissionRepository,
         IScopeRepository scopeRepository,
@@ -41,7 +41,7 @@ public class DataSeeder
         IHashService hashService)
     {
         _roleRepository = roleRepository;
-        _userGroupRepository = userGroupRepository;
+        _groupRepository = groupRepository;
         _userRepository = userRepository;
         _permissionRepository = permissionRepository;
         _scopeRepository = scopeRepository;
@@ -72,7 +72,7 @@ public class DataSeeder
         await SeedRolePermissions();
         await SeedServicePermissions();
         await SeedScopePermissions();
-        await SeedUserGroupPermissions();
+        await SeedGroupPermissions();
         await SeedUserPermissions();
     }
 
@@ -122,19 +122,19 @@ public class DataSeeder
         await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_remove_role", _permissionRepository));
     }
 
-    private async Task SeedUserGroupPermissions()
+    private async Task SeedGroupPermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_assign_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_revoke_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_set_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_move_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_remove_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_enable", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user-groups_disable", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_create", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_list", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_get", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_delete", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_assign_role", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_revoke_role", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_set_parent", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_move_parent", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_remove_parent", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_enable", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_disable", _permissionRepository));
     }
 
     private async Task SeedUserPermissions()
@@ -170,17 +170,17 @@ public class DataSeeder
             await _roleRepository.AddAsync(role);
         }
 
-        var userGroup = await _userGroupRepository.FindAsync(EntityBaseValues.AdministratorUserGroup);
-        if (userGroup is null)
+        var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+        if (group is null)
         {
-            userGroup = await UserGroup.FromAsync(EntityBaseValues.AdministratorUserGroup, role.Id, _userGroupRepository);
-            await _userGroupRepository.AddAsync(userGroup);
+            group = await Group.FromAsync(EntityBaseValues.AdministratorGroup, role.Id, _groupRepository);
+            await _groupRepository.AddAsync(group);
         }
 
         var user = await _userRepository.FindAsync(_adminUsername);
         if (user is null)
         {
-            user = await User.CreateAsync(_adminUsername, userGroup.Id, _userRepository);
+            user = await User.CreateAsync(_adminUsername, @group.Id, _userRepository);
             await _userRepository.AddAsync(user);
 
             await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
@@ -237,11 +237,11 @@ public class DataSeeder
 
         await _roleRepository.AddAsync(role);
 
-        var userGroup = await _userGroupRepository.FindAsync(EntityBaseValues.ServiceManUserGroup);
-        if (userGroup is null)
+        var group = await _groupRepository.FindAsync(EntityBaseValues.ServiceManGroup);
+        if (group is null)
         {
-            userGroup = await UserGroup.FromAsync(EntityBaseValues.ServiceManUserGroup, role.Id, _userGroupRepository);
-            await _userGroupRepository.AddAsync(userGroup);
+            group = await Group.FromAsync(EntityBaseValues.ServiceManGroup, role.Id, _groupRepository);
+            await _groupRepository.AddAsync(group);
         }
     }
 }
