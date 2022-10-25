@@ -96,6 +96,7 @@ public class DataSeeder
         await _permissionRepository.AddAsync(await Permission.FromAsync("roles_remove_permission", _permissionRepository));
         await _permissionRepository.AddAsync(await Permission.FromAsync("roles_add_meta", _permissionRepository));
         await _permissionRepository.AddAsync(await Permission.FromAsync("roles_remove_meta", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_permissions_list", _permissionRepository));
     }
 
     private async Task SeedServicePermissions()
@@ -120,6 +121,7 @@ public class DataSeeder
         await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_remove_service", _permissionRepository));
         await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_add_role", _permissionRepository));
         await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_remove_role", _permissionRepository));
+        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_roles_list", _permissionRepository));
     }
 
     private async Task SeedGroupPermissions()
@@ -208,6 +210,8 @@ public class DataSeeder
     private async Task SeedServiceManAsync()
     {
         var permissions = await Task.WhenAll(
+            _permissionRepository.FindAsync("scopes_list"),
+            _permissionRepository.FindAsync("scopes_roles_list"),
             _permissionRepository.FindAsync("roles_create"),
             _permissionRepository.FindAsync("roles_get"),
             _permissionRepository.FindAsync("roles_delete"),
@@ -215,6 +219,7 @@ public class DataSeeder
             _permissionRepository.FindAsync("roles_remove_permission"),
             _permissionRepository.FindAsync("roles_add_meta"),
             _permissionRepository.FindAsync("roles_remove_meta"),
+            _permissionRepository.FindAsync("roles_permissions_list"),
             _permissionRepository.FindAsync("permissions_create"),
             _permissionRepository.FindAsync("permissions_get"),
             _permissionRepository.FindAsync("permissions_delete"),

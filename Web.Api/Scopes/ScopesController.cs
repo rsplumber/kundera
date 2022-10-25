@@ -37,6 +37,16 @@ public class ScopesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("{id:guid:required}/roles")]
+    [Authorize("scopes_roles_list")]
+    public async Task<IActionResult> ScopeRolesAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var query = new ScopeRolesQuery(ScopeId.From(id));
+        var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
+        return Ok(response);
+    }
+
     [HttpGet("{id:required:guid}")]
     [Authorize("scopes_get")]
     public async Task<IActionResult> ScopeAsync([FromRoute] Guid id, CancellationToken cancellationToken)

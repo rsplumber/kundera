@@ -37,6 +37,16 @@ public class RolesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("{id:guid:required}/permissions")]
+    [Authorize("roles_permissions_list")]
+    public async Task<IActionResult> RolePermissionsAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var query = new RolePermissionsQuery(RoleId.From(id));
+        var response = await _serviceBus.QueryAsync(query, cancellationToken);
+
+        return Ok(response);
+    }
+
     [HttpGet("{id:required:guid}")]
     [Authorize("roles_get")]
     public async Task<IActionResult> RoleAsync([FromRoute] Guid id, CancellationToken cancellationToken)
