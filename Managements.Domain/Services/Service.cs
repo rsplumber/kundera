@@ -1,48 +1,39 @@
 ﻿using Kite.Domain.Contracts;
 using Kite.Hashing;
 using Managements.Domain.Services.Events;
-using Managements.Domain.Services.Exceptions;
 using Managements.Domain.Services.Types;
 
 namespace Managements.Domain.Services;
 
 public class Service : AggregateRoot<ServiceId>
 {
-    private string _name;
-    private string _secret;
-    private ServiceStatus _status;
-
     protected Service()
     {
     }
 
-    private Service(Name name, IHashService hashService) : base(ServiceId.Generate())
+    internal Service(Name name, IHashService hashService) : base(ServiceId.Generate())
     {
-        _name = name;
-        _secret = hashService.Hash(Id.ToString());
+        Name = name;
+        Secret = ServiceSecret.From(hashService.Hash(Id.ToString(), Name.Value));
         ChangeStatus(ServiceStatus.Active);
         AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
-    public static async Task<Service> FromAsync(Name name, IHashService hashService, IServiceRepository repository)
+    internal Service(Name name, ServiceSecret serviceSecret) : base(ServiceId.Generate())
     {
-        var exists = await repository.ExistsAsync(name);
-        if (exists)
-        {
-            throw new ServiceAlreadyExistsException(name);
-        }
-
-        return new Service(name, hashService);
+        Name = name;
+        Secret = serviceSecret;
+        ChangeStatus(ServiceStatus.Active);
+        AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
+    public Name Name { get; internal set; }
 
-    public Name Name => _name;
+    public ServiceSecret Secret { get; internal set; }
 
-    public ServiceSecret Secret => ServiceSecret.From(_secret);
+    public ServiceStatus Status { get; internal set; }
 
-    public ServiceStatus Status => _status;
-
-    public void ChangeName(Name name) => _name = name;
+    public void ChangeName(Name name) => Name = name;
 
     public void Activate() => ChangeStatus(ServiceStatus.Active);
 
@@ -50,7 +41,7 @@ public class Service : AggregateRoot<ServiceId>
 
     private void ChangeStatus(ServiceStatus status)
     {
-        _status = status;
+        Status = status;
         AddDomainEvent(new ServiceStatusChangedEvent(Id));
     }
 }

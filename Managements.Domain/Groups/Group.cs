@@ -8,87 +8,54 @@ namespace Managements.Domain.Groups;
 
 public class Group : AggregateRoot<GroupId>
 {
-    private string _name;
-    private string? _description;
-    private GroupId? _parent;
-    private GroupStatus _status;
-    private DateTime _statusChangedDate;
-    private readonly List<RoleId> _roles = new();
-
     protected Group()
     {
     }
 
-    private Group(string name, RoleId role) : base(GroupId.Generate())
+    internal Group(Name name, RoleId role) : base(GroupId.Generate())
     {
-        _name = name;
+        Name = name;
 
-        _roles = new List<RoleId>();
         AssignRole(role);
 
         ChangeStatus(GroupStatus.Enable);
         AddDomainEvent(new GroupCreatedEvent(Id));
     }
 
-    private Group(string name, RoleId role, GroupId parent) : this(name, role)
+    internal Group(Name name, RoleId role, GroupId parent) : this(name, role)
     {
-        _parent = parent;
+        Parent = parent;
     }
 
-    public static async Task<Group> FromAsync(Name name, RoleId role, IGroupRepository groupRepository)
-    {
-        var group = await groupRepository.FindAsync(name);
-        if (group is not null)
-        {
-            throw new GroupNameDuplicateException();
-        }
 
-        return new Group(name, role);
-    }
+    public Name Name { get; internal set; }
 
-    public static async Task<Group> FromAsync(Name name, RoleId role, GroupId parent, IGroupRepository groupRepository)
-    {
-        var group = await groupRepository.FindAsync(name);
-        if (group is not null)
-        {
-            throw new GroupNameDuplicateException();
-        }
+    public Text? Description { get; internal set; }
 
-        return new Group(name, role, parent);
-    }
+    public GroupId? Parent { get; internal set; }
 
-    public string Name => _name;
+    public IReadOnlyCollection<GroupId> Childs { get; internal set; } = new List<GroupId>();
 
-    public string? Description => _description;
+    public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
 
-    public GroupId? Parent => _parent;
+    public GroupStatus Status { get; internal set; }
 
-    public GroupStatus GroupStatus => _status;
+    public DateTime StatusChangeDate { get; internal set; }
 
-    public DateTime? StatusChangedDate => _statusChangedDate;
+    public void ChangeName(Name name) => Name = name;
 
-    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
-
-    public void ChangeName(Name name)
-    {
-        _name = name;
-    }
-
-    public void ChangeDescription(Text description)
-    {
-        _description = description;
-    }
+    public void ChangeDescription(Text? description) => Description = description;
 
     public void SetParent(GroupId parent)
     {
         AddDomainEvent(new GroupParentChangedEvent(Id, parent, Parent));
-        _parent = parent;
+        Parent = parent;
     }
 
     public void RemoveParent()
     {
         AddDomainEvent(new GroupParentChangedEvent(Id, null, Parent));
-        _parent = null;
+        Parent = null;
     }
 
 
@@ -96,7 +63,9 @@ public class Group : AggregateRoot<GroupId>
     {
         if (Has(role)) return;
 
-        _roles.Add(role);
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Add(role);
+        Roles = modifiableRoles;
         AddDomainEvent(new GroupRoleAddedEvent(Id, role));
     }
 
@@ -109,34 +78,35 @@ public class Group : AggregateRoot<GroupId>
             throw new GroupRoleCouldNotBeEmptyException();
         }
 
-        _roles.Remove(role);
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Remove(role);
+        Roles = modifiableRoles;
         AddDomainEvent(new GroupRoleRemovedEvent(Id, role));
     }
 
     public bool Has(RoleId role)
     {
-        return _roles.Any(id => id == role);
+        return Roles.Any(id => id == role);
     }
 
-    public bool HasParent() => _parent is not null;
+    public bool HasParent() => Parent is not null;
 
     public async Task<IEnumerable<Group>> ParentsAsync(IGroupRepository groupRepository)
     {
-        var groups = new List<Group>();
-        groups.Add(this);
+        var groups = new List<Group>() {this};
         await FetchParentsAsync(this);
         return groups;
 
-        async Task FetchParentsAsync(Group @group)
+        async Task FetchParentsAsync(Group group)
         {
             while (true)
             {
-                if (@group.HasParent())
+                if (group.HasParent())
                 {
-                    var org = await groupRepository.FindAsync(@group.Parent!);
-                    if (org is null) continue;
-                    @group = org;
-                    groups.Add(org);
+                    var parent = await groupRepository.FindAsync(group.Parent!);
+                    if (parent is null) break;
+                    group = parent;
+                    groups.Add(group);
                     continue;
                 }
 
@@ -145,7 +115,7 @@ public class Group : AggregateRoot<GroupId>
         }
     }
 
-    public async Task<IEnumerable<Role>> AllWithParentRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
+    public async Task<IEnumerable<Role>> RolesWithParentRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
     {
         var groups = await ParentsAsync(groupRepository);
 
@@ -160,8 +130,8 @@ public class Group : AggregateRoot<GroupId>
 
     private void ChangeStatus(GroupStatus status)
     {
-        _status = status;
-        _statusChangedDate = DateTime.UtcNow;
+        Status = status;
+        StatusChangeDate = DateTime.UtcNow;
         AddDomainEvent(new GroupStatusChangedEvent(Id, status));
     }
 }

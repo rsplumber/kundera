@@ -28,7 +28,7 @@ internal sealed class AddPermissionMetaICommandHandler : ICommandHandler<AddPerm
 
         foreach (var (key, value) in dictionary)
         {
-            permission.AddMeta(key, value);
+            permission.Meta.Add(key, value);
         }
 
         await _permissionRepository.UpdateAsync(permission, cancellationToken);

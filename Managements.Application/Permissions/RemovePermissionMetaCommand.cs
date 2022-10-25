@@ -28,7 +28,7 @@ internal sealed class RemovePermissionMetaCommandHandler : ICommandHandler<Remov
 
         foreach (var meta in metaKeys)
         {
-            permission.RemoveMeta(meta);
+            permission.Meta.Remove(meta);
         }
 
         await _permissionRepository.UpdateAsync(permission, cancellationToken);

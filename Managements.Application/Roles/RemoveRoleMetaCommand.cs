@@ -27,7 +27,7 @@ internal sealed class RemoveRoleMetaCommandHandler : ICommandHandler<RemoveRoleM
 
         foreach (var metaKey in metaKeys)
         {
-            role.RemoveMeta(metaKey);
+            role.Meta.Remove(metaKey);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

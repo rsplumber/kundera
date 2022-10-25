@@ -46,8 +46,7 @@ internal class ServiceRepository : IServiceRepository
 
     public async Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _services.Where(model => model.Secret.Contains(secret.Value))
-            .FirstOrDefaultAsync();
+        var dataModel = await _services.Where(model => model.Secret == secret.Value).FirstOrDefaultAsync();
 
         return _mapper.Map<Service>(dataModel);
     }

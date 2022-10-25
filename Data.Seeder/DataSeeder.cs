@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
-using Kite.Hashing;
 using Managements.Domain;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
@@ -9,6 +8,7 @@ using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Types;
 using Managements.Domain.Services;
+using Managements.Domain.Services.Types;
 using Managements.Domain.Users;
 using Microsoft.Extensions.Configuration;
 
@@ -18,7 +18,15 @@ public class DataSeeder
 {
     private readonly string _adminUsername;
     private readonly string _adminPassword;
-    private readonly string _kunderaScopeSecret;
+    private readonly string _identityScopeSecret;
+    private readonly string _kunderaServiceSecret;
+
+    private readonly IUserFactory _userFactory;
+    private readonly IServiceFactory _serviceFactory;
+    private readonly IScopeFactory _scopeFactory;
+    private readonly IRoleFactory _roleFactory;
+    private readonly IPermissionFactory _permissionFactory;
+    private readonly IGroupFactory _groupFactory;
 
     private readonly IRoleRepository _roleRepository;
     private readonly IGroupRepository _groupRepository;
@@ -27,7 +35,6 @@ public class DataSeeder
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ICredentialService _credentialService;
-    private readonly IHashService _hashService;
 
 
     public DataSeeder(IConfiguration configuration,
@@ -38,7 +45,12 @@ public class DataSeeder
         IScopeRepository scopeRepository,
         IServiceRepository serviceRepository,
         ICredentialService credentialService,
-        IHashService hashService)
+        IUserFactory userFactory,
+        IServiceFactory serviceFactory,
+        IScopeFactory scopeFactory,
+        IRoleFactory roleFactory,
+        IPermissionFactory permissionFactory,
+        IGroupFactory groupFactory)
     {
         _roleRepository = roleRepository;
         _groupRepository = groupRepository;
@@ -47,10 +59,16 @@ public class DataSeeder
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _credentialService = credentialService;
-        _hashService = hashService;
-        _adminPassword = configuration.GetSection("AdminPassword").Value;
-        _adminUsername = configuration.GetSection("AdminUsername").Value;
-        _kunderaScopeSecret = configuration.GetSection("KunderaScopeSecret").Value;
+        _userFactory = userFactory;
+        _serviceFactory = serviceFactory;
+        _scopeFactory = scopeFactory;
+        _roleFactory = roleFactory;
+        _permissionFactory = permissionFactory;
+        _groupFactory = groupFactory;
+        _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value;
+        _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value;
+        _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value;
+        _kunderaServiceSecret = configuration.GetSection("DefaultConfigs:KunderaServiceSecret").Value;
     }
 
 
@@ -78,83 +96,83 @@ public class DataSeeder
 
     private async Task SeedPermissionPermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_add_meta", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("permissions_remove_meta", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_add_meta"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_remove_meta"));
     }
 
     private async Task SeedRolePermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_add_permission", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_remove_permission", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_add_meta", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_remove_meta", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("roles_permissions_list", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_add_permission"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_remove_permission"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_add_meta"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_remove_meta"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_permissions_list"));
     }
 
     private async Task SeedServicePermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_activate", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("services_de-activate", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_activate"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_de-activate"));
     }
 
     private async Task SeedScopePermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_active", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_de-active", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_add_service", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_remove_service", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_add_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_remove_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("scopes_roles_list", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_active"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_de-active"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_add_service"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_remove_service"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_add_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_remove_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_roles_list"));
     }
 
     private async Task SeedGroupPermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_assign_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_revoke_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_set_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_move_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_remove_parent", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_enable", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("groups_disable", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_assign_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_revoke_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_set_parent"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_move_parent"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_remove_parent"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_enable"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_disable"));
     }
 
     private async Task SeedUserPermissions()
     {
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_create", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_list", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_get", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_delete", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_add_username", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_remove_username", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_exist_username", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_assign_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_revoke_role", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_join_group", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_remove_group", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_activate", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_suspend", _permissionRepository));
-        await _permissionRepository.AddAsync(await Permission.FromAsync("user_block", _permissionRepository));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_create"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_list"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_get"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_delete"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_add_username"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_remove_username"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_exist_username"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_assign_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_revoke_role"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_join_group"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_remove_group"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_activate"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_suspend"));
+        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_block"));
     }
 
     private async Task SeedKunderaAsync()
@@ -163,7 +181,7 @@ public class DataSeeder
         if (role is null)
         {
             var permissions = await _permissionRepository.FindAsync();
-            role = await Role.FromAsync(EntityBaseValues.SuperAdminRole, _roleRepository);
+            role = await _roleFactory.CreateAsync(EntityBaseValues.SuperAdminRole);
             foreach (var permission in permissions)
             {
                 role.AddPermission(permission.Id);
@@ -175,14 +193,14 @@ public class DataSeeder
         var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
         if (group is null)
         {
-            group = await Group.FromAsync(EntityBaseValues.AdministratorGroup, role.Id, _groupRepository);
+            group = await _groupFactory.CreateAsync(EntityBaseValues.AdministratorGroup, role.Id);
             await _groupRepository.AddAsync(group);
         }
 
         var user = await _userRepository.FindAsync(_adminUsername);
         if (user is null)
         {
-            user = await User.CreateAsync(_adminUsername, @group.Id, _userRepository);
+            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
             await _userRepository.AddAsync(user);
 
             await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
@@ -191,7 +209,7 @@ public class DataSeeder
         var service = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
         if (service is null)
         {
-            service = await Service.FromAsync(EntityBaseValues.KunderaServiceName, _hashService, _serviceRepository);
+            service = await _serviceFactory.CreateKunderaServiceAsync(ServiceSecret.From(_kunderaServiceSecret));
             await _serviceRepository.AddAsync(service);
         }
 
@@ -199,7 +217,7 @@ public class DataSeeder
         var scope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
         if (scope is null)
         {
-            scope = await Scope.CreateKunderaScopeAsync(ScopeSecret.From(_kunderaScopeSecret), _scopeRepository);
+            scope = await _scopeFactory.CreateIdentityScopeAsync(ScopeSecret.From(_identityScopeSecret));
             scope.AddService(service.Id);
             scope.AddRole(role.Id);
             await _scopeRepository.AddAsync(scope);
@@ -234,7 +252,7 @@ public class DataSeeder
 
         if (roleExists) return;
 
-        var role = await Role.FromAsync(EntityBaseValues.ServiceAdminRole, _roleRepository);
+        var role = await _roleFactory.CreateAsync(EntityBaseValues.ServiceAdminRole);
         foreach (var permission in permissions)
         {
             role.AddPermission(permission.Id);
@@ -245,7 +263,7 @@ public class DataSeeder
         var group = await _groupRepository.FindAsync(EntityBaseValues.ServiceManGroup);
         if (group is null)
         {
-            group = await Group.FromAsync(EntityBaseValues.ServiceManGroup, role.Id, _groupRepository);
+            group = await _groupFactory.CreateAsync(EntityBaseValues.ServiceManGroup, role.Id);
             await _groupRepository.AddAsync(group);
         }
     }

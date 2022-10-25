@@ -9,22 +9,24 @@ public sealed record CreatePermissionCommand(Name Name, IDictionary<string, stri
 
 internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePermissionCommand>
 {
+    private readonly IPermissionFactory _permissionFactory;
     private readonly IPermissionRepository _permissionRepository;
 
-    public CreatePermissionCommandHandler(IPermissionRepository permissionRepository)
+    public CreatePermissionCommandHandler(IPermissionRepository permissionRepository, IPermissionFactory permissionFactory)
     {
         _permissionRepository = permissionRepository;
+        _permissionFactory = permissionFactory;
     }
 
     public async Task HandleAsync(CreatePermissionCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
-        var permission = await Permission.FromAsync(name, _permissionRepository);
+        var permission = await _permissionFactory.CreateAsync(name);
         if (meta is not null)
         {
             foreach (var (key, value) in meta)
             {
-                permission.AddMeta(key, value);
+                permission.Meta.Add(key, value);
             }
         }
 

@@ -9,18 +9,11 @@ namespace Managements.Domain.Users;
 
 public class User : AggregateRoot<UserId>
 {
-    private readonly List<Username> _usernames = new();
-    private readonly List<GroupId> _groups = new();
-    private readonly List<RoleId> _roles = new();
-    private UserStatus _status;
-    private string? _statusChangedReason;
-    private DateTime _statusChangedDate;
-
     protected User()
     {
     }
 
-    private User(Username username, GroupId groupId) : base(UserId.Generate())
+    internal User(Username username, GroupId groupId) : base(UserId.Generate())
     {
         AddUsername(username);
 
@@ -31,32 +24,19 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserCreatedEvent(Id));
     }
 
+    public IReadOnlyCollection<Username> Usernames { get; internal set; } = new List<Username>();
 
-    public static async Task<User> CreateAsync(Username username, GroupId groupId, IUserRepository userRepository)
-    {
-        var exists = await userRepository.ExistsAsync(username);
-        if (exists)
-        {
-            throw new UserDuplicateIdentifierException(username);
-        }
+    public IReadOnlyCollection<GroupId> Groups { get; internal set; } = new List<GroupId>();
 
-        return new User(username, groupId);
-    }
+    public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
 
+    public UserStatus Status { get; internal set; }
 
-    public IReadOnlyCollection<Username> Usernames => _usernames.AsReadOnly();
+    public Text? StatusChangeReason { get; internal set; }
 
-    public string? Reason => _statusChangedReason;
+    public DateTime StatusChangeDate { get; internal set; }
 
-    public UserStatus Status => _status;
-
-    public DateTime StatusChangedDate => _statusChangedDate;
-
-    public IReadOnlyCollection<GroupId> Groups => _groups.AsReadOnly();
-
-    public IReadOnlyCollection<RoleId> Roles => _roles.AsReadOnly();
-
-    private void ChangeReason(Text? reason) => _statusChangedReason = reason ?? null;
+    private void ChangeReason(Text? reason) => StatusChangeReason = reason;
 
     public void AddUsername(Username username)
     {
@@ -65,7 +45,9 @@ public class User : AggregateRoot<UserId>
             throw new UserDuplicateIdentifierException(username);
         }
 
-        _usernames.Add(username);
+        var modifiableUsernames = Usernames.ToList();
+        modifiableUsernames.Add(username);
+        Usernames = modifiableUsernames;
 
         AddDomainEvent(new UserUsernameAddedEvent(Id, username));
     }
@@ -79,20 +61,25 @@ public class User : AggregateRoot<UserId>
             throw new UsernameCouldNotBeEmptyException();
         }
 
-        _usernames.Remove(username);
+        var modifiableUsernames = Usernames.ToList();
+        modifiableUsernames.Remove(username);
+        Usernames = modifiableUsernames;
+
         AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
     }
 
     public bool Has(Username username)
     {
-        return _usernames.Any(u => u == username);
+        return Usernames.Any(u => u == username);
     }
 
     public void JoinGroup(GroupId group)
     {
         if (Has(group)) return;
 
-        _groups.Add(group);
+        var modifiableGroups = Groups.ToList();
+        modifiableGroups.Add(group);
+        Groups = modifiableGroups;
         AddDomainEvent(new UserJoinedGroupEvent(Id, group));
     }
 
@@ -105,30 +92,34 @@ public class User : AggregateRoot<UserId>
             throw new UsernameGroupCouldNotBeEmptyException();
         }
 
-        _groups.Remove(group);
+        var modifiableGroups = Groups.ToList();
+        modifiableGroups.Remove(group);
+        Groups = modifiableGroups;
+
         AddDomainEvent(new UserRemovedGroupEvent(Id, group));
     }
 
-    public async Task<IEnumerable<Group>> ParentsAsync(IGroupRepository groupRepository)
+    public async Task<IEnumerable<Group>> GroupsWithParentsAsync(IGroupRepository groupRepository)
     {
-        var groups = await groupRepository.FindAsync(Groups);
-        var parentGroups = new List<Group>();
-        foreach (var group in groups)
+        var currentGroups = (await groupRepository.FindAsync(Groups)).ToList();
+        var allGroups = new List<Group>();
+        foreach (var group in currentGroups)
         {
-            parentGroups.AddRange(await group.ParentsAsync(groupRepository));
+            allGroups.AddRange(await group.ParentsAsync(groupRepository));
         }
 
-        return parentGroups;
+        allGroups.AddRange(currentGroups);
+        return allGroups;
     }
 
-    public async Task<IEnumerable<Role>> RolesWithParentRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
+    public async Task<IEnumerable<Role>> RolesWithGroupsRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
     {
         var roles = new List<Role>();
         roles.AddRange(await roleRepository.FindAsync(Roles));
-        var groups = await ParentsAsync(groupRepository);
+        var groups = await GroupsWithParentsAsync(groupRepository);
         foreach (var group in groups)
         {
-            roles.AddRange(await group.AllWithParentRolesAsync(groupRepository, roleRepository));
+            roles.AddRange(await group.RolesWithParentRolesAsync(groupRepository, roleRepository));
         }
 
         return roles;
@@ -136,14 +127,17 @@ public class User : AggregateRoot<UserId>
 
     public bool Has(GroupId group)
     {
-        return _groups.Any(id => id == group);
+        return Groups.Any(id => id == group);
     }
 
     public void AssignRole(RoleId role)
     {
         if (Has(role)) return;
 
-        _roles.Add(role);
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Add(role);
+        Roles = modifiableRoles;
+
         AddDomainEvent(new UserRoleAddedEvent(Id, role));
     }
 
@@ -151,16 +145,19 @@ public class User : AggregateRoot<UserId>
     {
         if (!Has(role)) return;
 
-        _roles.Remove(role);
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Remove(role);
+        Roles = modifiableRoles;
+
         AddDomainEvent(new UserRoleRemovedEvent(Id, role));
     }
 
     public bool Has(RoleId role)
     {
-        return _roles.Any(id => id == role);
+        return Roles.Any(id => id == role);
     }
 
-    public void Activate() => ChangeStatus(UserStatus.Active, null);
+    public void Activate() => ChangeStatus(UserStatus.Active);
 
     public void Suspend(Text? reason = null) => ChangeStatus(UserStatus.Suspend, reason);
 
@@ -168,8 +165,8 @@ public class User : AggregateRoot<UserId>
 
     private void ChangeStatus(UserStatus status, Text? reason = null)
     {
-        _status = status;
-        _statusChangedDate = DateTime.UtcNow;
+        Status = status;
+        StatusChangeDate = DateTime.UtcNow;
         ChangeReason(reason);
         AddDomainEvent(new UserStatusChangedEvent(Id, status));
     }

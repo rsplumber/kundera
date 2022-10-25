@@ -13,11 +13,11 @@ public class ScopeMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(scope => scope.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
-            .ForMember("_secret", expression => expression.MapFrom(model => model.Secret))
-            .ForMember("_services", expression => expression.MapFrom(model => model.Services))
-            .ForMember("_status", expression => expression.MapFrom(model => model.Status))
-            .ForMember("_roles", expression => expression.MapFrom(model => model.Roles))
+            .ForMember(scope => scope.Name, expression => expression.MapFrom(model => model.Name))
+            .ForMember(scope => scope.Secret, expression => expression.MapFrom(model => model.Secret))
+            .ForMember(scope => scope.Services, expression => expression.MapFrom(model => model.Services))
+            .ForMember(scope => scope.Status, expression => expression.MapFrom(model => model.Status))
+            .ForMember(scope => scope.Roles, expression => expression.MapFrom(model => model.Roles))
             .ReverseMap();
     }
 }

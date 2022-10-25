@@ -28,7 +28,7 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
             Description = groups.Description,
             Parent = groups.Parent,
             Roles = groups.Roles,
-            StatusChangedDate = groups.StatusChangedDate
+            StatusChangedDate = groups.StatusChangeDate
         };
     }
 }

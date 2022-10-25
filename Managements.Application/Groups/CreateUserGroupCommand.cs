@@ -11,13 +11,15 @@ public sealed record CreateGroupCommand(Name Name, RoleId Role) : Command;
 
 internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCommand>
 {
+    private readonly IGroupFactory _groupFactory;
     private readonly IGroupRepository _groupRepository;
     private readonly IRoleRepository _roleRepository;
 
-    public CreateGroupCommandHandler(IGroupRepository groupRepository, IRoleRepository roleRepository)
+    public CreateGroupCommandHandler(IGroupRepository groupRepository, IRoleRepository roleRepository, IGroupFactory groupFactory)
     {
         _groupRepository = groupRepository;
         _roleRepository = roleRepository;
+        _groupFactory = groupFactory;
     }
 
     public async Task HandleAsync(CreateGroupCommand message, CancellationToken cancellationToken = default)
@@ -29,7 +31,7 @@ internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCom
             throw new RoleNotFoundException();
         }
 
-        var group = await Group.FromAsync(name, role.Id, _groupRepository);
+        var group = await _groupFactory.CreateAsync(name, role.Id);
         await _groupRepository.AddAsync(group, cancellationToken);
     }
 }

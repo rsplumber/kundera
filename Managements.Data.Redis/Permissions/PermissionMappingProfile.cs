@@ -13,8 +13,8 @@ public class PermissionMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(permission => permission.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
-            .ForMember("_meta", expression => expression.MapFrom(model => model.Meta))
+            .ForMember(permission => permission.Name, expression => expression.MapFrom(model => model.Name))
+            .ForMember(permission => permission.Meta, expression => expression.MapFrom(model => model.Meta))
             .ReverseMap();
     }
 }

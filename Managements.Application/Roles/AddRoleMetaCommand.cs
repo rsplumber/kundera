@@ -27,7 +27,7 @@ internal sealed class AddRoleMetaCommandHandler : ICommandHandler<AddRoleMetaCom
 
         foreach (var (key, value) in dictionary)
         {
-            role.AddMeta(key, value);
+            role.Meta.Add(key, value);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

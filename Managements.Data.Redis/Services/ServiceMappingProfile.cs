@@ -13,9 +13,9 @@ public class ServiceMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(service => service.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_name", expression => expression.MapFrom(model => model.Name))
-            .ForMember("_secret", expression => expression.MapFrom(model => model.Secret))
-            .ForMember("_status", expression => expression.MapFrom(model => model.Status))
+            .ForMember(service => service.Name, expression => expression.MapFrom(model => model.Name))
+            .ForMember(service => service.Secret, expression => expression.MapFrom(model => model.Secret))
+            .ForMember(service => service.Status, expression => expression.MapFrom(model => model.Status))
             .ReverseMap();
     }
 }

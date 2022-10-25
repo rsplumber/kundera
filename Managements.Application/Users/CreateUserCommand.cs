@@ -10,13 +10,15 @@ public sealed record CreateUserCommand(Username Username, GroupId Group) : Comma
 
 internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
 {
+    private readonly IUserFactory _userFactory;
     private readonly IUserRepository _userRepository;
     private readonly IGroupRepository _groupRepository;
 
-    public CreateUserCommandHandler(IUserRepository userRepository, IGroupRepository groupRepository)
+    public CreateUserCommandHandler(IUserFactory userFactory, IUserRepository userRepository, IGroupRepository groupRepository)
     {
         _userRepository = userRepository;
         _groupRepository = groupRepository;
+        _userFactory = userFactory;
     }
 
     public async Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
@@ -28,7 +30,7 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
             throw new GroupNotFoundException();
         }
 
-        var user = await User.CreateAsync(username, groupId, _userRepository);
+        var user = await _userFactory.CreateAsync(username, groupId);
         await _userRepository.AddAsync(user, cancellationToken);
     }
 }

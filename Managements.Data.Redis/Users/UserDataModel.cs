@@ -15,7 +15,7 @@ internal sealed class UserDataModel
 
     [Indexed] public string Status { get; set; }
 
-    public string? StatusChangedReason { get; set; }
+    public string? StatusChangeReason { get; set; }
 
-    public DateTime StatusChangedDate { get; set; }
+    public DateTime StatusChangeDate { get; set; }
 }

@@ -9,22 +9,24 @@ public sealed record CreateRoleCommand(Name Name, IDictionary<string, string>? M
 
 internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
 {
+    private readonly IRoleFactory _roleFactory;
     private readonly IRoleRepository _roleRepository;
 
-    public CreateRoleCommandHandler(IRoleRepository roleRepository)
+    public CreateRoleCommandHandler(IRoleRepository roleRepository, IRoleFactory roleFactory)
     {
         _roleRepository = roleRepository;
+        _roleFactory = roleFactory;
     }
 
     public async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
-        var role = await Role.FromAsync(name, _roleRepository);
+        var role = await _roleFactory.CreateAsync(name);
         if (meta is not null)
         {
             foreach (var (key, value) in meta)
             {
-                role.AddMeta(key, value);
+                role.Meta.Add(key, value);
             }
         }
 

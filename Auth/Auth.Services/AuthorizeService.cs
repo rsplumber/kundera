@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
-using Managements.Domain;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
@@ -63,7 +62,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var userRoles = await user!.RolesWithParentRolesAsync(_groupRepository, _roleRepository);
+        var userRoles = await user!.RolesWithGroupsRolesAsync(_groupRepository, _roleRepository);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole())
@@ -72,7 +71,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var service = await _serviceRepository.FindAsync(ServiceSecret.From(serviceSecret), cancellationToken);
-        if (!userRoles.Any(role => role.Name == EntityBaseValues.SuperAdminRole) && InvalidService())
+        if (InvalidService())
         {
             throw new UnAuthorizedException();
         }
