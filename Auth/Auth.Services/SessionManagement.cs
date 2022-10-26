@@ -43,8 +43,7 @@ internal sealed class SessionManagement : ISessionManagement
 
         if (!Expired())
         {
-            await UpdateAsync(token, ipAddress, cancellationToken);
-
+            await UpdateAsync(session, ipAddress, cancellationToken);
             return session;
         }
 
@@ -65,12 +64,8 @@ internal sealed class SessionManagement : ISessionManagement
         return await _sessionRepository.FindAsync(userId, cancellationToken);
     }
 
-    private async Task UpdateAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    private async Task UpdateAsync(Session session, IPAddress ipAddress, CancellationToken cancellationToken = default)
     {
-        var session = await _sessionRepository.FindAsync(token, cancellationToken);
-
-        if (session is null) return;
-
         session.UpdateUsage(DateTime.UtcNow, ipAddress);
         await _sessionRepository.UpdateAsync(session, cancellationToken);
     }

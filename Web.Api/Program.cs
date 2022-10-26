@@ -8,7 +8,7 @@ using Web.Api;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddKundera(builder.Configuration);
-builder.Services.AddSingleton<ExceptionMiddleware>();
+// builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddKunderaAuthorization(builder.Configuration);
 
 builder.Services.AddControllers();
@@ -67,7 +67,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 app.UseKundera();
-app.UseMiddleware<ExceptionMiddleware>();
+// app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRouting();
 app.UseHealthChecks("/health");
