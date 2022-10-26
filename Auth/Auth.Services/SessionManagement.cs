@@ -7,12 +7,14 @@ namespace Auth.Services;
 
 internal sealed class SessionManagement : ISessionManagement
 {
+    private readonly ISessionFactory _sessionFactory;
     private readonly ISessionRepository _sessionRepository;
     private readonly SessionOptions _sessionOptions;
 
-    public SessionManagement(ISessionRepository sessionRepository, IOptions<SessionOptions> sessionOptions)
+    public SessionManagement(ISessionRepository sessionRepository, IOptions<SessionOptions> sessionOptions, ISessionFactory sessionFactory)
     {
         _sessionRepository = sessionRepository;
+        _sessionFactory = sessionFactory;
         _sessionOptions = sessionOptions.Value;
     }
 
@@ -20,7 +22,7 @@ internal sealed class SessionManagement : ISessionManagement
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
-        var session = Session.Create(token,
+        var session = await _sessionFactory.CreateAsync(token,
             refreshToken,
             scopeId,
             userId,

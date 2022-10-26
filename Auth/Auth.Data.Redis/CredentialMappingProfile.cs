@@ -12,13 +12,13 @@ internal sealed class CredentialMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
-            .ForMember("_password", expression => expression.MapFrom(model => model.Password))
-            .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
-            .ForMember("_lastLoggedIn", expression => expression.MapFrom(model => model.LastLoggedIn.ToUniversalTime()))
-            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt == null ? model.ExpiresAt : model.ExpiresAt.Value.ToUniversalTime()))
-            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
-            .ForMember("_oneTime", expression => expression.MapFrom(model => model.OneTime))
+            .ForMember(credential => credential.UserId, expression => expression.MapFrom(model => model.UserId))
+            .ForMember(credential => credential.Password, expression => expression.MapFrom(model => model.Password))
+            .ForMember(credential => credential.LastIpAddress, expression => expression.MapFrom(model => model.LastIpAddress))
+            .ForMember(credential => credential.LastLoggedIn, expression => expression.MapFrom(model => model.LastLoggedIn.ToUniversalTime()))
+            .ForMember(credential => credential.ExpiresAt, expression => expression.MapFrom(model => model.ExpiresAt == null ? model.ExpiresAt : model.ExpiresAt.Value.ToUniversalTime()))
+            .ForMember(credential => credential.CreatedDate, expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
+            .ForMember(credential => credential.OneTime, expression => expression.MapFrom(model => model.OneTime))
             .ReverseMap();
     }
 }

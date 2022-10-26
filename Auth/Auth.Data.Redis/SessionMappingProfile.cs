@@ -12,13 +12,13 @@ internal sealed class SessionMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember("_refreshToken", expression => expression.MapFrom(model => model.RefreshToken))
-            .ForMember("_scopeId", expression => expression.MapFrom(model => model.ScopeId))
-            .ForMember("_userId", expression => expression.MapFrom(model => model.UserId))
-            .ForMember("_expiresAt", expression => expression.MapFrom(model => model.ExpiresAt.ToUniversalTime()))
-            .ForMember("_createdDate", expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
-            .ForMember("_lastUsageDate", expression => expression.MapFrom(model => model.LastUsageDate.ToUniversalTime()))
-            .ForMember("_lastIpAddress", expression => expression.MapFrom(model => model.LastIpAddress))
+            .ForMember(credential => credential.RefreshToken, expression => expression.MapFrom(model => model.RefreshToken))
+            .ForMember(credential => credential.ScopeId, expression => expression.MapFrom(model => model.ScopeId))
+            .ForMember(credential => credential.UserId, expression => expression.MapFrom(model => model.UserId))
+            .ForMember(credential => credential.ExpiresAt, expression => expression.MapFrom(model => model.ExpiresAt.ToUniversalTime()))
+            .ForMember(credential => credential.CreatedDate, expression => expression.MapFrom(model => model.CreatedDate.ToUniversalTime()))
+            .ForMember(credential => credential.LastUsageDate, expression => expression.MapFrom(model => model.LastUsageDate.ToUniversalTime()))
+            .ForMember(credential => credential.LastIpAddress, expression => expression.MapFrom(model => model.LastIpAddress))
             .ReverseMap();
     }
 }

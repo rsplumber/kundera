@@ -13,5 +13,13 @@
         <PackageReference Include="Kite.Domain.Contracts" Version="0.0.83" />
 
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Managements.Domain\Managements.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Auth.Builder" />
+    </ItemGroup>
     
 </Project>
