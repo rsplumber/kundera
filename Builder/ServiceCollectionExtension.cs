@@ -2,6 +2,7 @@
 using Data.Seeder;
 using Kite.Cache.InMemory;
 using Kite.Hashing.HMAC;
+using Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection;
 using Kite.Serializer.Microsoft;
 using Managements.Builder;
 using Microsoft.Extensions.Configuration;

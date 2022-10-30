@@ -16,7 +16,7 @@ public static class ApplicationBuilderExtension
 
     private static void UseModules(this IApplicationBuilder app)
     {
-        app.ConfigureAuth();
-        app.ConfigureManagements();
+        app.UseAuth();
+        app.UseManagements();
     }
 }

@@ -6,7 +6,7 @@ namespace Managements.Builder;
 
 internal static class ApplicationBuilderExtension
 {
-    public static Assembly ConfigureManagements(this IApplicationBuilder app)
+    public static Assembly UseManagements(this IApplicationBuilder app)
     {
         app.ConfigureManagementsData();
         return Assembly.GetExecutingAssembly();

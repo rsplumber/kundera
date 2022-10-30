@@ -5,7 +5,7 @@ namespace Auth.Builder;
 
 internal static class ApplicationBuilderExtension
 {
-    public static void ConfigureAuth(this IApplicationBuilder app)
+    public static void UseAuth(this IApplicationBuilder app)
     {
         app.ConfigureAuthData();
     }
