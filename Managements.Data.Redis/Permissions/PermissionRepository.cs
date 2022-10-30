@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kite.Events;
 using Managements.Domain;
 using Managements.Domain.Permissions;
 using Redis.OM;
@@ -8,19 +9,22 @@ namespace Managements.Data.Permissions;
 
 internal class PermissionRepository : IPermissionRepository
 {
+    private readonly IEventBus _eventBus;
     private readonly RedisCollection<PermissionDataModel> _permissions;
     private readonly IMapper _mapper;
 
-    public PermissionRepository(RedisConnectionProvider provider, IMapper mapper)
+    public PermissionRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
         _mapper = mapper;
+        _eventBus = eventBus;
     }
 
     public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.InsertAsync(permission);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
@@ -60,6 +64,7 @@ internal class PermissionRepository : IPermissionRepository
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
         await _permissions.UpdateAsync(permission);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)

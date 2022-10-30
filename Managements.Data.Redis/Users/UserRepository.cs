@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kite.Events;
 using Managements.Domain.Users;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -7,6 +8,7 @@ namespace Managements.Data.Users;
 
 internal class UserRepository : IUserRepository
 {
+    private readonly IEventBus _eventBus;
     private readonly RedisCollection<UserDataModel> _users;
     private readonly IMapper _mapper;
 
@@ -20,6 +22,7 @@ internal class UserRepository : IUserRepository
     {
         var userDataModel = _mapper.Map<UserDataModel>(entity);
         await _users.InsertAsync(userDataModel);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
@@ -46,6 +49,7 @@ internal class UserRepository : IUserRepository
     {
         var userDataModel = _mapper.Map<UserDataModel>(entity);
         await _users.InsertAsync(userDataModel);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public Task DeleteAsync(UserId id, CancellationToken cancellationToken = default)

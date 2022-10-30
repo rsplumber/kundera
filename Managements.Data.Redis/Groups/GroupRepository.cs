@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kite.Events;
 using Managements.Domain;
 using Managements.Domain.Groups;
 using Redis.OM;
@@ -8,13 +9,15 @@ namespace Managements.Data.Groups;
 
 internal class GroupRepository : IGroupRepository
 {
+    private readonly IEventBus _eventBus;
     private readonly RedisCollection<GroupDataModel> _groups;
     private readonly IMapper _mapper;
 
 
-    public GroupRepository(RedisConnectionProvider provider, IMapper mapper)
+    public GroupRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
     {
         _mapper = mapper;
+        _eventBus = eventBus;
         _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
     }
 
@@ -22,6 +25,7 @@ internal class GroupRepository : IGroupRepository
     {
         var dataModel = _mapper.Map<GroupDataModel>(entity);
         await _groups.InsertAsync(dataModel);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Group?> FindAsync(GroupId id, CancellationToken cancellationToken = default)
@@ -34,6 +38,7 @@ internal class GroupRepository : IGroupRepository
     {
         var dataModel = _mapper.Map<GroupDataModel>(entity);
         await _groups.UpdateAsync(dataModel);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)

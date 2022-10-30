@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Kite.CQRS.InMemory.Microsoft.DependencyInjection;
+using Kite.Events.InMemory.Extensions.Microsoft.DependencyInjection;
 using Managements.Data;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
@@ -25,5 +26,7 @@ public static class ServiceCollectionExtension
         var dataAssembly = services.AddManagementsData(configuration);
         var applicationAssembly = Assembly.Load("Managements.Application");
         services.AddCqrsInMemory(applicationAssembly, dataAssembly);
+        
+        services.AddEventsInMemory(dataAssembly);
     }
 }

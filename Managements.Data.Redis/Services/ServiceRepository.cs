@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kite.Events;
 using Managements.Domain;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
@@ -9,20 +10,23 @@ namespace Managements.Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {
+    private readonly IEventBus _eventBus;
     private readonly RedisCollection<ServiceDataModel> _services;
     private readonly IMapper _mapper;
 
 
-    public ServiceRepository(RedisConnectionProvider provider, IMapper mapper)
+    public ServiceRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
         _mapper = mapper;
+        _eventBus = eventBus;
     }
 
     public async Task AddAsync(Service entity, CancellationToken cancellationToken = default)
     {
         var service = _mapper.Map<ServiceDataModel>(entity);
         await _services.InsertAsync(service);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
@@ -55,6 +59,7 @@ internal class ServiceRepository : IServiceRepository
     {
         var service = _mapper.Map<ServiceDataModel>(entity);
         await _services.UpdateAsync(service);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public Task DeleteAsync(ServiceId id, CancellationToken cancellationToken = default)
