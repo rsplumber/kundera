@@ -15,7 +15,7 @@ internal sealed class GroupDataModel
 
     [Indexed] public string Status { get; set; }
     
-    [Indexed] public List<Guid> Childs { get; set; }
+    [Indexed] public List<Guid> Children { get; set; }
 
     public DateTime StatusChangeDate { get; set; }
 

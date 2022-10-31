@@ -19,7 +19,7 @@ internal sealed class GroupMappingProfile : Profile
             .ForMember(group => group.Status, expression => expression.MapFrom(model => model.Status))
             .ForMember(group => group.StatusChangeDate, expression => expression.MapFrom(model => model.StatusChangeDate.ToUniversalTime()))
             .ForMember(group => group.Roles, expression => expression.MapFrom(model => model.Roles))
-            .ForMember(group => group.Childs, expression => expression.MapFrom(model => model.Childs))
+            .ForMember(group => group.Children, expression => expression.MapFrom(model => model.Children))
             .ReverseMap();
     }
 }

@@ -54,6 +54,50 @@ internal class GroupRepository : IGroupRepository
         return dataModels.Values.Select(model => _mapper.Map<Group>(model));
     }
 
+    public async Task<IEnumerable<Group>> FindChildrenAsync(GroupId id, CancellationToken cancellationToken = default)
+    {
+        var currentGroup = await _groups.FindByIdAsync(id.Value.ToString());
+        if (currentGroup is null) return Array.Empty<Group>();
+        var dataModels = new List<GroupDataModel>();
+        await FetchChildrenAsync(currentGroup);
+
+        return dataModels.Select(model => _mapper.Map<Group>(model));
+
+        async Task FetchChildrenAsync(GroupDataModel group)
+        {
+            while (group.Children.Count > 0)
+            {
+                var ids = group.Children.Select(groupId => groupId.ToString()).ToArray();
+                var children = await _groups.FindByIdsAsync(ids);
+                dataModels.AddRange(children.Values!);
+                foreach (var groupDataModel in children.Values)
+                {
+                    await FetchChildrenAsync(groupDataModel!);
+                }
+            }
+        }
+    }
+
+    public async Task<IEnumerable<Group>> FindParentsAsync(GroupId id, CancellationToken cancellationToken = default)
+    {
+        var currentGroup = await _groups.FindByIdAsync(id.Value.ToString());
+        if (currentGroup is null) return Array.Empty<Group>();
+        var dataModels = new List<GroupDataModel>();
+        await FetchParentsAsync(currentGroup);
+        return dataModels.Select(model => _mapper.Map<Group>(model));
+
+        async Task FetchParentsAsync(GroupDataModel group)
+        {
+            while (group.Parent is not null)
+            {
+                var parent = await _groups.FindByIdAsync(group.Parent.ToString()!);
+                if (parent is null) break;
+                group = parent;
+                dataModels.Add(group);
+            }
+        }
+    }
+
     public async Task<Group?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
         var dataModel = await _groups.FirstOrDefaultAsync(model => model.Name == name.Value);

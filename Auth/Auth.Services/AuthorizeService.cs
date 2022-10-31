@@ -62,7 +62,27 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var userRoles = await user!.RolesWithGroupsRolesAsync(_groupRepository, _roleRepository);
+        var userGroups = new List<Group>();
+        foreach (var userGroupId in user!.Groups)
+        {
+            var userGroup = await _groupRepository.FindAsync(userGroupId, cancellationToken);
+            if (userGroup is null)
+            {
+                throw new UnAuthorizedException();
+            }
+
+            userGroups.Add(userGroup);
+            var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
+            userGroups.AddRange(children);
+        }
+
+
+        var allRoles = new List<Role>();
+        var userRoles = await _roleRepository.FindAsync(user.Roles, cancellationToken);
+        allRoles.AddRange(userRoles);
+        var groupsRolesIds = userGroups.SelectMany(group => group.Roles);
+        var groupRoles = await _roleRepository.FindAsync(groupsRolesIds, cancellationToken);
+        allRoles.AddRange(groupRoles);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole())
@@ -77,7 +97,9 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
 
-        var permissionIds = userRoles.SelectMany(role => role.Permissions.Select(id => id));
+        var permissionIds = allRoles.DistinctBy(role => role.Id)
+            .SelectMany(role => role.Permissions.Distinct());
+
         var permissions = await _permissionRepository.FindAsync(permissionIds, cancellationToken);
         if (!permissions.Any(permission => permission.Name.Value.Equals(action.ToLower())))
         {

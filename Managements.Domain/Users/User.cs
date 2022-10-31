@@ -99,32 +99,6 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserRemovedGroupEvent(Id, group));
     }
 
-    public async Task<IEnumerable<Group>> GroupsWithParentsAsync(IGroupRepository groupRepository)
-    {
-        var currentGroups = (await groupRepository.FindAsync(Groups)).ToList();
-        var allGroups = new List<Group>();
-        foreach (var group in currentGroups)
-        {
-            allGroups.AddRange(await group.ParentsAsync(groupRepository));
-        }
-
-        allGroups.AddRange(currentGroups);
-        return allGroups;
-    }
-
-    public async Task<IEnumerable<Role>> RolesWithGroupsRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
-    {
-        var roles = new List<Role>();
-        roles.AddRange(await roleRepository.FindAsync(Roles));
-        var groups = await GroupsWithParentsAsync(groupRepository);
-        foreach (var group in groups)
-        {
-            roles.AddRange(await group.RolesWithParentRolesAsync(groupRepository, roleRepository));
-        }
-
-        return roles;
-    }
-
     public bool Has(GroupId group)
     {
         return Groups.Any(id => id == group);

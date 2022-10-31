@@ -34,7 +34,7 @@ public class Group : AggregateRoot<GroupId>
 
     public GroupId? Parent { get; internal set; }
 
-    public IReadOnlyCollection<GroupId> Childs { get; internal set; } = new List<GroupId>();
+    public IReadOnlyCollection<GroupId> Children { get; internal set; } = new List<GroupId>();
 
     public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
 
@@ -91,38 +91,7 @@ public class Group : AggregateRoot<GroupId>
 
     public bool HasParent() => Parent is not null;
 
-    public async Task<IEnumerable<Group>> ParentsAsync(IGroupRepository groupRepository)
-    {
-        var groups = new List<Group>() {this};
-        await FetchParentsAsync(this);
-        return groups;
-
-        async Task FetchParentsAsync(Group group)
-        {
-            while (true)
-            {
-                if (group.HasParent())
-                {
-                    var parent = await groupRepository.FindAsync(group.Parent!);
-                    if (parent is null) break;
-                    group = parent;
-                    groups.Add(group);
-                    continue;
-                }
-
-                break;
-            }
-        }
-    }
-
-    public async Task<IEnumerable<Role>> RolesWithParentRolesAsync(IGroupRepository groupRepository, IRoleRepository roleRepository)
-    {
-        var groups = await ParentsAsync(groupRepository);
-
-        var roleIds = groups.SelectMany(group => group.Roles.Select(id => id)).ToArray();
-
-        return await roleRepository.FindAsync(roleIds);
-    }
+    public bool HasChild() => Children.Count > 0;
 
     public void Enable() => ChangeStatus(GroupStatus.Enable);
 
