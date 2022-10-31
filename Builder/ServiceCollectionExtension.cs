@@ -1,9 +1,9 @@
 ﻿using Auth.Builder;
 using Data.Seeder;
-using Kite.Cache.InMemory;
+using Kite.Cache.InMemory.Extensions.Microsoft.DependencyInjection;
 using Kite.Hashing.HMAC;
 using Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection;
-using Kite.Serializer.Microsoft;
+using Kite.Serializer.Microsoft.Extensions.Microsoft.DependencyInjection;
 using Managements.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,14 +14,12 @@ public static class ServiceCollectionExtension
 {
     public static void AddKundera(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddLibrariesDependencies();
-
+        services.AddLibraries();
         services.AddModules(configuration);
-
         services.AddDataSeeder();
     }
 
-    private static void AddLibrariesDependencies(this IServiceCollection services)
+    private static void AddLibraries(this IServiceCollection services)
     {
         services.AddMicrosoftSerializer();
         services.AddCacheInMemory();
