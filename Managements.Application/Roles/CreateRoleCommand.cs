@@ -22,13 +22,6 @@ internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleComma
     {
         var (name, meta) = message;
         var role = await _roleFactory.CreateAsync(name);
-        if (meta is not null)
-        {
-            foreach (var (key, value) in meta)
-            {
-                role.Meta.Add(key, value);
-            }
-        }
 
         await _roleRepository.AddAsync(role, cancellationToken);
     }

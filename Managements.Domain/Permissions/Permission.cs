@@ -9,9 +9,17 @@ public class Permission : AggregateRoot<PermissionId>
     {
     }
 
-    internal Permission(Name name) : base(PermissionId.Generate())
+    internal Permission(Name name, IDictionary<string, string>? meta = null) : base(PermissionId.Generate())
     {
         Name = name;
+        if (meta is not null)
+        {
+            foreach (var (key, value) in meta)
+            {
+                Meta.Add(key, value);
+            }
+        }
+
         AddDomainEvent(new PermissionCreatedEvent(Id));
     }
 

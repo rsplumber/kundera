@@ -10,15 +10,22 @@ public class Role : AggregateRoot<RoleId>
     {
     }
 
-    internal Role(Name name) : base(RoleId.Generate())
+    internal Role(Name name, IDictionary<string, string>? meta = null) : base(RoleId.Generate())
     {
         Name = name;
+        if (meta is not null)
+        {
+            foreach (var (key, value) in meta)
+            {
+                Meta.Add(key, value);
+            }
+        }
+
         AddDomainEvent(new RoleCreatedEvent(Id));
     }
 
-
     public Name Name { get; internal set; }
-    
+
     public IReadOnlyCollection<PermissionId> Permissions { get; internal set; } = new List<PermissionId>();
 
     public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();

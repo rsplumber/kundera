@@ -13,5 +13,7 @@ public sealed record GroupResponse(Guid Id, string Name, string Status)
 
     public DateTime? StatusChangedDate { get; set; }
 
-    public IEnumerable<Guid> Roles { get; set; }
+    public IEnumerable<GroupRoleResponse> Roles { get; set; }
 }
+
+public sealed record GroupRoleResponse(Guid Id, string Name);

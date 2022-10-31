@@ -193,7 +193,7 @@ public class DataSeeder
         var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
         if (group is null)
         {
-            group = await _groupFactory.CreateAsync(EntityBaseValues.AdministratorGroup, role.Id);
+            group = await _groupFactory.CreateAdministratorAsync();
             await _groupRepository.AddAsync(group);
         }
 

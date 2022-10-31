@@ -4,7 +4,7 @@ namespace Managements.Domain.Permissions;
 
 public interface IPermissionFactory
 {
-    Task<Permission> CreateAsync(Name name);
+    Task<Permission> CreateAsync(Name name, IDictionary<string, string>? meta = null);
 }
 
 internal sealed class PermissionFactory : IPermissionFactory
@@ -17,7 +17,7 @@ internal sealed class PermissionFactory : IPermissionFactory
         _permissionRepository = permissionRepository;
     }
 
-    public async Task<Permission> CreateAsync(Name name)
+    public async Task<Permission> CreateAsync(Name name, IDictionary<string, string>? meta = null)
     {
         var exists = await _permissionRepository.ExistsAsync(name);
         if (exists)
@@ -25,6 +25,6 @@ internal sealed class PermissionFactory : IPermissionFactory
             throw new PermissionAlreadyExistsException(name);
         }
 
-        return new Permission(name);
+        return new Permission(name, meta);
     }
 }

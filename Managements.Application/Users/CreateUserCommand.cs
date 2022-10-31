@@ -24,12 +24,6 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
     public async Task HandleAsync(CreateUserCommand message, CancellationToken cancellationToken = default)
     {
         var (username, groupId) = message;
-        var group = await _groupRepository.FindAsync(message.Group, cancellationToken);
-        if (group is null)
-        {
-            throw new GroupNotFoundException();
-        }
-
         var user = await _userFactory.CreateAsync(username, groupId);
         await _userRepository.AddAsync(user, cancellationToken);
     }
