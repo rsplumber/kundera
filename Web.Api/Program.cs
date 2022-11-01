@@ -1,6 +1,7 @@
 using Builder;
 using Kite.Web.Requests;
 using KunderaNet.Authorization.Microsoft.DependencyInjection;
+using KunderaNet.Authorization.Swagger.Extensions;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Web.Api;
@@ -35,32 +36,7 @@ builder.Services.AddSwaggerGen(c =>
                 Email = "sha.a.wf@gmail.com"
             }
         });
-
-    c.AddSecurityDefinition("KunderaToken",
-        new OpenApiSecurityScheme
-        {
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Description = "Input your token to access this API",
-        });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "KunderaToken",
-                },
-                Name = "KunderaToken",
-                In = ParameterLocation.Header,
-            },
-            new List<string>()
-        },
-    });
+    c.AddKunderaHeaders();
 });
 
 var app = builder.Build();
@@ -81,8 +57,8 @@ app.MapControllers();
 
 // if (app.Environment.IsDevelopment())
 // {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 // }
 
 await app.RunAsync();
