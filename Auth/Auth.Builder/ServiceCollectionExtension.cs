@@ -1,4 +1,5 @@
-﻿using Auth.Core;
+﻿using Auth.BackgroundJobs;
+using Auth.Core;
 using Auth.Core.Services;
 using Auth.Data;
 using Auth.Services;
@@ -23,5 +24,7 @@ internal static class ServiceCollectionExtension
         services.AddScoped<IAuthenticateService, AuthenticateService>();
         services.AddScoped<ICredentialService, CredentialService>();
         services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
+
+        services.AddBackgroundJobs();
     }
 }

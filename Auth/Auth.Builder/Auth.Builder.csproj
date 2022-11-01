@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Managements.Domain\Managements.Domain.csproj" />
+        <ProjectReference Include="..\Auth.BackgroundJobs\Auth.BackgroundJobs.csproj" />
         <ProjectReference Include="..\Auth.Services\Auth.Services.csproj" />
         <ProjectReference Include="..\Auth.Data.Redis\Auth.Data.Redis.csproj" />
     </ItemGroup>

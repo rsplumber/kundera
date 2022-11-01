@@ -9,4 +9,6 @@ public interface ISessionRepository : IRepository<Session, Token>, IUpdateServic
     Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
 }

@@ -5,4 +5,6 @@ namespace Auth.Core;
 public interface ICredentialRepository : IRepository<Credential, UniqueIdentifier>, IDeleteService<UniqueIdentifier>, IUpdateService<Credential>
 {
     Task<bool> ExistsAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
+
+    Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
 }

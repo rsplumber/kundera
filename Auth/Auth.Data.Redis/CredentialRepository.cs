@@ -40,6 +40,16 @@ internal class CredentialRepository : ICredentialRepository
         return await _credentials.AnyAsync(model => model.Id == uniqueIdentifier.Value);
     }
 
+    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
+    {
+        var credentials = await _credentials.ToListAsync();
+        var expiredCredentials = credentials.Where(model => DateTime.UtcNow >= model.CreatedDate.ToUniversalTime());
+        foreach (var credential in expiredCredentials)
+        {
+            await _credentials.DeleteAsync(credential);
+        }
+    }
+
     public async Task UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<CredentialDataModel>(entity);

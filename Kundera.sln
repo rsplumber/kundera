@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{6CCE08
 		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.BackgroundJobs", "Auth\Auth.BackgroundJobs\Auth.BackgroundJobs.csproj", "{51097C1F-953F-4EBD-94E5-5BAB617AC8C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,7 @@ Global
 		{7CDEA9E7-1063-41B8-A6DB-6CE334109E62} = {ADCD454B-5C37-4840-9028-5D9C68EF63C3}
 		{6D63F88D-3955-4BA6-BAC4-8EFF00B73B62} = {ADCD454B-5C37-4840-9028-5D9C68EF63C3}
 		{F37749B4-703C-4641-8483-1081F3034505} = {ADCD454B-5C37-4840-9028-5D9C68EF63C3}
+		{51097C1F-953F-4EBD-94E5-5BAB617AC8C0} = {D5E43B89-A44B-426D-A5B1-3163DC23487A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7CDEA9E7-1063-41B8-A6DB-6CE334109E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -93,5 +96,9 @@ Global
 		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFA12D4A-8C91-4FDC-B40F-D7EBD96BD6E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51097C1F-953F-4EBD-94E5-5BAB617AC8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51097C1F-953F-4EBD-94E5-5BAB617AC8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51097C1F-953F-4EBD-94E5-5BAB617AC8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51097C1F-953F-4EBD-94E5-5BAB617AC8C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
