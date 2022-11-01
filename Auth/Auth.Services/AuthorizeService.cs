@@ -98,7 +98,8 @@ internal sealed class AuthorizeService : IAuthorizeService
 
 
         var permissionIds = allRoles.DistinctBy(role => role.Id)
-            .SelectMany(role => role.Permissions.Distinct());
+            .SelectMany(role => role.Permissions)
+            .Distinct();
 
         var permissions = await _permissionRepository.FindAsync(permissionIds, cancellationToken);
         if (!permissions.Any(permission => permission.Name.Value.Equals(action.ToLower())))
@@ -106,8 +107,9 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        return user.Id.Value;
 
+        return user.Id.Value;
+        
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidService()
@@ -117,6 +119,6 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active;
 
-        bool UserHasNotScopeRole() => !userRoles.Any(role => sessionScope.Has(role.Id));
+        bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
     }
 }

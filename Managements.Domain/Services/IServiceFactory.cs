@@ -30,7 +30,9 @@ internal sealed class ServiceFactory : IServiceFactory
             throw new ServiceAlreadyExistsException(name);
         }
 
-        return new Service(name, _hashService);
+        var service = new Service(name, _hashService);
+        await _serviceRepository.AddAsync(service);
+        return service;
     }
 
     public async Task<Service> CreateKunderaServiceAsync(ServiceSecret serviceSecret)
@@ -41,6 +43,8 @@ internal sealed class ServiceFactory : IServiceFactory
             throw new ServiceAlreadyExistsException(EntityBaseValues.KunderaServiceName);
         }
 
-        return new Service(EntityBaseValues.KunderaServiceName, serviceSecret);
+        var service = new Service(EntityBaseValues.KunderaServiceName, serviceSecret);
+        await _serviceRepository.AddAsync(service);
+        return service;
     }
 }

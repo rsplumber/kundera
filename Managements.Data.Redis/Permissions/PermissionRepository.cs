@@ -22,16 +22,15 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
     {
-        var permission = _mapper.Map<PermissionDataModel>(entity);
-        await _permissions.InsertAsync(permission);
+        var dataModel = _mapper.Map<PermissionDataModel>(entity);
+        await _permissions.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
     {
-        var permissionDataModel = await _permissions.FindByIdAsync(id.ToString());
-
-        return _mapper.Map<Permission>(permissionDataModel);
+        var dataModel = await _permissions.FindByIdAsync(id.ToString());
+        return _mapper.Map<Permission>(dataModel);
     }
 
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
@@ -41,9 +40,8 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default)
     {
-        var permissionDataModels = await _permissions.ToListAsync();
-
-        return _mapper.Map<List<Permission>>(permissionDataModels);
+        var dataModels = await _permissions.ToListAsync();
+        return _mapper.Map<List<Permission>>(dataModels);
     }
 
     public async Task<Permission> FindAsync(Name name, CancellationToken cancellationToken = default)
@@ -56,14 +54,13 @@ internal class PermissionRepository : IPermissionRepository
     {
         var rawPermissionIds = permissionIds.Select(id => id.ToString());
         var dataModels = await _permissions.FindByIdsAsync(rawPermissionIds);
-
         return dataModels.Values.Select(model => _mapper.Map<Permission>(model));
     }
 
     public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
     {
         var permission = _mapper.Map<PermissionDataModel>(entity);
-        await _permissions.UpdateAsync(permission);
+        await _permissions.InsertAsync(permission);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 

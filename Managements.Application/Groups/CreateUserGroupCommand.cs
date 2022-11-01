@@ -6,23 +6,20 @@ using Managements.Domain.Roles;
 
 namespace Managements.Application.Groups;
 
-public sealed record CreateGroupCommand(Name Name, RoleId Role) : Command;
+public sealed record CreateGroupCommand(Name Name, RoleId Role, GroupId? Parent = null) : Command;
 
 internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCommand>
 {
     private readonly IGroupFactory _groupFactory;
-    private readonly IGroupRepository _groupRepository;
 
-    public CreateGroupCommandHandler(IGroupRepository groupRepository, IGroupFactory groupFactory)
+    public CreateGroupCommandHandler(IGroupFactory groupFactory)
     {
-        _groupRepository = groupRepository;
         _groupFactory = groupFactory;
     }
 
     public async Task HandleAsync(CreateGroupCommand message, CancellationToken cancellationToken = default)
     {
-        var (name, roleId) = message;
-        var group = await _groupFactory.CreateAsync(name, roleId);
-        await _groupRepository.AddAsync(group, cancellationToken);
+        var (name, roleId, parent) = message;
+        await _groupFactory.CreateAsync(name, roleId, parent);
     }
 }

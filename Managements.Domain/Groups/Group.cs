@@ -58,6 +58,24 @@ public class Group : AggregateRoot<GroupId>
         Parent = null;
     }
 
+    public void AddChild(GroupId child)
+    {
+        if (HasChild(child)) return;
+        var modifiableChildren = Children.ToList();
+        modifiableChildren.Add(child);
+        Children = modifiableChildren;
+        AddDomainEvent(new GroupChildAddedEvent(Id, child));
+    }
+
+    public void RemoveChild(GroupId child)
+    {
+        if (!HasChild(child)) return;
+        var modifiableChildren = Children.ToList();
+        modifiableChildren.Remove(child);
+        Children = modifiableChildren;
+        AddDomainEvent(new GroupChildRemovedEvent(Id, child));
+    }
+
 
     public void AssignRole(RoleId role)
     {
@@ -91,7 +109,11 @@ public class Group : AggregateRoot<GroupId>
 
     public bool HasParent() => Parent is not null;
 
+    public bool HasParent(GroupId group) => Parent == group;
+
     public bool HasChild() => Children.Count > 0;
+
+    public bool HasChild(GroupId child) => Children.Any(id => id == child);
 
     public void Enable() => ChangeStatus(GroupStatus.Enable);
 

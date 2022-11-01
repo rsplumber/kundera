@@ -34,6 +34,8 @@ internal sealed class UserFactory : IUserFactory
             throw new GroupNotFoundException();
         }
 
-        return new User(username, groupId);
+        var user = new User(username, groupId);
+        await _userRepository.AddAsync(user);
+        return user;
     }
 }

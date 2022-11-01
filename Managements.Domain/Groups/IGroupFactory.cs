@@ -6,9 +6,7 @@ namespace Managements.Domain.Groups;
 
 public interface IGroupFactory
 {
-    Task<Group> CreateAsync(Name name, RoleId role);
-
-    Task<Group> CreateAsync(Name name, RoleId role, GroupId parent);
+    Task<Group> CreateAsync(Name name, RoleId role, GroupId? parent = null);
 
     Task<Group> CreateAdministratorAsync();
 }
@@ -25,50 +23,49 @@ internal sealed class GroupFactory : IGroupFactory
         _roleRepository = roleRepository;
     }
 
-    public async Task<Group> CreateAsync(Name name, RoleId roleId)
+    public async Task<Group> CreateAsync(Name name, RoleId roleId, GroupId? parent = null)
     {
-        var group = await _groupRepository.FindAsync(name);
-        if (group is not null)
+        var existsGroup = await _groupRepository.FindAsync(name);
+        if (existsGroup is not null)
         {
             throw new GroupNameDuplicateException();
         }
 
-        var administratorGroup = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
-        if (administratorGroup is null)
+        var role = await _roleRepository.FindAsync(roleId);
+        if (role is null)
+        {
+            throw new RoleNotFoundException();
+        }
+
+        Group? selectedParent;
+        if (parent is null)
+        {
+            selectedParent = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+        }
+        else
+        {
+            selectedParent = await _groupRepository.FindAsync(parent);
+        }
+
+        if (selectedParent is null)
         {
             throw new GroupNotFoundException();
         }
 
-        var role = await _roleRepository.FindAsync(roleId);
-        if (role is null)
-        {
-            throw new RoleNotFoundException();
-        }
 
-        return new Group(name, role.Id, administratorGroup.Id);
-    }
+        var group = new Group(name, role.Id, selectedParent.Id);
+        await _groupRepository.AddAsync(group);
 
-    public async Task<Group> CreateAsync(Name name, RoleId roleId, GroupId parent)
-    {
-        var group = await _groupRepository.FindAsync(name);
-        if (group is not null)
-        {
-            throw new GroupNameDuplicateException();
-        }
+        selectedParent.AddChild(group.Id);
+        await _groupRepository.UpdateAsync(selectedParent);
 
-        var role = await _roleRepository.FindAsync(roleId);
-        if (role is null)
-        {
-            throw new RoleNotFoundException();
-        }
-
-        return new Group(name, role.Id, parent);
+        return group;
     }
 
     public async Task<Group> CreateAdministratorAsync()
     {
-        var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
-        if (group is not null)
+        var existsGroup = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+        if (existsGroup is not null)
         {
             throw new GroupNameDuplicateException();
         }
@@ -79,6 +76,9 @@ internal sealed class GroupFactory : IGroupFactory
             throw new RoleNotFoundException();
         }
 
-        return new Group(EntityBaseValues.AdministratorGroup, role.Id);
+        var group = new Group(EntityBaseValues.AdministratorGroup, role.Id);
+        await _groupRepository.AddAsync(group);
+
+        return group;
     }
 }

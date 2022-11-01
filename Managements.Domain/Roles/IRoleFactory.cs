@@ -25,6 +25,9 @@ internal sealed class RoleFactory : IRoleFactory
             throw new RoleAlreadyExistsException(name);
         }
 
-        return new Role(name, meta);
+        var role = new Role(name, meta);
+        await _roleRepository.AddAsync(role);
+
+        return role;
     }
 }

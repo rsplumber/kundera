@@ -31,7 +31,10 @@ internal sealed class ScopeFactory : IScopeFactory
             throw new ScopeAlreadyExistsException(name);
         }
 
-        return new Scope(name, _hashService);
+        var scope = new Scope(name, _hashService);
+        await _scopeRepository.AddAsync(scope);
+
+        return scope;
     }
 
     public async Task<Scope> CreateIdentityScopeAsync(ScopeSecret serviceSecret)
@@ -42,6 +45,9 @@ internal sealed class ScopeFactory : IScopeFactory
             throw new ScopeAlreadyExistsException(EntityBaseValues.IdentityScopeName);
         }
 
-        return new Scope(EntityBaseValues.IdentityScopeName, serviceSecret);
+        var scope = new Scope(EntityBaseValues.IdentityScopeName, serviceSecret);
+        await _scopeRepository.AddAsync(scope);
+
+        return scope;
     }
 }

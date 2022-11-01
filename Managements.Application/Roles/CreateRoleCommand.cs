@@ -10,19 +10,15 @@ public sealed record CreateRoleCommand(Name Name, IDictionary<string, string>? M
 internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
 {
     private readonly IRoleFactory _roleFactory;
-    private readonly IRoleRepository _roleRepository;
 
-    public CreateRoleCommandHandler(IRoleRepository roleRepository, IRoleFactory roleFactory)
+    public CreateRoleCommandHandler(IRoleFactory roleFactory)
     {
-        _roleRepository = roleRepository;
         _roleFactory = roleFactory;
     }
 
     public async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
     {
         var (name, meta) = message;
-        var role = await _roleFactory.CreateAsync(name);
-
-        await _roleRepository.AddAsync(role, cancellationToken);
+        await _roleFactory.CreateAsync(name, meta);
     }
 }

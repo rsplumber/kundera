@@ -12,24 +12,24 @@ internal class UserRepository : IUserRepository
     private readonly RedisCollection<UserDataModel> _users;
     private readonly IMapper _mapper;
 
-    public UserRepository(RedisConnectionProvider provider, IMapper mapper)
+    public UserRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
     {
         _mapper = mapper;
+        _eventBus = eventBus;
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
     public async Task AddAsync(User entity, CancellationToken cancellationToken = default)
     {
-        var userDataModel = _mapper.Map<UserDataModel>(entity);
-        await _users.InsertAsync(userDataModel);
+        var dataModel = _mapper.Map<UserDataModel>(entity);
+        await _users.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
     {
-        var userDataModel = await _users.FindByIdAsync(id.Value.ToString());
-
-        return _mapper.Map<User>(userDataModel);
+        var dataModel = await _users.FindByIdAsync(id.Value.ToString());
+        return _mapper.Map<User>(dataModel);
     }
 
     public async Task<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
@@ -39,16 +39,15 @@ internal class UserRepository : IUserRepository
 
     public async Task<User?> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
-        var userDataModel = await _users.Where(model => model.Usernames.Contains(username))
+        var dataModel = await _users.Where(model => model.Usernames.Contains(username))
             .FirstOrDefaultAsync();
-
-        return _mapper.Map<User>(userDataModel);
+        return _mapper.Map<User>(dataModel);
     }
 
     public async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
     {
-        var userDataModel = _mapper.Map<UserDataModel>(entity);
-        await _users.InsertAsync(userDataModel);
+        var dataModel = _mapper.Map<UserDataModel>(entity);
+        await _users.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 

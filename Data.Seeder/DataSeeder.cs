@@ -96,83 +96,83 @@ public class DataSeeder
 
     private async Task SeedPermissionPermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_add_meta"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("permissions_remove_meta"));
+        await _permissionFactory.CreateAsync("permissions_create");
+        await _permissionFactory.CreateAsync("permissions_list");
+        await _permissionFactory.CreateAsync("permissions_get");
+        await _permissionFactory.CreateAsync("permissions_delete");
+        await _permissionFactory.CreateAsync("permissions_add_meta");
+        await _permissionFactory.CreateAsync("permissions_remove_meta");
     }
 
     private async Task SeedRolePermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_add_permission"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_remove_permission"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_add_meta"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_remove_meta"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("roles_permissions_list"));
+        await _permissionFactory.CreateAsync("roles_create");
+        await _permissionFactory.CreateAsync("roles_list");
+        await _permissionFactory.CreateAsync("roles_get");
+        await _permissionFactory.CreateAsync("roles_delete");
+        await _permissionFactory.CreateAsync("roles_add_permission");
+        await _permissionFactory.CreateAsync("roles_remove_permission");
+        await _permissionFactory.CreateAsync("roles_add_meta");
+        await _permissionFactory.CreateAsync("roles_remove_meta");
+        await _permissionFactory.CreateAsync("roles_permissions_list");
     }
 
     private async Task SeedServicePermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_activate"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("services_de-activate"));
+        await _permissionFactory.CreateAsync("services_create");
+        await _permissionFactory.CreateAsync("services_list");
+        await _permissionFactory.CreateAsync("services_get");
+        await _permissionFactory.CreateAsync("services_delete");
+        await _permissionFactory.CreateAsync("services_activate");
+        await _permissionFactory.CreateAsync("services_de-activate");
     }
 
     private async Task SeedScopePermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_active"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_de-active"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_add_service"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_remove_service"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_add_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_remove_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("scopes_roles_list"));
+        await _permissionFactory.CreateAsync("scopes_create");
+        await _permissionFactory.CreateAsync("scopes_list");
+        await _permissionFactory.CreateAsync("scopes_get");
+        await _permissionFactory.CreateAsync("scopes_delete");
+        await _permissionFactory.CreateAsync("scopes_active");
+        await _permissionFactory.CreateAsync("scopes_de-active");
+        await _permissionFactory.CreateAsync("scopes_add_service");
+        await _permissionFactory.CreateAsync("scopes_remove_service");
+        await _permissionFactory.CreateAsync("scopes_add_role");
+        await _permissionFactory.CreateAsync("scopes_remove_role");
+        await _permissionFactory.CreateAsync("scopes_roles_list");
     }
 
     private async Task SeedGroupPermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_assign_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_revoke_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_set_parent"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_move_parent"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_remove_parent"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_enable"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("groups_disable"));
+        await _permissionFactory.CreateAsync("groups_create");
+        await _permissionFactory.CreateAsync("groups_list");
+        await _permissionFactory.CreateAsync("groups_get");
+        await _permissionFactory.CreateAsync("groups_delete");
+        await _permissionFactory.CreateAsync("groups_assign_role");
+        await _permissionFactory.CreateAsync("groups_revoke_role");
+        await _permissionFactory.CreateAsync("groups_set_parent");
+        await _permissionFactory.CreateAsync("groups_move_parent");
+        await _permissionFactory.CreateAsync("groups_remove_parent");
+        await _permissionFactory.CreateAsync("groups_enable");
+        await _permissionFactory.CreateAsync("groups_disable");
     }
 
     private async Task SeedUserPermissions()
     {
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_create"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_list"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_get"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_delete"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_add_username"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_remove_username"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_exist_username"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_assign_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_revoke_role"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_join_group"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_remove_group"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_activate"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_suspend"));
-        await _permissionRepository.AddAsync(await _permissionFactory.CreateAsync("user_block"));
+        await _permissionFactory.CreateAsync("user_create");
+        await _permissionFactory.CreateAsync("user_list");
+        await _permissionFactory.CreateAsync("user_get");
+        await _permissionFactory.CreateAsync("user_delete");
+        await _permissionFactory.CreateAsync("user_add_username");
+        await _permissionFactory.CreateAsync("user_remove_username");
+        await _permissionFactory.CreateAsync("user_exist_username");
+        await _permissionFactory.CreateAsync("user_assign_role");
+        await _permissionFactory.CreateAsync("user_revoke_role");
+        await _permissionFactory.CreateAsync("user_join_group");
+        await _permissionFactory.CreateAsync("user_remove_group");
+        await _permissionFactory.CreateAsync("user_activate");
+        await _permissionFactory.CreateAsync("user_suspend");
+        await _permissionFactory.CreateAsync("user_block");
     }
 
     private async Task SeedKunderaAsync()
@@ -187,22 +187,19 @@ public class DataSeeder
                 role.AddPermission(permission.Id);
             }
 
-            await _roleRepository.AddAsync(role);
+            await _roleRepository.UpdateAsync(role);
         }
 
         var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
         if (group is null)
         {
             group = await _groupFactory.CreateAdministratorAsync();
-            await _groupRepository.AddAsync(group);
         }
 
         var user = await _userRepository.FindAsync(_adminUsername);
         if (user is null)
         {
             user = await _userFactory.CreateAsync(_adminUsername, group.Id);
-            await _userRepository.AddAsync(user);
-
             await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
         }
 
@@ -210,7 +207,6 @@ public class DataSeeder
         if (service is null)
         {
             service = await _serviceFactory.CreateKunderaServiceAsync(ServiceSecret.From(_kunderaServiceSecret));
-            await _serviceRepository.AddAsync(service);
         }
 
 
@@ -220,7 +216,7 @@ public class DataSeeder
             scope = await _scopeFactory.CreateIdentityScopeAsync(ScopeSecret.From(_identityScopeSecret));
             scope.AddService(service.Id);
             scope.AddRole(role.Id);
-            await _scopeRepository.AddAsync(scope);
+            await _scopeRepository.UpdateAsync(scope);
         }
     }
 
@@ -258,13 +254,12 @@ public class DataSeeder
             role.AddPermission(permission.Id);
         }
 
-        await _roleRepository.AddAsync(role);
+        await _roleRepository.UpdateAsync(role);
 
         var group = await _groupRepository.FindAsync(EntityBaseValues.ServiceManGroup);
         if (group is null)
         {
-            group = await _groupFactory.CreateAsync(EntityBaseValues.ServiceManGroup, role.Id);
-            await _groupRepository.AddAsync(group);
+            await _groupFactory.CreateAsync(EntityBaseValues.ServiceManGroup, role.Id);
         }
     }
 }

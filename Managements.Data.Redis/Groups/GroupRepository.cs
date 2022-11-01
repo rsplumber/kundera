@@ -37,7 +37,7 @@ internal class GroupRepository : IGroupRepository
     public async Task UpdateAsync(Group entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<GroupDataModel>(entity);
-        await _groups.UpdateAsync(dataModel);
+        await _groups.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
@@ -50,7 +50,6 @@ internal class GroupRepository : IGroupRepository
     {
         var rawGroupIds = ids.Select(id => id.Value.ToString());
         var dataModels = await _groups.FindByIdsAsync(rawGroupIds);
-
         return dataModels.Values.Select(model => _mapper.Map<Group>(model));
     }
 
@@ -65,15 +64,13 @@ internal class GroupRepository : IGroupRepository
 
         async Task FetchChildrenAsync(GroupDataModel group)
         {
-            while (group.Children.Count > 0)
+            if (group.Children.Count == 0) return;
+            var ids = group.Children.Select(groupId => groupId.ToString()).ToArray();
+            var children = (await _groups.FindByIdsAsync(ids)).Values;
+            dataModels.AddRange(children!);
+            foreach (var groupDataModel in children)
             {
-                var ids = group.Children.Select(groupId => groupId.ToString()).ToArray();
-                var children = await _groups.FindByIdsAsync(ids);
-                dataModels.AddRange(children.Values!);
-                foreach (var groupDataModel in children.Values)
-                {
-                    await FetchChildrenAsync(groupDataModel!);
-                }
+                await FetchChildrenAsync(groupDataModel!);
             }
         }
     }

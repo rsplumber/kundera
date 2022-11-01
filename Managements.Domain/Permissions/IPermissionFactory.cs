@@ -25,6 +25,8 @@ internal sealed class PermissionFactory : IPermissionFactory
             throw new PermissionAlreadyExistsException(name);
         }
 
-        return new Permission(name, meta);
+        var permission = new Permission(name, meta);
+        await _permissionRepository.AddAsync(permission);
+        return permission;
     }
 }

@@ -22,16 +22,15 @@ internal class RoleRepository : IRoleRepository
 
     public async Task AddAsync(Role entity, CancellationToken cancellationToken = default)
     {
-        var role = _mapper.Map<RoleDataModel>(entity);
-        await _roles.InsertAsync(role);
+        var dataModel = _mapper.Map<RoleDataModel>(entity);
+        await _roles.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
     {
-        var roleDataModel = await _roles.FindByIdAsync(id.ToString());
-
-        return _mapper.Map<Role>(roleDataModel);
+        var dataModel = await _roles.FindByIdAsync(id.ToString());
+        return _mapper.Map<Role>(dataModel);
     }
 
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
@@ -49,14 +48,13 @@ internal class RoleRepository : IRoleRepository
     {
         var rawRoleIds = roleIds.Select(id => id.ToString());
         var dataModels = await _roles.FindByIdsAsync(rawRoleIds);
-
         return dataModels.Values.Select(model => _mapper.Map<Role>(model));
     }
 
     public async Task UpdateAsync(Role entity, CancellationToken cancellationToken = default)
     {
         var role = _mapper.Map<RoleDataModel>(entity);
-        await _roles.UpdateAsync(role);
+        await _roles.InsertAsync(role);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 

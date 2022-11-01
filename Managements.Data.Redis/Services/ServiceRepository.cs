@@ -24,16 +24,15 @@ internal class ServiceRepository : IServiceRepository
 
     public async Task AddAsync(Service entity, CancellationToken cancellationToken = default)
     {
-        var service = _mapper.Map<ServiceDataModel>(entity);
-        await _services.InsertAsync(service);
+        var dataModel = _mapper.Map<ServiceDataModel>(entity);
+        await _services.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
     {
-        var serviceDataModel = await _services.FindByIdAsync(id.ToString());
-
-        return _mapper.Map<Service>(serviceDataModel);
+        var dataModel = await _services.FindByIdAsync(id.ToString());
+        return _mapper.Map<Service>(dataModel);
     }
 
     public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
@@ -44,21 +43,19 @@ internal class ServiceRepository : IServiceRepository
     public async Task<Service?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
         var dataModel = await _services.FirstOrDefaultAsync(model => model.Name == name.Value);
-
         return _mapper.Map<Service>(dataModel);
     }
 
     public async Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default)
     {
         var dataModel = await _services.Where(model => model.Secret == secret.Value).FirstOrDefaultAsync();
-
         return _mapper.Map<Service>(dataModel);
     }
 
     public async Task UpdateAsync(Service entity, CancellationToken cancellationToken = default)
     {
-        var service = _mapper.Map<ServiceDataModel>(entity);
-        await _services.UpdateAsync(service);
+        var dataModel = _mapper.Map<ServiceDataModel>(entity);
+        await _services.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
