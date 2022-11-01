@@ -25,22 +25,19 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
-
         return _mapper.Map<Session>(dataModel);
     }
 
     public async Task UpdateAsync(Session entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<SessionDataModel>(entity);
-        await _sessions.UpdateAsync(dataModel);
+        await _sessions.InsertAsync(dataModel);
     }
 
     public async Task DeleteAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
-
         if (dataModel is null) return;
-
         await _sessions.DeleteAsync(dataModel);
     }
 
@@ -52,7 +49,6 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.ToListAsync();
-
         return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 

@@ -22,14 +22,12 @@ internal sealed class SessionManagement : ISessionManagement
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
-        var session = await _sessionFactory.CreateAsync(token,
+        await _sessionFactory.CreateAsync(token,
             refreshToken,
             scopeId,
             userId,
             expiresAt,
             ipAddress);
-
-        await _sessionRepository.AddAsync(session, cancellationToken);
     }
 
     public async Task DeleteAsync(Token token, CancellationToken cancellationToken = default)

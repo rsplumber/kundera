@@ -46,6 +46,8 @@ internal sealed class CredentialFactory : ICredentialFactory
             throw new UsernameNotFoundException();
         }
 
-        return new(uniqueIdentifier, password, userId, oneTime, expireInMinutes, ipAddress);
+        var credential = new Credential(uniqueIdentifier, password, userId, oneTime, expireInMinutes, ipAddress);
+        await _credentialRepository.AddAsync(credential);
+        return credential;
     }
 }

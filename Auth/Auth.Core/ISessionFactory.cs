@@ -14,8 +14,17 @@ public interface ISessionFactory
 
 internal sealed class SessionFactory : ISessionFactory
 {
-    public Task<Session> CreateAsync(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
+    private readonly ISessionRepository _sessionRepository;
+
+    public SessionFactory(ISessionRepository sessionRepository)
     {
-        return Task.FromResult(new Session(token, refreshToken, scopeId, userId, expireDate, lastIpAddress));
+        _sessionRepository = sessionRepository;
+    }
+
+    public async Task<Session> CreateAsync(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
+    {
+        var session = new Session(token, refreshToken, scopeId, userId, expireDate, lastIpAddress);
+        await _sessionRepository.AddAsync(session);
+        return session;
     }
 }

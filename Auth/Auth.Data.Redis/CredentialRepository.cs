@@ -25,16 +25,13 @@ internal class CredentialRepository : ICredentialRepository
     public async Task<Credential?> FindAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
-
         return _mapper.Map<Credential>(dataModel);
     }
 
     public async Task DeleteAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _credentials.FindByIdAsync(id.Value);
-
         if (dataModel is null) return;
-
         await _credentials.DeleteAsync(dataModel);
     }
 
@@ -46,6 +43,6 @@ internal class CredentialRepository : ICredentialRepository
     public async Task UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
     {
         var dataModel = _mapper.Map<CredentialDataModel>(entity);
-        await _credentials.UpdateAsync(dataModel);
+        await _credentials.InsertAsync(dataModel);
     }
 }

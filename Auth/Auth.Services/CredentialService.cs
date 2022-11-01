@@ -19,34 +19,31 @@ internal class CredentialService : ICredentialService
     public async Task CreateAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
-        var credential = await _credentialFactory.CreateAsync(uniqueIdentifier,
+        await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
-            ipAddress: ipAddress);
-        await _credentialRepository.AddAsync(credential, cancellationToken);
+            ipAddress);
     }
 
     public async Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
-        var credential = await _credentialFactory.CreateAsync(uniqueIdentifier,
+        await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
             ipAddress,
             expireInMinutes);
-        await _credentialRepository.AddAsync(credential, cancellationToken);
     }
 
     public async Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await ValidateUser(uniqueIdentifier, userId, cancellationToken);
-        var credential = await _credentialFactory.CreateAsync(uniqueIdentifier,
+        await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
             ipAddress,
             expireInMinutes,
             true);
-        await _credentialRepository.AddAsync(credential, cancellationToken);
     }
 
     public async Task UpdateUsageAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
