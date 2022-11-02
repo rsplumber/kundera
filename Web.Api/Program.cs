@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseKestrel();
+builder.WebHost.UseUrls("https://+:7179");
 builder.Services.AddKundera(builder.Configuration);
 builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddKunderaAuthorization(builder.Configuration);
