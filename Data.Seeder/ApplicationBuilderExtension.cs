@@ -10,14 +10,7 @@ internal static class ApplicationBuilderExtension
         using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
 
         if (serviceScope is null) return;
-        try
-        {
-            var seed = serviceScope.ServiceProvider.GetRequiredService<DataSeeder>();
-            seed.SeedAsync().Wait();
-        }
-        catch (Exception e)
-        {
-            // ignored
-        }
+        var seed = serviceScope.ServiceProvider.GetRequiredService<DataSeeder>();
+        seed.SeedAsync().Wait();
     }
 }

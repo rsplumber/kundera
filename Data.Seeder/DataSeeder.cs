@@ -196,19 +196,11 @@ public class DataSeeder
             group = await _groupFactory.CreateAdministratorAsync();
         }
 
-        var user = await _userRepository.FindAsync(_adminUsername);
-        if (user is null)
-        {
-            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
-            await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
-        }
-
         var service = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
         if (service is null)
         {
             service = await _serviceFactory.CreateKunderaServiceAsync(ServiceSecret.From(_kunderaServiceSecret));
         }
-
 
         var scope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
         if (scope is null)
@@ -217,6 +209,13 @@ public class DataSeeder
             scope.AddService(service.Id);
             scope.AddRole(role.Id);
             await _scopeRepository.UpdateAsync(scope);
+        }
+
+        var user = await _userRepository.FindAsync(_adminUsername);
+        if (user is null)
+        {
+            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
+            await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
         }
     }
 

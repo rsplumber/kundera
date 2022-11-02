@@ -62,5 +62,3 @@ app.UseSwaggerUI();
 // }
 
 await app.RunAsync();
-
-await app.WaitForShutdownAsync();

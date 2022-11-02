@@ -16,8 +16,8 @@
         <PackageReference Include="Kite.Serializer.Abstractions" Version="0.0.8" />
         <PackageReference Include="Kite.Web.Requests" Version="0.0.8" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="KunderaNet.AspNetCore.Authorization" Version="0.0.8" />
-        <PackageReference Include="KunderaNet.Authorization.Http.Extensions.Microsoft.DependencyInjection" Version="0.0.8" />
+        <PackageReference Include="KunderaNet.AspNetCore.Authorization" Version="0.0.82" />
+        <PackageReference Include="KunderaNet.Authorization.Http.Extensions.Microsoft.DependencyInjection" Version="0.0.82" />
         <PackageReference Include="KunderaNet.Authorization.Swagger.Extensions" Version="0.0.8" />
     </ItemGroup>
 
