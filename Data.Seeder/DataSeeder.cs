@@ -113,6 +113,8 @@ public class DataSeeder
         }
 
         await SeedPermissions();
+
+        await SeedServiceManAsync();
     }
 
     private async Task SeedPermissions()
@@ -224,6 +226,9 @@ public class DataSeeder
 
     private async Task SeedServiceManAsync()
     {
+        var roleExists = await _roleRepository.ExistsAsync(EntityBaseValues.ServiceAdminRole);
+        if (roleExists) return;
+
         var permissions = await Task.WhenAll(
             _permissionRepository.FindAsync("scopes_list"),
             _permissionRepository.FindAsync("scopes_roles_list"),
@@ -244,10 +249,6 @@ public class DataSeeder
             _permissionRepository.FindAsync("services_activate"),
             _permissionRepository.FindAsync("services_de-activate")
         );
-
-        var roleExists = await _roleRepository.ExistsAsync(EntityBaseValues.ServiceAdminRole);
-
-        if (roleExists) return;
 
         var role = await _roleFactory.CreateAsync(EntityBaseValues.ServiceAdminRole);
         foreach (var permission in permissions)

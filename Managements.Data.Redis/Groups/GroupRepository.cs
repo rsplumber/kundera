@@ -48,8 +48,7 @@ internal class GroupRepository : IGroupRepository
 
     public async Task<IEnumerable<Group>> FindAsync(IEnumerable<GroupId> ids, CancellationToken cancellationToken = default)
     {
-        var rawGroupIds = ids.Select(id => id.Value.ToString());
-        var dataModels = await _groups.FindByIdsAsync(rawGroupIds);
+        var dataModels = await _groups.FindByIdsAsync(ids.Select(id => id.Value.ToString()));
         return dataModels.Values.Select(model => _mapper.Map<Group>(model));
     }
 

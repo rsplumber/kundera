@@ -44,14 +44,14 @@ internal class AuthenticateService : IAuthenticateService
 
 
         var certificate = await _certificateService.GenerateAsync(credential.UserId, scope.Id.Value, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, credential.UserId, scope.Id.Value, ipAddress ?? IPAddress.None, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, credential.UserId, scope.Id.Value, cancellationToken);
 
         return certificate;
     }
 
     public async Task<Certificate> RefreshCertificateAsync(Token token, Token refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        var session = await _sessionManagement.GetAsync(token, ipAddress ?? IPAddress.None, cancellationToken);
+        var session = await _sessionManagement.GetAsync(token, cancellationToken);
         if (session is null)
         {
             throw new UnAuthenticateException();
@@ -65,7 +65,7 @@ internal class AuthenticateService : IAuthenticateService
         var userId = session.UserId;
         var scopeId = session.ScopeId;
         var certificate = await _certificateService.GenerateAsync(userId, scopeId, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, userId, scopeId, ipAddress ?? IPAddress.None, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, userId, scopeId, cancellationToken);
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 
         return certificate;

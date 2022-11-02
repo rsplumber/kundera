@@ -45,7 +45,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default)
     {
-        var session = await _sessionManagement.GetAsync(token, ipAddress ?? IPAddress.None, cancellationToken);
+        var session = await _sessionManagement.GetAsync(token, cancellationToken);
         if (session is null)
         {
             throw new UnAuthorizedException();
@@ -63,26 +63,20 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var userGroups = new List<Group>();
-        foreach (var userGroupId in user!.Groups)
+        var currentUserGroups = await _groupRepository.FindAsync(user!.Groups, cancellationToken);
+        userGroups.AddRange(currentUserGroups);
+        foreach (var userGroupId in user.Groups)
         {
-            var userGroup = await _groupRepository.FindAsync(userGroupId, cancellationToken);
-            if (userGroup is null)
-            {
-                throw new UnAuthorizedException();
-            }
-
-            userGroups.Add(userGroup);
             var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
             userGroups.AddRange(children);
         }
 
 
-        var allRoles = new List<Role>();
+        var roles = new List<Role>();
         var userRoles = await _roleRepository.FindAsync(user.Roles, cancellationToken);
-        allRoles.AddRange(userRoles);
-        var groupsRolesIds = userGroups.SelectMany(group => group.Roles);
-        var groupRoles = await _roleRepository.FindAsync(groupsRolesIds, cancellationToken);
-        allRoles.AddRange(groupRoles);
+        var groupRoles = await _roleRepository.FindAsync(userGroups.SelectMany(group => group.Roles), cancellationToken);
+        roles.AddRange(userRoles);
+        roles.AddRange(groupRoles);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
         if (sessionScope is null || UserHasNotScopeRole())
@@ -97,7 +91,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
 
-        var permissionIds = allRoles.DistinctBy(role => role.Id)
+        var permissionIds = roles.DistinctBy(role => role.Id)
             .SelectMany(role => role.Permissions)
             .Distinct();
 
@@ -109,7 +103,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
 
         return user.Id.Value;
-        
+
         bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidService()
@@ -119,6 +113,6 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active;
 
-        bool UserHasNotScopeRole() => !allRoles.Any(role => sessionScope.Has(role.Id));
+        bool UserHasNotScopeRole() => !roles.Any(role => sessionScope.Has(role.Id));
     }
 }

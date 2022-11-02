@@ -18,7 +18,7 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task SaveAsync(Certificate certificate, Guid userId, Guid scopeId, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Certificate certificate, Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
@@ -26,8 +26,7 @@ internal sealed class SessionManagement : ISessionManagement
             refreshToken,
             scopeId,
             userId,
-            expiresAt,
-            ipAddress);
+            expiresAt);
     }
 
     public async Task DeleteAsync(Token token, CancellationToken cancellationToken = default)
@@ -35,7 +34,7 @@ internal sealed class SessionManagement : ISessionManagement
         await _sessionRepository.DeleteAsync(token, cancellationToken);
     }
 
-    public async Task<Session?> GetAsync(Token token, IPAddress ipAddress, CancellationToken cancellationToken = default)
+    public async Task<Session?> GetAsync(Token token, CancellationToken cancellationToken = default)
     {
         var session = await _sessionRepository.FindAsync(token, cancellationToken);
 
@@ -43,7 +42,6 @@ internal sealed class SessionManagement : ISessionManagement
 
         if (!Expired())
         {
-            await UpdateAsync(session, ipAddress, cancellationToken);
             return session;
         }
 
@@ -62,11 +60,5 @@ internal sealed class SessionManagement : ISessionManagement
     public async Task<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await _sessionRepository.FindAsync(userId, cancellationToken);
-    }
-
-    private async Task UpdateAsync(Session session, IPAddress ipAddress, CancellationToken cancellationToken = default)
-    {
-        session.UpdateUsage(DateTime.UtcNow, ipAddress);
-        await _sessionRepository.UpdateAsync(session, cancellationToken);
     }
 }

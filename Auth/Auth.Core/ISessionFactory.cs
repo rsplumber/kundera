@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Auth.Core;
+﻿namespace Auth.Core;
 
 public interface ISessionFactory
 {
@@ -8,8 +6,7 @@ public interface ISessionFactory
         Token refreshToken,
         Guid scopeId,
         Guid userId,
-        DateTime expireDate,
-        IPAddress? lastIpAddress = null);
+        DateTime expireDate);
 }
 
 internal sealed class SessionFactory : ISessionFactory
@@ -21,9 +18,9 @@ internal sealed class SessionFactory : ISessionFactory
         _sessionRepository = sessionRepository;
     }
 
-    public async Task<Session> CreateAsync(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
+    public async Task<Session> CreateAsync(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate)
     {
-        var session = new Session(token, refreshToken, scopeId, userId, expireDate, lastIpAddress);
+        var session = new Session(token, refreshToken, scopeId, userId, expireDate);
         await _sessionRepository.AddAsync(session);
         return session;
     }
