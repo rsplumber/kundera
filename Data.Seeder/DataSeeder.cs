@@ -35,6 +35,7 @@ public class DataSeeder
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ICredentialService _credentialService;
+    private readonly ICredentialFactory _credentialFactory;
 
 
     public DataSeeder(IConfiguration configuration,
@@ -50,7 +51,8 @@ public class DataSeeder
         IScopeFactory scopeFactory,
         IRoleFactory roleFactory,
         IPermissionFactory permissionFactory,
-        IGroupFactory groupFactory)
+        IGroupFactory groupFactory,
+        ICredentialFactory credentialFactory)
     {
         _roleRepository = roleRepository;
         _groupRepository = groupRepository;
@@ -65,6 +67,7 @@ public class DataSeeder
         _roleFactory = roleFactory;
         _permissionFactory = permissionFactory;
         _groupFactory = groupFactory;
+        _credentialFactory = credentialFactory;
         _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value;
         _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value;
         _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value;
@@ -74,11 +77,42 @@ public class DataSeeder
 
     public async Task SeedAsync()
     {
+        var role = await _roleRepository.FindAsync(EntityBaseValues.SuperAdminRole);
+        if (role is null)
+        {
+            role = await _roleFactory.CreateAsync(EntityBaseValues.SuperAdminRole);
+            await _roleRepository.UpdateAsync(role);
+        }
+
+        var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+        if (group is null)
+        {
+            group = await _groupFactory.CreateAdministratorAsync();
+        }
+
+        var service = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
+        if (service is null)
+        {
+            service = await _serviceFactory.CreateKunderaServiceAsync(ServiceSecret.From(_kunderaServiceSecret));
+        }
+
+        var scope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
+        if (scope is null)
+        {
+            scope = await _scopeFactory.CreateIdentityScopeAsync(ScopeSecret.From(_identityScopeSecret));
+            scope.AddService(service.Id);
+            scope.AddRole(role.Id);
+            await _scopeRepository.UpdateAsync(scope);
+        }
+
+        var user = await _userRepository.FindAsync(_adminUsername);
+        if (user is null)
+        {
+            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
+            await _credentialFactory.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
+        }
+
         await SeedPermissions();
-
-        await SeedKunderaAsync();
-
-        await SeedServiceManAsync();
     }
 
     private async Task SeedPermissions()
@@ -92,6 +126,18 @@ public class DataSeeder
         await SeedScopePermissions();
         await SeedGroupPermissions();
         await SeedUserPermissions();
+
+        var role = await _roleRepository.FindAsync(EntityBaseValues.SuperAdminRole);
+        if (role is not null)
+        {
+            var permissions = await _permissionRepository.FindAsync();
+            foreach (var permission in permissions)
+            {
+                role.AddPermission(permission.Id);
+            }
+
+            await _roleRepository.UpdateAsync(role);
+        }
     }
 
     private async Task SeedPermissionPermissions()
@@ -173,50 +219,6 @@ public class DataSeeder
         await _permissionFactory.CreateAsync("user_activate");
         await _permissionFactory.CreateAsync("user_suspend");
         await _permissionFactory.CreateAsync("user_block");
-    }
-
-    private async Task SeedKunderaAsync()
-    {
-        var role = await _roleRepository.FindAsync(EntityBaseValues.SuperAdminRole);
-        if (role is null)
-        {
-            var permissions = await _permissionRepository.FindAsync();
-            role = await _roleFactory.CreateAsync(EntityBaseValues.SuperAdminRole);
-            foreach (var permission in permissions)
-            {
-                role.AddPermission(permission.Id);
-            }
-
-            await _roleRepository.UpdateAsync(role);
-        }
-
-        var group = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
-        if (group is null)
-        {
-            group = await _groupFactory.CreateAdministratorAsync();
-        }
-
-        var service = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
-        if (service is null)
-        {
-            service = await _serviceFactory.CreateKunderaServiceAsync(ServiceSecret.From(_kunderaServiceSecret));
-        }
-
-        var scope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
-        if (scope is null)
-        {
-            scope = await _scopeFactory.CreateIdentityScopeAsync(ScopeSecret.From(_identityScopeSecret));
-            scope.AddService(service.Id);
-            scope.AddRole(role.Id);
-            await _scopeRepository.UpdateAsync(scope);
-        }
-
-        var user = await _userRepository.FindAsync(_adminUsername);
-        if (user is null)
-        {
-            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
-            await _credentialService.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
-        }
     }
 
 
