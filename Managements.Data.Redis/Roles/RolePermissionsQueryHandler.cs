@@ -12,7 +12,7 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
     private readonly IRedisCollection<RoleDataModel> _roles;
     private readonly IRedisCollection<PermissionDataModel> _permissions;
 
-    public RolePermissionsQueryHandler(RedisConnectionProvider provider)
+    public RolePermissionsQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();

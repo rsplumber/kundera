@@ -13,7 +13,7 @@ internal static class ApplicationBuilderExtension
         if (serviceScope is null) return Assembly.GetExecutingAssembly();
         try
         {
-            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionProvider>();
+            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionAuthProviderWrapper>();
             if (dbProvider.Connection.GetIndexInfo(typeof(CredentialDataModel)) is null)
             {
                 dbProvider.Connection.CreateIndex(typeof(CredentialDataModel));

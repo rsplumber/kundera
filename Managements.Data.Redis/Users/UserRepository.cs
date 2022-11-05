@@ -12,11 +12,11 @@ internal class UserRepository : IUserRepository
     private readonly RedisCollection<UserDataModel> _users;
     private readonly IMapper _mapper;
 
-    public UserRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
+    public UserRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;
-        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
+        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>(false);
     }
 
     public async Task AddAsync(User entity, CancellationToken cancellationToken = default)

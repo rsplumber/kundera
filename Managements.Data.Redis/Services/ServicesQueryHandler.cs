@@ -9,7 +9,7 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
 {
     private IRedisCollection<ServiceDataModel> _services;
 
-    public ServicesQueryHandler(RedisConnectionProvider provider)
+    public ServicesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }

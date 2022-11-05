@@ -10,7 +10,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopeQueryHandler(RedisConnectionProvider provider)
+    public ScopeQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }

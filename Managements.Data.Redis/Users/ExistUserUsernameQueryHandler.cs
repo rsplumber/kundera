@@ -9,7 +9,7 @@ internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUse
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public ExistUserUsernameQueryHandler(RedisConnectionProvider provider)
+    public ExistUserUsernameQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }

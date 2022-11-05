@@ -12,7 +12,7 @@ internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, IE
     private readonly IRedisCollection<ScopeDataModel> _scopes;
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public ScopeRolesQueryHandler(RedisConnectionProvider provider)
+    public ScopeRolesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();

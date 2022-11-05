@@ -10,7 +10,7 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
 {
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public RoleQueryHandler(RedisConnectionProvider provider)
+    public RoleQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }

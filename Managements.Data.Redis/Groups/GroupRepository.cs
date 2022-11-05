@@ -14,11 +14,11 @@ internal class GroupRepository : IGroupRepository
     private readonly IMapper _mapper;
 
 
-    public GroupRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
+    public GroupRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;
-        _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
+        _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>(false);
     }
 
     public async Task AddAsync(Group entity, CancellationToken cancellationToken = default)

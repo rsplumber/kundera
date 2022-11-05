@@ -10,9 +10,9 @@ internal class CredentialRepository : ICredentialRepository
     private readonly RedisCollection<CredentialDataModel> _credentials;
     private readonly IMapper _mapper;
 
-    public CredentialRepository(RedisConnectionProvider provider, IMapper mapper)
+    public CredentialRepository(RedisConnectionAuthProviderWrapper provider, IMapper mapper)
     {
-        _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>();
+        _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>(false);
         _mapper = mapper;
     }
 

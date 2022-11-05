@@ -9,7 +9,7 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
-    public PermissionsQueryHandler(RedisConnectionProvider provider)
+    public PermissionsQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }

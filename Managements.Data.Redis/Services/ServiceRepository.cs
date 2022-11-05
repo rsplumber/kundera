@@ -15,9 +15,9 @@ internal class ServiceRepository : IServiceRepository
     private readonly IMapper _mapper;
 
 
-    public ServiceRepository(RedisConnectionProvider provider, IMapper mapper, IEventBus eventBus)
+    public ServiceRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
     {
-        _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
+        _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>(false);
         _mapper = mapper;
         _eventBus = eventBus;
     }

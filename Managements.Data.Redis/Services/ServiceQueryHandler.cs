@@ -10,7 +10,7 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
 {
     private readonly IRedisCollection<ServiceDataModel> _services;
 
-    public ServiceQueryHandler(RedisConnectionProvider provider)
+    public ServiceQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }

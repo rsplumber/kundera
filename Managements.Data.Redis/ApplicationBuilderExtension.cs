@@ -22,7 +22,7 @@ internal static class ApplicationBuilderExtension
 
         try
         {
-            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionProvider>();
+            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionManagementsProviderWrapper>();
             new List<Type>
             {
                 typeof(GroupDataModel),

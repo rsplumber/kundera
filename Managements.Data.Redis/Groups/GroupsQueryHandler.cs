@@ -9,7 +9,7 @@ internal sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, IEnumerabl
 {
     private readonly IRedisCollection<GroupDataModel> _groups;
 
-    public GroupsQueryHandler(RedisConnectionProvider provider)
+    public GroupsQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
     }

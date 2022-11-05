@@ -9,7 +9,7 @@ internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public UsersQueryHandler(RedisConnectionProvider provider)
+    public UsersQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }

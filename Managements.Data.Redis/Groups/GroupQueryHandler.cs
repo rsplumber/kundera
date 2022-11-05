@@ -12,7 +12,7 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
     private readonly IRedisCollection<GroupDataModel> _groups;
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public GroupQueryHandler(RedisConnectionProvider provider)
+    public GroupQueryHandler(RedisConnectionManagementsProviderWrapper provider)
     {
         _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();

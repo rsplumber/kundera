@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Auth.Core;
-using Auth.Core.Services;
 using Managements.Domain;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
@@ -34,7 +33,6 @@ public class DataSeeder
     private readonly IPermissionRepository _permissionRepository;
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
-    private readonly ICredentialService _credentialService;
     private readonly ICredentialFactory _credentialFactory;
 
 
@@ -45,7 +43,6 @@ public class DataSeeder
         IPermissionRepository permissionRepository,
         IScopeRepository scopeRepository,
         IServiceRepository serviceRepository,
-        ICredentialService credentialService,
         IUserFactory userFactory,
         IServiceFactory serviceFactory,
         IScopeFactory scopeFactory,
@@ -60,7 +57,6 @@ public class DataSeeder
         _permissionRepository = permissionRepository;
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
-        _credentialService = credentialService;
         _userFactory = userFactory;
         _serviceFactory = serviceFactory;
         _scopeFactory = scopeFactory;
