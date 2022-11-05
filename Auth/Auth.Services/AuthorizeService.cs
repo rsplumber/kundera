@@ -112,7 +112,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidService() => service is null || sessionScope!.Services.All(id => id != service.Id);
 
-        bool InvalidPermission() => permissions.All(permission => permission.Name != action);
+        bool InvalidPermission() => permissions.All(permission => permission.Name != action.ToLower());
     }
 
     private async Task<IReadOnlyCollection<Role>> RolesAsync(User user, CancellationToken cancellationToken)
