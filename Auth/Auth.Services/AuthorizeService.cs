@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
+using Managements.Domain;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
@@ -85,9 +86,13 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var service = await _serviceRepository.FindAsync(ServiceSecret.From(serviceSecret), cancellationToken);
+
         if (InvalidService())
         {
-            throw new UnAuthorizedException();
+            if (service!.Name != EntityBaseValues.KunderaServiceName)
+            {
+                throw new UnAuthorizedException();
+            }
         }
 
 
@@ -96,7 +101,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             .Distinct();
 
         var permissions = await _permissionRepository.FindAsync(permissionIds, cancellationToken);
-        if (!permissions.Any(permission => permission.Name.Value.Equals(action.ToLower())))
+        if (permissions.All(permission => permission.Name != action))
         {
             throw new UnAuthorizedException();
         }

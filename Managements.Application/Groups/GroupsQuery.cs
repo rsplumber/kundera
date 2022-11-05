@@ -2,7 +2,7 @@
 
 namespace Managements.Application.Groups;
 
-public sealed record GroupsQuery() : Query<IEnumerable<GroupsResponse>>;
+public sealed record GroupsQuery : Query<IEnumerable<GroupsResponse>>;
 
 public sealed record GroupsResponse(Guid Id, string Name, string Status)
 {
