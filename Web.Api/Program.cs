@@ -8,7 +8,7 @@ using Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
-builder.WebHost.UseUrls("https://+:7179");
+builder.WebHost.UseUrls("https://+:7179" , "http://+:5179");
 builder.Services.AddKundera(builder.Configuration);
 builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddKunderaAuthorization(builder.Configuration);
@@ -53,7 +53,6 @@ app.UseCors(b => b.AllowAnyHeader()
     .SetIsOriginAllowed(_ => true)
     .AllowCredentials());
 
-app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 

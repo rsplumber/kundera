@@ -46,7 +46,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
 
             if (code == StatusCodes.Status500InternalServerError)
             {
-                message = InternalServerErrorMessage;
+                message = exception.Message;
             }
 
             response.StatusCode = code;

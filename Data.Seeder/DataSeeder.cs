@@ -241,6 +241,7 @@ public class DataSeeder
             _permissionRepository.FindAsync("roles_remove_meta"),
             _permissionRepository.FindAsync("roles_permissions_list"),
             _permissionRepository.FindAsync("permissions_create"),
+            _permissionRepository.FindAsync("permissions_list"),
             _permissionRepository.FindAsync("permissions_get"),
             _permissionRepository.FindAsync("permissions_delete"),
             _permissionRepository.FindAsync("permissions_add_meta"),
