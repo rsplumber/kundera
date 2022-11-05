@@ -25,6 +25,6 @@ internal static class ServiceCollectionExtension
         services.AddScoped<ICredentialService, CredentialService>();
         services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
 
-        // services.AddBackgroundJobs();
+        services.AddBackgroundJobs();
     }
 }

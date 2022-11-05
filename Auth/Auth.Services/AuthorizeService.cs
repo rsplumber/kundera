@@ -52,7 +52,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        if (TokenExpired())
+        if (Expired())
         {
             throw new UnAuthorizedException();
         }
@@ -63,61 +63,69 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var userGroups = new List<Group>();
-        var currentUserGroups = await _groupRepository.FindAsync(user!.Groups, cancellationToken);
-        userGroups.AddRange(currentUserGroups);
-        foreach (var userGroupId in user.Groups)
-        {
-            var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
-            userGroups.AddRange(children);
-        }
-
-
-        var roles = new List<Role>();
-        var userRoles = await _roleRepository.FindAsync(user.Roles, cancellationToken);
-        var groupRoles = await _roleRepository.FindAsync(userGroups.SelectMany(group => group.Roles), cancellationToken);
-        roles.AddRange(userRoles);
-        roles.AddRange(groupRoles);
+        var roles = await RolesAsync(user!, cancellationToken);
 
         var sessionScope = await _scopeRepository.FindAsync(ScopeId.From(session.ScopeId), cancellationToken);
-        if (sessionScope is null || UserHasNotScopeRole())
+        if (InvalidSessionScope())
         {
             throw new UnAuthorizedException();
         }
 
         var service = await _serviceRepository.FindAsync(ServiceSecret.From(serviceSecret), cancellationToken);
-
         if (InvalidService())
         {
-            if (service!.Name != EntityBaseValues.KunderaServiceName)
+            if (service is null || service.Name != EntityBaseValues.KunderaServiceName)
             {
                 throw new UnAuthorizedException();
             }
         }
 
-
         var permissionIds = roles.DistinctBy(role => role.Id)
             .SelectMany(role => role.Permissions)
             .Distinct();
-
         var permissions = await _permissionRepository.FindAsync(permissionIds, cancellationToken);
-        if (permissions.All(permission => permission.Name != action))
+        if (InvalidPermission())
         {
             throw new UnAuthorizedException();
         }
 
+        return user!.Id.Value;
 
-        return user.Id.Value;
-
-        bool TokenExpired() => DateTime.UtcNow >= session.ExpiresAt;
-
-        bool InvalidService()
-        {
-            return service is null || sessionScope.Services.All(id => id != service.Id);
-        }
+        bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active;
 
+        bool InvalidSessionScope() => sessionScope is null || UserHasNotScopeRole();
+
         bool UserHasNotScopeRole() => !roles.Any(role => sessionScope.Has(role.Id));
+
+        bool InvalidService() => service is null || sessionScope!.Services.All(id => id != service.Id);
+
+        bool InvalidPermission() => permissions.All(permission => permission.Name != action);
+    }
+
+    private async Task<IReadOnlyCollection<Role>> RolesAsync(User user, CancellationToken cancellationToken)
+    {
+        var userGroups = await UserGroupsAsync(user, cancellationToken);
+        var allRoles = new List<Role>();
+        var userRoles = await _roleRepository.FindAsync(user.Roles, cancellationToken);
+        var groupRoles = await _roleRepository.FindAsync(userGroups.SelectMany(group => group.Roles), cancellationToken);
+        allRoles.AddRange(userRoles);
+        allRoles.AddRange(groupRoles);
+        return allRoles;
+    }
+
+    private async Task<IReadOnlyCollection<Group>> UserGroupsAsync(User user, CancellationToken cancellationToken)
+    {
+        var groups = new List<Group>();
+        var currentUserGroups = await _groupRepository.FindAsync(user.Groups, cancellationToken);
+        groups.AddRange(currentUserGroups);
+        foreach (var userGroupId in user.Groups)
+        {
+            var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
+            groups.AddRange(children);
+        }
+
+        return groups;
     }
 }

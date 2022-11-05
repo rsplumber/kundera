@@ -43,7 +43,10 @@ internal class CredentialRepository : ICredentialRepository
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
     {
         var credentials = await _credentials.ToListAsync();
-        var expiredCredentials = credentials.Where(model => DateTime.UtcNow >= model.CreatedDate.ToUniversalTime());
+        var expiredCredentials = credentials
+            .Where(model => model.ExpiresAt is not null)
+            .Where(model => DateTime.UtcNow >= model.ExpiresAt!.Value.ToUniversalTime());
+        
         foreach (var credential in expiredCredentials)
         {
             await _credentials.DeleteAsync(credential);

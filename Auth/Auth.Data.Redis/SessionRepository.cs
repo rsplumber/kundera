@@ -61,7 +61,7 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
     {
         var sessions = await _sessions.ToListAsync();
-        var expiredSessions = sessions.Where(model => DateTime.UtcNow >= model.CreatedDate.ToUniversalTime());
+        var expiredSessions = sessions.Where(model => DateTime.UtcNow >= model.ExpiresAt.ToUniversalTime());
         foreach (var credential in expiredSessions)
         {
             await _sessions.DeleteAsync(credential);

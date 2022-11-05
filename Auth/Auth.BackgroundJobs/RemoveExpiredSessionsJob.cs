@@ -7,7 +7,7 @@ namespace Auth.BackgroundJobs;
 public class RemoveExpiredSessionsJob : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
-    private const int TenSeconds = 10 * 1000;
+    private const int OneMinute = 60 * 1000;
 
     public RemoveExpiredSessionsJob(IServiceProvider serviceProvider)
     {
@@ -20,9 +20,9 @@ public class RemoveExpiredSessionsJob : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var scope = _serviceProvider.CreateScope();
-            var dataMigratorService = scope.ServiceProvider.GetRequiredService<ISessionRepository>();
-            await dataMigratorService.DeleteExpiredAsync(stoppingToken);
-            await Task.Delay(TenSeconds, stoppingToken);
+            var sessionRepository = scope.ServiceProvider.GetRequiredService<ISessionRepository>();
+            await sessionRepository.DeleteExpiredAsync(stoppingToken);
+            await Task.Delay(OneMinute, stoppingToken);
         }
     }
 }
