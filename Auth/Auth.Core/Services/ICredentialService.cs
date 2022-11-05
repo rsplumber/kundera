@@ -33,5 +33,5 @@ public interface ICredentialService
 
     Task RemoveAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
 
-    Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default);
+    Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default);
 }

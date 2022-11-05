@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using Auth.Core;
 using Auth.Core.Services;
+using Auth.Services.Events;
+using Kite.Events;
 using Managements.Domain;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
@@ -22,6 +24,7 @@ internal sealed class AuthorizeService : IAuthorizeService
     private readonly IServiceRepository _serviceRepository;
     private readonly IGroupRepository _groupRepository;
     private readonly IPermissionRepository _permissionRepository;
+    private readonly IEventBus _eventBus;
 
     public AuthorizeService(ISessionManagement sessionManagement,
         IRoleRepository roleRepository,
@@ -29,7 +32,8 @@ internal sealed class AuthorizeService : IAuthorizeService
         IScopeRepository scopeRepository,
         IGroupRepository groupRepository,
         IServiceRepository serviceRepository,
-        IPermissionRepository permissionRepository)
+        IPermissionRepository permissionRepository,
+        IEventBus eventBus)
     {
         _sessionManagement = sessionManagement;
         _roleRepository = roleRepository;
@@ -38,6 +42,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _groupRepository = groupRepository;
         _serviceRepository = serviceRepository;
         _permissionRepository = permissionRepository;
+        _eventBus = eventBus;
     }
 
     public async Task<Guid> AuthorizeAsync(Token token,
@@ -89,7 +94,13 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        return user!.Id.Value;
+        await _eventBus.PublishAsync(new OnAuthorizeEvent(user!.Id.Value,
+            sessionScope!.Id.Value,
+            service!.Id.Value,
+            action,
+            ipAddress ?? IPAddress.None), cancellationToken);
+
+        return user.Id.Value;
 
         bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
 
@@ -106,26 +117,26 @@ internal sealed class AuthorizeService : IAuthorizeService
 
     private async Task<IReadOnlyCollection<Role>> RolesAsync(User user, CancellationToken cancellationToken)
     {
-        var userGroups = await UserGroupsAsync(user, cancellationToken);
+        var userGroups = await UserGroupsAsync();
         var allRoles = new List<Role>();
         var userRoles = await _roleRepository.FindAsync(user.Roles, cancellationToken);
         var groupRoles = await _roleRepository.FindAsync(userGroups.SelectMany(group => group.Roles), cancellationToken);
         allRoles.AddRange(userRoles);
         allRoles.AddRange(groupRoles);
         return allRoles;
-    }
 
-    private async Task<IReadOnlyCollection<Group>> UserGroupsAsync(User user, CancellationToken cancellationToken)
-    {
-        var groups = new List<Group>();
-        var currentUserGroups = await _groupRepository.FindAsync(user.Groups, cancellationToken);
-        groups.AddRange(currentUserGroups);
-        foreach (var userGroupId in user.Groups)
+        async Task<IReadOnlyCollection<Group>> UserGroupsAsync()
         {
-            var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
-            groups.AddRange(children);
-        }
+            var groups = new List<Group>();
+            var currentUserGroups = await _groupRepository.FindAsync(user.Groups, cancellationToken);
+            groups.AddRange(currentUserGroups);
+            foreach (var userGroupId in user.Groups)
+            {
+                var children = await _groupRepository.FindChildrenAsync(userGroupId, cancellationToken);
+                groups.AddRange(children);
+            }
 
-        return groups;
+            return groups;
+        }
     }
 }

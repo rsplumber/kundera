@@ -15,6 +15,7 @@
         <PackageReference Include="Kite.Hashing.Abstractions" Version="0.0.8" />
         <PackageReference Include="Kite.Extensions.Random" Version="0.0.8" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="Kite.Events.Abstractions" Version="0.0.83" />
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="Auth.Builder" />

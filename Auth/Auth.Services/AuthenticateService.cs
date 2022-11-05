@@ -2,6 +2,8 @@
 using Auth.Core;
 using Auth.Core.Exceptions;
 using Auth.Core.Services;
+using Auth.Services.Events;
+using Kite.Events;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Types;
 
@@ -13,38 +15,48 @@ internal class AuthenticateService : IAuthenticateService
     private readonly ICertificateService _certificateService;
     private readonly ISessionManagement _sessionManagement;
     private readonly IScopeRepository _scopeRepository;
+    private readonly IEventBus _eventBus;
 
     public AuthenticateService(ICertificateService certificateService,
         ISessionManagement sessionManagement,
         ICredentialService credentialService,
-        IScopeRepository scopeRepository)
+        IScopeRepository scopeRepository,
+        IEventBus eventBus)
     {
         _certificateService = certificateService;
         _sessionManagement = sessionManagement;
         _credentialService = credentialService;
         _scopeRepository = scopeRepository;
+        _eventBus = eventBus;
     }
 
     public async Task<Certificate> AuthenticateAsync(UniqueIdentifier uniqueIdentifier, string password, string scopeSecret, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        var credential = await _credentialService.FindAsync(uniqueIdentifier, ipAddress, cancellationToken);
-        if (credential is null)
-        {
-            throw new UnAuthenticateException();
-        }
-
+        var credential = await _credentialService.FindAsync(uniqueIdentifier, cancellationToken);
         var scope = await _scopeRepository.FindAsync(ScopeSecret.From(scopeSecret), cancellationToken);
-        if (scope is null)
+        if (credential is null || scope is null)
         {
+            await PublishUnAuthenticateEvent(null, uniqueIdentifier.Value, ipAddress, cancellationToken);
             throw new UnAuthenticateException();
         }
 
+        try
+        {
+            credential.Password.Check(password);
+        }
+        catch
+        {
+            await PublishUnAuthenticateEvent(scope.Id.Value, uniqueIdentifier.Value, ipAddress, cancellationToken);
+            throw new UnAuthenticateException();
+        }
 
-        credential.Password.Check(password);
+        var scopeId = scope.Id.Value;
+        var certificate = await _certificateService.GenerateAsync(credential.UserId, scopeId, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, credential.UserId, scopeId, cancellationToken);
 
-
-        var certificate = await _certificateService.GenerateAsync(credential.UserId, scope.Id.Value, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, credential.UserId, scope.Id.Value, cancellationToken);
+        await _eventBus.PublishAsync(new OnAuthenticateEvent(scopeId,
+            uniqueIdentifier.Value,
+            ipAddress ?? IPAddress.None), cancellationToken);
 
         return certificate;
     }
@@ -52,13 +64,9 @@ internal class AuthenticateService : IAuthenticateService
     public async Task<Certificate> RefreshCertificateAsync(Token token, Token refreshToken, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         var session = await _sessionManagement.GetAsync(token, cancellationToken);
-        if (session is null)
+        if (session is null || session.RefreshToken != refreshToken)
         {
-            throw new UnAuthenticateException();
-        }
-
-        if (session.RefreshToken != refreshToken)
-        {
+            await PublishUnAuthenticateEvent(session?.ScopeId, null, ipAddress, cancellationToken);
             throw new UnAuthenticateException();
         }
 
@@ -69,5 +77,15 @@ internal class AuthenticateService : IAuthenticateService
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 
         return certificate;
+    }
+
+    private Task PublishUnAuthenticateEvent(Guid? scopeId, string? uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    {
+        return _eventBus.PublishAsync(new OnUnAuthenticateEvent
+        {
+            ScopeId = scopeId,
+            UniqueIdentifier = uniqueIdentifier,
+            IpAddress = ipAddress
+        }, cancellationToken);
     }
 }

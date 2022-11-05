@@ -18,7 +18,6 @@ internal class CredentialService : ICredentialService
 
     public async Task CreateAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
-        await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
@@ -27,7 +26,6 @@ internal class CredentialService : ICredentialService
 
     public async Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
@@ -37,7 +35,6 @@ internal class CredentialService : ICredentialService
 
     public async Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
-        await ValidateUser(uniqueIdentifier, userId, cancellationToken);
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
             userId,
@@ -76,7 +73,7 @@ internal class CredentialService : ICredentialService
         await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
     }
 
-    public async Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, IPAddress? ipAddress = default, CancellationToken cancellationToken = default)
+    public async Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier, cancellationToken);
         if (credential is null) return null;
@@ -87,22 +84,10 @@ internal class CredentialService : ICredentialService
             return null;
         }
 
-        if (credential.OneTime)
-        {
-            await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
-            return credential;
-        }
-
-        credential.UpdateActivityInfo(ipAddress ?? IPAddress.None);
-        await _credentialRepository.UpdateAsync(credential, cancellationToken);
-
+        if (!credential.OneTime) return credential;
+        await _credentialRepository.DeleteAsync(uniqueIdentifier, cancellationToken);
         return credential;
 
         bool Expired() => DateTime.UtcNow >= credential.ExpiresAt;
-    }
-
-
-    private async Task ValidateUser(UniqueIdentifier uniqueIdentifier, Guid userId, CancellationToken cancellationToken)
-    {
     }
 }
