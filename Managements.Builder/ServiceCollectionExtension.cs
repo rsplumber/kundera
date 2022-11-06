@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using Kite.CQRS.InMemory.Microsoft.DependencyInjection;
-using Kite.Events.InMemory.Extensions.Microsoft.DependencyInjection;
+using Kite.CQRS.Extensions.Microsoft.DependencyInjection;
+using Kite.CQRS.InMemory.Extensions.Microsoft.DependencyInjection;
 using Managements.Data;
 using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
@@ -23,10 +23,15 @@ public static class ServiceCollectionExtension
         services.AddScoped<IRoleFactory, RoleFactory>();
         services.AddScoped<IPermissionFactory, PermissionFactory>();
         services.AddScoped<IGroupFactory, GroupFactory>();
+
         var dataAssembly = services.AddManagementsData(configuration);
-        var applicationAssembly = Assembly.Load("Managements.Application");
-        services.AddCqrsInMemory(applicationAssembly, dataAssembly);
-        
-        services.AddEventsInMemory(dataAssembly);
+        services.AddKiteCqrs(option =>
+        {
+            option.UseInMemory(options =>
+            {
+                options.AddAssembly(dataAssembly);
+                options.AddAssembly(Assembly.Load("Managements.Application"));
+            });
+        });
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Auth.Builder;
 using Data.Seeder;
 using Kite.Cache.InMemory.Extensions.Microsoft.DependencyInjection;
+using Kite.Events.Extensions.Microsoft.DependencyInjection;
+using Kite.Events.InMemory.Extensions.Microsoft.DependencyInjection;
 using Kite.Hashing.HMAC;
 using Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection;
 using Kite.Serializer.Microsoft.Extensions.Microsoft.DependencyInjection;
@@ -24,6 +26,7 @@ public static class ServiceCollectionExtension
         services.AddMicrosoftSerializer();
         services.AddCacheInMemory();
         services.AddHashHmac(HashingType.HMACSHA512);
+        services.AddKiteEvents(configuration => { configuration.UseInMemory(_ => { }); });
     }
 
     private static void AddModules(this IServiceCollection services, IConfiguration configuration)

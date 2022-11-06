@@ -13,6 +13,8 @@
         <PackageReference Include="Kite.Serializer.Microsoft.Extensions.Microsoft.DependencyInjection" Version="0.0.83" />
         <PackageReference Include="Kite.Cache.InMemory.Extensions.Microsoft.DependencyInjection" Version="0.0.81" />
         <PackageReference Include="Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection" Version="0.0.82" />
+        <PackageReference Include="Kite.Events.Extensions.Microsoft.DependencyInjection" Version="0.0.89" />
+        <PackageReference Include="Kite.Events.InMemory.Extensions.Microsoft.DependencyInjection" Version="0.0.89" />
     </ItemGroup>
 
     <ItemGroup>

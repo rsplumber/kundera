@@ -227,6 +227,7 @@ public class DataSeeder
 
         var permissions = await Task.WhenAll(
             _permissionRepository.FindAsync("scopes_list"),
+            _permissionRepository.FindAsync("scopes_get"),
             _permissionRepository.FindAsync("scopes_roles_list"),
             _permissionRepository.FindAsync("roles_create"),
             _permissionRepository.FindAsync("roles_get"),
