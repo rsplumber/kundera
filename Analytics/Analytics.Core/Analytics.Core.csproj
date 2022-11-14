@@ -7,11 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Kite.CQRS.Abstractions" Version="0.0.83" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
+      <Folder Include="Entities" />
+      <Folder Include="EventHandlers" />
+      <Folder Include="Queries" />
     </ItemGroup>
 
 </Project>

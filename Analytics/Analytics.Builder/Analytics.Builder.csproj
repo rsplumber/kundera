@@ -7,11 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Auth\Auth.Core\Auth.Core.csproj" />
-      <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
@@ -21,4 +16,8 @@
         <InternalsVisibleTo Include="Builder" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Analytics.Data.Redis\Analytics.Data.Redis.csproj" />
+    </ItemGroup>
+    
 </Project>

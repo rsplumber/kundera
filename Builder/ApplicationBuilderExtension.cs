@@ -1,3 +1,4 @@
+using Analytics.Builder;
 using Auth.Builder;
 using Data.Seeder;
 using Managements.Builder;
@@ -16,6 +17,7 @@ public static class ApplicationBuilderExtension
     private static void UseModules(this IApplicationBuilder app)
     {
         app.UseAuth();
+        app.UseAnalytics();
         app.UseManagements();
     }
 }

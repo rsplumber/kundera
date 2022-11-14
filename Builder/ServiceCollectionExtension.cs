@@ -1,4 +1,5 @@
-﻿using Auth.Builder;
+﻿using Analytics.Builder;
+using Auth.Builder;
 using Data.Seeder;
 using Kite.Cache.InMemory.Extensions.Microsoft.DependencyInjection;
 using Kite.Events.Extensions.Microsoft.DependencyInjection;
@@ -32,6 +33,7 @@ public static class ServiceCollectionExtension
     private static void AddModules(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuth(configuration);
+        services.AddAnalytics(configuration);
         services.AddManagements(configuration);
     }
 }

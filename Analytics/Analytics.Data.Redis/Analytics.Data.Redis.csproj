@@ -4,12 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Analytics.Data</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Auth\Auth.Core\Auth.Core.csproj" />
-      <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -18,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Builder" />
+        <InternalsVisibleTo Include="Analytics.Builder" />
     </ItemGroup>
 
 </Project>
