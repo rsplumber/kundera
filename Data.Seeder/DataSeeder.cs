@@ -34,7 +34,7 @@ public class DataSeeder
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ICredentialFactory _credentialFactory;
-
+    private readonly ICredentialRepository _credentialRepository;
 
     public DataSeeder(IConfiguration configuration,
         IRoleRepository roleRepository,
@@ -49,7 +49,8 @@ public class DataSeeder
         IRoleFactory roleFactory,
         IPermissionFactory permissionFactory,
         IGroupFactory groupFactory,
-        ICredentialFactory credentialFactory)
+        ICredentialFactory credentialFactory, 
+        ICredentialRepository credentialRepository)
     {
         _roleRepository = roleRepository;
         _groupRepository = groupRepository;
@@ -64,10 +65,11 @@ public class DataSeeder
         _permissionFactory = permissionFactory;
         _groupFactory = groupFactory;
         _credentialFactory = credentialFactory;
-        _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value;
-        _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value;
-        _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value;
-        _kunderaServiceSecret = configuration.GetSection("DefaultConfigs:KunderaServiceSecret").Value;
+        _credentialRepository = credentialRepository;
+        _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value ?? throw new ArgumentNullException(nameof(_adminUsername));
+        _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value ?? throw new ArgumentNullException(nameof(_adminPassword));
+        _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value ?? throw new ArgumentNullException(nameof(_identityScopeSecret));
+        _kunderaServiceSecret = configuration.GetSection("DefaultConfigs:KunderaServiceSecret").Value ?? throw new ArgumentNullException(nameof(_kunderaServiceSecret));
     }
 
 
@@ -105,7 +107,13 @@ public class DataSeeder
         if (user is null)
         {
             user = await _userFactory.CreateAsync(_adminUsername, group.Id);
-            await _credentialFactory.CreateAsync(UniqueIdentifier.From(_adminUsername), _adminPassword, user.Id.Value, IPAddress.None);
+        }
+
+        var uniqueIdentifier = UniqueIdentifier.From(_adminUsername);
+        var credential = await _credentialRepository.FindAsync(uniqueIdentifier);
+        if (credential is null)
+        {
+            await _credentialFactory.CreateAsync(uniqueIdentifier, _adminPassword, user.Id.Value, IPAddress.None);
         }
 
         await SeedPermissions();
