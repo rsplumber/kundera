@@ -59,7 +59,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         if (Expired())
         {
-            throw new UnAuthorizedException();
+            throw new SessionExpiredException();
         }
 
         var user = await _userRepository.FindAsync(UserId.From(session.UserId), cancellationToken);

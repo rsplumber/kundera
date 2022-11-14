@@ -16,6 +16,8 @@ RUN dotnet build "outp/Web.Api/Web.Api.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "outp/Web.Api/Web.Api.csproj" -c Release -o /app/publish
 
+
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

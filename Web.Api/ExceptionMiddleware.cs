@@ -31,7 +31,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
             {
                 DomainException or ValidationException => StatusCodes.Status400BadRequest,
                 UnAuthenticateException => StatusCodes.Status401Unauthorized,
-                UnAuthorizedException => StatusCodes.Status403Forbidden,
+                UnAuthorizedException or SessionExpiredException => StatusCodes.Status403Forbidden,
                 _ => 0
             };
             if (code == 0 && exception.GetType().Name.EndsWith("NotFoundException"))
