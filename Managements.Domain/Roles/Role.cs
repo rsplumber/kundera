@@ -1,16 +1,17 @@
-﻿using Kite.Domain.Contracts;
-using Managements.Domain.Permissions;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Permissions.Types;
 using Managements.Domain.Roles.Events;
+using Managements.Domain.Roles.Types;
 
 namespace Managements.Domain.Roles;
 
-public class Role : AggregateRoot<RoleId>
+public class Role : AggregateRoot
 {
     protected Role()
     {
     }
 
-    internal Role(Name name, IDictionary<string, string>? meta = null) : base(RoleId.Generate())
+    internal Role(Name name, IDictionary<string, string>? meta = null)
     {
         Name = name;
         if (meta is not null)
@@ -24,7 +25,9 @@ public class Role : AggregateRoot<RoleId>
         AddDomainEvent(new RoleCreatedEvent(Id));
     }
 
-    public Name Name { get; internal set; }
+    public RoleId Id { get; set; } = RoleId.Generate();
+
+    public Name Name { get; internal set; } = default!;
 
     public IReadOnlyCollection<PermissionId> Permissions { get; internal set; } = new List<PermissionId>();
 

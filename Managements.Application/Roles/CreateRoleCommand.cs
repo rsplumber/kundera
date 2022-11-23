@@ -1,13 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Roles;
+using Mediator;
 
 namespace Managements.Application.Roles;
 
-public sealed record CreateRoleCommand(Name Name, IDictionary<string, string>? Meta = null) : Command;
+public sealed record CreateRoleCommand : ICommand<Role>
+{
+    public string Name { get; init; } = default!;
 
-internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
+    public IDictionary<string, string>? Meta { get; init; }
+}
+
+internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand, Role>
 {
     private readonly IRoleFactory _roleFactory;
 
@@ -16,9 +20,19 @@ internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleComma
         _roleFactory = roleFactory;
     }
 
-    public async Task HandleAsync(CreateRoleCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Role> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        var (name, meta) = message;
-        await _roleFactory.CreateAsync(name, meta);
+        var role = await _roleFactory.CreateAsync(command.Name, command.Meta);
+        return role;
+    }
+}
+
+public sealed class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
+{
+    public CreateRoleCommandValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

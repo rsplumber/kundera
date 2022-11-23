@@ -12,14 +12,14 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Redis.OM" Version="0.3.1" />
-        <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
-        <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
         <PackageReference Include="AutoMapper" Version="12.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-        <PackageReference Include="Kite.CQRS.Abstractions" Version="0.0.83" />
-        <PackageReference Include="Kite.Events.Abstractions" Version="0.0.83" />
+        <PackageReference Include="DotNetCore.CAP" Version="6.2.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
+    </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="Managements.Builder" />
     </ItemGroup>

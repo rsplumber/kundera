@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Users.Exception;
 
-public class UsernameNotFoundException : DomainException
+public sealed class UsernameNotFoundException : DomainException
 {
     private const string DefaultMessage = "Username not found";
 

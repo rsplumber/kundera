@@ -1,13 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Services;
+using Mediator;
 
 namespace Managements.Application.Services;
 
-public sealed record CreateServiceCommand(Name Name) : Command;
+public sealed record CreateServiceCommand : ICommand<Service>
+{
+    public string Name { get; init; } = default!;
+}
 
-internal sealed class CreateServiceCommandHandler : ICommandHandler<CreateServiceCommand>
+internal sealed class CreateServiceCommandHandler : ICommandHandler<CreateServiceCommand, Service>
 {
     private readonly IServiceFactory _serviceFactory;
 
@@ -16,8 +18,19 @@ internal sealed class CreateServiceCommandHandler : ICommandHandler<CreateServic
         _serviceFactory = serviceFactory;
     }
 
-    public async Task HandleAsync(CreateServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Service> Handle(CreateServiceCommand command, CancellationToken cancellationToken)
     {
-        await _serviceFactory.CreateAsync(message.Name);
+        var service = await _serviceFactory.CreateAsync(command.Name);
+        return service;
+    }
+}
+
+public sealed class CreateServiceCommandValidator : AbstractValidator<CreateServiceCommand>
+{
+    public CreateServiceCommandValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

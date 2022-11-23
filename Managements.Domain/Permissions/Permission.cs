@@ -1,15 +1,16 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 using Managements.Domain.Permissions.Events;
+using Managements.Domain.Permissions.Types;
 
 namespace Managements.Domain.Permissions;
 
-public class Permission : AggregateRoot<PermissionId>
+public class Permission : AggregateRoot
 {
     protected Permission()
     {
     }
 
-    internal Permission(Name name, IDictionary<string, string>? meta = null) : base(PermissionId.Generate())
+    internal Permission(Name name, IDictionary<string, string>? meta = null)
     {
         Name = name;
         if (meta is not null)
@@ -23,7 +24,9 @@ public class Permission : AggregateRoot<PermissionId>
         AddDomainEvent(new PermissionCreatedEvent(Id));
     }
 
-    public Name Name { get; internal set; }
+    public PermissionId Id { get; set; } = PermissionId.Generate();
+
+    public Name Name { get; internal set; } = default!;
 
     public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();
 

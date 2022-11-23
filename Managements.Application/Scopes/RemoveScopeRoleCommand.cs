@@ -1,12 +1,18 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain.Roles;
+﻿using FluentValidation;
+using Managements.Domain.Roles.Types;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Exceptions;
+using Managements.Domain.Scopes.Types;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record RemoveScopeRoleCommand(ScopeId Scope, params RoleId[] Roles) : Command;
+public sealed record RemoveScopeRoleCommand : ICommand
+{
+    public Guid Scope { get; init; } = default!;
+
+    public Guid[] Roles { get; init; } = default!;
+}
 
 internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScopeRoleCommand>
 {
@@ -17,20 +23,35 @@ internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScop
         _scopeRepository = scopeRepository;
     }
 
-    public async Task HandleAsync(RemoveScopeRoleCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(RemoveScopeRoleCommand command, CancellationToken cancellationToken)
     {
-        var (scopeId, roleIds) = message;
-        var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
         }
 
-        foreach (var role in roleIds)
+        foreach (var role in command.Roles)
         {
-            scope.RemoveRole(role);
+            scope.RemoveRole(RoleId.From(role));
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class RemoveScopeRoleCommandValidator : AbstractValidator<RemoveScopeRoleCommand>
+{
+    public RemoveScopeRoleCommandValidator()
+    {
+        RuleFor(request => request.Scope)
+            .NotEmpty().WithMessage("Enter a Scope")
+            .NotNull().WithMessage("Enter a Scope");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter at least one role")
+            .NotNull().WithMessage("Enter at least one role");
     }
 }

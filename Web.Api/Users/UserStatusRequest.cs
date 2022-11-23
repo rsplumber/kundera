@@ -2,6 +2,7 @@
 using Managements.Application.Users;
 using Managements.Domain;
 using Managements.Domain.Users;
+using Managements.Domain.Users.Types;
 
 namespace Web.Api.Users;
 

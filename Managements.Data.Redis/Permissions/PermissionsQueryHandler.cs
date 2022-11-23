@@ -1,5 +1,5 @@
-﻿using Kite.CQRS;
-using Managements.Application.Permissions;
+﻿using Managements.Application.Permissions;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -14,11 +14,11 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async Task<IEnumerable<PermissionsResponse>> HandleAsync(PermissionsQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)
     {
-        if (message.Name is not null)
+        if (query.Name is not null)
         {
-            _permissions = _permissions.Where(model => model.Name.Contains(message.Name));
+            _permissions = _permissions.Where(model => model.Name.Contains(query.Name));
         }
 
         var permissionsDataModel = await _permissions.ToListAsync();

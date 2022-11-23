@@ -1,7 +1,6 @@
-﻿using Kite.CQRS;
-using Managements.Application.Services;
+﻿using Managements.Application.Services;
 using Managements.Domain.Services.Exceptions;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Services;
@@ -15,9 +14,9 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
 
-    public async Task<ServiceResponse> HandleAsync(ServiceQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<ServiceResponse> Handle(ServiceQuery query, CancellationToken cancellationToken)
     {
-        var service = await _services.FindByIdAsync(message.Service.ToString());
+        var service = await _services.FindByIdAsync(query.Service.ToString());
         if (service is null)
         {
             throw new ServiceNotFoundException();

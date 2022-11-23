@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Types;
-using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
 internal class ScopeRepository : IScopeRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<ScopeDataModel> _scopes;
     private readonly IMapper _mapper;
 
 
-    public ScopeRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public ScopeRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>(false);
         _mapper = mapper;

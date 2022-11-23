@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Groups;
 using Managements.Domain.Groups.Exception;
+using Managements.Domain.Groups.Types;
+using Mediator;
 
 namespace Managements.Application.Groups;
 
-public sealed record DisableGroupCommand(GroupId Group) : Command;
+public sealed record DisableGroupCommand : ICommand
+{
+    public Guid Group { get; set; } = default!;
+}
 
 internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupCommand>
 {
@@ -16,9 +20,9 @@ internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupC
         _groupRepository = groupRepository;
     }
 
-    public async Task HandleAsync(DisableGroupCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(DisableGroupCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(message.Group, cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -26,5 +30,17 @@ internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupC
 
         group.Disable();
         await _groupRepository.UpdateAsync(group, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class DisableGroupCommandValidator : AbstractValidator<DisableGroupCommand>
+{
+    public DisableGroupCommandValidator()
+    {
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter Group")
+            .NotNull().WithMessage("Enter Group");
     }
 }

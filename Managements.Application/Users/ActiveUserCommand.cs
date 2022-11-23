@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record ActiveUserCommand(UserId User) : Command;
+public sealed record ActiveUserCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+}
 
 internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserCommand>
 {
@@ -16,9 +20,10 @@ internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserComma
         _userRepository = userRepository;
     }
 
-    public async Task HandleAsync(ActiveUserCommand message, CancellationToken cancellationToken = default)
+
+    public async ValueTask<Unit> Handle(ActiveUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
@@ -27,5 +32,17 @@ internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserComma
         user.Activate();
 
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class ActiveUserCommandValidator : AbstractValidator<ActiveUserCommand>
+{
+    public ActiveUserCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
     }
 }

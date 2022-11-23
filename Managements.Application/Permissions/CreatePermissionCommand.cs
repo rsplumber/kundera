@@ -1,13 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Permissions;
+using Mediator;
 
 namespace Managements.Application.Permissions;
 
-public sealed record CreatePermissionCommand(Name Name, IDictionary<string, string>? Meta = null) : Command;
+public sealed record CreatePermissionCommand : ICommand<Permission>
+{
+    public string Name { get; init; } = default!;
 
-internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePermissionCommand>
+    public IDictionary<string, string>? Meta { get; init; }
+}
+
+internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePermissionCommand, Permission>
 {
     private readonly IPermissionFactory _permissionFactory;
 
@@ -16,9 +20,19 @@ internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePer
         _permissionFactory = permissionFactory;
     }
 
-    public async Task HandleAsync(CreatePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Permission> Handle(CreatePermissionCommand command, CancellationToken cancellationToken)
     {
-        var (name, meta) = message;
-        await _permissionFactory.CreateAsync(name, meta);
+        var permission = await _permissionFactory.CreateAsync(command.Name, command.Meta);
+        return permission;
+    }
+}
+
+public sealed class CreatePermissionCommandValidator : AbstractValidator<CreatePermissionCommand>
+{
+    public CreatePermissionCommandValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

@@ -1,8 +1,7 @@
-﻿using Kite.CQRS;
-using Managements.Application.Groups;
+﻿using Managements.Application.Groups;
 using Managements.Data.Roles;
 using Managements.Domain.Groups.Exception;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
@@ -18,9 +17,9 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public async Task<GroupResponse> HandleAsync(GroupQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<GroupResponse> Handle(GroupQuery query, CancellationToken cancellationToken)
     {
-        var group = await _groups.FindByIdAsync(message.Id.Value.ToString());
+        var group = await _groups.FindByIdAsync(query.Id.ToString());
         if (group is null)
         {
             throw new GroupNotFoundException();

@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Users.Exception;
 
-public class InvalidPhoneNumberException : DomainException
+public sealed class InvalidPhoneNumberException : DomainException
 {
     public InvalidPhoneNumberException() : base("PhoneNumber Format Is Invalid")
     {

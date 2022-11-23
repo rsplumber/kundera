@@ -1,6 +1,6 @@
 namespace Managements.Domain.Permissions.Exceptions;
 
-public class PermissionNotFoundException : NotSupportedException
+public sealed class PermissionNotFoundException : NotSupportedException
 {
     private const string DefaultMessage = "Permission not found";
 

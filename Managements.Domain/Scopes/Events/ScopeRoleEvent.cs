@@ -1,7 +1,11 @@
-﻿using Managements.Domain.Roles;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Roles.Types;
+using Managements.Domain.Scopes.Types;
 
 namespace Managements.Domain.Scopes.Events;
 
-public record ScopeRoleAddedEvent(ScopeId Id, RoleId Role) : DomainEvent;
+[Event("scope_role_added")]
+public sealed record ScopeRoleAddedEvent(ScopeId Id, RoleId Role) : DomainEvent;
 
-public record ScopeRoleRemovedEvent(ScopeId Id, RoleId Role) : DomainEvent;
+[Event("scope_role_removed")]
+public sealed record ScopeRoleRemovedEvent(ScopeId Id, RoleId Role) : DomainEvent;

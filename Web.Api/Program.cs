@@ -1,65 +1,49 @@
 using Builder;
-using Kite.Web.Requests;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using KunderaNet.Authorization.Microsoft.DependencyInjection;
-using KunderaNet.Authorization.Swagger.Extensions;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.OpenApi.Models;
-using Web.Api;
+using NSwag;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.UseUrls("http://+:5179");
+
 builder.Services.AddKundera(builder.Configuration);
-builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddKunderaAuthorization(builder.Configuration);
 
-builder.Services.AddControllers();
-builder.Services.AddRequestValidators();
-builder.Services.AddCors();
-builder.Services.AddHealthChecks();
-builder.Services.AddResponseCompression(options =>
+builder.Services.AddFastEndpoints();
+builder.Services.AddSwaggerDoc(settings =>
 {
-    options.Providers.Add<BrotliCompressionProvider>();
-    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] {"image/svg+xml"});
-});
+    settings.Title = "Kundera - WebApi";
+    settings.DocumentName = "v1";
+    settings.Version = "v1";
+    settings.AddAuth("Kundera", new()
+    {
+        Name = "Kundera",
+        In = OpenApiSecurityApiKeyLocation.Header,
+        Type = OpenApiSecuritySchemeType.ApiKey,
+    });
+}, addJWTBearerAuth: false, maxEndpointVersion: 1);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1",
-        new OpenApiInfo
-        {
-            Version = "v1",
-            Title = "Kundera - WebApi",
-            Description = "This Api will be responsible for overall data distribution and authorization.",
-            Contact = new OpenApiContact
-            {
-                Name = "plumber",
-                Email = "sha.a.wf@gmail.com"
-            }
-        });
-    c.AddKunderaHeaders();
-});
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-app.UseKundera();
-app.UseMiddleware<ExceptionMiddleware>();
-
-app.UseRouting();
-app.UseHealthChecks("/health");
-app.UseCors(b => b.AllowAnyHeader()
-    .AllowAnyMethod()
-    .SetIsOriginAllowed(_ => true)
-    .AllowCredentials());
-
-app.UseAuthorization();
-app.MapControllers();
+app.UseFastEndpoints(config =>
+{
+    config.Endpoints.RoutePrefix = "api";
+    config.Versioning.Prefix = "v";
+    config.Versioning.PrependToRoute = true;
+});
 
 // if (app.Environment.IsDevelopment())
 // {
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseOpenApi();
+app.UseSwaggerUi3(s => s.ConfigureDefaults());
 // }
 
+app.UseKundera();
+
 await app.RunAsync();
+
+await app.WaitForShutdownAsync();

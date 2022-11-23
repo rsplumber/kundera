@@ -1,18 +1,18 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 using Managements.Domain.Groups.Events;
 using Managements.Domain.Groups.Exception;
 using Managements.Domain.Groups.Types;
-using Managements.Domain.Roles;
+using Managements.Domain.Roles.Types;
 
 namespace Managements.Domain.Groups;
 
-public class Group : AggregateRoot<GroupId>
+public class Group : AggregateRoot
 {
     protected Group()
     {
     }
 
-    internal Group(Name name, RoleId role) : base(GroupId.Generate())
+    internal Group(Name name, RoleId role)
     {
         Name = name;
 
@@ -27,8 +27,9 @@ public class Group : AggregateRoot<GroupId>
         Parent = parent;
     }
 
+    public GroupId Id { get; internal set; } = GroupId.Generate();
 
-    public Name Name { get; internal set; }
+    public Name Name { get; internal set; } = default!;
 
     public Text? Description { get; internal set; }
 
@@ -38,7 +39,7 @@ public class Group : AggregateRoot<GroupId>
 
     public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
 
-    public GroupStatus Status { get; internal set; }
+    public GroupStatus Status { get; internal set; } = default!;
 
     public DateTime StatusChangeDate { get; internal set; }
 

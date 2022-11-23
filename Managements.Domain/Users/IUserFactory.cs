@@ -1,5 +1,6 @@
 ﻿using Managements.Domain.Groups;
 using Managements.Domain.Groups.Exception;
+using Managements.Domain.Groups.Types;
 using Managements.Domain.Users.Exception;
 
 namespace Managements.Domain.Users;

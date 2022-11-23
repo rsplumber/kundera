@@ -1,11 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record AddUserUsernameCommand(UserId User, Username Username) : Command;
+public sealed record AddUserUsernameCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+
+    public string Username { get; init; } = default!;
+}
 
 internal sealed class AddUserUsernameCommandHandler : ICommandHandler<AddUserUsernameCommand>
 {
@@ -16,16 +22,32 @@ internal sealed class AddUserUsernameCommandHandler : ICommandHandler<AddUserUse
         _userRepository = userRepository;
     }
 
-    public async Task HandleAsync(AddUserUsernameCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(AddUserUsernameCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(message.User, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.AddUsername(message.Username);
+        user.AddUsername(command.Username);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class AddUserUsernameCommandValidator : AbstractValidator<AddUserUsernameCommand>
+{
+    public AddUserUsernameCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter a User")
+            .NotNull().WithMessage("Enter a User");
+
+        RuleFor(request => request.Username)
+            .NotEmpty().WithMessage("Enter a Username")
+            .NotNull().WithMessage("Enter a Username");
     }
 }

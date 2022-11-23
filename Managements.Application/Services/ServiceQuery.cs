@@ -1,8 +1,21 @@
-﻿using Kite.CQRS.Contracts;
-using Managements.Domain.Services;
+﻿using FluentValidation;
+using Mediator;
 
 namespace Managements.Application.Services;
 
-public sealed record ServiceQuery(ServiceId Service) : Query<ServiceResponse>;
+public sealed record ServiceQuery : IQuery<ServiceResponse>
+{
+    public Guid Service { get; init; } = default!;
+}
 
 public sealed record ServiceResponse(Guid Id, string Name, string Secret, string Status);
+
+public sealed class ServiceQueryValidator : AbstractValidator<ServiceQuery>
+{
+    public ServiceQueryValidator()
+    {
+        RuleFor(request => request.Service)
+            .NotEmpty().WithMessage("Enter a Service")
+            .NotNull().WithMessage("Enter a Service");
+    }
+}

@@ -1,12 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record SuspendUserCommand(UserId User, Text? Reason) : Command;
+public sealed record SuspendUserCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+
+    public string? Reason { get; init; }
+}
 
 internal sealed class SuspendUserCommandHandler : ICommandHandler<SuspendUserCommand>
 {
@@ -17,17 +22,28 @@ internal sealed class SuspendUserCommandHandler : ICommandHandler<SuspendUserCom
         _userRepository = userRepository;
     }
 
-    public async Task HandleAsync(SuspendUserCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(SuspendUserCommand command, CancellationToken cancellationToken)
     {
-        var (userId, reason) = message;
-        var user = await _userRepository.FindAsync(userId, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Suspend(reason);
+        user.Suspend(command.Reason);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class SuspendUserCommandValidator : AbstractValidator<SuspendUserCommand>
+{
+    public SuspendUserCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
     }
 }

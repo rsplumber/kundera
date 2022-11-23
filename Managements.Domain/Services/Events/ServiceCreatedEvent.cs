@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Services.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Services.Types;
 
-public record ServiceCreatedEvent(ServiceId Id) : DomainEvent;
+namespace Managements.Domain.Services.Events;
+
+[Event("service_created")]
+public sealed record ServiceCreatedEvent(ServiceId Id) : DomainEvent;

@@ -1,19 +1,19 @@
-﻿using Kite.Domain.Contracts;
-using Managements.Domain.Groups;
-using Managements.Domain.Roles;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Groups.Types;
+using Managements.Domain.Roles.Types;
 using Managements.Domain.Users.Events;
 using Managements.Domain.Users.Exception;
 using Managements.Domain.Users.Types;
 
 namespace Managements.Domain.Users;
 
-public class User : AggregateRoot<UserId>
+public class User : AggregateRoot
 {
     protected User()
     {
     }
 
-    internal User(Username username, GroupId groupId) : base(UserId.Generate())
+    internal User(Username username, GroupId groupId)
     {
         AddUsername(username);
 
@@ -24,13 +24,15 @@ public class User : AggregateRoot<UserId>
         AddDomainEvent(new UserCreatedEvent(Id));
     }
 
+    public UserId Id { get; set; } = UserId.Generate();
+
     public IReadOnlyCollection<Username> Usernames { get; internal set; } = new List<Username>();
 
     public IReadOnlyCollection<GroupId> Groups { get; internal set; } = new List<GroupId>();
 
     public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
 
-    public UserStatus Status { get; internal set; }
+    public UserStatus Status { get; internal set; } = default!;
 
     public Text? StatusChangeReason { get; internal set; }
 

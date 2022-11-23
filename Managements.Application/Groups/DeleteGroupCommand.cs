@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Groups;
 using Managements.Domain.Groups.Exception;
+using Managements.Domain.Groups.Types;
+using Mediator;
 
 namespace Managements.Application.Groups;
 
-public sealed record DeleteGroupCommand(GroupId Id) : Command;
+public sealed record DeleteGroupCommand : ICommand
+{
+    public Guid Group { get; init; } = default!;
+}
 
 internal sealed class DeleteGroupCommandHandler : ICommandHandler<DeleteGroupCommand>
 {
@@ -16,14 +20,27 @@ internal sealed class DeleteGroupCommandHandler : ICommandHandler<DeleteGroupCom
         _groupRepository = groupRepository;
     }
 
-    public async Task HandleAsync(DeleteGroupCommand message, CancellationToken cancellationToken = default)
+
+    public async ValueTask<Unit> Handle(DeleteGroupCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(message.Id, cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
         }
 
         await _groupRepository.DeleteAsync(group.Id, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class DeleteGroupCommandValidator : AbstractValidator<DeleteGroupCommand>
+{
+    public DeleteGroupCommandValidator()
+    {
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter a Group")
+            .NotNull().WithMessage("Enter a Group");
     }
 }

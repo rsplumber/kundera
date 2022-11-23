@@ -2,12 +2,13 @@
 using Kite.Web.Requests;
 using Managements.Application.Permissions;
 using Managements.Domain.Permissions;
+using Managements.Domain.Permissions.Types;
 
 namespace Web.Api.Permissions;
 
 public record AddPermissionMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {
-    public AddPermissionMetaCommand ToCommand(Guid permissionId) => new(PermissionId.From(permissionId), Meta);
+    public ChangePermissionMetaCommand ToCommand(Guid permissionId) => new(PermissionId.From(permissionId), Meta);
 }
 
 public class AddPermissionMetaRequestValidator : RequestValidator<AddPermissionMetaRequest>

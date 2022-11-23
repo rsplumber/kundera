@@ -8,6 +8,7 @@ using Managements.Domain.Groups;
 using Managements.Domain.Permissions;
 using Managements.Domain.Roles;
 using Managements.Domain.Scopes;
+using Managements.Domain.Scopes.Types;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
 using Managements.Domain.Users;

@@ -1,6 +1,6 @@
 namespace Managements.Domain.Services.Exceptions;
 
-public class ServiceNotFoundException : NotSupportedException
+public sealed class ServiceNotFoundException : NotSupportedException
 {
     private const string DefaultMessage = "Service not found";
 

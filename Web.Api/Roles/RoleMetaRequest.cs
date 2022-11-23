@@ -2,12 +2,13 @@
 using Kite.Web.Requests;
 using Managements.Application.Roles;
 using Managements.Domain.Roles;
+using Managements.Domain.Roles.Types;
 
 namespace Web.Api.Roles;
 
 public record AddRoleMetaRequest(Dictionary<string, string> Meta) : IWebRequest
 {
-    public AddRoleMetaCommand ToCommand(Guid roleId) => new(RoleId.From(roleId), Meta);
+    public ChangeRoleMetaCommand ToCommand(Guid roleId) => new(RoleId.From(roleId), Meta);
 }
 
 public class AddRoleMetaRequestValidator : RequestValidator<AddRoleMetaRequest>

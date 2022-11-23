@@ -1,5 +1,5 @@
-﻿using Kite.CQRS;
-using Managements.Application.Roles;
+﻿using Managements.Application.Roles;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -14,11 +14,11 @@ internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public async Task<IEnumerable<RolesResponse>> HandleAsync(RolesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<RolesResponse>> Handle(RolesQuery query, CancellationToken cancellationToken)
     {
-        if (message.Name is not null)
+        if (query.Name is not null)
         {
-            _roles = _roles.Where(model => model.Name.Contains(message.Name));
+            _roles = _roles.Where(model => model.Name.Contains(query.Name));
         }
 
         var rolesDataModel = await _roles.ToListAsync();

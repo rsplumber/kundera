@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Roles.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Roles.Types;
 
-public record RoleCreatedEvent(RoleId Id) : DomainEvent;
+namespace Managements.Domain.Roles.Events;
+
+[Event("role_created")]
+public sealed record RoleCreatedEvent(RoleId Id) : DomainEvent;

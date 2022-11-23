@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Users.Exception;
 
-public class UserDuplicateIdentifierException : DomainException
+public sealed class UserDuplicateIdentifierException : DomainException
 {
     public UserDuplicateIdentifierException(string identifier) : base($"User {identifier} exists")
     {

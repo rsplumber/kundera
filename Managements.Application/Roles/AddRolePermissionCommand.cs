@@ -1,13 +1,20 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Permissions;
 using Managements.Domain.Permissions.Exceptions;
+using Managements.Domain.Permissions.Types;
 using Managements.Domain.Roles;
 using Managements.Domain.Roles.Exceptions;
+using Managements.Domain.Roles.Types;
+using Mediator;
 
 namespace Managements.Application.Roles;
 
-public sealed record AddRolePermissionCommand(RoleId Role, params PermissionId[] Permissions) : Command;
+public sealed record AddRolePermissionCommand : ICommand
+{
+    public Guid Role { get; init; } = default!;
+
+    public Guid[] Permissions { get; init; } = default!;
+}
 
 internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRolePermissionCommand>
 {
@@ -20,18 +27,17 @@ internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRoleP
         _permissionRepository = permissionRepository;
     }
 
-    public async Task HandleAsync(AddRolePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(AddRolePermissionCommand command, CancellationToken cancellationToken)
     {
-        var (roleId, permissions) = message;
-        var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+        var role = await _roleRepository.FindAsync(RoleId.From(command.Role), cancellationToken);
         if (role is null)
         {
             throw new RoleNotFoundException();
         }
 
-        foreach (var permissionId in permissions)
+        foreach (var permissionId in command.Permissions)
         {
-            var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);
+            var permission = await _permissionRepository.FindAsync(PermissionId.From(permissionId), cancellationToken);
             if (permission is null)
             {
                 throw new PermissionNotFoundException();
@@ -41,5 +47,21 @@ internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRoleP
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class AddRolePermissionCommandValidator : AbstractValidator<AddRolePermissionCommand>
+{
+    public AddRolePermissionCommandValidator()
+    {
+        RuleFor(request => request.Role)
+            .NotEmpty().WithMessage("Enter a Role")
+            .NotNull().WithMessage("Enter a Role");
+
+        RuleFor(request => request.Permissions)
+            .NotEmpty().WithMessage("Enter a at least one permission")
+            .NotNull().WithMessage("Enter a at least one permission");
     }
 }

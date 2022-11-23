@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Groups.Exception;
 
-public class GroupNameDuplicateException : DomainException
+public sealed class GroupNameDuplicateException : DomainException
 {
     private const string DefaultMessage = "Group name is duplicate";
 

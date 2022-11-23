@@ -1,5 +1,7 @@
-﻿using Managements.Domain.Users.Types;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Users.Types;
 
 namespace Managements.Domain.Users.Events;
 
-public record UserStatusChangedEvent(UserId UserId, UserStatus UserStatus) : DomainEvent;
+[Event("user_status")]
+public sealed record UserStatusChangedEvent(UserId UserId, UserStatus UserStatus) : DomainEvent;

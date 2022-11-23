@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain.Users;
+using Managements.Domain.Users.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -8,11 +9,11 @@ namespace Managements.Data.Users;
 
 internal class UserRepository : IUserRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<UserDataModel> _users;
     private readonly IMapper _mapper;
 
-    public UserRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public UserRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;

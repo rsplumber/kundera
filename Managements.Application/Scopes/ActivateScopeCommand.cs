@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Exceptions;
+using Managements.Domain.Scopes.Types;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record ActivateScopeCommand(ScopeId Scope) : Command;
+public sealed record ActivateScopeCommand : ICommand
+{
+    public Guid Scope { get; init; } = default!;
+}
 
 internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScopeCommand>
 {
@@ -16,9 +20,9 @@ internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScop
         _scopeRepository = scopeRepository;
     }
 
-    public async Task HandleAsync(ActivateScopeCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(ActivateScopeCommand command, CancellationToken cancellationToken)
     {
-        var scope = await _scopeRepository.FindAsync(message.Scope, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
@@ -27,5 +31,17 @@ internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScop
         scope.Activate();
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class ActivateScopeCommandValidator : AbstractValidator<ActivateScopeCommand>
+{
+    public ActivateScopeCommandValidator()
+    {
+        RuleFor(request => request.Scope)
+            .NotEmpty().WithMessage("Enter Scope")
+            .NotNull().WithMessage("Enter Scope");
     }
 }

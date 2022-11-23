@@ -1,12 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record BlockUserCommand(UserId User, Text Reason) : Command;
+public sealed record BlockUserCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+
+    public string Reason { get; init; } = default!;
+}
 
 internal sealed class BlockUserCommandHandler : ICommandHandler<BlockUserCommand>
 {
@@ -17,17 +22,32 @@ internal sealed class BlockUserCommandHandler : ICommandHandler<BlockUserCommand
         _userRepository = userRepository;
     }
 
-    public async Task HandleAsync(BlockUserCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(BlockUserCommand command, CancellationToken cancellationToken)
     {
-        var (userId, reason) = message;
-        var user = await _userRepository.FindAsync(userId, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.Block(reason);
+        user.Block(command.Reason!);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class BlockUserCommandValidator : AbstractValidator<BlockUserCommand>
+{
+    public BlockUserCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
+
+        RuleFor(request => request.Reason)
+            .NotEmpty().WithMessage("Enter Reason")
+            .NotNull().WithMessage("Enter Reason");
     }
 }

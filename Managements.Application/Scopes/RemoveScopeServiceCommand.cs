@@ -1,12 +1,18 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Exceptions;
-using Managements.Domain.Services;
+using Managements.Domain.Scopes.Types;
+using Managements.Domain.Services.Types;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record RemoveScopeServiceCommand(ScopeId Scope, params ServiceId[] Services) : Command;
+public sealed record RemoveScopeServiceCommand : ICommand
+{
+    public Guid Scope { get; init; } = default!;
+
+    public Guid[] Services { get; init; } = default!;
+}
 
 internal sealed class RemoveScopeServiceCommandHandler : ICommandHandler<RemoveScopeServiceCommand>
 {
@@ -17,20 +23,35 @@ internal sealed class RemoveScopeServiceCommandHandler : ICommandHandler<RemoveS
         _scopeRepository = scopeRepository;
     }
 
-    public async Task HandleAsync(RemoveScopeServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(RemoveScopeServiceCommand command, CancellationToken cancellationToken)
     {
-        var (scopeId, serviceIds) = message;
-        var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
         }
 
-        foreach (var service in serviceIds)
+        foreach (var service in command.Services)
         {
-            scope.RemoveService(service);
+            scope.RemoveService(ServiceId.From(service));
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class RemoveScopeServiceCommandValidator : AbstractValidator<RemoveScopeServiceCommand>
+{
+    public RemoveScopeServiceCommandValidator()
+    {
+        RuleFor(request => request.Scope)
+            .NotEmpty().WithMessage("Enter a Scope")
+            .NotNull().WithMessage("Enter a Scope");
+
+        RuleFor(request => request.Services)
+            .NotEmpty().WithMessage("Enter at least one service")
+            .NotNull().WithMessage("Enter at least one service");
     }
 }

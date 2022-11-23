@@ -2,6 +2,7 @@
 using Auth.Core.Exceptions;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
 
 namespace Auth.Core;
 

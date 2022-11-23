@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Permissions.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Permissions.Types;
 
-public record PermissionCreatedEvent(PermissionId Id) : DomainEvent;
+namespace Managements.Domain.Permissions.Events;
+
+[Event("permission_created")]
+public sealed record PermissionCreatedEvent(PermissionId Id) : DomainEvent;

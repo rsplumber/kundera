@@ -1,7 +1,9 @@
 ﻿using Kite.Web.Requests;
 using Managements.Application.Groups;
 using Managements.Domain.Groups;
+using Managements.Domain.Groups.Types;
 using Managements.Domain.Roles;
+using Managements.Domain.Roles.Types;
 
 namespace Web.Api.Groups;
 

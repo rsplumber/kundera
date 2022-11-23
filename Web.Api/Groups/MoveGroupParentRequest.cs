@@ -2,6 +2,7 @@
 using Kite.Web.Requests;
 using Managements.Application.Groups;
 using Managements.Domain.Groups;
+using Managements.Domain.Groups.Types;
 
 namespace Web.Api.Groups;
 

@@ -1,6 +1,6 @@
 namespace Managements.Domain.Scopes.Exceptions;
 
-public class ScopeNotFoundException : NotSupportedException
+public sealed class ScopeNotFoundException : NotSupportedException
 {
     private const string DefaultMessage = "Scope not found";
 

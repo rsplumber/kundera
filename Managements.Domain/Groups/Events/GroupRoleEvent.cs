@@ -1,7 +1,11 @@
-﻿using Managements.Domain.Roles;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Groups.Types;
+using Managements.Domain.Roles.Types;
 
 namespace Managements.Domain.Groups.Events;
 
-public record GroupRoleAddedEvent(GroupId Id, RoleId Role) : DomainEvent;
+[Event("group_role_added")]
+public sealed record GroupRoleAddedEvent(GroupId Id, RoleId Role) : DomainEvent;
 
-public record GroupRoleRemovedEvent(GroupId Id, RoleId Role) : DomainEvent;
+[Event("group_role_removed")]
+public sealed record GroupRoleRemovedEvent(GroupId Id, RoleId Role) : DomainEvent;

@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Groups.Exception;
 
-public class GroupRoleCouldNotBeEmptyException : DomainException
+public sealed class GroupRoleCouldNotBeEmptyException : DomainException
 {
     private const string DefaultMessage = "Group's roles could not be empty";
 

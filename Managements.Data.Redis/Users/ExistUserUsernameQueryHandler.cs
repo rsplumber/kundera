@@ -1,11 +1,12 @@
-﻿using Kite.CQRS;
-using Managements.Application.Users;
+﻿using Managements.Application.Users;
+using Managements.Domain.Users.Exception;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
 
-internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUsernameQuery, bool>
+internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUsernameQuery, Guid>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
@@ -14,8 +15,14 @@ internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUse
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async Task<bool> HandleAsync(ExistUserUsernameQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<Guid> Handle(ExistUserUsernameQuery query, CancellationToken cancellationToken)
     {
-        return await _users.AnyAsync(model => model.Usernames.Contains(message.Username));
+        var user = await _users.Where(model => model.Usernames.Contains(query.Username)).FirstOrDefaultAsync();
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        return user.Id;
     }
 }

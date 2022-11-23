@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain;
 using Managements.Domain.Permissions;
-using Redis.OM;
+using Managements.Domain.Permissions.Types;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
 
 internal class PermissionRepository : IPermissionRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<PermissionDataModel> _permissions;
     private readonly IMapper _mapper;
 
-    public PermissionRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public PermissionRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>(false);
         _mapper = mapper;

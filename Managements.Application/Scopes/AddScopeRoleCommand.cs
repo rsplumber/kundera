@@ -1,13 +1,20 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Roles;
 using Managements.Domain.Roles.Exceptions;
+using Managements.Domain.Roles.Types;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Exceptions;
+using Managements.Domain.Scopes.Types;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record AddScopeRoleCommand(ScopeId Scope, params RoleId[] Roles) : Command;
+public sealed record AddScopeRoleCommand : ICommand
+{
+    public Guid Scope { get; init; } = default!;
+
+    public Guid[] Roles { get; init; } = default!;
+}
 
 internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleCommand>
 {
@@ -20,18 +27,17 @@ internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleC
         _roleRepository = roleRepository;
     }
 
-    public async Task HandleAsync(AddScopeRoleCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(AddScopeRoleCommand command, CancellationToken cancellationToken)
     {
-        var (scopeId, roleIds) = message;
-        var scope = await _scopeRepository.FindAsync(scopeId, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
         }
 
-        foreach (var roleId in roleIds)
+        foreach (var roleId in command.Roles)
         {
-            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            var role = await _roleRepository.FindAsync(RoleId.From(roleId), cancellationToken);
             if (role is null)
             {
                 throw new RoleNotFoundException();
@@ -41,5 +47,21 @@ internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleC
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class AddScopeRoleCommandValidator : AbstractValidator<AddScopeRoleCommand>
+{
+    public AddScopeRoleCommandValidator()
+    {
+        RuleFor(request => request.Scope)
+            .NotEmpty().WithMessage("Enter a Scope")
+            .NotNull().WithMessage("Enter a Scope");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter at least one role")
+            .NotNull().WithMessage("Enter at least one role");
     }
 }

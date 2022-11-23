@@ -1,8 +1,21 @@
-﻿using Kite.CQRS.Contracts;
-using Managements.Domain.Roles;
+﻿using FluentValidation;
+using Mediator;
 
 namespace Managements.Application.Roles;
 
-public sealed record RolePermissionsQuery(RoleId Id) : Query<IEnumerable<RolePermissionsResponse>>;
+public sealed record RolePermissionsQuery : IQuery<IEnumerable<RolePermissionsResponse>>
+{
+    public Guid Role { get; init; } = default!;
+}
 
 public sealed record RolePermissionsResponse(Guid Id, string Name);
+
+public sealed class RolePermissionsQueryValidator : AbstractValidator<RolePermissionsQuery>
+{
+    public RolePermissionsQueryValidator()
+    {
+        RuleFor(request => request.Role)
+            .NotEmpty().WithMessage("Enter Role")
+            .NotNull().WithMessage("Enter Role");
+    }
+}

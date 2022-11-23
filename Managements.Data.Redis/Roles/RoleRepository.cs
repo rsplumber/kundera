@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain;
 using Managements.Domain.Roles;
-using Redis.OM;
+using Managements.Domain.Roles.Types;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
 
 internal class RoleRepository : IRoleRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<RoleDataModel> _roles;
     private readonly IMapper _mapper;
 
-    public RoleRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public RoleRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>(false);
         _mapper = mapper;

@@ -1,9 +1,17 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Permissions.Types;
 
 namespace Managements.Domain.Permissions;
 
-public interface IPermissionRepository : IRepository<Permission, PermissionId>, IUpdateService<Permission>, IDeleteService<PermissionId>
+public interface IPermissionRepository
 {
+    Task AddAsync(Permission entity, CancellationToken cancellationToken = default);
+
+    Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default);
+
+    Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default);
+
+    Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default);
+
     Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default);

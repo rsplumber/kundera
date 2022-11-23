@@ -7,11 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Kite.CQRS.Abstractions" Version="0.0.83" />
+        <PackageReference Include="Mediator.Abstractions" Version="2.1.0-preview.2" />
+        <PackageReference Include="FluentValidation" Version="11.3.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Managements.Domain\Managements.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Managements.Builder" />
     </ItemGroup>
 
 </Project>

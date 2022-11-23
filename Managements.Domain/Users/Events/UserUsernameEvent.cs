@@ -1,5 +1,10 @@
-﻿namespace Managements.Domain.Users.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Users.Types;
 
-public record UserUsernameAddedEvent(UserId Id, Username Username) : DomainEvent;
+namespace Managements.Domain.Users.Events;
 
-public record UserUsernameRemovedEvent(UserId Id, Username Username) : DomainEvent;
+[Event("user_username_added")]
+public sealed record UserUsernameAddedEvent(UserId Id, Username Username) : DomainEvent;
+
+[Event("user_username_removed")]
+public sealed record UserUsernameRemovedEvent(UserId Id, Username Username) : DomainEvent;

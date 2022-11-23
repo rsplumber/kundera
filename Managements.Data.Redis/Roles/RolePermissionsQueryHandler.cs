@@ -1,8 +1,7 @@
-﻿using Kite.CQRS;
-using Managements.Application.Roles;
+﻿using Managements.Application.Roles;
 using Managements.Data.Permissions;
 using Managements.Domain.Roles.Exceptions;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
@@ -18,9 +17,9 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async Task<IEnumerable<RolePermissionsResponse>> HandleAsync(RolePermissionsQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<RolePermissionsResponse>> Handle(RolePermissionsQuery query, CancellationToken cancellationToken)
     {
-        var roleDataModel = await _roles.FindByIdAsync(message.Id.ToString());
+        var roleDataModel = await _roles.FindByIdAsync(query.Role.ToString());
         if (roleDataModel is null)
         {
             throw new RoleNotFoundException();

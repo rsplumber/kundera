@@ -1,5 +1,5 @@
-﻿using Kite.CQRS;
-using Managements.Application.Scopes;
+﻿using Managements.Application.Scopes;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -14,11 +14,11 @@ internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerabl
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public async Task<IEnumerable<ScopesResponse>> HandleAsync(ScopesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<ScopesResponse>> Handle(ScopesQuery query, CancellationToken cancellationToken)
     {
-        if (message.Name is not null)
+        if (query.Name is not null)
         {
-            _scopes = _scopes.Where(model => model.Name.Contains(message.Name));
+            _scopes = _scopes.Where(model => model.Name.Contains(query.Name));
         }
 
         var rolesDataModel = await _scopes.ToListAsync();

@@ -1,7 +1,11 @@
-﻿using Managements.Domain.Groups;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Groups.Types;
+using Managements.Domain.Users.Types;
 
 namespace Managements.Domain.Users.Events;
 
-public record UserJoinedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
+[Event("user_joined_group")]
+public sealed record UserJoinedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
 
-public record UserRemovedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
+[Event("user_removed_group")]
+public sealed record UserRemovedGroupEvent(UserId Id, GroupId Group) : DomainEvent;

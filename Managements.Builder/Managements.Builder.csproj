@@ -9,13 +9,15 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Kite.CQRS.Extensions.Microsoft.DependencyInjection" Version="0.0.89"/>
-        <PackageReference Include="Kite.CQRS.InMemory.Extensions.Microsoft.DependencyInjection" Version="0.0.89"/>
-
+        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\Managements.Data.Redis\Managements.Data.Redis.csproj" />
+      <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
+      <ProjectReference Include="..\Managements.Data.Redis\Managements.Data.Redis.csproj" />
     </ItemGroup>
 
     <ItemGroup>

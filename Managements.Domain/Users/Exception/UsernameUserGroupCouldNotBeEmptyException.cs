@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Users.Exception;
 
-public class UsernameGroupCouldNotBeEmptyException : DomainException
+public sealed class UsernameGroupCouldNotBeEmptyException : DomainException
 {
     private const string DefaultMessage = "Username's group could not be empty";
 

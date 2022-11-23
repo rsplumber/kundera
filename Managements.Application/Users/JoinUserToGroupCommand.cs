@@ -1,13 +1,20 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Groups;
 using Managements.Domain.Groups.Exception;
+using Managements.Domain.Groups.Types;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record JoinUserToGroupCommand(UserId User, GroupId Group) : Command;
+public sealed record JoinUserToGroupCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+
+    public Guid Group { get; init; } = default!;
+}
 
 internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserToGroupCommand>
 {
@@ -20,22 +27,37 @@ internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserTo
         _groupRepository = groupRepository;
     }
 
-    public async Task HandleAsync(JoinUserToGroupCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(JoinUserToGroupCommand command, CancellationToken cancellationToken)
     {
-        var (userId, groupId) = message;
-        var user = await _userRepository.FindAsync(userId, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        var group = await _groupRepository.FindAsync(groupId, cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
         }
 
-        user.JoinGroup(groupId);
+        user.JoinGroup(group.Id);
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class JoinUserToGroupCommandValidator : AbstractValidator<JoinUserToGroupCommand>
+{
+    public JoinUserToGroupCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
+
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter Group")
+            .NotNull().WithMessage("Enter Group");
     }
 }

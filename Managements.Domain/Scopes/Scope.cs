@@ -1,19 +1,19 @@
-﻿using Kite.Domain.Contracts;
-using Kite.Hashing;
-using Managements.Domain.Roles;
+﻿using Kite.Hashing;
+using Managements.Domain.Contracts;
+using Managements.Domain.Roles.Types;
 using Managements.Domain.Scopes.Events;
 using Managements.Domain.Scopes.Types;
-using Managements.Domain.Services;
+using Managements.Domain.Services.Types;
 
 namespace Managements.Domain.Scopes;
 
-public class Scope : AggregateRoot<ScopeId>
+public class Scope : AggregateRoot
 {
     protected Scope()
     {
     }
 
-    internal Scope(Name name, IHashService hashService) : base(ScopeId.Generate())
+    internal Scope(Name name, IHashService hashService)
     {
         Name = name;
         Secret = ScopeSecret.From(hashService.Hash(Id.ToString(), Name.Value));
@@ -21,7 +21,7 @@ public class Scope : AggregateRoot<ScopeId>
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    internal Scope(Name name, ScopeSecret scopeSecret) : base(ScopeId.Generate())
+    internal Scope(Name name, ScopeSecret scopeSecret)
     {
         Name = name;
         Secret = scopeSecret;
@@ -29,11 +29,13 @@ public class Scope : AggregateRoot<ScopeId>
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    public Name Name { get; internal set; }
+    public ScopeId Id { get; internal set; } = ScopeId.Generate();
+    
+    public Name Name { get; internal set; } = default!;
 
-    public ScopeSecret Secret { get; internal set; }
+    public ScopeSecret Secret { get; internal set; } = default!;
 
-    public ScopeStatus Status { get; internal set; }
+    public ScopeStatus Status { get; internal set; } = default!;
 
     public IReadOnlyCollection<ServiceId> Services { get; internal set; } = new List<ServiceId>();
 

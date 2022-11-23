@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Exceptions;
+using Managements.Domain.Services.Types;
+using Mediator;
 
 namespace Managements.Application.Services;
 
-public sealed record ActivateServiceCommand(ServiceId Service) : Command;
+public sealed record ActivateServiceCommand : ICommand
+{
+    public Guid Service { get; init; } = default!;
+}
 
 internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateServiceCommand>
 {
@@ -16,9 +20,9 @@ internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateSe
         _serviceRepository = serviceRepository;
     }
 
-    public async Task HandleAsync(ActivateServiceCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(ActivateServiceCommand command, CancellationToken cancellationToken)
     {
-        var service = await _serviceRepository.FindAsync(message.Service, cancellationToken);
+        var service = await _serviceRepository.FindAsync(ServiceId.From(command.Service), cancellationToken);
         if (service is null)
         {
             throw new ServiceNotFoundException();
@@ -27,5 +31,17 @@ internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateSe
         service.Activate();
 
         await _serviceRepository.UpdateAsync(service, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class ActivateServiceCommandValidator : AbstractValidator<ActivateServiceCommand>
+{
+    public ActivateServiceCommandValidator()
+    {
+        RuleFor(request => request.Service)
+            .NotEmpty().WithMessage("Enter a Service")
+            .NotNull().WithMessage("Enter a Service");
     }
 }

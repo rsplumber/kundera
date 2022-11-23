@@ -1,12 +1,25 @@
-﻿using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain;
-using Managements.Domain.Permissions;
+using Mediator;
 
 namespace Managements.Application.Permissions;
 
-public sealed record PermissionQuery(PermissionId Permission) : Query<PermissionResponse>;
+public sealed record PermissionQuery : IQuery<PermissionResponse>
+{
+    public Guid Permission { get; init; } = default!;
+}
 
 public sealed record PermissionResponse(Guid Id, Name Name)
 {
     public Dictionary<string, string>? Meta { get; set; }
+}
+
+public sealed class PermissionQueryValidator : AbstractValidator<PermissionQuery>
+{
+    public PermissionQueryValidator()
+    {
+        RuleFor(request => request.Permission)
+            .NotEmpty().WithMessage("Enter Permission")
+            .NotNull().WithMessage("Enter Permission");
+    }
 }

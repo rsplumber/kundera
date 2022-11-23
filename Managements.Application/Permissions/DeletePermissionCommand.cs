@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Permissions;
 using Managements.Domain.Permissions.Exceptions;
+using Managements.Domain.Permissions.Types;
+using Mediator;
 
 namespace Managements.Application.Permissions;
 
-public sealed record DeletePermissionCommand(PermissionId PermissionId) : Command;
+public sealed record DeletePermissionCommand : ICommand
+{
+    public Guid Permission { get; init; } = default;
+}
 
 internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePermissionCommand>
 {
@@ -16,14 +20,27 @@ internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePer
         _permissionRepository = permissionRepository;
     }
 
-    public async Task HandleAsync(DeletePermissionCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(DeletePermissionCommand command, CancellationToken cancellationToken)
     {
-        var permission = await _permissionRepository.FindAsync(message.PermissionId, cancellationToken);
+        var permissionId = PermissionId.From(command.Permission);
+        var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);
         if (permission is null)
         {
             throw new PermissionNotFoundException();
         }
 
-        await _permissionRepository.DeleteAsync(message.PermissionId, cancellationToken);
+        await _permissionRepository.DeleteAsync(permissionId, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class DeletePermissionCommandValidator : AbstractValidator<DeletePermissionCommand>
+{
+    public DeletePermissionCommandValidator()
+    {
+        RuleFor(request => request.Permission)
+            .NotEmpty().WithMessage("Enter a Permission")
+            .NotNull().WithMessage("Enter a Permission");
     }
 }

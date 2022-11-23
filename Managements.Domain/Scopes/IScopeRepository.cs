@@ -1,13 +1,20 @@
-﻿using Kite.Domain.Contracts;
-using Managements.Domain.Scopes.Types;
+﻿using Managements.Domain.Scopes.Types;
 
 namespace Managements.Domain.Scopes;
 
-public interface IScopeRepository : IRepository<Scope, ScopeId>, IUpdateService<Scope>, IDeleteService<ScopeId>
+public interface IScopeRepository
 {
+    Task AddAsync(Scope entity, CancellationToken cancellationToken = default);
+
+    Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default);
+
     Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
 
     Task<Scope?> FindAsync(Name name, CancellationToken cancellationToken = default);
 
     Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default);
+
+    Task UpdateAsync(Scope entity, CancellationToken cancellationToken = default);
+
+    Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = default);
 }

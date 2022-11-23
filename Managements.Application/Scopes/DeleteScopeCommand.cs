@@ -1,11 +1,15 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Scopes;
 using Managements.Domain.Scopes.Exceptions;
+using Managements.Domain.Scopes.Types;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record DeleteScopeCommand(ScopeId Id) : Command;
+public sealed record DeleteScopeCommand : ICommand
+{
+    public Guid Scope { get; init; } = default!;
+}
 
 internal sealed class DeleteScopeCommandHandler : ICommandHandler<DeleteScopeCommand>
 {
@@ -16,14 +20,26 @@ internal sealed class DeleteScopeCommandHandler : ICommandHandler<DeleteScopeCom
         _scopeRepository = scopeRepository;
     }
 
-    public async Task HandleAsync(DeleteScopeCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(DeleteScopeCommand command, CancellationToken cancellationToken)
     {
-        var scope = await _scopeRepository.FindAsync(message.Id, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
         }
 
         await _scopeRepository.DeleteAsync(scope.Id, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class DeleteScopeCommandValidator : AbstractValidator<DeleteScopeCommand>
+{
+    public DeleteScopeCommandValidator()
+    {
+        RuleFor(request => request.Scope)
+            .NotEmpty().WithMessage("Enter a Scope")
+            .NotNull().WithMessage("Enter a Scope");
     }
 }

@@ -1,7 +1,6 @@
-﻿using Kite.CQRS;
-using Managements.Application.Users;
+﻿using Managements.Application.Users;
 using Managements.Domain.Users.Exception;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
@@ -15,9 +14,9 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async Task<UserResponse> HandleAsync(UserQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<UserResponse> Handle(UserQuery query, CancellationToken cancellationToken)
     {
-        var user = await _users.FindByIdAsync(message.User.Value.ToString());
+        var user = await _users.FindByIdAsync(query.User.ToString());
         if (user is null)
         {
             throw new UserNotFoundException();

@@ -1,7 +1,6 @@
-﻿using Kite.CQRS;
-using Managements.Application.Scopes;
+﻿using Managements.Application.Scopes;
 using Managements.Domain.Roles.Exceptions;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
@@ -15,9 +14,9 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public async Task<ScopeResponse> HandleAsync(ScopeQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<ScopeResponse> Handle(ScopeQuery query, CancellationToken cancellationToken)
     {
-        var scope = await _scopes.FindByIdAsync(message.Scope.ToString());
+        var scope = await _scopes.FindByIdAsync(query.Scope.ToString());
         if (scope is null)
         {
             throw new RoleNotFoundException();

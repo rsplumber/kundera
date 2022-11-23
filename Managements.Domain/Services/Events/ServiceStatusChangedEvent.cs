@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Services.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Services.Types;
 
-public record ServiceStatusChangedEvent(ServiceId Id) : DomainEvent;
+namespace Managements.Domain.Services.Events;
+
+[Event("service_status_changed")]
+public sealed record ServiceStatusChangedEvent(ServiceId Id) : DomainEvent;

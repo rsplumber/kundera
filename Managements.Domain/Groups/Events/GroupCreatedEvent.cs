@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Groups.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Groups.Types;
 
-public record GroupCreatedEvent(GroupId GroupId) : DomainEvent;
+namespace Managements.Domain.Groups.Events;
+
+[Event("group_created")]
+public sealed record GroupCreatedEvent(GroupId GroupId) : DomainEvent;

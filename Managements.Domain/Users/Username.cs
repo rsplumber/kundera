@@ -1,37 +1,10 @@
-﻿namespace Managements.Domain.Users;
+﻿using ValueOf;
 
-public record Username
+namespace Managements.Domain.Users;
+
+public sealed class Username : ValueOf<string, Username>
 {
-    private readonly string _value;
-
-    private Username(string value)
-    {
-        _value = value;
-    }
-
-    public static Username From(string username) => new(username);
-
     public static implicit operator string(Username username) => username.Value;
 
-    public static implicit operator Username(string name) => new(name);
-
-    public string Value => _value;
-
-    public virtual bool Equals(Username? other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-
-        return _value == other._value;
-    }
-
-    public override int GetHashCode()
-    {
-        return _value.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return _value;
-    }
+    public static implicit operator Username(string name) => From(name);
 }

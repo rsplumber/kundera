@@ -1,11 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Groups;
 using Managements.Domain.Groups.Exception;
+using Managements.Domain.Groups.Types;
+using Mediator;
 
 namespace Managements.Application.Groups;
 
-public sealed record SetGroupParentCommand(GroupId Group, GroupId Parent) : Command;
+public sealed record SetGroupParentCommand : ICommand
+{
+    public Guid Group { get; init; } = default!;
+
+    public Guid Parent { get; init; } = default!;
+}
 
 internal sealed class SetGroupParentCommandHandler : ICommandHandler<SetGroupParentCommand>
 {
@@ -16,16 +22,15 @@ internal sealed class SetGroupParentCommandHandler : ICommandHandler<SetGroupPar
         _groupRepository = groupRepository;
     }
 
-    public async Task HandleAsync(SetGroupParentCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(SetGroupParentCommand command, CancellationToken cancellationToken)
     {
-        var (groupId, parentId) = message;
-        var group = await _groupRepository.FindAsync(groupId, cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
         }
 
-        var parent = await _groupRepository.FindAsync(parentId, cancellationToken);
+        var parent = await _groupRepository.FindAsync(GroupId.From(command.Parent), cancellationToken);
         if (parent is null)
         {
             throw new GroupNotFoundException();
@@ -33,5 +38,21 @@ internal sealed class SetGroupParentCommandHandler : ICommandHandler<SetGroupPar
 
         group.SetParent(parent.Id);
         await _groupRepository.UpdateAsync(group, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class SetGroupParentCommandValidator : AbstractValidator<SetGroupParentCommand>
+{
+    public SetGroupParentCommandValidator()
+    {
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter a Group")
+            .NotNull().WithMessage("Enter a Group");
+
+        RuleFor(request => request.Parent)
+            .NotEmpty().WithMessage("Enter a at least one role")
+            .NotNull().WithMessage("Enter a at least one role");
     }
 }

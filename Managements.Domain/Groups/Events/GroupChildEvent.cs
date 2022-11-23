@@ -1,5 +1,10 @@
-﻿namespace Managements.Domain.Groups.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Groups.Types;
 
-public record GroupChildAddedEvent(GroupId GroupId, GroupId Child) : DomainEvent;
+namespace Managements.Domain.Groups.Events;
 
-public record GroupChildRemovedEvent(GroupId GroupId, GroupId Child) : DomainEvent;
+[Event("group_child_added")]
+public sealed record GroupChildAddedEvent(GroupId GroupId, GroupId Child) : DomainEvent;
+
+[Event("group_child_removed")]
+public sealed record GroupChildRemovedEvent(GroupId GroupId, GroupId Child) : DomainEvent;

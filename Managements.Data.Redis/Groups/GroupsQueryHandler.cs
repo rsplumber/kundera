@@ -1,6 +1,5 @@
-﻿using Kite.CQRS;
-using Managements.Application.Groups;
-using Redis.OM;
+﻿using Managements.Application.Groups;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
@@ -14,7 +13,7 @@ internal sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, IEnumerabl
         _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
     }
 
-    public async Task<IEnumerable<GroupsResponse>> HandleAsync(GroupsQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<GroupsResponse>> Handle(GroupsQuery query, CancellationToken cancellationToken)
     {
         var groups = await _groups.ToListAsync();
 

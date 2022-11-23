@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain;
 using Managements.Domain.Groups;
-using Redis.OM;
+using Managements.Domain.Groups.Types;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
 
 internal class GroupRepository : IGroupRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<GroupDataModel> _groups;
     private readonly IMapper _mapper;
 
 
-    public GroupRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public GroupRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;
@@ -39,11 +39,6 @@ internal class GroupRepository : IGroupRepository
         var dataModel = _mapper.Map<GroupDataModel>(entity);
         await _groups.InsertAsync(dataModel);
         await _eventBus.DispatchDomainEventsAsync(entity);
-    }
-
-    public Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<Group>> FindAsync(IEnumerable<GroupId> ids, CancellationToken cancellationToken = default)
@@ -74,30 +69,15 @@ internal class GroupRepository : IGroupRepository
         }
     }
 
-    public async Task<IEnumerable<Group>> FindParentsAsync(GroupId id, CancellationToken cancellationToken = default)
-    {
-        var currentGroup = await _groups.FindByIdAsync(id.Value.ToString());
-        if (currentGroup is null) return Array.Empty<Group>();
-        var dataModels = new List<GroupDataModel>();
-        await FetchParentsAsync(currentGroup);
-        return dataModels.Select(model => _mapper.Map<Group>(model));
-
-        async Task FetchParentsAsync(GroupDataModel group)
-        {
-            while (group.Parent is not null)
-            {
-                var parent = await _groups.FindByIdAsync(group.Parent.ToString()!);
-                if (parent is null) break;
-                group = parent;
-                dataModels.Add(group);
-            }
-        }
-    }
-
     public async Task<Group?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
         var dataModel = await _groups.FirstOrDefaultAsync(model => model.Name == name.Value);
 
         return _mapper.Map<Group>(dataModel);
+    }
+
+    public async Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

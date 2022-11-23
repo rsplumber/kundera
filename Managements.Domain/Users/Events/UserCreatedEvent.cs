@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Users.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Users.Types;
 
-public record UserCreatedEvent(UserId UserId) : DomainEvent;
+namespace Managements.Domain.Users.Events;
+
+[Event("user_created")]
+public sealed record UserCreatedEvent(UserId UserId) : DomainEvent;

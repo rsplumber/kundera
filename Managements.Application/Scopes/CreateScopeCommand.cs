@@ -1,24 +1,36 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
-using Managements.Domain;
+﻿using FluentValidation;
 using Managements.Domain.Scopes;
+using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record CreateScopeCommand(Name Name) : Command;
+public sealed record CreateScopeCommand : ICommand<Scope>
+{
+    public string Name { get; init; } = default!;
+}
 
-internal sealed class CreateScopeCommandHandler : ICommandHandler<CreateScopeCommand>
+internal sealed class CreateScopeCommandHandler : ICommandHandler<CreateScopeCommand, Scope>
 {
     private readonly IScopeFactory _scopeFactory;
-
 
     public CreateScopeCommandHandler(IScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
     }
 
-    public async Task HandleAsync(CreateScopeCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Scope> Handle(CreateScopeCommand command, CancellationToken cancellationToken)
     {
-        await _scopeFactory.CreateAsync(message.Name);
+        var scope = await _scopeFactory.CreateAsync(command.Name);
+        return scope;
+    }
+}
+
+public sealed class CreateScopeCommandValidator : AbstractValidator<CreateScopeCommand>
+{
+    public CreateScopeCommandValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

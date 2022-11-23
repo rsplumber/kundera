@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Kite.Events;
+using DotNetCore.CAP;
 using Managements.Domain;
 using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
@@ -10,12 +10,12 @@ namespace Managements.Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {
-    private readonly IEventBus _eventBus;
+    private readonly ICapPublisher _eventBus;
     private readonly RedisCollection<ServiceDataModel> _services;
     private readonly IMapper _mapper;
 
 
-    public ServiceRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, IEventBus eventBus)
+    public ServiceRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>(false);
         _mapper = mapper;

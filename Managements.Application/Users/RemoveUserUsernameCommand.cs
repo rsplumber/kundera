@@ -1,11 +1,17 @@
-﻿using Kite.CQRS;
-using Kite.CQRS.Contracts;
+﻿using FluentValidation;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Exception;
+using Managements.Domain.Users.Types;
+using Mediator;
 
 namespace Managements.Application.Users;
 
-public sealed record RemoveUserUsernameCommand(UserId User, Username Username) : Command;
+public sealed record RemoveUserUsernameCommand : ICommand
+{
+    public Guid User { get; init; } = default!;
+
+    public string Username { get; init; } = default!;
+}
 
 internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveUserUsernameCommand>
 {
@@ -16,16 +22,31 @@ internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveU
         _userRepository = userRepository;
     }
 
-    public async Task HandleAsync(RemoveUserUsernameCommand message, CancellationToken cancellationToken = default)
+    public async ValueTask<Unit> Handle(RemoveUserUsernameCommand command, CancellationToken cancellationToken)
     {
-        var (userId, username) = message;
-        var user = await _userRepository.FindAsync(userId, cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        user.RemoveUsername(username);
+        user.RemoveUsername(command.Username);
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return Unit.Value;
+    }
+}
+
+public sealed class RemoveUserUsernameCommandValidator : AbstractValidator<RemoveUserUsernameCommand>
+{
+    public RemoveUserUsernameCommandValidator()
+    {
+        RuleFor(request => request.User)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
+
+        RuleFor(request => request.Username)
+            .NotEmpty().WithMessage("Enter Username")
+            .NotNull().WithMessage("Enter Username");
     }
 }

@@ -1,8 +1,8 @@
-﻿using Kite.CQRS.Contracts;
+﻿using Mediator;
 
 namespace Managements.Application.Services;
 
-public sealed record ServicesQuery : Query<IEnumerable<ServicesResponse>>
+public sealed record ServicesQuery : IQuery<IEnumerable<ServicesResponse>>
 {
     public string? Name { get; set; }
 }

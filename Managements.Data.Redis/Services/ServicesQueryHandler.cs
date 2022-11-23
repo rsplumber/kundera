@@ -1,5 +1,5 @@
-﻿using Kite.CQRS;
-using Managements.Application.Services;
+﻿using Managements.Application.Services;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -14,11 +14,11 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
 
-    public async Task<IEnumerable<ServicesResponse>> HandleAsync(ServicesQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<ServicesResponse>> Handle(ServicesQuery query, CancellationToken cancellationToken)
     {
-        if (message.Name is not null)
+        if (query.Name is not null)
         {
-            _services = _services.Where(model => model.Name.Contains(message.Name));
+            _services = _services.Where(model => model.Name.Contains(query.Name));
         }
 
         var serviceDataModels = await _services.ToListAsync();

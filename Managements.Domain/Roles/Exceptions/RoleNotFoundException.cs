@@ -1,6 +1,6 @@
 namespace Managements.Domain.Roles.Exceptions;
 
-public class RoleNotFoundException : NotSupportedException
+public sealed class RoleNotFoundException : NotSupportedException
 {
     private const string DefaultMessage = "Role not found";
 

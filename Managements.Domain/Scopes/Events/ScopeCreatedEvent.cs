@@ -1,3 +1,7 @@
-﻿namespace Managements.Domain.Scopes.Events;
+﻿using Managements.Domain.Contracts;
+using Managements.Domain.Scopes.Types;
 
-public record ScopeCreatedEvent(ScopeId Id) : DomainEvent;
+namespace Managements.Domain.Scopes.Events;
+
+[Event("scope_created")]
+public sealed record ScopeCreatedEvent(ScopeId Id) : DomainEvent;

@@ -2,6 +2,7 @@ using Kite.CQRS;
 using KunderaNet.AspNetCore.Authorization;
 using Managements.Application.Roles;
 using Managements.Domain.Roles;
+using Managements.Domain.Roles.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Roles;

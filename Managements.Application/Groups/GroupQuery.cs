@@ -1,9 +1,12 @@
-﻿using Kite.CQRS.Contracts;
-using Managements.Domain.Groups;
+﻿using FluentValidation;
+using Mediator;
 
 namespace Managements.Application.Groups;
 
-public sealed record GroupQuery(GroupId Id) : Query<GroupResponse>;
+public sealed record GroupQuery : IQuery<GroupResponse>
+{
+    public Guid Id { get; set; }
+}
 
 public sealed record GroupResponse(Guid Id, string Name, string Status)
 {
@@ -17,3 +20,13 @@ public sealed record GroupResponse(Guid Id, string Name, string Status)
 }
 
 public sealed record GroupRoleResponse(Guid Id, string Name);
+
+public sealed class GroupQueryValidator : AbstractValidator<GroupQuery>
+{
+    public GroupQueryValidator()
+    {
+        RuleFor(request => request.Id)
+            .NotEmpty().WithMessage("Enter a group id")
+            .NotNull().WithMessage("Enter a group id");
+    }
+}

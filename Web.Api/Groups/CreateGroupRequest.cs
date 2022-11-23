@@ -2,12 +2,13 @@
 using Kite.Web.Requests;
 using Managements.Application.Groups;
 using Managements.Domain.Groups;
+using Managements.Domain.Groups.Types;
 
 namespace Web.Api.Groups;
 
 public record CreateGroupRequest(string Name, Guid RoleId, Guid? ParentId = null) : IWebRequest
 {
-    public CreateGroupCommand ToCommand() => new(Name, Managements.Domain.Roles.RoleId.From(RoleId))
+    public CreateGroupCommand ToCommand() => new(Name, Managements.Domain.Roles.Types.RoleId.From(RoleId))
     {
         Parent = ParentId is not null ? GroupId.From(ParentId.Value) : null
     };

@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Managements.Domain.Groups.Exception;
 
-public class GroupNotFoundException : DomainException
+public sealed class GroupNotFoundException : DomainException
 {
     private const string DefaultMessage = "Group not found";
 

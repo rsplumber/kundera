@@ -1,17 +1,17 @@
-﻿using Kite.Domain.Contracts;
-using Kite.Hashing;
+﻿using Kite.Hashing;
+using Managements.Domain.Contracts;
 using Managements.Domain.Services.Events;
 using Managements.Domain.Services.Types;
 
 namespace Managements.Domain.Services;
 
-public class Service : AggregateRoot<ServiceId>
+public class Service : AggregateRoot
 {
     protected Service()
     {
     }
 
-    internal Service(Name name, IHashService hashService) : base(ServiceId.Generate())
+    internal Service(Name name, IHashService hashService)
     {
         Name = name;
         Secret = ServiceSecret.From(hashService.Hash(Id.ToString(), Name.Value));
@@ -19,7 +19,7 @@ public class Service : AggregateRoot<ServiceId>
         AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
-    internal Service(Name name, ServiceSecret serviceSecret) : base(ServiceId.Generate())
+    internal Service(Name name, ServiceSecret serviceSecret)
     {
         Name = name;
         Secret = serviceSecret;
@@ -27,11 +27,13 @@ public class Service : AggregateRoot<ServiceId>
         AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
-    public Name Name { get; internal set; }
+    public ServiceId Id { get; set; } = ServiceId.Generate();
 
-    public ServiceSecret Secret { get; internal set; }
+    public Name Name { get; internal set; } = default!;
 
-    public ServiceStatus Status { get; internal set; }
+    public ServiceSecret Secret { get; internal set; } = default!;
+
+    public ServiceStatus Status { get; internal set; } = default!;
 
     public void ChangeName(Name name) => Name = name;
 

@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Managements.Domain;
-using Managements.Domain.Groups;
+using Managements.Domain.Contracts;
 using Managements.Domain.Groups.Types;
-using Managements.Domain.Permissions;
-using Managements.Domain.Roles;
-using Managements.Domain.Scopes;
+using Managements.Domain.Permissions.Types;
+using Managements.Domain.Roles.Types;
 using Managements.Domain.Scopes.Types;
-using Managements.Domain.Services;
 using Managements.Domain.Services.Types;
 using Managements.Domain.Users;
 using Managements.Domain.Users.Types;
@@ -37,10 +35,10 @@ internal sealed class CustomTypesProfile : Profile
             .ConvertUsing(u => u.Value);
 
         CreateMap<string, UserStatus>()
-            .ConvertUsing(u => UserStatus.From(u));
+            .ConvertUsing(u => Enumeration.GetAll<UserStatus>().First(status => status.Name == u));
 
         CreateMap<UserStatus, string>()
-            .ConvertUsing(u => u.Value);
+            .ConvertUsing(u => u.Name);
 
         CreateMap<Guid, GroupId>()
             .ConvertUsing(u => GroupId.From(u));
@@ -49,10 +47,10 @@ internal sealed class CustomTypesProfile : Profile
             .ConvertUsing(u => u.Value);
 
         CreateMap<string, GroupStatus>()
-            .ConvertUsing(u => GroupStatus.From(u));
+            .ConvertUsing(u => Enumeration.GetAll<GroupStatus>().First(status => status.Name == u));
 
         CreateMap<GroupStatus, string>()
-            .ConvertUsing(u => u.Value);
+            .ConvertUsing(u => u.Name);
 
         CreateMap<Guid, ServiceId>()
             .ConvertUsing(s => ServiceId.From(s));
@@ -61,10 +59,10 @@ internal sealed class CustomTypesProfile : Profile
             .ConvertUsing(s => s.Value);
 
         CreateMap<string, ServiceStatus>()
-            .ConvertUsing(s => ServiceStatus.From(s));
+            .ConvertUsing(s => Enumeration.GetAll<ServiceStatus>().First(status => status.Name == s));
 
         CreateMap<ServiceStatus, string>()
-            .ConvertUsing(s => s.Value);
+            .ConvertUsing(s => s.Name);
 
         CreateMap<string, ServiceSecret>()
             .ConvertUsing(s => ServiceSecret.From(s));
@@ -79,10 +77,10 @@ internal sealed class CustomTypesProfile : Profile
             .ConvertUsing(s => s.Value);
 
         CreateMap<string, ScopeStatus>()
-            .ConvertUsing(s => ScopeStatus.From(s));
+            .ConvertUsing(s => Enumeration.GetAll<ScopeStatus>().First(status => status.Name == s));
 
         CreateMap<ScopeStatus, string>()
-            .ConvertUsing(s => s.Value);
+            .ConvertUsing(s => s.Name);
 
         CreateMap<string, ScopeSecret>()
             .ConvertUsing(s => ScopeSecret.From(s));

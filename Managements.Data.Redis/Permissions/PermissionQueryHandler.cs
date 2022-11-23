@@ -1,7 +1,6 @@
-﻿using Kite.CQRS;
-using Managements.Application.Permissions;
+﻿using Managements.Application.Permissions;
 using Managements.Domain.Permissions.Exceptions;
-using Redis.OM;
+using Mediator;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
@@ -15,9 +14,9 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async Task<PermissionResponse> HandleAsync(PermissionQuery message, CancellationToken cancellationToken = default)
+    public async ValueTask<PermissionResponse> Handle(PermissionQuery query, CancellationToken cancellationToken)
     {
-        var permission = await _permissions.FindByIdAsync(message.Permission.ToString());
+        var permission = await _permissions.FindByIdAsync(query.Permission.ToString());
         if (permission is null)
         {
             throw new PermissionNotFoundException();
