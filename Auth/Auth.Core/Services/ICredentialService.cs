@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Auth.Core.Entities;
 
 namespace Auth.Core.Services;
 

@@ -1,4 +1,6 @@
-﻿namespace Auth.Core.Services;
+﻿using Auth.Core.Entities;
+
+namespace Auth.Core.Services;
 
 public record Certificate(Token Token, Token RefreshToken)
 {

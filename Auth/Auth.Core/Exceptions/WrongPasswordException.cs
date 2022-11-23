@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Auth.Core.Exceptions;
 
-public class WrongPasswordException : DomainException
+public sealed class WrongPasswordException : DomainException
 {
     private const string DefaultMessage = "wrong password";
 

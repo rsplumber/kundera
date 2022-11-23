@@ -1,4 +1,5 @@
 using Auth.Core;
+using Auth.Core.Entities;
 using Auth.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
