@@ -8,7 +8,16 @@ public sealed record ServiceQuery : IQuery<ServiceResponse>
     public Guid Service { get; init; } = default!;
 }
 
-public sealed record ServiceResponse(Guid Id, string Name, string Secret, string Status);
+public sealed record ServiceResponse
+{
+    public Guid Id { set; get; }
+
+    public string Name { set; get; }
+
+    public string Secret { set; get; }
+
+    public string Status { set; get; }
+};
 
 public sealed class ServiceQueryValidator : AbstractValidator<ServiceQuery>
 {

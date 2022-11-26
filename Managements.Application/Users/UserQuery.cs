@@ -8,13 +8,17 @@ public sealed record UserQuery : IQuery<UserResponse>
     public Guid User { get; init; } = default!;
 }
 
-public sealed record UserResponse(Guid Id, IEnumerable<string> Usernames)
+public sealed record UserResponse()
 {
+    public Guid Id { get; set; }
+
     public string Status { get; set; }
 
-    public IEnumerable<Guid> Groups { get; set; } = Array.Empty<Guid>();
+    public List<string> Usernames { get; set; } = Array.Empty<string>().ToList();
 
-    public IEnumerable<Guid> Roles { get; set; } = Array.Empty<Guid>();
+    public List<Guid> Groups { get; set; } = Array.Empty<Guid>().ToList();
+
+    public List<Guid> Roles { get; set; } = Array.Empty<Guid>().ToList();
 }
 
 public sealed class UserQueryValidator : AbstractValidator<UserQuery>

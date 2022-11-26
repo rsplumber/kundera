@@ -2,7 +2,7 @@
 
 namespace Managements.Application.Scopes;
 
-public sealed record ScopesQuery : IQuery<IEnumerable<ScopesResponse>>
+public sealed record ScopesQuery : IQuery<List<ScopesResponse>>
 {
     public string? Name { get; init; }
 }

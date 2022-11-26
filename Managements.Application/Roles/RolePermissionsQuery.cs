@@ -3,7 +3,7 @@ using Mediator;
 
 namespace Managements.Application.Roles;
 
-public sealed record RolePermissionsQuery : IQuery<IEnumerable<RolePermissionsResponse>>
+public sealed record RolePermissionsQuery : IQuery<List<RolePermissionsResponse>>
 {
     public Guid Role { get; init; } = default!;
 }

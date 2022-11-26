@@ -3,7 +3,7 @@ using Mediator;
 
 namespace Managements.Application.Scopes;
 
-public sealed record ScopeRolesQuery : IQuery<IEnumerable<ScopeRolesResponse>>
+public sealed record ScopeRolesQuery : IQuery<List<ScopeRolesResponse>>
 {
     public Guid Scope { get; init; } = default!;
 }

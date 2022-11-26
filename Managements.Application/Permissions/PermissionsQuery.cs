@@ -2,7 +2,7 @@
 
 namespace Managements.Application.Permissions;
 
-public sealed record PermissionsQuery : IQuery<IEnumerable<PermissionsResponse>>
+public sealed record PermissionsQuery : IQuery<List<PermissionsResponse>>
 {
     public string? Name { get; init; }
 }

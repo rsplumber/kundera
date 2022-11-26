@@ -26,8 +26,11 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
         }
 
         var roles = await _roles.FindByIdsAsync(group.Roles.Select(guid => guid.ToString()));
-        return new GroupResponse(group.Id, group.Name, group.Status)
+        return new GroupResponse
         {
+            Id = group.Id,
+            Name = group.Name,
+            Status = group.Status,
             Description = group.Description,
             Parent = group.Parent,
             Roles = roles.Values.Select(model => new GroupRoleResponse(model.Id, model.Name)),

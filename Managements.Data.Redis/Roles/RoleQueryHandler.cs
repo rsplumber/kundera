@@ -22,8 +22,10 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
             throw new RoleNotFoundException();
         }
 
-        return new RoleResponse(role.Id, role.Name)
+        return new RoleResponse
         {
+            Id = role.Id,
+            Name = role.Name,
             Meta = role.Meta,
             Permissions = role.Permissions
         };

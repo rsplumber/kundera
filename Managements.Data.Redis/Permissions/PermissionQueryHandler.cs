@@ -22,8 +22,10 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
             throw new PermissionNotFoundException();
         }
 
-        return new PermissionResponse(permission.Id, permission.Name)
+        return new PermissionResponse
         {
+            Id = permission.Id,
+            Name = permission.Name,
             Meta = permission.Meta,
         };
     }
