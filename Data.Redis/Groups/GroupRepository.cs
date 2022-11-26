@@ -3,7 +3,7 @@ using Core.Domains;
 using Core.Domains.Groups;
 using Core.Domains.Groups.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
@@ -15,7 +15,7 @@ internal class GroupRepository : IGroupRepository
     private readonly IMapper _mapper;
 
 
-    public GroupRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public GroupRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;

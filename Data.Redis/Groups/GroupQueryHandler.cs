@@ -1,8 +1,8 @@
 ﻿using Application.Groups;
 using Core.Domains.Groups.Exception;
-using Managements.Data.ConnectionProviders;
 using Managements.Data.Roles;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
@@ -12,7 +12,7 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
     private readonly IRedisCollection<GroupDataModel> _groups;
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public GroupQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public GroupQueryHandler(RedisConnectionProvider provider)
     {
         _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
@@ -27,8 +27,11 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
         }
 
         var roles = await _roles.FindByIdsAsync(group.Roles.Select(guid => guid.ToString()));
-        return new GroupResponse(group.Id, group.Name, group.Status)
+        return new GroupResponse
         {
+            Id = group.Id,
+            Name = group.Name,
+            Status = group.Status,
             Description = group.Description,
             Parent = group.Parent,
             Roles = roles.Values.Select(model => new GroupRoleResponse(model.Id, model.Name)),

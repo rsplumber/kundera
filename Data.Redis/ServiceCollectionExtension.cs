@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Core.Domains.Credentials;
+﻿using Core.Domains.Credentials;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
 using Core.Domains.Roles;
@@ -8,7 +7,6 @@ using Core.Domains.Services;
 using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Services;
-using Managements.Data.ConnectionProviders;
 using Managements.Data.Credentials;
 using Managements.Data.Groups;
 using Managements.Data.Permissions;
@@ -20,28 +18,21 @@ using Managements.Data.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Redis.OM;
 
 namespace Managements.Data;
 
 internal static class ServiceCollectionExtension
 {
-    public static Assembly AddData(this IServiceCollection services, IConfiguration configuration)
+    public static void AddData(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionUrl = configuration.GetSection("RedisConnections:Managements").Value;
+        var connectionUrl = configuration.GetSection("RedisConnections:Default").Value;
         if (connectionUrl is null)
         {
-            throw new ArgumentException("Enter RedisConnections:Managements db connection in appsettings.json");
+            throw new ArgumentException("Enter RedisConnections:Default db connection in appsettings.json");
         }
 
-        services.TryAddSingleton(_ => new RedisConnectionManagementsProviderWrapper(connectionUrl));
-
-        var authConnectionUrl = configuration.GetSection("RedisConnections:Auth").Value;
-        if (authConnectionUrl is null)
-        {
-            throw new ArgumentException("Enter RedisConnections:Auth db connection in appsettings.json");
-        }
-
-        services.TryAddSingleton(_ => new RedisConnectionAuthProviderWrapper(authConnectionUrl));
+        services.TryAddSingleton(_ => new RedisConnectionProvider(connectionUrl));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
@@ -57,7 +48,5 @@ internal static class ServiceCollectionExtension
         services.AddScoped<IAuthorizeService, AuthorizeService>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-        return Assembly.GetExecutingAssembly();
     }
 }

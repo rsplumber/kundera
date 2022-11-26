@@ -1,4 +1,5 @@
 ﻿using Core.Domains.Credentials;
+using Core.Domains.Users.Types;
 
 namespace Core.Domains.Sessions;
 
@@ -14,7 +15,7 @@ public interface ISessionRepository
 
     Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Session>> FindAsync(UserId userId, CancellationToken cancellationToken = default);
 
     Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
 }

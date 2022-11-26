@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Domains.Sessions;
-using Managements.Data.ConnectionProviders;
+using Core.Domains.Users.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -11,7 +11,7 @@ internal sealed class SessionRepository : ISessionRepository
     private readonly RedisCollection<SessionDataModel> _sessions;
     private readonly IMapper _mapper;
 
-    public SessionRepository(RedisConnectionAuthProviderWrapper provider, IMapper mapper)
+    public SessionRepository(RedisConnectionProvider provider, IMapper mapper)
     {
         _sessions = (RedisCollection<SessionDataModel>) provider.RedisCollection<SessionDataModel>(false);
         _mapper = mapper;
@@ -53,9 +53,9 @@ internal sealed class SessionRepository : ISessionRepository
         return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 
-    public async Task<IEnumerable<Session>> FindAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> FindAsync(UserId userId, CancellationToken cancellationToken = default)
     {
-        var dataModels = await _sessions.Where(model => model.UserId == userId).ToListAsync();
+        var dataModels = await _sessions.Where(model => model.UserId == userId.Value).ToListAsync();
         return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 

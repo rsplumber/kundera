@@ -12,7 +12,7 @@ internal sealed class CredentialMappingProfile : Profile
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
-            .ForMember(credential => credential.UserId, expression => expression.MapFrom(model => model.UserId))
+            .ForMember(credential => credential.User, expression => expression.MapFrom(model => model.UserId))
             .ForMember(credential => credential.Password, expression => expression.MapFrom(model => model.Password))
             .ForMember(credential => credential.LastIpAddress, expression => expression.MapFrom(model => model.LastIpAddress))
             .ForMember(credential => credential.LastLoggedIn, expression => expression.MapFrom(model => model.LastLoggedIn.ToUniversalTime()))

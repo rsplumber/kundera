@@ -8,8 +8,12 @@ public sealed record RoleQuery : IQuery<RoleResponse>
     public Guid Role { get; init; } = default!;
 }
 
-public sealed record RoleResponse(Guid Id, string Name)
+public sealed record RoleResponse
 {
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
     public IEnumerable<Guid>? Permissions { get; set; }
 
     public Dictionary<string, string>? Meta { get; set; }

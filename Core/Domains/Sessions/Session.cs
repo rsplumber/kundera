@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using Core.Domains.Contracts;
-using Core.Domains.Credentials;
+using Core.Domains.Scopes.Types;
 using Core.Domains.Sessions.Events;
+using Core.Domains.Users.Types;
 
 namespace Core.Domains.Sessions;
 
@@ -11,12 +12,12 @@ public class Session : Entity
     {
     }
 
-    internal Session(Token token, Token refreshToken, Guid scopeId, Guid userId, DateTime expireDate, IPAddress? lastIpAddress = null)
+    internal Session(Token token, Token refreshToken, ScopeId scope, UserId user, DateTime expireDate, IPAddress? lastIpAddress = null)
     {
         Id = token;
         RefreshToken = refreshToken;
-        ScopeId = scopeId;
-        UserId = userId;
+        Scope = scope;
+        User = user;
         ExpiresAt = expireDate;
         LastIpAddress = lastIpAddress ?? IPAddress.None;
         LastUsageDate = DateTime.UtcNow;
@@ -27,9 +28,10 @@ public class Session : Entity
     public Token Id { get; internal set; } = default!;
 
     public Token RefreshToken { get; internal set; } = default!;
-    public Guid ScopeId { get; internal set; }
 
-    public Guid UserId { get; internal set; }
+    public ScopeId Scope { get; internal set; }
+
+    public UserId User { get; internal set; }
 
     public DateTime ExpiresAt { get; internal set; }
 

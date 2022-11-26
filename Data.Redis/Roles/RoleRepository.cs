@@ -3,7 +3,7 @@ using Core.Domains;
 using Core.Domains.Roles;
 using Core.Domains.Roles.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
@@ -14,7 +14,7 @@ internal class RoleRepository : IRoleRepository
     private readonly RedisCollection<RoleDataModel> _roles;
     private readonly IMapper _mapper;
 
-    public RoleRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public RoleRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>(false);
         _mapper = mapper;

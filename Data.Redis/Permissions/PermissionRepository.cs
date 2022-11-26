@@ -3,7 +3,7 @@ using Core.Domains;
 using Core.Domains.Permissions;
 using Core.Domains.Permissions.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
@@ -14,7 +14,7 @@ internal class PermissionRepository : IPermissionRepository
     private readonly RedisCollection<PermissionDataModel> _permissions;
     private readonly IMapper _mapper;
 
-    public PermissionRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public PermissionRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>(false);
         _mapper = mapper;

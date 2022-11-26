@@ -11,6 +11,7 @@ using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Services;
 using Data.Seeder;
+using Hashing.Abstractions;
 using Hashing.HMAC;
 using Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection;
 using Managements.Data;

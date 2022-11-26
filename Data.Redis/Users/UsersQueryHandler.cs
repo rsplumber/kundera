@@ -1,6 +1,6 @@
 ﻿using Application.Users;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
@@ -9,7 +9,7 @@ internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public UsersQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public UsersQueryHandler(RedisConnectionProvider provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }

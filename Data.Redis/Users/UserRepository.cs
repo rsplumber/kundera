@@ -2,7 +2,6 @@
 using Core.Domains.Users;
 using Core.Domains.Users.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -14,7 +13,7 @@ internal class UserRepository : IUserRepository
     private readonly RedisCollection<UserDataModel> _users;
     private readonly IMapper _mapper;
 
-    public UserRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public UserRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _mapper = mapper;
         _eventBus = eventBus;

@@ -32,7 +32,7 @@ internal class AuthenticateService : IAuthenticateService
         var scope = await _scopeRepository.FindAsync(ScopeSecret.From(scopeSecret), cancellationToken);
         if (credential is null || scope is null)
         {
-            await PublishUnAuthenticateEvent(null, uniqueIdentifier.Value, ipAddress, cancellationToken);
+            // await PublishUnAuthenticateEvent(null, uniqueIdentifier.Value, ipAddress, cancellationToken);
             throw new UnAuthenticateException();
         }
 
@@ -42,13 +42,12 @@ internal class AuthenticateService : IAuthenticateService
         }
         catch
         {
-            await PublishUnAuthenticateEvent(scope.Id.Value, uniqueIdentifier.Value, ipAddress, cancellationToken);
+            // await PublishUnAuthenticateEvent(scope.Id.Value, uniqueIdentifier.Value, ipAddress, cancellationToken);
             throw new UnAuthenticateException();
         }
 
-        var scopeId = scope.Id.Value;
-        var certificate = await _certificateService.GenerateAsync(credential.UserId, scopeId, cancellationToken);
-        await _sessionManagement.SaveAsync(certificate, credential.UserId, scopeId, cancellationToken);
+        var certificate = await _certificateService.GenerateAsync(credential.User, scope.Id, cancellationToken);
+        await _sessionManagement.SaveAsync(certificate, credential.User, scope.Id, cancellationToken);
 
         // await _eventBus.PublishAsync(new OnAuthenticateEvent(scopeId,
         //     uniqueIdentifier.Value,
@@ -62,12 +61,12 @@ internal class AuthenticateService : IAuthenticateService
         var session = await _sessionManagement.GetAsync(token, cancellationToken);
         if (session is null || session.RefreshToken != refreshToken)
         {
-            await PublishUnAuthenticateEvent(session?.ScopeId, null, ipAddress, cancellationToken);
+            // await PublishUnAuthenticateEvent(session?.Scope, null, ipAddress, cancellationToken);
             throw new UnAuthenticateException();
         }
 
-        var userId = session.UserId;
-        var scopeId = session.ScopeId;
+        var userId = session.User;
+        var scopeId = session.Scope;
         var certificate = await _certificateService.GenerateAsync(userId, scopeId, cancellationToken);
         await _sessionManagement.SaveAsync(certificate, userId, scopeId, cancellationToken);
         await _sessionManagement.DeleteAsync(token, cancellationToken);
@@ -75,14 +74,14 @@ internal class AuthenticateService : IAuthenticateService
         return certificate;
     }
 
-    private Task PublishUnAuthenticateEvent(Guid? scopeId, string? uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
-    {
-        // return _eventBus.PublishAsync(new OnUnAuthenticateEvent
-        // {
-        //     ScopeId = scopeId,
-        //     UniqueIdentifier = uniqueIdentifier,
-        //     IpAddress = ipAddress
-        // }, cancellationToken);
-        return Task.CompletedTask;
-    }
+    // private Task PublishUnAuthenticateEvent(Guid? scopeId, string? uniqueIdentifier, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    // {
+    //     // return _eventBus.PublishAsync(new OnUnAuthenticateEvent
+    //     // {
+    //     //     ScopeId = scopeId,
+    //     //     UniqueIdentifier = uniqueIdentifier,
+    //     //     IpAddress = ipAddress
+    //     // }, cancellationToken);
+    //     return Task.CompletedTask;
+    // }
 }

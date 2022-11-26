@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Domains.Credentials;
-using Managements.Data.ConnectionProviders;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Credentials;
@@ -10,7 +10,7 @@ internal class CredentialRepository : ICredentialRepository
     private readonly RedisCollection<CredentialDataModel> _credentials;
     private readonly IMapper _mapper;
 
-    public CredentialRepository(RedisConnectionAuthProviderWrapper provider, IMapper mapper)
+    public CredentialRepository(RedisConnectionProvider provider, IMapper mapper)
     {
         _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>(false);
         _mapper = mapper;
@@ -46,7 +46,7 @@ internal class CredentialRepository : ICredentialRepository
         var expiredCredentials = credentials
             .Where(model => model.ExpiresAt is not null)
             .Where(model => DateTime.UtcNow >= model.ExpiresAt!.Value.ToUniversalTime());
-        
+
         foreach (var credential in expiredCredentials)
         {
             await _credentials.DeleteAsync(credential);

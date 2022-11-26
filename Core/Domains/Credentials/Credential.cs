@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Core.Domains.Contracts;
 using Core.Domains.Credentials.Events;
+using Core.Domains.Users.Types;
 
 namespace Core.Domains.Credentials;
 
@@ -10,18 +11,18 @@ public class Credential : AggregateRoot
     {
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? lastIpAddress = null)
+    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, IPAddress? lastIpAddress = null)
     {
         Id = uniqueIdentifier;
-        UserId = userId;
+        User = user;
         Password = Password.Create(password);
         LastIpAddress = lastIpAddress ?? IPAddress.None;
         LastLoggedIn = DateTime.UtcNow;
         CreatedDate = DateTime.UtcNow;
-        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, userId));
+        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, Guid user, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
+    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
         this(uniqueIdentifier, password, user, lastIpAddress)
     {
         if (expireInMinutes > 0)
@@ -30,8 +31,8 @@ public class Credential : AggregateRoot
         }
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, Guid userId, bool oneTime, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
-        this(uniqueIdentifier, password, userId, expireInMinutes, lastIpAddress)
+    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, bool oneTime, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
+        this(uniqueIdentifier, password, user, expireInMinutes, lastIpAddress)
     {
         OneTime = oneTime;
     }
@@ -39,7 +40,7 @@ public class Credential : AggregateRoot
 
     public UniqueIdentifier Id { get; internal set; } = default!;
 
-    public Guid UserId { get; internal set; }
+    public UserId User { get; internal set; }
     
     public Password Password { get; internal set; } = null!;
 

@@ -9,8 +9,12 @@ public sealed record PermissionQuery : IQuery<PermissionResponse>
     public Guid Permission { get; init; } = default!;
 }
 
-public sealed record PermissionResponse(Guid Id, Name Name)
+public sealed record PermissionResponse()
 {
+    public Guid Id { get; set; }
+
+    public Name Name { get; set; }
+
     public Dictionary<string, string>? Meta { get; set; }
 }
 

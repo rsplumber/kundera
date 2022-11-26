@@ -2,7 +2,7 @@
 
 namespace Application.Services;
 
-public sealed record ServicesQuery : IQuery<IEnumerable<ServicesResponse>>
+public sealed record ServicesQuery : IQuery<List<ServicesResponse>>
 {
     public string? Name { get; set; }
 }

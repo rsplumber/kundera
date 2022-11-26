@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Core.Domains.Credentials;
 using Core.Domains.Credentials.Exceptions;
+using Core.Domains.Users.Types;
 using Core.Services;
 
 namespace Application.Auth;
@@ -16,7 +17,7 @@ internal class CredentialService : ICredentialService
         _credentialFactory = credentialFactory;
     }
 
-    public async Task CreateAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
@@ -24,7 +25,7 @@ internal class CredentialService : ICredentialService
             ipAddress);
     }
 
-    public async Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task CreateOneTimeAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, int expireInMinutes = 0, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,
@@ -33,7 +34,7 @@ internal class CredentialService : ICredentialService
             expireInMinutes);
     }
 
-    public async Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, int expireInMinutes, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
+    public async Task CreateTimePeriodicAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, int expireInMinutes, IPAddress? ipAddress = null, CancellationToken cancellationToken = default)
     {
         await _credentialFactory.CreateAsync(uniqueIdentifier,
             password,

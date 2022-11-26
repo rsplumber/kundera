@@ -1,7 +1,7 @@
 ﻿using Application.Users;
 using Core.Domains.Users.Exception;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
@@ -10,7 +10,7 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public UserQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public UserQueryHandler(RedisConnectionProvider provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
@@ -23,8 +23,10 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
             throw new UserNotFoundException();
         }
 
-        return new UserResponse(user.Id, user.Usernames)
+        return new UserResponse
         {
+            Id = user.Id,
+            Usernames = user.Usernames,
             Status = user.Status,
             Roles = user.Roles,
             Groups = user.Groups

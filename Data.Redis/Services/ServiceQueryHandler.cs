@@ -1,7 +1,7 @@
 ﻿using Application.Services;
 using Core.Domains.Services.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Services;
@@ -10,7 +10,7 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
 {
     private readonly IRedisCollection<ServiceDataModel> _services;
 
-    public ServiceQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ServiceQueryHandler(RedisConnectionProvider provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
@@ -23,6 +23,12 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
             throw new ServiceNotFoundException();
         }
 
-        return new ServiceResponse(service.Id, service.Name, service.Secret, service.Status);
+        return new ServiceResponse
+        {
+            Id = service.Id,
+            Name = service.Name,
+            Secret = service.Secret,
+            Status = service.Status
+        };
     }
 }

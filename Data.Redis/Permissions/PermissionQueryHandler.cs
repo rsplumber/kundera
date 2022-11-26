@@ -1,7 +1,7 @@
 ﻿using Application.Permissions;
 using Core.Domains.Permissions.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
@@ -10,7 +10,7 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
 {
     private readonly IRedisCollection<PermissionDataModel> _permissions;
 
-    public PermissionQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public PermissionQueryHandler(RedisConnectionProvider provider)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
@@ -23,8 +23,10 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
             throw new PermissionNotFoundException();
         }
 
-        return new PermissionResponse(permission.Id, permission.Name)
+        return new PermissionResponse
         {
+            Id = permission.Id,
+            Name = permission.Name,
             Meta = permission.Meta,
         };
     }

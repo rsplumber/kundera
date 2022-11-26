@@ -11,6 +11,7 @@ using Core.Domains.Services.Types;
 using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Domains.Users.Types;
+using Managements.Data.Credentials;
 
 namespace Managements.Data;
 

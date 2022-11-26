@@ -1,5 +1,4 @@
 ﻿using Application.Services;
-using Managements.Data.ConnectionProviders;
 using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -10,7 +9,7 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
 {
     private IRedisCollection<ServiceDataModel> _services;
 
-    public ServicesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ServicesQueryHandler(RedisConnectionProvider provider)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }

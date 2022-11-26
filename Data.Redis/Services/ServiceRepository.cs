@@ -3,7 +3,6 @@ using Core.Domains;
 using Core.Domains.Services;
 using Core.Domains.Services.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -16,7 +15,7 @@ internal class ServiceRepository : IServiceRepository
     private readonly IMapper _mapper;
 
 
-    public ServiceRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public ServiceRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>(false);
         _mapper = mapper;

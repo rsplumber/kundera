@@ -2,15 +2,22 @@
 using Core.Domains;
 using Core.Domains.Users.Types;
 using Core.Services;
+using Managements.Data.Groups;
+using Managements.Data.Permissions;
+using Managements.Data.Roles;
+using Managements.Data.Scopes;
+using Managements.Data.Services;
 using Managements.Data.Sessions;
+using Managements.Data.Users;
+using Redis.OM;
 
 namespace Managements.Data;
 
 internal sealed class AuthorizeService : IAuthorizeService
 {
-    private readonly RedisConnectionManagementsProviderWrapper _dbProvider;
+    private readonly RedisConnectionProvider _dbProvider;
 
-    public AuthorizeService(RedisConnectionManagementsProviderWrapper dbProvider)
+    public AuthorizeService(RedisConnectionProvider dbProvider)
     {
         _dbProvider = dbProvider;
     }

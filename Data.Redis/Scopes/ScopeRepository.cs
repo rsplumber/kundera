@@ -3,7 +3,7 @@ using Core.Domains;
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Types;
 using DotNetCore.CAP;
-using Managements.Data.ConnectionProviders;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
@@ -15,7 +15,7 @@ internal class ScopeRepository : IScopeRepository
     private readonly IMapper _mapper;
 
 
-    public ScopeRepository(RedisConnectionManagementsProviderWrapper provider, IMapper mapper, ICapPublisher eventBus)
+    public ScopeRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>(false);
         _mapper = mapper;

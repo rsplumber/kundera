@@ -1,8 +1,8 @@
 ﻿using Application.Scopes;
 using Core.Domains.Scopes.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Managements.Data.Roles;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
@@ -12,7 +12,7 @@ internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, IE
     private readonly IRedisCollection<ScopeDataModel> _scopes;
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public ScopeRolesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ScopeRolesQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();

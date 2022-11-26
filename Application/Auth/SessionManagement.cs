@@ -1,5 +1,8 @@
-﻿using Core.Domains.Sessions;
+﻿using Core.Domains.Scopes.Types;
+using Core.Domains.Sessions;
+using Core.Domains.Users.Types;
 using Core.Services;
+using Microsoft.Extensions.Options;
 
 namespace Application.Auth;
 
@@ -16,7 +19,7 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task SaveAsync(Certificate certificate, Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Certificate certificate, UserId userId, ScopeId scopeId, CancellationToken cancellationToken = default)
     {
         var (token, refreshToken) = certificate;
         var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
@@ -56,7 +59,7 @@ internal sealed class SessionManagement : ISessionManagement
         return await _sessionRepository.FindAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Session>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> GetAllAsync(UserId userId, CancellationToken cancellationToken = default)
     {
         return await _sessionRepository.FindAsync(userId, cancellationToken);
     }

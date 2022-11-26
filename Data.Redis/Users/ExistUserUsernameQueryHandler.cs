@@ -1,6 +1,5 @@
 ﻿using Application.Users;
 using Core.Domains.Users.Exception;
-using Managements.Data.ConnectionProviders;
 using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -11,7 +10,7 @@ internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUse
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
-    public ExistUserUsernameQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ExistUserUsernameQueryHandler(RedisConnectionProvider provider)
     {
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }

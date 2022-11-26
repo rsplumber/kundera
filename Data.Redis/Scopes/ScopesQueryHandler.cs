@@ -1,5 +1,4 @@
 ﻿using Application.Scopes;
-using Managements.Data.ConnectionProviders;
 using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -10,7 +9,7 @@ internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerabl
 {
     private IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ScopesQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }

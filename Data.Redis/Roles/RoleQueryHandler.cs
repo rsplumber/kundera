@@ -1,7 +1,7 @@
 ﻿using Application.Roles;
 using Core.Domains.Roles.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
@@ -10,7 +10,7 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
 {
     private readonly IRedisCollection<RoleDataModel> _roles;
 
-    public RoleQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public RoleQueryHandler(RedisConnectionProvider provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
@@ -23,8 +23,10 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
             throw new RoleNotFoundException();
         }
 
-        return new RoleResponse(role.Id, role.Name)
+        return new RoleResponse
         {
+            Id = role.Id,
+            Name = role.Name,
             Meta = role.Meta,
             Permissions = role.Permissions
         };

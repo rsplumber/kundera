@@ -8,8 +8,14 @@ public sealed record GroupQuery : IQuery<GroupResponse>
     public Guid Id { get; set; }
 }
 
-public sealed record GroupResponse(Guid Id, string Name, string Status)
+public sealed record GroupResponse()
 {
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Status { get; set; }
+
     public string? Description { get; set; }
 
     public Guid? Parent { get; set; }

@@ -10,7 +10,7 @@ public interface ICredentialFactory
 {
     Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
         string password,
-        Guid userId,
+        UserId user,
         IPAddress? ipAddress = null,
         int expireInMinutes = 0,
         bool oneTime = false);
@@ -27,7 +27,7 @@ internal sealed class CredentialFactory : ICredentialFactory
         _userRepository = userRepository;
     }
 
-    public async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier, string password, Guid userId, IPAddress? ipAddress = null, int expireInMinutes = 0, bool oneTime = false)
+    public async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, IPAddress? ipAddress = null, int expireInMinutes = 0, bool oneTime = false)
     {
         var exists = await _credentialRepository.ExistsAsync(uniqueIdentifier);
         if (exists)
@@ -35,7 +35,7 @@ internal sealed class CredentialFactory : ICredentialFactory
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }
 
-        var user = await _userRepository.FindAsync(UserId.From(userId));
+        var user = await _userRepository.FindAsync(userId);
         if (user is null)
         {
             throw new UserNotFoundException();

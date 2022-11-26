@@ -1,7 +1,7 @@
 ﻿using Application.Scopes;
 using Core.Domains.Roles.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
@@ -10,7 +10,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
 
-    public ScopeQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public ScopeQueryHandler(RedisConnectionProvider provider)
     {
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
@@ -23,8 +23,12 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
             throw new RoleNotFoundException();
         }
 
-        return new ScopeResponse(scope.Id, scope.Name, scope.Secret, scope.Status)
+        return new ScopeResponse
         {
+            Id = scope.Id,
+            Name = scope.Name,
+            Secret = scope.Secret,
+            Status = scope.Status,
             Roles = scope.Roles,
             Services = scope.Services
         };

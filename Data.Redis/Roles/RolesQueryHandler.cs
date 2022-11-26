@@ -1,5 +1,4 @@
 ﻿using Application.Roles;
-using Managements.Data.ConnectionProviders;
 using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -10,7 +9,7 @@ internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<
 {
     private IRedisCollection<RoleDataModel> _roles;
 
-    public RolesQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public RolesQueryHandler(RedisConnectionProvider provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }

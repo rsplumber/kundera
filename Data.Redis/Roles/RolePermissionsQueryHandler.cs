@@ -1,8 +1,8 @@
 ﻿using Application.Roles;
 using Core.Domains.Roles.Exceptions;
-using Managements.Data.ConnectionProviders;
 using Managements.Data.Permissions;
 using Mediator;
+using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
@@ -12,7 +12,7 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
     private readonly IRedisCollection<RoleDataModel> _roles;
     private readonly IRedisCollection<PermissionDataModel> _permissions;
 
-    public RolePermissionsQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public RolePermissionsQueryHandler(RedisConnectionProvider provider)
     {
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();

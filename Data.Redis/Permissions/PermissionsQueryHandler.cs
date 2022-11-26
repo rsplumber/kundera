@@ -1,5 +1,4 @@
 ﻿using Application.Permissions;
-using Managements.Data.ConnectionProviders;
 using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -10,7 +9,7 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
-    public PermissionsQueryHandler(RedisConnectionManagementsProviderWrapper provider)
+    public PermissionsQueryHandler(RedisConnectionProvider provider)
     {
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }

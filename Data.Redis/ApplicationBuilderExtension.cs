@@ -1,4 +1,3 @@
-using Managements.Data.ConnectionProviders;
 using Managements.Data.Credentials;
 using Managements.Data.Groups;
 using Managements.Data.Permissions;
@@ -24,7 +23,7 @@ internal static class ApplicationBuilderExtension
 
         try
         {
-            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionManagementsProviderWrapper>();
+            var dbProvider = serviceScope.ServiceProvider.GetRequiredService<RedisConnectionProvider>();
             new List<Type>
             {
                 typeof(GroupDataModel),

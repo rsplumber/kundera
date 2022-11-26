@@ -2,7 +2,7 @@
 
 namespace Application.Roles;
 
-public sealed record RolesQuery : IQuery<IEnumerable<RolesResponse>>
+public sealed record RolesQuery : IQuery<List<RolesResponse>>
 {
     public string? Name { get; init; }
 }
