@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Roles;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Roles;
 
 namespace Web.Api.Roles;
 

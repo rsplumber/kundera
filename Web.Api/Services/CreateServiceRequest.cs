@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Services;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Services;
 
 namespace Web.Api.Services;
 

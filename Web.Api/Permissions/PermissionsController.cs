@@ -1,8 +1,7 @@
+using Application.Permissions;
+using Core.Domains.Permissions.Types;
 using Kite.CQRS;
 using KunderaNet.AspNetCore.Authorization;
-using Managements.Application.Permissions;
-using Managements.Domain.Permissions;
-using Managements.Domain.Permissions.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Permissions;

@@ -1,8 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.Roles;
+using Core.Domains.Roles.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Roles;
-using Managements.Domain.Roles;
-using Managements.Domain.Roles.Types;
 
 namespace Web.Api.Roles;
 

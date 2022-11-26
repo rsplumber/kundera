@@ -1,10 +1,8 @@
-﻿using FluentValidation;
+﻿using Application.Scopes;
+using Core.Domains.Roles.Types;
+using Core.Domains.Scopes.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Scopes;
-using Managements.Domain.Roles;
-using Managements.Domain.Roles.Types;
-using Managements.Domain.Scopes;
-using Managements.Domain.Scopes.Types;
 
 namespace Web.Api.Scopes;
 

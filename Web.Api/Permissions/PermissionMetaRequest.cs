@@ -1,8 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.Permissions;
+using Core.Domains.Permissions.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Permissions;
-using Managements.Domain.Permissions;
-using Managements.Domain.Permissions.Types;
 
 namespace Web.Api.Permissions;
 

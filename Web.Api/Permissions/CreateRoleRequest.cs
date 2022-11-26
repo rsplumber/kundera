@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Permissions;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Permissions;
 
 namespace Web.Api.Permissions;
 

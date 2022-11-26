@@ -1,8 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.Groups;
+using Core.Domains.Groups.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Groups;
-using Managements.Domain.Groups;
-using Managements.Domain.Groups.Types;
 
 namespace Web.Api.Groups;
 

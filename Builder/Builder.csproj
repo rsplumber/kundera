@@ -10,14 +10,20 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection" Version="0.0.82" />
         <PackageReference Include="DotNetCore.CAP.SqlServer" Version="6.2.1" />
         <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="6.0.0" />
+        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Quartz.AspNetCore" Version="3.5.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Analytics\Analytics.Builder\Analytics.Builder.csproj" />
+      <ProjectReference Include="..\Auth\Auth.Application\Auth.Application.csproj" />
+      <ProjectReference Include="..\Auth\Auth.Data.Redis\Auth.Data.Redis.csproj" />
       <ProjectReference Include="..\Data.Seeder\Data.Seeder.csproj" />
+      <ProjectReference Include="..\Libraries\Hashing\Hashing.HMAC\Hashing.HMAC.csproj" />
       <ProjectReference Include="..\Managements.Builder\Managements.Builder.csproj" />
     </ItemGroup>
     

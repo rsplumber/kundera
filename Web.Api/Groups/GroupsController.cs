@@ -1,8 +1,7 @@
+using Application.Groups;
+using Core.Domains.Groups.Types;
 using Kite.CQRS;
 using KunderaNet.AspNetCore.Authorization;
-using Managements.Application.Groups;
-using Managements.Domain.Groups;
-using Managements.Domain.Groups.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Groups;

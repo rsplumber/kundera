@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Analytics\Analytics.Web.Api\Analytics.Web.Api.csproj" />
-        <ProjectReference Include="..\Managements.Application\Managements.Application.csproj" />
-        <ProjectReference Include="..\Auth\Auth.Services\Auth.Services.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj" />
         <ProjectReference Include="..\Builder\Builder.csproj" />
     </ItemGroup>
 
@@ -18,6 +16,10 @@
         <PackageReference Include="FastEndpoints.Swagger" Version="5.4.1" />
         <PackageReference Include="KunderaNet.AspNetCore.Authorization" Version="0.0.85" />
         <PackageReference Include="KunderaNet.Authorization.Http.Extensions.Microsoft.DependencyInjection" Version="0.0.85" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Auth" />
     </ItemGroup>
 
 </Project>

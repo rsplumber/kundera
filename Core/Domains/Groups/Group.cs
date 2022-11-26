@@ -1,0 +1,129 @@
+﻿using Core.Domains.Contracts;
+using Core.Domains.Groups.Events;
+using Core.Domains.Groups.Exception;
+using Core.Domains.Groups.Types;
+using Core.Domains.Roles.Types;
+
+namespace Core.Domains.Groups;
+
+public class Group : AggregateRoot
+{
+    protected Group()
+    {
+    }
+
+    internal Group(Name name, RoleId role)
+    {
+        Name = name;
+
+        AssignRole(role);
+
+        ChangeStatus(GroupStatus.Enable);
+        AddDomainEvent(new GroupCreatedEvent(Id));
+    }
+
+    internal Group(Name name, RoleId role, GroupId parent) : this(name, role)
+    {
+        Parent = parent;
+    }
+
+    public GroupId Id { get; internal set; } = GroupId.Generate();
+
+    public Name Name { get; internal set; } = default!;
+
+    public Text? Description { get; internal set; }
+
+    public GroupId? Parent { get; internal set; }
+
+    public IReadOnlyCollection<GroupId> Children { get; internal set; } = new List<GroupId>();
+
+    public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
+
+    public GroupStatus Status { get; internal set; } = default!;
+
+    public DateTime StatusChangeDate { get; internal set; }
+
+    public void ChangeName(Name name) => Name = name;
+
+    public void ChangeDescription(Text? description) => Description = description;
+
+    public void SetParent(GroupId parent)
+    {
+        AddDomainEvent(new GroupParentChangedEvent(Id, parent, Parent));
+        Parent = parent;
+    }
+
+    public void RemoveParent()
+    {
+        AddDomainEvent(new GroupParentChangedEvent(Id, null, Parent));
+        Parent = null;
+    }
+
+    public void AddChild(GroupId child)
+    {
+        if (HasChild(child)) return;
+        var modifiableChildren = Children.ToList();
+        modifiableChildren.Add(child);
+        Children = modifiableChildren;
+        AddDomainEvent(new GroupChildAddedEvent(Id, child));
+    }
+
+    public void RemoveChild(GroupId child)
+    {
+        if (!HasChild(child)) return;
+        var modifiableChildren = Children.ToList();
+        modifiableChildren.Remove(child);
+        Children = modifiableChildren;
+        AddDomainEvent(new GroupChildRemovedEvent(Id, child));
+    }
+
+
+    public void AssignRole(RoleId role)
+    {
+        if (Has(role)) return;
+
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Add(role);
+        Roles = modifiableRoles;
+        AddDomainEvent(new GroupRoleAddedEvent(Id, role));
+    }
+
+    public void RevokeRole(RoleId role)
+    {
+        if (!Has(role)) return;
+
+        if (Roles.Count == 1)
+        {
+            throw new GroupRoleCouldNotBeEmptyException();
+        }
+
+        var modifiableRoles = Roles.ToList();
+        modifiableRoles.Remove(role);
+        Roles = modifiableRoles;
+        AddDomainEvent(new GroupRoleRemovedEvent(Id, role));
+    }
+
+    public bool Has(RoleId role)
+    {
+        return Roles.Any(id => id == role);
+    }
+
+    public bool HasParent() => Parent is not null;
+
+    public bool HasParent(GroupId group) => Parent == group;
+
+    public bool HasChild() => Children.Count > 0;
+
+    public bool HasChild(GroupId child) => Children.Any(id => id == child);
+
+    public void Enable() => ChangeStatus(GroupStatus.Enable);
+
+    public void Disable() => ChangeStatus(GroupStatus.Disable);
+
+    private void ChangeStatus(GroupStatus status)
+    {
+        Status = status;
+        StatusChangeDate = DateTime.UtcNow;
+        AddDomainEvent(new GroupStatusChangedEvent(Id, status));
+    }
+}

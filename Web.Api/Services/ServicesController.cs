@@ -1,8 +1,7 @@
+using Application.Services;
+using Core.Domains.Services.Types;
 using Kite.CQRS;
 using KunderaNet.AspNetCore.Authorization;
-using Managements.Application.Services;
-using Managements.Domain.Services;
-using Managements.Domain.Services.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Services;

@@ -1,14 +1,13 @@
-﻿using FluentValidation;
+﻿using Application.Users;
+using Core.Domains.Users.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Users;
-using Managements.Domain.Users;
-using Managements.Domain.Users.Types;
 
 namespace Web.Api.Users;
 
 public record AddUserUsernameRequest(string Username) : IWebRequest
 {
-    public AddUserUsernameCommand ToCommand(Guid userId) => new(UserId.From(userId), Managements.Domain.Users.Username.From(Username));
+    public AddUserUsernameCommand ToCommand(Guid userId) => new(UserId.From(userId), Core.Domains.Users.Username.From(Username));
 }
 
 public class AddUserUsernameRequestValidator : RequestValidator<AddUserUsernameRequest>
@@ -27,7 +26,7 @@ public class AddUserUsernameRequestValidator : RequestValidator<AddUserUsernameR
 
 public record RemoveUserUsernameRequest(string Username) : IWebRequest
 {
-    public RemoveUserUsernameCommand ToCommand(Guid userId) => new(UserId.From(userId), Managements.Domain.Users.Username.From(Username));
+    public RemoveUserUsernameCommand ToCommand(Guid userId) => new(UserId.From(userId), Core.Domains.Users.Username.From(Username));
 }
 
 public class RemoveUserUsernameRequestValidator : RequestValidator<RemoveUserUsernameRequest>

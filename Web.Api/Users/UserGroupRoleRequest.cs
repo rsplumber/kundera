@@ -1,10 +1,8 @@
-﻿using FluentValidation;
+﻿using Application.Users;
+using Core.Domains.Roles.Types;
+using Core.Domains.Users.Types;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Users;
-using Managements.Domain.Roles;
-using Managements.Domain.Roles.Types;
-using Managements.Domain.Users;
-using Managements.Domain.Users.Types;
 
 namespace Web.Api.Users;
 

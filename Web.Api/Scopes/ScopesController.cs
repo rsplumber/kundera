@@ -1,8 +1,7 @@
+using Application.Scopes;
+using Core.Domains.Scopes.Types;
 using Kite.CQRS;
 using KunderaNet.AspNetCore.Authorization;
-using Managements.Application.Scopes;
-using Managements.Domain.Scopes;
-using Managements.Domain.Scopes.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Scopes;

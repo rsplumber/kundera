@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Scopes;
+using FluentValidation;
 using Kite.Web.Requests;
-using Managements.Application.Scopes;
 
 namespace Web.Api.Scopes;
 

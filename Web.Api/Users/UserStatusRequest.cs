@@ -1,8 +1,7 @@
-﻿using Kite.Web.Requests;
-using Managements.Application.Users;
-using Managements.Domain;
-using Managements.Domain.Users;
-using Managements.Domain.Users.Types;
+﻿using Application.Users;
+using Core.Domains;
+using Core.Domains.Users.Types;
+using Kite.Web.Requests;
 
 namespace Web.Api.Users;
 
