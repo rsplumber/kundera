@@ -1,4 +1,6 @@
-﻿namespace Auth.Core.Services;
+﻿using Auth.Core.Entities;
+
+namespace Auth.Core.Services;
 
 public interface ISessionManagement
 {

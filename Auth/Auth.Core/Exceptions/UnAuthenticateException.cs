@@ -1,6 +1,6 @@
 ﻿namespace Auth.Core.Exceptions;
 
-public class UnAuthenticateException : ApplicationException
+public sealed class UnAuthenticateException : ApplicationException
 {
     private const string DefaultMessage = "UnAuthenticate";
 

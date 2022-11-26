@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Auth.Core.Exceptions;
 
-public class CredentialNotFoundException : DomainException
+public sealed class CredentialNotFoundException : DomainException
 {
     private const string DefaultMessage = "Credential not found";
 

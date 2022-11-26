@@ -1,8 +1,8 @@
-﻿using Kite.Domain.Contracts;
+﻿using Managements.Domain.Contracts;
 
 namespace Auth.Core.Exceptions;
 
-public class DuplicateUniqueIdentifierException : DomainException
+public sealed class DuplicateUniqueIdentifierException : DomainException
 {
     public DuplicateUniqueIdentifierException(string identifier) : base($"{identifier} already exists")
     {
