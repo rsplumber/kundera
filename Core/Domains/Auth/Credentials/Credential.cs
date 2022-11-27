@@ -40,9 +40,9 @@ public class Credential : AggregateRoot
 
     public UniqueIdentifier Id { get; internal set; } = default!;
 
-    public UserId User { get; internal set; }
-    
-    public Password Password { get; internal set; } = null!;
+    public UserId User { get; internal set; } = default!;
+
+    public Password Password { get; internal set; } = default!;
 
     public IPAddress LastIpAddress { get; internal set; } = default!;
 

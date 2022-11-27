@@ -34,7 +34,11 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
             Status = group.Status,
             Description = group.Description,
             Parent = group.Parent,
-            Roles = roles.Values.Select(model => new GroupRoleResponse(model.Id, model.Name)),
+            Roles = roles.Values.Where(model => model is not null).Select(model => new GroupRoleResponse
+            {
+                Id = model!.Id,
+                Name = model.Name
+            }),
             StatusChangedDate = group.StatusChangeDate
         };
     }

@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
-internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerable<ScopesResponse>>
+internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesResponse>>
 {
     private IRedisCollection<ScopeDataModel> _scopes;
 
@@ -14,7 +14,7 @@ internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerabl
         _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
     }
 
-    public async ValueTask<IEnumerable<ScopesResponse>> Handle(ScopesQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<ScopesResponse>> Handle(ScopesQuery query, CancellationToken cancellationToken)
     {
         if (query.Name is not null)
         {
@@ -23,6 +23,6 @@ internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, IEnumerabl
 
         var rolesDataModel = await _scopes.ToListAsync();
 
-        return rolesDataModel.Select(model => new ScopesResponse(model.Id, model.Name, model.Status));
+        return rolesDataModel.Select(model => new ScopesResponse(model.Id, model.Name, model.Status)).ToList();
     }
 }

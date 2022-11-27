@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Libraries\Hashing\Hashing.Abstractions\Hashing.Abstractions.csproj" />
+      <Folder Include="Domains\Auth" />
     </ItemGroup>
     
 </Project>

@@ -28,7 +28,7 @@ internal sealed class DeleteServiceEndpoint : Endpoint<DeleteServiceCommand>
     }
 }
 
-internal sealed class DeleteServiceEndpointSummary : Summary<CreateServiceEndpoint>
+internal sealed class DeleteServiceEndpointSummary : Summary<DeleteServiceEndpoint>
 {
     public DeleteServiceEndpointSummary()
     {

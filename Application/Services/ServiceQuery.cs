@@ -10,13 +10,13 @@ public sealed record ServiceQuery : IQuery<ServiceResponse>
 
 public sealed record ServiceResponse
 {
-    public Guid Id { set; get; }
+    public Guid Id { get; init; }
 
-    public string Name { set; get; }
+    public string Name { get; init; } = string.Empty;
 
-    public string Secret { set; get; }
+    public string Secret { get; init; } = string.Empty;
 
-    public string Status { set; get; }
+    public string Status { get; init; } = string.Empty;
 };
 
 public sealed class ServiceQueryValidator : AbstractValidator<ServiceQuery>

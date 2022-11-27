@@ -28,7 +28,7 @@ internal sealed class DeleteGroupEndpoint : Endpoint<DeleteGroupCommand>
     }
 }
 
-internal sealed class DeleteGroupEndpointSummary : Summary<CreateGroupEndpoint>
+internal sealed class DeleteGroupEndpointSummary : Summary<DeleteGroupEndpoint>
 {
     public DeleteGroupEndpointSummary()
     {

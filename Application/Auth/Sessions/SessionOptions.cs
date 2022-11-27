@@ -1,4 +1,4 @@
-﻿namespace Application.Auth;
+﻿namespace Application.Auth.Sessions;
 
 public class SessionOptions
 {

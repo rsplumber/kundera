@@ -4,7 +4,7 @@ using Core.Domains.Users.Types;
 using Core.Services;
 using Microsoft.Extensions.Options;
 
-namespace Application.Auth;
+namespace Application.Auth.Sessions;
 
 internal sealed class SessionManagement : ISessionManagement
 {

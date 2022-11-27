@@ -1,6 +1,6 @@
 ﻿using Core.Domains.Services.Exceptions;
 using Core.Domains.Services.Types;
-using Hashing.Abstractions;
+using Core.Hashing;
 
 namespace Core.Domains.Services;
 

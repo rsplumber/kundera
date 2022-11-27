@@ -113,7 +113,7 @@ public class DataSeeder
         var credential = await _credentialRepository.FindAsync(uniqueIdentifier);
         if (credential is null)
         {
-            await _credentialFactory.CreateAsync(uniqueIdentifier, _adminPassword, user.Id.Value, IPAddress.None);
+            await _credentialFactory.CreateAsync(uniqueIdentifier, _adminPassword, user.Id, IPAddress.None);
         }
 
         await SeedPermissions();

@@ -7,7 +7,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
 
-internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermissionsQuery, IEnumerable<RolePermissionsResponse>>
+internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermissionsQuery, List<RolePermissionsResponse>>
 {
     private readonly IRedisCollection<RoleDataModel> _roles;
     private readonly IRedisCollection<PermissionDataModel> _permissions;
@@ -18,7 +18,7 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async ValueTask<IEnumerable<RolePermissionsResponse>> Handle(RolePermissionsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<RolePermissionsResponse>> Handle(RolePermissionsQuery query, CancellationToken cancellationToken)
     {
         var roleDataModel = await _roles.FindByIdAsync(query.Role.ToString());
         if (roleDataModel is null)
@@ -26,8 +26,14 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
             throw new RoleNotFoundException();
         }
 
+        if (roleDataModel.Permissions is null)
+        {
+            return Array.Empty<RolePermissionsResponse>().ToList();
+        }
+
         var permissionDataModels = await _permissions.FindByIdsAsync(roleDataModel.Permissions.Select(guid => guid.ToString()));
 
-        return permissionDataModels.Values.Select(model => new RolePermissionsResponse(model!.Id, model.Name));
+        return permissionDataModels.Values.Select(model => new RolePermissionsResponse(model!.Id, model.Name))
+            .ToList();
     }
 }

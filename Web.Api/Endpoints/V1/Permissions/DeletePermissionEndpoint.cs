@@ -28,7 +28,7 @@ internal sealed class DeletePermissionEndpoint : Endpoint<DeletePermissionComman
     }
 }
 
-internal sealed class DeletePermissionEndpointSummary : Summary<CreatePermissionEndpoint>
+internal sealed class DeletePermissionEndpointSummary : Summary<DeletePermissionEndpoint>
 {
     public DeletePermissionEndpointSummary()
     {

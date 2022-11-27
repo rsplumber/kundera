@@ -7,7 +7,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
-internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, IEnumerable<ScopeRolesResponse>>
+internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, List<ScopeRolesResponse>>
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
     private readonly IRedisCollection<RoleDataModel> _roles;
@@ -18,7 +18,7 @@ internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, IE
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public async ValueTask<IEnumerable<ScopeRolesResponse>> Handle(ScopeRolesQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<ScopeRolesResponse>> Handle(ScopeRolesQuery query, CancellationToken cancellationToken)
     {
         var scopeDataModel = await _scopes.FindByIdAsync(query.Scope.ToString());
         if (scopeDataModel is null)
@@ -26,8 +26,13 @@ internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, IE
             throw new ScopeNotFoundException();
         }
 
+        if (scopeDataModel.Roles is null)
+        {
+            return Array.Empty<ScopeRolesResponse>().ToList();
+        }
+
         var rolesDataModel = await _roles.FindByIdsAsync(scopeDataModel.Roles.Select(guid => guid.ToString()));
 
-        return rolesDataModel.Values.Select(model => new ScopeRolesResponse(model!.Id, model.Name));
+        return rolesDataModel.Values.Select(model => new ScopeRolesResponse(model!.Id, model.Name)).ToList();
     }
 }

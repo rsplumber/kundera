@@ -16,7 +16,7 @@ internal sealed class AuthorizeEndpoint : Endpoint<AuthorizeRequest, Guid>
 
     public override void Configure()
     {
-        Post("authenticate");
+        Post("authorize");
         AllowAnonymous();
         Version(1);
     }

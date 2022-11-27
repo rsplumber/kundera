@@ -12,7 +12,7 @@ public sealed record RoleResponse
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public IEnumerable<Guid>? Permissions { get; set; }
 

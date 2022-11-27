@@ -1,6 +1,6 @@
 ﻿using Core.Domains.Scopes.Exceptions;
 using Core.Domains.Scopes.Types;
-using Hashing.Abstractions;
+using Core.Hashing;
 
 namespace Core.Domains.Scopes;
 

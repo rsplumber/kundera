@@ -15,7 +15,7 @@ internal sealed class RemoveGroupParentEndpoint : Endpoint<RemoveGroupParentComm
 
     public override void Configure()
     {
-        Delete("groups/{id:guid}");
+        Delete("groups/{id:guid}/parent");
         AllowAnonymous();
         Version(1);
     }

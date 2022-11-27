@@ -1,17 +1,18 @@
-﻿using Core.Domains.Credentials;
+﻿using Application.Auth;
+using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
-using FluentValidation;
+using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Authentications;
 
 internal sealed class AuthenticateEndpoint : Endpoint<AuthenticateRequest, Certificate>
 {
-    private readonly IAuthenticateService _authenticateService;
+    private readonly IMediator _mediator;
 
-    public AuthenticateEndpoint(IAuthenticateService authenticateService)
+    public AuthenticateEndpoint(IMediator mediator)
     {
-        _authenticateService = authenticateService;
+        _mediator = mediator;
     }
 
     public override void Configure()
@@ -23,14 +24,17 @@ internal sealed class AuthenticateEndpoint : Endpoint<AuthenticateRequest, Certi
 
     public override async Task HandleAsync(AuthenticateRequest req, CancellationToken ct)
     {
-        var uniqueIdentifier = UniqueIdentifier.From(req.Username, req.Type);
-        var certificate = await _authenticateService.AuthenticateAsync(uniqueIdentifier,
-            req.Password,
-            req.ScopeSecret,
-            HttpContext.Connection.LocalIpAddress,
-            ct);
-
-        await SendOkAsync(certificate, ct);
+        var command = new AuthenticateCommand
+        {
+            Username = req.Username,
+            Password = req.Password,
+            Type = req.Type,
+            IpAddress = HttpContext.Connection.LocalIpAddress,
+            ScopeSecret = req.ScopeSecret
+        };
+        var response = await _mediator.Send(command, ct);
+        
+        await SendOkAsync(response, ct);
     }
 }
 
@@ -53,28 +57,4 @@ public sealed record AuthenticateRequest
     public string? Type { get; set; }
 
     [FromHeader] public string ScopeSecret { get; set; } = default!;
-};
-
-internal sealed class AuthenticateRequestValidator : AbstractValidator<AuthenticateRequest>
-{
-    public AuthenticateRequestValidator()
-    {
-        RuleFor(request => request.Username)
-            .NotEmpty()
-            .WithMessage("Enter valid Username")
-            .NotNull()
-            .WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty()
-            .WithMessage("Enter valid Password")
-            .NotNull()
-            .WithMessage("Enter valid Password");
-
-        RuleFor(request => request.ScopeSecret)
-            .NotEmpty()
-            .WithMessage("Enter valid ScopeSecret")
-            .NotNull()
-            .WithMessage("Enter valid ScopeSecret");
-    }
 }

@@ -10,15 +10,15 @@ public sealed record UserQuery : IQuery<UserResponse>
 
 public sealed record UserResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
-    public string Status { get; set; }
+    public string Status { get; init; } = string.Empty;
 
-    public List<string> Usernames { get; set; } = Array.Empty<string>().ToList();
+    public List<string> Usernames { get; init; } = Array.Empty<string>().ToList();
 
-    public List<Guid> Groups { get; set; } = Array.Empty<Guid>().ToList();
+    public List<Guid> Groups { get; init; } = Array.Empty<Guid>().ToList();
 
-    public List<Guid> Roles { get; set; } = Array.Empty<Guid>().ToList();
+    public List<Guid>? Roles { get; init; } = Array.Empty<Guid>().ToList();
 }
 
 public sealed class UserQueryValidator : AbstractValidator<UserQuery>

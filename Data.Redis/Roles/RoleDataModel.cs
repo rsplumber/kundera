@@ -7,9 +7,9 @@ public class RoleDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 
-    [Indexed] public string Name { get; set; }
+    [Indexed] public string Name { get; set; } = default!;
 
-    public Dictionary<string, string> Meta { get; set; }
+    public Dictionary<string, string>? Meta { get; set; }
 
-    [Indexed] public List<Guid> Permissions { get; set; }
+    [Indexed] public List<Guid>? Permissions { get; set; }
 }

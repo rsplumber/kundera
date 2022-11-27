@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
 
-internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<RolesResponse>>
+internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, List<RolesResponse>>
 {
     private IRedisCollection<RoleDataModel> _roles;
 
@@ -14,7 +14,7 @@ internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<
         _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
     }
 
-    public async ValueTask<IEnumerable<RolesResponse>> Handle(RolesQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<RolesResponse>> Handle(RolesQuery query, CancellationToken cancellationToken)
     {
         if (query.Name is not null)
         {
@@ -23,6 +23,6 @@ internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, IEnumerable<
 
         var rolesDataModel = await _roles.ToListAsync();
 
-        return rolesDataModel.Select(model => new RolesResponse(model.Id, model.Name));
+        return rolesDataModel.Select(model => new RolesResponse(model.Id, model.Name)).ToList();
     }
 }

@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
 
-internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, IEnumerable<PermissionsResponse>>
+internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, List<PermissionsResponse>>
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
@@ -14,7 +14,7 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
         _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
     }
 
-    public async ValueTask<IEnumerable<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)
     {
         if (query.Name is not null)
         {
@@ -23,6 +23,6 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
 
         var permissionsDataModel = await _permissions.ToListAsync();
 
-        return permissionsDataModel.Select(model => new PermissionsResponse(model.Id, model.Name));
+        return permissionsDataModel.Select(model => new PermissionsResponse(model.Id, model.Name)).ToList();
     }
 }

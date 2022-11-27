@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Services;
 
-internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnumerable<ServicesResponse>>
+internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, List<ServicesResponse>>
 {
     private IRedisCollection<ServiceDataModel> _services;
 
@@ -14,7 +14,7 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
         _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>();
     }
 
-    public async ValueTask<IEnumerable<ServicesResponse>> Handle(ServicesQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<ServicesResponse>> Handle(ServicesQuery query, CancellationToken cancellationToken)
     {
         if (query.Name is not null)
         {
@@ -23,6 +23,6 @@ internal sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, IEnume
 
         var serviceDataModels = await _services.ToListAsync();
 
-        return serviceDataModels.Select(model => new ServicesResponse(model.Id, model.Name, model.Status));
+        return serviceDataModels.Select(model => new ServicesResponse(model.Id, model.Name, model.Status)).ToList();
     }
 }

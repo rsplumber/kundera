@@ -49,7 +49,7 @@ internal class GroupRepository : IGroupRepository
         return _mapper.Map<Group>(dataModel);
     }
 
-    public async Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

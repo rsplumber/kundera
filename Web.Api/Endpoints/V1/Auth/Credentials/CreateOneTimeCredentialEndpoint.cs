@@ -1,20 +1,18 @@
-﻿using Core.Domains.Credentials;
-using Core.Domains.Users.Types;
-using Core.Services;
+﻿using Application.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
+using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials;
 
 internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCredentialRequest>
 {
-    private readonly ICredentialService _credentialService;
+    private readonly IMediator _mediator;
 
-    public CreateOneTimeCredentialEndpoint(ICredentialService credentialService)
+    public CreateOneTimeCredentialEndpoint(IMediator mediator)
     {
-        _credentialService = credentialService;
+        _mediator = mediator;
     }
-
 
     public override void Configure()
     {
@@ -25,13 +23,17 @@ internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCr
 
     public override async Task HandleAsync(CreateOneTimeCredentialRequest req, CancellationToken ct)
     {
-        var uniqueIdentifier = UniqueIdentifier.From(req.Username, req.Type);
-        await _credentialService.CreateOneTimeAsync(uniqueIdentifier,
-            req.Password,
-            UserId.From(req.UserId),
-            req.ExpireInMinutes,
-            HttpContext.Connection.LocalIpAddress,
-            ct);
+        var command = new CreateOneTimeCredentialCommand
+        {
+            Username = req.Username,
+            Password = req.Password,
+            Type = req.Type,
+            ExpireInMinutes = req.ExpireInMinutes,
+            IpAddress = HttpContext.Connection.LocalIpAddress,
+            UserId = req.UserId
+        };
+
+        await _mediator.Send(command, ct);
         await SendOkAsync(ct);
     }
 }

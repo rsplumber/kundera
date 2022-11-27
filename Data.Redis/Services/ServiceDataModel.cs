@@ -7,9 +7,9 @@ public class ServiceDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 
-    [Indexed] public string Name { get; set; }
+    [Indexed] public string Name { get; set; } = default!;
 
-    [Indexed] public string Secret { get; set; }
+    [Indexed] public string Secret { get; set; } = default!;
 
-    [Indexed] public string Status { get; set; }
+    [Indexed] public string Status { get; set; } = default!;
 }

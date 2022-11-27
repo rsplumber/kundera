@@ -29,9 +29,9 @@ public class Session : Entity
 
     public Token RefreshToken { get; internal set; } = default!;
 
-    public ScopeId Scope { get; internal set; }
+    public ScopeId Scope { get; internal set; } = default!;
 
-    public UserId User { get; internal set; }
+    public UserId User { get; internal set; } = default!;
 
     public DateTime ExpiresAt { get; internal set; }
 

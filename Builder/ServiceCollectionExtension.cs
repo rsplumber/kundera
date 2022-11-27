@@ -1,6 +1,5 @@
-﻿using Auth.Application.BackgroundJobs;
-using Auth.Application.Services;
-using Auth.Data;
+﻿using Application.Auth.Sessions;
+using Application.BackgroundJobs;
 using Core.Domains.Credentials;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
@@ -9,11 +8,10 @@ using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Sessions;
 using Core.Domains.Users;
+using Core.Hashing;
 using Core.Services;
 using Data.Seeder;
-using Hashing.Abstractions;
 using Hashing.HMAC;
-using Kite.Hashing.HMAC.Extensions.Microsoft.DependencyInjection;
 using Managements.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,44 +24,42 @@ namespace Builder;
 public static class ServiceCollectionExtension
 {
     public static void AddKundera(this IServiceCollection services, IConfiguration configuration)
-    { 
-        services.TryAddSingleton<IHashService>(_ => new HMACHashingService(HashingType.HMACSHA384, 6));
-        services.AddMediator();
+    {
+        services.AddLibraries(configuration);
+        services.AddServices(configuration);
+        services.AddFactories();
+        services.AddData(configuration);
+        services.AddDataSeeder();
+        services.AddBackgroundServices();
+    }
+
+    private static void AddLibraries(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
         services.AddCap(x =>
         {
-            var connectionString = configuration.GetConnectionString("EventSourcing");
-            if (connectionString is null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Enter EventSourcing connection string");
-            }
-
-            x.UseSqlServer(connectionString);
+            x.UseInMemoryStorage();
             x.UseInMemoryMessageQueue();
         });
+    }
 
-        services.AddScoped<ISessionFactory, SessionFactory>();
-        services.AddScoped<ICredentialFactory, CredentialFactory>();
-
-        services.AddScoped<ICertificateService, CertificateService>();
+    private static void AddServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.TryAddSingleton<IHashService>(_ => new HmacHashingService(HashingType.HMACSHA384, 6));
         services.AddScoped<ISessionManagement, SessionManagement>();
-
-        services.AddScoped<IAuthenticateService, AuthenticateService>();
-        services.AddScoped<ICredentialService, CredentialService>();
         services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
+    }
 
-        services.AddAuthData(configuration);
-
-        services.AddData(configuration);
+    private static void AddFactories(this IServiceCollection services)
+    {
         services.AddScoped<IUserFactory, UserFactory>();
         services.AddScoped<IServiceFactory, ServiceFactory>();
         services.AddScoped<IScopeFactory, ScopeFactory>();
         services.AddScoped<IRoleFactory, RoleFactory>();
         services.AddScoped<IPermissionFactory, PermissionFactory>();
         services.AddScoped<IGroupFactory, GroupFactory>();
-
-        services.AddDataSeeder();
-
-        services.AddBackgroundServices();
+        services.AddScoped<ISessionFactory, SessionFactory>();
+        services.AddScoped<ICredentialFactory, CredentialFactory>();
     }
 
     private static void AddBackgroundServices(this IServiceCollection services)

@@ -28,7 +28,7 @@ internal sealed class DeleteRoleEndpoint : Endpoint<DeleteRoleCommand>
     }
 }
 
-internal sealed class DeleteRoleEndpointSummary : Summary<CreateRoleEndpoint>
+internal sealed class DeleteRoleEndpointSummary : Summary<DeleteRoleEndpoint>
 {
     public DeleteRoleEndpointSummary()
     {

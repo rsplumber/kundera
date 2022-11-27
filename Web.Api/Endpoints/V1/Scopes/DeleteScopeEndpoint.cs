@@ -28,7 +28,7 @@ internal sealed class DeleteScopeEndpoint : Endpoint<DeleteScopeCommand>
     }
 }
 
-internal sealed class DeleteScopeEndpointSummary : Summary<CreateScopeEndpoint>
+internal sealed class DeleteScopeEndpointSummary : Summary<DeleteScopeEndpoint>
 {
     public DeleteScopeEndpointSummary()
     {

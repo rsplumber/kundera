@@ -10,17 +10,17 @@ public sealed record ScopeQuery : IQuery<ScopeResponse>
 
 public sealed record ScopeResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
-    public string Name { get; set; }
+    public string Name { get; init; }  = string.Empty;
 
-    public string Secret { get; set; }
+    public string Secret { get; init; } = string.Empty;
 
-    public string Status { get; set; }
+    public string Status { get; init; } = string.Empty;
 
-    public IEnumerable<Guid>? Roles { get; set; }
+    public IEnumerable<Guid>? Roles { get; init; }
 
-    public IEnumerable<Guid>? Services { get; set; }
+    public IEnumerable<Guid>? Services { get; init; }
 }
 
 public sealed class ScopeQueryValidator : AbstractValidator<ScopeQuery>

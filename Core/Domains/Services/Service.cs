@@ -1,7 +1,7 @@
 ﻿using Core.Domains.Contracts;
 using Core.Domains.Services.Events;
 using Core.Domains.Services.Types;
-using Hashing.Abstractions;
+using Core.Hashing;
 
 namespace Core.Domains.Services;
 

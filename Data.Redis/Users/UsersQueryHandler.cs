@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
 
-internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<UsersResponse>>
+internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 
@@ -14,7 +14,7 @@ internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<
         _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
-    public async ValueTask<IEnumerable<UsersResponse>> Handle(UsersQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<UsersResponse>> Handle(UsersQuery query, CancellationToken cancellationToken)
     {
         var users = await _users.ToListAsync();
         return users.Select(model => new UsersResponse(model.Id, model.Usernames))

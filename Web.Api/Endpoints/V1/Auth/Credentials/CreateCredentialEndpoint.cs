@@ -1,20 +1,17 @@
-﻿using Core.Domains.Credentials;
-using Core.Domains.Users.Types;
-using Core.Services;
+﻿using Application.Auth.Credentials;
 using FastEndpoints;
-using FluentValidation;
+using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials;
 
 internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialRequest>
 {
-    private readonly ICredentialService _credentialService;
+    private readonly IMediator _mediator;
 
-    public CreateCredentialEndpoint(ICredentialService credentialService)
+    public CreateCredentialEndpoint(IMediator mediator)
     {
-        _credentialService = credentialService;
+        _mediator = mediator;
     }
-
 
     public override void Configure()
     {
@@ -25,13 +22,16 @@ internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialReques
 
     public override async Task HandleAsync(CreateCredentialRequest req, CancellationToken ct)
     {
-        var uniqueIdentifier = UniqueIdentifier.From(req.Username, req.Type);
-        await _credentialService.CreateAsync(uniqueIdentifier,
-            req.Password,
-            UserId.From(req.UserId),
-            HttpContext.Connection.LocalIpAddress,
-            ct);
+        var command = new CreateBasicCredentialCommand
+        {
+            Username = req.Username,
+            Password = req.Password,
+            Type = req.Type,
+            IpAddress = HttpContext.Connection.LocalIpAddress,
+            UserId = req.UserId
+        };
 
+        await _mediator.Send(command, ct);
         await SendOkAsync(ct);
     }
 }
@@ -55,22 +55,4 @@ public sealed record CreateCredentialRequest
     public string Password { get; set; } = default!;
 
     public string? Type { get; set; }
-}
-
-internal sealed class CreateCredentialRequestValidator : AbstractValidator<CreateCredentialRequest>
-{
-    public CreateCredentialRequestValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter valid UserId")
-            .NotNull().WithMessage("Enter valid UserId");
-
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
-    }
 }

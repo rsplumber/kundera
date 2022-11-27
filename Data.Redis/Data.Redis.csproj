@@ -23,5 +23,8 @@
     <ItemGroup>
         <InternalsVisibleTo Include="Builder" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Auth" />
+    </ItemGroup>
 
 </Project>

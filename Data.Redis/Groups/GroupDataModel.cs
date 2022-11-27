@@ -5,19 +5,19 @@ namespace Managements.Data.Groups;
 [Document(IndexName = "groups", StorageType = StorageType.Json, Prefixes = new[] {"groups"})]
 internal sealed class GroupDataModel
 {
-    [RedisIdField] [Indexed] public Guid Id { get; set; }
+    [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 
-    [Indexed] public string Name { get; set; }
+    [Indexed] public string Name { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string Description { get; set; } = default!;
 
     [Indexed] public Guid? Parent { get; set; }
 
-    [Indexed] public string Status { get; set; }
-    
-    [Indexed] public List<Guid> Children { get; set; }
+    [Indexed] public string Status { get; set; } = default!;
 
-    public DateTime StatusChangeDate { get; set; }
+    [Indexed] public List<Guid>? Children { get; set; }
 
-    [Indexed] public List<Guid> Roles { get; set; }
+    public DateTime StatusChangeDate { get; set; } = default!;
+
+    [Indexed] public List<Guid> Roles { get; set; } = default!;
 }

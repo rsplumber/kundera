@@ -1,4 +1,4 @@
-﻿namespace Hashing.Abstractions;
+﻿namespace Core.Hashing;
 
 public interface IHashService
 {

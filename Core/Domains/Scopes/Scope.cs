@@ -3,7 +3,7 @@ using Core.Domains.Roles.Types;
 using Core.Domains.Scopes.Events;
 using Core.Domains.Scopes.Types;
 using Core.Domains.Services.Types;
-using Hashing.Abstractions;
+using Core.Hashing;
 
 namespace Core.Domains.Scopes;
 

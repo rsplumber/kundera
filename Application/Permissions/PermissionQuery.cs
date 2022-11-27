@@ -9,13 +9,13 @@ public sealed record PermissionQuery : IQuery<PermissionResponse>
     public Guid Permission { get; init; } = default!;
 }
 
-public sealed record PermissionResponse()
+public sealed record PermissionResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
-    public Name Name { get; set; }
+    public Name Name { get; init; } = default!;
 
-    public Dictionary<string, string>? Meta { get; set; }
+    public Dictionary<string, string>? Meta { get; init; }
 }
 
 public sealed class PermissionQueryValidator : AbstractValidator<PermissionQuery>

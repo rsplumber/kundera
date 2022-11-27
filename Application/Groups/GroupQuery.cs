@@ -5,27 +5,32 @@ namespace Application.Groups;
 
 public sealed record GroupQuery : IQuery<GroupResponse>
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 }
 
-public sealed record GroupResponse()
+public sealed record GroupResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
-    public string Name { get; set; }
+    public string Name { get; init; } = string.Empty;
 
-    public string Status { get; set; }
+    public string Status { get; init; } = string.Empty;
 
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
-    public Guid? Parent { get; set; }
+    public Guid? Parent { get; init; }
 
-    public DateTime? StatusChangedDate { get; set; }
+    public DateTime? StatusChangedDate { get; init; }
 
-    public IEnumerable<GroupRoleResponse> Roles { get; set; }
+    public IEnumerable<GroupRoleResponse> Roles { get; init; } = Enumerable.Empty<GroupRoleResponse>();
 }
 
-public sealed record GroupRoleResponse(Guid Id, string Name);
+public sealed record GroupRoleResponse
+{
+    public Guid Id { get; init; }
+
+    public string Name { get; init; } = string.Empty;
+}
 
 public sealed class GroupQueryValidator : AbstractValidator<GroupQuery>
 {

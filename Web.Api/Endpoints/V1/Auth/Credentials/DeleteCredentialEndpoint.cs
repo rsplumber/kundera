@@ -1,17 +1,16 @@
-﻿using Core.Domains.Credentials;
-using Core.Services;
+﻿using Application.Auth.Credentials;
 using FastEndpoints;
-using FluentValidation;
+using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials;
 
-internal sealed class DeleteCredentialEndpoint : Endpoint<DeleteCredentialRequest>
+internal sealed class DeleteCredentialEndpoint : Endpoint<RemoveCredentialCommand>
 {
-    private readonly ICredentialService _credentialService;
+    private readonly IMediator _mediator;
 
-    public DeleteCredentialEndpoint(ICredentialService credentialService)
+    public DeleteCredentialEndpoint(IMediator mediator)
     {
-        _credentialService = credentialService;
+        _mediator = mediator;
     }
 
     public override void Configure()
@@ -21,10 +20,9 @@ internal sealed class DeleteCredentialEndpoint : Endpoint<DeleteCredentialReques
         Version(1);
     }
 
-    public override async Task HandleAsync(DeleteCredentialRequest req, CancellationToken ct)
+    public override async Task HandleAsync(RemoveCredentialCommand req, CancellationToken ct)
     {
-        await _credentialService.RemoveAsync(UniqueIdentifier.Parse(req.UniqueIdentifier), ct);
-
+        await _mediator.Send(req, ct);
         await SendNoContentAsync(ct);
     }
 }
@@ -33,23 +31,8 @@ internal sealed class DeleteCredentialEndpointSummary : Summary<DeleteCredential
 {
     public DeleteCredentialEndpointSummary()
     {
-        Summary = "Terminate session";
-        Description = "Terminate a session";
-        Response(200, "Session terminated successfully");
-    }
-}
-
-public sealed record DeleteCredentialRequest
-{
-    public string UniqueIdentifier { get; set; } = default!;
-}
-
-internal sealed class DeleteCredentialRequestValidator : AbstractValidator<DeleteCredentialRequest>
-{
-    public DeleteCredentialRequestValidator()
-    {
-        RuleFor(request => request.UniqueIdentifier)
-            .NotEmpty().WithMessage("Enter valid UniqueIdentifier")
-            .NotNull().WithMessage("Enter valid UniqueIdentifier");
+        Summary = "Remove Credential";
+        Description = "remove a Credential";
+        Response(204, "Credential removed successfully");
     }
 }

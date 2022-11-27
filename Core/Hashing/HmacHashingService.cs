@@ -1,17 +1,17 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Kite.Extensions.Random;
-using Kite.Hashing;
+using Core.Extensions;
+using Hashing.HMAC;
 
-namespace Hashing.HMAC;
+namespace Core.Hashing;
 
-public sealed class HMACHashingService : IHashService
+public sealed class HmacHashingService : IHashService
 {
     private readonly HashingType _hashingType;
     private readonly int _randomKeyLength;
     private static readonly Random Random = new();
 
-    public HMACHashingService(HashingType hashingType = HashingType.HMACSHA384, int randomKeyLength = 8)
+    public HmacHashingService(HashingType hashingType = HashingType.HMACSHA384, int randomKeyLength = 8)
     {
         _hashingType = hashingType;
         _randomKeyLength = randomKeyLength;
@@ -29,7 +29,7 @@ public sealed class HMACHashingService : IHashService
     }
 
 
-    private System.Security.Cryptography.HMAC GetHasher(HashingType type)
+    private HMAC GetHasher(HashingType type)
     {
         var random = Random.RandomCharsNums(_randomKeyLength);
         var randomBytes = Encoding.UTF8.GetBytes(random);

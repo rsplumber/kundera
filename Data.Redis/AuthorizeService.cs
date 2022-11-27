@@ -43,7 +43,8 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         var roles = await RolesAsync(user!);
 
-        var sessionScope = await _dbProvider.RedisCollection<ScopeDataModel>(false).FindByIdAsync(session.ScopeId.ToString());
+        var sessionScope = await _dbProvider.RedisCollection<ScopeDataModel>(false)
+            .FindByIdAsync(session.ScopeId.ToString());
         if (InvalidSessionScope())
         {
             throw new UnAuthorizedException();
@@ -59,7 +60,8 @@ internal sealed class AuthorizeService : IAuthorizeService
         }
 
         var permissionIds = roles.DistinctBy(role => role.Id)
-            .SelectMany(role => role.Permissions)
+            .Where(role => role.Permissions is not null)
+            .SelectMany(role => role.Permissions!)
             .Distinct();
         var permissions = (await _dbProvider.RedisCollection<PermissionDataModel>(false)
             .FindByIdsAsync(permissionIds.Select(guid => guid.ToString()))).Values;
@@ -82,22 +84,25 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidSessionScope() => sessionScope is null || UserHasNotScopeRole();
 
-        bool UserHasNotScopeRole() => !roles.Any(role => sessionScope.Roles.Any(id => id == role.Id));
+        bool UserHasNotScopeRole() => sessionScope.Roles is null || !roles.Any(role => sessionScope.Roles.Any(id => id == role.Id));
 
-        bool InvalidService() => service is null || sessionScope!.Services.All(id => id != service.Id);
+        bool InvalidService() => service is null || sessionScope!.Services is null || sessionScope.Services.All(id => id != service.Id);
 
-        bool InvalidPermission() => permissions.All(permission => permission.Name != action.ToLower());
+        bool InvalidPermission() => permissions.All(permission => permission is not null && permission.Name != action.ToLower());
     }
 
-    private async Task<ICollection<RoleDataModel?>> RolesAsync(UserDataModel user)
+    private async Task<ICollection<RoleDataModel>> RolesAsync(UserDataModel user)
     {
         var userGroupRoleIds = await UserGroupsRolesAsync();
         var allRoleIds = new List<Guid>(userGroupRoleIds);
-        allRoleIds.AddRange(user.Roles);
+        if (user.Roles is not null)
+        {
+            allRoleIds.AddRange(user.Roles);    
+        }
 
         return (await _dbProvider.RedisCollection<RoleDataModel>()
                 .FindByIdsAsync(allRoleIds.Select(guid => guid.ToString())))
-            .Values;
+            .Values!;
 
         async Task<IEnumerable<Guid>> UserGroupsRolesAsync()
         {
@@ -124,8 +129,8 @@ internal sealed class AuthorizeService : IAuthorizeService
 
                 async Task FetchChildrenAsync(GroupDataModel group)
                 {
-                    if (group.Children.Count == 0) return;
-                    var ids = group.Children.Select(groupId => groupId.ToString()).ToArray();
+                    if (group.Children is {Count: 0}) return;
+                    var ids = group.Children!.Select(groupId => groupId.ToString()).ToArray();
                     var children = (await groupsDbCollection.FindByIdsAsync(ids)).Values;
                     dataModels.AddRange(children!);
                     foreach (var groupDataModel in children)

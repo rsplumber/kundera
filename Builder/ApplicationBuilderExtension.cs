@@ -1,4 +1,3 @@
-using Auth.Data;
 using Data.Seeder;
 using Managements.Data;
 using Microsoft.AspNetCore.Builder;

@@ -28,7 +28,7 @@ internal sealed class DeleteUserEndpoint : Endpoint<DeleteUserCommand>
     }
 }
 
-internal sealed class DeleteUserEndpointSummary : Summary<CreateUserEndpoint>
+internal sealed class DeleteUserEndpointSummary : Summary<DeleteUserEndpoint>
 {
     public DeleteUserEndpointSummary()
     {

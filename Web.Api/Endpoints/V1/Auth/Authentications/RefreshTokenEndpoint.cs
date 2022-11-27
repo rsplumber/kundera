@@ -1,17 +1,18 @@
-﻿using Core.Domains.Sessions;
+﻿using Application.Auth;
+using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
-using FluentValidation;
+using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Authentications;
 
 internal sealed class RefreshTokenEndpoint : Endpoint<RefreshTokenRequest, Certificate>
 {
-    private readonly IAuthenticateService _authenticateService;
+    private readonly IMediator _mediator;
 
-    public RefreshTokenEndpoint(IAuthenticateService authenticateService)
+    public RefreshTokenEndpoint(IMediator mediator)
     {
-        _authenticateService = authenticateService;
+        _mediator = mediator;
     }
 
     public override void Configure()
@@ -23,13 +24,15 @@ internal sealed class RefreshTokenEndpoint : Endpoint<RefreshTokenRequest, Certi
 
     public override async Task HandleAsync(RefreshTokenRequest req, CancellationToken ct)
     {
-        var certificate = await _authenticateService.RefreshCertificateAsync(
-            Token.From(req.Authorization),
-            Token.From(req.RefreshToken),
-            HttpContext.Connection.LocalIpAddress,
-            ct);
+        var command = new RefreshCertificateCommand
+        {
+            Token = req.Authorization,
+            RefreshToken = req.RefreshToken,
+            IpAddress = HttpContext.Connection.LocalIpAddress
+        };
+        var response = await _mediator.Send(command, ct);
 
-        await SendOkAsync(certificate, ct);
+        await SendOkAsync(response, ct);
     }
 }
 
@@ -48,14 +51,4 @@ public sealed record RefreshTokenRequest
     [FromHeader] public string Authorization { get; set; } = default!;
 
     public string RefreshToken { get; set; } = default!;
-}
-
-internal sealed class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
-{
-    public RefreshTokenRequestValidator()
-    {
-        RuleFor(request => request.RefreshToken)
-            .NotEmpty().WithMessage("Enter valid RefreshToken")
-            .NotNull().WithMessage("Enter valid RefreshToken");
-    }
 }

@@ -5,13 +5,13 @@ namespace Managements.Data.Credentials;
 [Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] {"credentials"})]
 internal sealed class CredentialDataModel
 {
-    [RedisIdField] [Indexed] public string Id { get; set; }
+    [RedisIdField] [Indexed] public string Id { get; set; } = default!;
 
     [Indexed] public Guid UserId { get; set; }
 
-    public PasswordType Password { get; set; }
+    public PasswordType Password { get; set; } = default!;
 
-    public string LastIpAddress { get; set; }
+    public string? LastIpAddress { get; set; }
 
     [Indexed] public DateTime LastLoggedIn { get; set; }
 
@@ -24,7 +24,7 @@ internal sealed class CredentialDataModel
 
 internal sealed class PasswordType
 {
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 
-    public string Salt { get; set; }
+    public string Salt { get; set; } = default!;
 }
