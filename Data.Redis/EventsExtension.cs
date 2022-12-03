@@ -17,7 +17,7 @@ internal static class EventsExtension
             var attribute = domainEvent.GetType().GetCustomAttribute(typeof(EventAttribute));
             if (attribute is null) continue;
             var eventAttribute = (EventAttribute) attribute;
-            await eventBus.PublishAsync(eventAttribute.Name, domainEvent);
+            // await eventBus.PublishAsync(eventAttribute.Name, domainEvent);
         }
     }
 }

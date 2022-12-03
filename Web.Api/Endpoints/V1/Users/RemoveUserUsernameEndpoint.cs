@@ -16,7 +16,7 @@ internal sealed class RemoveUserUsernameEndpoint : Endpoint<RemoveUserUsernameCo
     public override void Configure()
     {
         Delete("users/{id:guid}/usernames");
-        AllowAnonymous();
+        Permissions("user_remove_username");
         Version(1);
     }
 

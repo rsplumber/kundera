@@ -16,7 +16,7 @@ internal sealed class ActivateScopeEndpoint : Endpoint<ActivateScopeCommand>
     public override void Configure()
     {
         Post("scopes/{id:guid}/active");
-        AllowAnonymous();
+        Permissions("scopes_activate");
         Version(1);
     }
 

@@ -16,16 +16,14 @@ internal sealed class GroupsEndpoint : EndpointWithoutRequest<List<GroupsRespons
     public override void Configure()
     {
         Get("groups");
-        AllowAnonymous();
+        Permissions("groups_list");
         Version(1);
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var query = new GroupsQuery();
-
         var response = await _mediator.Send(query, ct);
-
         await SendOkAsync(response, ct);
     }
 }
@@ -36,7 +34,7 @@ internal sealed class GroupsEndpointSummary : Summary<GroupsEndpoint>
     {
         Summary = "Groups list";
         Description = "Groups list";
-        Response<IEnumerable<GroupResponse>>(200, "Groups was successfully received");
+        Response<List<GroupResponse>>(200, "Groups was successfully received");
         Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
     }
 }

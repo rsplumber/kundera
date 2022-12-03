@@ -132,6 +132,7 @@ public class DataSeeder
         await SeedScopePermissions();
         await SeedGroupPermissions();
         await SeedUserPermissions();
+        await SeedCredentialsPermissions();
 
         var role = await _roleRepository.FindAsync(EntityBaseValues.SuperAdminRole);
         if (role is not null)
@@ -152,8 +153,7 @@ public class DataSeeder
         await _permissionFactory.CreateAsync("permissions_list");
         await _permissionFactory.CreateAsync("permissions_get");
         await _permissionFactory.CreateAsync("permissions_delete");
-        await _permissionFactory.CreateAsync("permissions_add_meta");
-        await _permissionFactory.CreateAsync("permissions_remove_meta");
+        await _permissionFactory.CreateAsync("permissions_change_meta");
     }
 
     private async Task SeedRolePermissions()
@@ -164,8 +164,7 @@ public class DataSeeder
         await _permissionFactory.CreateAsync("roles_delete");
         await _permissionFactory.CreateAsync("roles_add_permission");
         await _permissionFactory.CreateAsync("roles_remove_permission");
-        await _permissionFactory.CreateAsync("roles_add_meta");
-        await _permissionFactory.CreateAsync("roles_remove_meta");
+        await _permissionFactory.CreateAsync("roles_change_meta");
         await _permissionFactory.CreateAsync("roles_permissions_list");
     }
 
@@ -185,8 +184,8 @@ public class DataSeeder
         await _permissionFactory.CreateAsync("scopes_list");
         await _permissionFactory.CreateAsync("scopes_get");
         await _permissionFactory.CreateAsync("scopes_delete");
-        await _permissionFactory.CreateAsync("scopes_active");
-        await _permissionFactory.CreateAsync("scopes_de-active");
+        await _permissionFactory.CreateAsync("scopes_activate");
+        await _permissionFactory.CreateAsync("scopes_de-activate");
         await _permissionFactory.CreateAsync("scopes_add_service");
         await _permissionFactory.CreateAsync("scopes_remove_service");
         await _permissionFactory.CreateAsync("scopes_add_role");
@@ -227,6 +226,14 @@ public class DataSeeder
         await _permissionFactory.CreateAsync("user_block");
     }
 
+    private async Task SeedCredentialsPermissions()
+    {
+        await _permissionFactory.CreateAsync("credentials_create");
+        await _permissionFactory.CreateAsync("credentials_create_onetime");
+        await _permissionFactory.CreateAsync("credentials_create_time-periodic");
+        await _permissionFactory.CreateAsync("credentials_delete");
+    }
+
 
     private async Task SeedServiceManAsync()
     {
@@ -242,15 +249,13 @@ public class DataSeeder
             _permissionRepository.FindAsync("roles_delete"),
             _permissionRepository.FindAsync("roles_add_permission"),
             _permissionRepository.FindAsync("roles_remove_permission"),
-            _permissionRepository.FindAsync("roles_add_meta"),
-            _permissionRepository.FindAsync("roles_remove_meta"),
+            _permissionRepository.FindAsync("roles_change_meta"),
             _permissionRepository.FindAsync("roles_permissions_list"),
             _permissionRepository.FindAsync("permissions_create"),
             _permissionRepository.FindAsync("permissions_list"),
             _permissionRepository.FindAsync("permissions_get"),
             _permissionRepository.FindAsync("permissions_delete"),
-            _permissionRepository.FindAsync("permissions_add_meta"),
-            _permissionRepository.FindAsync("permissions_remove_meta"),
+            _permissionRepository.FindAsync("permissions_change_meta"),
             _permissionRepository.FindAsync("services_get"),
             _permissionRepository.FindAsync("services_activate"),
             _permissionRepository.FindAsync("services_de-activate")

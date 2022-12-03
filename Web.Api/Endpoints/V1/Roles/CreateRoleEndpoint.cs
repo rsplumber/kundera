@@ -16,7 +16,7 @@ internal sealed class CreateRoleEndpoint : Endpoint<CreateRoleCommand>
     public override void Configure()
     {
         Post("roles");
-        AllowAnonymous();
+        Permissions("roles_create");
         Version(1);
     }
 

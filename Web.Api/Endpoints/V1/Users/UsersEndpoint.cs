@@ -17,7 +17,7 @@ internal sealed class UsersEndpoint : Endpoint<UsersQuery, List<UsersResponse>>
     public override void Configure()
     {
         Get("users");
-        AllowAnonymous();
+        Permissions("user_list");
         Version(1);
     }
 

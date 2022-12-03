@@ -16,7 +16,7 @@ internal sealed class BlockUserEndpoint : Endpoint<ActiveUserCommand>
     public override void Configure()
     {
         Post("user/{id:guid}/block");
-        AllowAnonymous();
+        Permissions("user_block");
         Version(1);
     }
 

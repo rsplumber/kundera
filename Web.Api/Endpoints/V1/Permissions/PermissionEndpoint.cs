@@ -17,7 +17,7 @@ internal sealed class PermissionEndpoint : Endpoint<PermissionQuery, PermissionR
     public override void Configure()
     {
         Get("permissions/{id:guid}");
-        AllowAnonymous();
+        Permissions("permissions_get");
         Version(1);
     }
 

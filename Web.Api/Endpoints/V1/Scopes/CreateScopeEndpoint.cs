@@ -16,7 +16,7 @@ internal sealed class CreateScopeEndpoint : Endpoint<CreateScopeCommand>
     public override void Configure()
     {
         Post("scopes");
-        AllowAnonymous();
+        Permissions("scopes_create");
         Version(1);
     }
 

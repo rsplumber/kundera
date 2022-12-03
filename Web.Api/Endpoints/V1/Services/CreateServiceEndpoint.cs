@@ -16,7 +16,7 @@ internal sealed class CreateServiceEndpoint : Endpoint<CreateServiceCommand>
     public override void Configure()
     {
         Post("services");
-        AllowAnonymous();
+        Permissions("services_create");
         Version(1);
     }
 

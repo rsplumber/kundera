@@ -48,7 +48,7 @@ public sealed record UserSessionsRequest
     public Guid Id { get; init; } = default!;
 }
 
-public class UserSessionsRequestValidator : AbstractValidator<UserSessionsRequest>
+public class UserSessionsRequestValidator : Validator<UserSessionsRequest>
 {
     public UserSessionsRequestValidator()
     {

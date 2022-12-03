@@ -16,7 +16,7 @@ internal sealed class MoveGroupParentEndpoint : Endpoint<MoveGroupParentCommand>
     public override void Configure()
     {
         Post("groups/{id:guid}/parent/move");
-        AllowAnonymous();
+        Permissions("groups_move_parent");
         Version(1);
     }
 

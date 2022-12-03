@@ -16,7 +16,7 @@ internal sealed class DeleteScopeEndpoint : Endpoint<DeleteScopeCommand>
     public override void Configure()
     {
         Delete("scopes/{id:guid}");
-        AllowAnonymous();
+        Permissions("scopes_delete");
         Version(1);
     }
 

@@ -16,7 +16,7 @@ internal sealed class RevokeGroupRoleEndpoint : Endpoint<RevokeGroupRoleCommand>
     public override void Configure()
     {
         Delete("groups/{id:guid}/roles");
-        AllowAnonymous();
+        Permissions("groups_revoke_role");
         Version(1);
     }
 

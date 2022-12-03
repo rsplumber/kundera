@@ -16,7 +16,7 @@ internal sealed class CreateUserEndpoint : Endpoint<CreateUserCommand>
     public override void Configure()
     {
         Post("users");
-        AllowAnonymous();
+        Permissions("user_create");
         Version(1);
     }
 

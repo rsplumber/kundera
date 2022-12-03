@@ -16,7 +16,7 @@ internal sealed class RemoveUserFromGroupEndpoint : Endpoint<RemoveUserFromGroup
     public override void Configure()
     {
         Delete("users/{id:guid}/groups");
-        AllowAnonymous();
+        Permissions("user_remove_group");
         Version(1);
     }
 

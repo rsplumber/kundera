@@ -17,7 +17,7 @@ internal sealed class RolePermissionsEndpoint : Endpoint<RolePermissionsQuery, L
     public override void Configure()
     {
         Get("roles/{id:guid}/permissions");
-        AllowAnonymous();
+        Permissions("roles_permissions_list");
         Version(1);
     }
 

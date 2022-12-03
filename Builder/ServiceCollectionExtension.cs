@@ -25,33 +25,16 @@ public static class ServiceCollectionExtension
 {
     public static void AddKundera(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddLibraries(configuration);
-        services.AddServices(configuration);
-        services.AddFactories();
-        services.AddData(configuration);
-        services.AddDataSeeder();
-        services.AddBackgroundServices();
-    }
-
-    private static void AddLibraries(this IServiceCollection services, IConfiguration configuration)
-    {
         services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
         services.AddCap(x =>
         {
             x.UseInMemoryStorage();
             x.UseInMemoryMessageQueue();
         });
-    }
-
-    private static void AddServices(this IServiceCollection services, IConfiguration configuration)
-    {
         services.TryAddSingleton<IHashService>(_ => new HmacHashingService(HashingType.HMACSHA384, 6));
         services.AddScoped<ISessionManagement, SessionManagement>();
         services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
-    }
 
-    private static void AddFactories(this IServiceCollection services)
-    {
         services.AddScoped<IUserFactory, UserFactory>();
         services.AddScoped<IServiceFactory, ServiceFactory>();
         services.AddScoped<IScopeFactory, ScopeFactory>();
@@ -60,12 +43,11 @@ public static class ServiceCollectionExtension
         services.AddScoped<IGroupFactory, GroupFactory>();
         services.AddScoped<ISessionFactory, SessionFactory>();
         services.AddScoped<ICredentialFactory, CredentialFactory>();
-    }
-
-    private static void AddBackgroundServices(this IServiceCollection services)
-    {
         services.AddTransient<RemoveExpiredCredentialsJob>();
         services.AddTransient<RemoveExpiredSessionsJob>();
+
+        services.AddData(configuration);
+        services.AddDataSeeder();
 
         services.AddQuartz(q =>
         {

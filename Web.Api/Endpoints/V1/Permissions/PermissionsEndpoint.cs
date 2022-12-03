@@ -17,7 +17,7 @@ internal sealed class PermissionsEndpoint : Endpoint<PermissionsQuery, List<Perm
     public override void Configure()
     {
         Get("permissions");
-        AllowAnonymous();
+        Permissions("permissions_list");
         Version(1);
     }
 

@@ -1,6 +1,5 @@
 ﻿using Application.Auth.Credentials;
 using FastEndpoints;
-using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials;
@@ -17,7 +16,7 @@ internal sealed class CreateTimePeriodicEndpoint : Endpoint<CreateTimePeriodicCr
     public override void Configure()
     {
         Post("users/{UserId:guid}/credentials/time-periodic");
-        AllowAnonymous();
+        Permissions("credentials_create_time-periodic");
         Version(1);
     }
 
@@ -42,9 +41,9 @@ internal sealed class CreateTimePeriodicEndpointSummary : Summary<CreateTimePeri
 {
     public CreateTimePeriodicEndpointSummary()
     {
-        Summary = "Terminate session";
-        Description = "Terminate a session";
-        Response(200, "Session terminated successfully");
+        Summary = "Create TimePeriodic Credential";
+        Description = "Create a TimePeriodic Credential that expires after period of time";
+        Response(200, "Credential Created successfully");
     }
 }
 
@@ -58,5 +57,5 @@ public record CreateTimePeriodicCredentialRequest
 
     public int ExpireInMinutes { get; init; } = default!;
 
-    public string? Type { get; init; }
+    public string? Type { get; init; } = default;
 }

@@ -17,7 +17,7 @@ internal sealed class ScopesEndpoint : Endpoint<ScopesQuery, List<ScopesResponse
     public override void Configure()
     {
         Get("scopes");
-        AllowAnonymous();
+        Permissions("scopes_list");
         Version(1);
     }
 

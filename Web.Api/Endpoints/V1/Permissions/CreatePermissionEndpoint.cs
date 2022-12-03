@@ -16,7 +16,7 @@ internal sealed class CreatePermissionEndpoint : Endpoint<CreatePermissionComman
     public override void Configure()
     {
         Post("permissions");
-        AllowAnonymous();
+        Permissions("permissions_create");
         Version(1);
     }
 

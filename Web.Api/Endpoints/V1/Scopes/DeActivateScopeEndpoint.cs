@@ -16,7 +16,7 @@ internal sealed class DeActivateScopeEndpoint : Endpoint<DeActivateScopeCommand>
     public override void Configure()
     {
         Post("scopes/{id:guid}/de-active");
-        AllowAnonymous();
+        Permissions("scopes_de-activate");
         Version(1);
     }
 

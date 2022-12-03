@@ -16,7 +16,7 @@ internal sealed class AddUserUsernameEndpoint : Endpoint<AddUserUsernameCommand>
     public override void Configure()
     {
         Post("users/{id:guid}/usernames");
-        AllowAnonymous();
+        Permissions("user_add_username");
         Version(1);
     }
 

@@ -16,7 +16,7 @@ internal sealed class GroupEndpoint : Endpoint<GroupQuery, GroupResponse>
     public override void Configure()
     {
         Get("groups/{id:guid}");
-        AllowAnonymous();
+        Permissions("groups_get");
         Version(1);
     }
 

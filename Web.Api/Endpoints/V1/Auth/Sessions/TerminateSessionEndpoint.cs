@@ -44,7 +44,7 @@ public sealed record TerminateSessionRequest
     public string Token { get; init; } = default!;
 }
 
-public class TerminateSessionRequestValidator : AbstractValidator<TerminateSessionRequest>
+public class TerminateSessionRequestValidator : Validator<TerminateSessionRequest>
 {
     public TerminateSessionRequestValidator()
     {

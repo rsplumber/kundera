@@ -16,7 +16,7 @@ internal sealed class AssignUserRoleEndpoint : Endpoint<AssignUserRoleCommand>
     public override void Configure()
     {
         Post("users/{id:guid}/roles");
-        AllowAnonymous();
+        Permissions("user_assign_role");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class ServicesEndpoint : Endpoint<ServicesQuery, List<ServicesRe
     public override void Configure()
     {
         Get("services");
-        AllowAnonymous();
+        Permissions("services_list");
         Version(1);
     }
 

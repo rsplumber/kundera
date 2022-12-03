@@ -16,7 +16,7 @@ internal sealed class AddScopeServiceEndpoint : Endpoint<AddScopeServiceCommand>
     public override void Configure()
     {
         Post("scopes/{id:guid}/services");
-        AllowAnonymous();
+        Permissions("scopes_add_service");
         Version(1);
     }
 

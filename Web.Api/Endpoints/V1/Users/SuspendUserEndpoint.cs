@@ -16,7 +16,7 @@ internal sealed class SuspendUserEndpoint : Endpoint<ActiveUserCommand>
     public override void Configure()
     {
         Post("user/{id:guid}/suspend");
-        AllowAnonymous();
+        Permissions("user_suspend");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class ExistUserUsernameEndpoint : Endpoint<ExistUserUsernameQuer
     public override void Configure()
     {
         Get("users/exists");
-        AllowAnonymous();
+        Permissions("user_exist_username");
         Version(1);
     }
 

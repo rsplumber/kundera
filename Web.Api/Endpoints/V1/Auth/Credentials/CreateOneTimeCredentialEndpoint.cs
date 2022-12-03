@@ -1,6 +1,5 @@
 ﻿using Application.Auth.Credentials;
 using FastEndpoints;
-using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials;
@@ -17,7 +16,7 @@ internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCr
     public override void Configure()
     {
         Post("users/{UserId:guid}/credentials/one-time");
-        AllowAnonymous();
+        Permissions("credentials_create_onetime");
         Version(1);
     }
 
@@ -42,9 +41,9 @@ internal sealed class CreateOneTimeCredentialEndpointSummary : Summary<CreateOne
 {
     public CreateOneTimeCredentialEndpointSummary()
     {
-        Summary = "Terminate session";
-        Description = "Terminate a session";
-        Response(200, "Session terminated successfully");
+        Summary = "Create OneTime Credential";
+        Description = "Create a OneTime Credential that expires after one use";
+        Response(200, "Credential Created successfully");
     }
 }
 
@@ -59,22 +58,4 @@ public record CreateOneTimeCredentialRequest
     public string? Type { get; init; }
 
     public int ExpireInMinutes { get; init; } = 0;
-}
-
-public class CreateOneTimeCredentialRequestValidator : AbstractValidator<CreateOneTimeCredentialRequest>
-{
-    public CreateOneTimeCredentialRequestValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter valid UserId")
-            .NotNull().WithMessage("Enter valid UserId");
-
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
-    }
 }

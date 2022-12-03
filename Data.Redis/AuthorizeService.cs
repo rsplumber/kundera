@@ -50,7 +50,8 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        var service = await _dbProvider.RedisCollection<ServiceDataModel>(false).FindByIdAsync(serviceSecret);
+        var service = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
+            .FirstOrDefaultAsync();
         if (InvalidService())
         {
             if (service is null || service.Name != EntityBaseValues.KunderaServiceName)
@@ -80,7 +81,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
 
-        bool InvalidUser() => user is null || user.Status == UserStatus.Active.Name;
+        bool InvalidUser() => user is null || user.Status != UserStatus.Active.Name;
 
         bool InvalidSessionScope() => sessionScope is null || UserHasNotScopeRole();
 

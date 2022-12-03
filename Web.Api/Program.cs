@@ -1,34 +1,26 @@
 using Builder;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using KunderaNet.Authorization.Microsoft.DependencyInjection;
-using NSwag;
+using KunderaNet.FastEndpoints.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.UseUrls("http://+:5179");
-
 builder.Services.AddKundera(builder.Configuration);
-builder.Services.AddKunderaAuthorization(builder.Configuration);
 
+builder.Services.AddKunderaAuthorization(builder.Configuration);
 builder.Services.AddFastEndpoints();
 builder.Services.AddSwaggerDoc(settings =>
 {
     settings.Title = "Kundera - WebApi";
     settings.DocumentName = "v1";
     settings.Version = "v1";
-    settings.AddAuth("Kundera", new()
-    {
-        Name = "Kundera",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Type = OpenApiSecuritySchemeType.ApiKey,
-    });
+    settings.AddKunderaAuth();
 }, addJWTBearerAuth: false, maxEndpointVersion: 1);
 
-builder.Services.AddHttpContextAccessor();
-
 var app = builder.Build();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";

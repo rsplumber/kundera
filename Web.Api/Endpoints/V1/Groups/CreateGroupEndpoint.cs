@@ -16,7 +16,7 @@ internal sealed class CreateGroupEndpoint : Endpoint<CreateGroupCommand>
     public override void Configure()
     {
         Post("groups");
-        AllowAnonymous();
+        Permissions("groups_create");
         Version(1);
     }
 

@@ -8,7 +8,6 @@ internal sealed class AuthorizeEndpoint : Endpoint<AuthorizeRequest, Guid>
 {
     private readonly IAuthorizeService _authorizeService;
 
-
     public AuthorizeEndpoint(IAuthorizeService authorizeService)
     {
         _authorizeService = authorizeService;
@@ -16,6 +15,7 @@ internal sealed class AuthorizeEndpoint : Endpoint<AuthorizeRequest, Guid>
 
     public override void Configure()
     {
+        // http://localhost:5179/authorize
         Post("authorize");
         AllowAnonymous();
         Version(1);
@@ -45,14 +45,14 @@ internal sealed class AuthorizeEndpointSummary : Summary<AuthorizeEndpoint>
 
 public sealed record AuthorizeRequest
 {
-    [FromHeader] public string Authorization { get; init; } = default!;
+    public string Authorization { get; init; } = default!;
 
-    [FromHeader] public string Action { get; init; } = default!;
+    public string Action { get; init; } = default!;
 
-    [FromHeader] public string ServiceSecret { get; init; } = default!;
+    public string ServiceSecret { get; init; } = default!;
 }
 
-internal sealed class AuthorizeRequestValidator : AbstractValidator<AuthorizeRequest>
+internal sealed class AuthorizeRequestValidator : Validator<AuthorizeRequest>
 {
     public AuthorizeRequestValidator()
     {

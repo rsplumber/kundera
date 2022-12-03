@@ -16,7 +16,7 @@ internal sealed class JoinUserToGroupEndpoint : Endpoint<JoinUserToGroupCommand>
     public override void Configure()
     {
         Post("users/{id:guid}/groups");
-        AllowAnonymous();
+        Permissions("user_join_group");
         Version(1);
     }
 

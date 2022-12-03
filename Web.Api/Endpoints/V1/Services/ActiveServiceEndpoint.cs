@@ -16,7 +16,7 @@ internal sealed class ActiveServiceEndpoint : Endpoint<ActivateServiceCommandVal
     public override void Configure()
     {
         Post("services/{id:guid}/activate");
-        AllowAnonymous();
+        Permissions("services_activate");
         Version(1);
     }
 

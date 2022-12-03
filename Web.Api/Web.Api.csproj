@@ -14,8 +14,7 @@
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="5.4.1" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.4.1" />
-        <PackageReference Include="KunderaNet.AspNetCore.Authorization" Version="0.0.85" />
-        <PackageReference Include="KunderaNet.Authorization.Http.Extensions.Microsoft.DependencyInjection" Version="0.0.85" />
+        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="0.0.92" />
     </ItemGroup>
 
     <ItemGroup>

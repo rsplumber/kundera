@@ -16,7 +16,7 @@ internal sealed class ActivateUserEndpoint : Endpoint<ActiveUserCommand>
     public override void Configure()
     {
         Post("user/{id:guid}/activate");
-        AllowAnonymous();
+        Permissions("user_activate");
         Version(1);
     }
 

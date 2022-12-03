@@ -17,6 +17,7 @@ internal sealed class ChangePermissionMetaEndpoint : Endpoint<ChangePermissionMe
     {
         Post("permissions/{id:guid}/meta");
         AllowAnonymous();
+        Permissions("permissions_change_meta");
         Version(1);
     }
 

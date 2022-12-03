@@ -16,7 +16,7 @@ internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialReques
     public override void Configure()
     {
         Post("users/{UserId:guid}/credentials");
-        AllowAnonymous();
+        Permissions("credentials_create");
         Version(1);
     }
 
@@ -40,9 +40,9 @@ internal sealed class CreateCredentialEndpointSummary : Summary<CreateCredential
 {
     public CreateCredentialEndpointSummary()
     {
-        Summary = "Terminate session";
-        Description = "Terminate a session";
-        Response(200, "Session terminated successfully");
+        Summary = "Create Credential";
+        Description = "Create a default Credential";
+        Response(200, "Credential Created successfully");
     }
 }
 

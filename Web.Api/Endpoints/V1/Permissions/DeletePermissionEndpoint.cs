@@ -16,7 +16,7 @@ internal sealed class DeletePermissionEndpoint : Endpoint<DeletePermissionComman
     public override void Configure()
     {
         Delete("permissions/{id:guid}");
-        AllowAnonymous();
+        Permissions("permissions_delete");
         Version(1);
     }
 

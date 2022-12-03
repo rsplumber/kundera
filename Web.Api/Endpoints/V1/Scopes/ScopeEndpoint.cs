@@ -17,7 +17,7 @@ internal sealed class ScopeEndpoint : Endpoint<ScopeQuery, ScopeResponse>
     public override void Configure()
     {
         Get("scopes/{id:guid}");
-        AllowAnonymous();
+        Permissions("scopes_get");
         Version(1);
     }
 
