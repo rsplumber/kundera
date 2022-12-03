@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="6.2.1" />
+        <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="6.0.0" />
+        <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />
         <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
