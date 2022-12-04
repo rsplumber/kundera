@@ -1,5 +1,4 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Services.Events;
+﻿using Core.Domains.Services.Events;
 using Core.Domains.Services.Types;
 using Core.Hashing;
 

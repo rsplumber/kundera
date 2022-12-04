@@ -1,5 +1,4 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Groups.Events;
+﻿using Core.Domains.Groups.Events;
 using Core.Domains.Groups.Exception;
 using Core.Domains.Groups.Types;
 using Core.Domains.Roles.Types;

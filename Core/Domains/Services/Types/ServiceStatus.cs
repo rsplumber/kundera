@@ -1,5 +1,3 @@
-using Core.Domains.Contracts;
-
 namespace Core.Domains.Services.Types;
 
 public sealed class ServiceStatus : Enumeration

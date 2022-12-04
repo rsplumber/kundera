@@ -1,6 +1,6 @@
-﻿using Core.Domains.Contracts;
+﻿namespace Core.Domains.Auth.Credentials.Events;
 
-namespace Core.Domains.Credentials.Events;
-
-[Event("credential_password_changed")]
-public sealed record CredentialPasswordChangedEvent(UniqueIdentifier UniqueIdentifier) : DomainEvent;
+public sealed record CredentialPasswordChangedEvent(UniqueIdentifier UniqueIdentifier) : DomainEvent
+{
+    public override string Name => "credential_password_changed";
+}

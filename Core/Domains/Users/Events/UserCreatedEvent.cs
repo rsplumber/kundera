@@ -1,7 +1,8 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Users.Types;
+﻿using Core.Domains.Users.Types;
 
 namespace Core.Domains.Users.Events;
 
-[Event("user_created")]
-public sealed record UserCreatedEvent(UserId UserId) : DomainEvent;
+public sealed record UserCreatedEvent(UserId UserId) : DomainEvent
+{
+    public override string Name => "user_created";
+}

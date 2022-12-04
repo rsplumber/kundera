@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Core.Domains.Contracts;
+﻿using Core.Domains;
 using DotNetCore.CAP;
 
 namespace Managements.Data;
@@ -11,13 +10,12 @@ internal static class EventsExtension
         if (entity.DomainEvents is null) return;
 
         var domainEvents = entity.DomainEvents.ToList();
-        entity.ClearDomainEvent();
         foreach (var domainEvent in domainEvents)
         {
-            var attribute = domainEvent.GetType().GetCustomAttribute(typeof(EventAttribute));
-            if (attribute is null) continue;
-            var eventAttribute = (EventAttribute) attribute;
-            // await eventBus.PublishAsync(eventAttribute.Name, domainEvent);
+            var eventAttribute = (DomainEvent) domainEvent;
+            await eventBus.PublishAsync(eventAttribute.Name, domainEvent);
         }
+
+        entity.ClearDomainEvent();
     }
 }

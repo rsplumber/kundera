@@ -15,7 +15,7 @@ internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCr
 
     public override void Configure()
     {
-        Post("users/{UserId:guid}/credentials/one-time");
+        Post("users/{id:guid}/credentials/one-time");
         Permissions("credentials_create_onetime");
         Version(1);
     }
@@ -29,7 +29,7 @@ internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCr
             Type = req.Type,
             ExpireInMinutes = req.ExpireInMinutes,
             IpAddress = HttpContext.Connection.LocalIpAddress,
-            UserId = req.UserId
+            UserId = req.Id
         };
 
         await _mediator.Send(command, ct);
@@ -49,7 +49,7 @@ internal sealed class CreateOneTimeCredentialEndpointSummary : Summary<CreateOne
 
 public record CreateOneTimeCredentialRequest
 {
-    public Guid UserId { get; init; } = default!;
+    public Guid Id { get; init; } = default!;
 
     public string Username { get; init; } = default!;
 

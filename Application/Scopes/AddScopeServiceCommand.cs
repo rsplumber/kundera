@@ -47,7 +47,7 @@ internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeSe
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
-        
+
         return Unit.Value;
     }
 }

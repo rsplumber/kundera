@@ -1,5 +1,4 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Roles.Types;
+﻿using Core.Domains.Roles.Types;
 using Core.Domains.Scopes.Events;
 using Core.Domains.Scopes.Types;
 using Core.Domains.Services.Types;
@@ -30,7 +29,7 @@ public class Scope : AggregateRoot
     }
 
     public ScopeId Id { get; internal set; } = ScopeId.Generate();
-    
+
     public Name Name { get; internal set; } = default!;
 
     public ScopeSecret Secret { get; internal set; } = default!;

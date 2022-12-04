@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Core.Domains.Contracts;
+namespace Core.Domains;
 
 public abstract class Enumeration : IComparable
 {

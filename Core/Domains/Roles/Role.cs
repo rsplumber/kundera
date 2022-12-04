@@ -1,5 +1,4 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Permissions.Types;
+﻿using Core.Domains.Permissions.Types;
 using Core.Domains.Roles.Events;
 using Core.Domains.Roles.Types;
 

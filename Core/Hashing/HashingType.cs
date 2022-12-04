@@ -1,4 +1,4 @@
-namespace Hashing.HMAC;
+namespace Core.Hashing;
 
 public enum HashingType
 {

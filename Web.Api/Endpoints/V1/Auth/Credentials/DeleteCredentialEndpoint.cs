@@ -15,7 +15,7 @@ internal sealed class DeleteCredentialEndpoint : Endpoint<RemoveCredentialComman
 
     public override void Configure()
     {
-        Delete("credentials/{uniqueIdentifier}");
+        Delete("users/credentials/{uniqueIdentifier}");
         Permissions("credentials_delete");
         Version(1);
     }

@@ -1,4 +1,4 @@
-using Core.Domains.Sessions;
+using Core.Domains.Auth.Sessions;
 using Quartz;
 
 namespace Application.BackgroundJobs;

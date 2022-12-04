@@ -1,5 +1,4 @@
-﻿using Application.Auth;
-using Application.Auth.Authentications;
+﻿using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
 using Mediator;
@@ -33,7 +32,7 @@ internal sealed class AuthenticateEndpoint : Endpoint<AuthenticateRequest, Certi
             ScopeSecret = req.ScopeSecret
         };
         var response = await _mediator.Send(command, ct);
-        
+
         await SendOkAsync(response, ct);
     }
 }

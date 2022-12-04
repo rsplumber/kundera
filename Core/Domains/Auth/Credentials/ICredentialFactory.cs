@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using Core.Domains.Credentials.Exceptions;
+using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
 
-namespace Core.Domains.Credentials;
+namespace Core.Domains.Auth.Credentials;
 
 public interface ICredentialFactory
 {

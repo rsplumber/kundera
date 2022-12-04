@@ -1,4 +1,4 @@
-﻿namespace Core.Domains.Contracts;
+﻿namespace Core.Domains;
 
 public interface IDomainEvent
 {
@@ -7,20 +7,11 @@ public interface IDomainEvent
     public DateTime CreatedDateUtc { get; }
 }
 
-public record DomainEvent : IDomainEvent
+public abstract record DomainEvent : IDomainEvent
 {
     public Guid EventId { get; } = Guid.NewGuid();
 
     public DateTime CreatedDateUtc { get; } = DateTime.UtcNow;
-}
 
-[AttributeUsage(AttributeTargets.Class)]
-public class EventAttribute : Attribute
-{
-    public EventAttribute(string name)
-    {
-        Name = name;
-    }
-
-    public string Name { get; }
+    public abstract string Name { get; }
 }

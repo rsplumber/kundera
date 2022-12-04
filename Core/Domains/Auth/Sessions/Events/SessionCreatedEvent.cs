@@ -1,7 +1,6 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Credentials;
+﻿namespace Core.Domains.Auth.Sessions.Events;
 
-namespace Core.Domains.Sessions.Events;
-
-[Event("session_created")]
-public sealed record SessionCreatedEvent(Token Token) : DomainEvent;
+public sealed record SessionCreatedEvent(Token Token) : DomainEvent
+{
+    public override string Name => "session_created";
+}

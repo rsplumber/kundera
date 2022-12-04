@@ -1,19 +1,19 @@
-﻿using Core.Domains.Credentials;
+﻿using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
-using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Services;
-using Managements.Data.Credentials;
+using Managements.Data.Auth.Credentials;
+using Managements.Data.Auth.Sessions;
 using Managements.Data.Groups;
 using Managements.Data.Permissions;
 using Managements.Data.Roles;
 using Managements.Data.Scopes;
 using Managements.Data.Services;
-using Managements.Data.Sessions;
 using Managements.Data.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,18 +34,18 @@ internal static class ServiceCollectionExtension
 
         services.TryAddSingleton(_ => new RedisConnectionProvider(connectionUrl));
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<IGroupRepository, GroupRepository>();
 
-        services.AddScoped<IServiceRepository, ServiceRepository>();
-        services.AddScoped<IScopeRepository, ScopeRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddSingleton<IServiceRepository, ServiceRepository>();
+        services.AddSingleton<IScopeRepository, ScopeRepository>();
+        services.AddSingleton<IRoleRepository, RoleRepository>();
+        services.AddSingleton<IPermissionRepository, PermissionRepository>();
 
-        services.AddScoped<ICredentialRepository, CredentialRepository>();
-        services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddSingleton<ICredentialRepository, CredentialRepository>();
+        services.AddSingleton<ISessionRepository, SessionRepository>();
 
-        services.AddScoped<IAuthorizeService, AuthorizeService>();
+        services.AddSingleton<IAuthorizeService, AuthorizeServiceTest>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }

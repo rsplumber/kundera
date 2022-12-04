@@ -12,7 +12,7 @@ public sealed record ScopeResponse
 {
     public Guid Id { get; init; }
 
-    public string Name { get; init; }  = string.Empty;
+    public string Name { get; init; } = string.Empty;
 
     public string Secret { get; init; } = string.Empty;
 

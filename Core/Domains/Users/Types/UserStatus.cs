@@ -1,6 +1,4 @@
-﻿using Core.Domains.Contracts;
-
-namespace Core.Domains.Users.Types;
+﻿namespace Core.Domains.Users.Types;
 
 public sealed class UserStatus : Enumeration
 {

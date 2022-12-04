@@ -1,5 +1,3 @@
-using Core.Domains.Contracts;
-
 namespace Core.Domains.Scopes.Types;
 
 public sealed class ScopeStatus : Enumeration

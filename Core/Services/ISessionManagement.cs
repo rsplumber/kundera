@@ -1,5 +1,5 @@
-﻿using Core.Domains.Scopes.Types;
-using Core.Domains.Sessions;
+﻿using Core.Domains.Auth.Sessions;
+using Core.Domains.Scopes.Types;
 using Core.Domains.Users.Types;
 
 namespace Core.Services;

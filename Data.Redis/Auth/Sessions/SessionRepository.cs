@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Core.Domains.Sessions;
+using Core.Domains.Auth.Sessions;
 using Core.Domains.Users.Types;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Sessions;
+namespace Managements.Data.Auth.Sessions;
 
 internal sealed class SessionRepository : ISessionRepository
 {

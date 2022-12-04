@@ -1,7 +1,8 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Users.Types;
+﻿using Core.Domains.Users.Types;
 
-namespace Core.Domains.Credentials.Events;
+namespace Core.Domains.Auth.Credentials.Events;
 
-[Event("credential_created")]
-public sealed record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, UserId User) : DomainEvent;
+public sealed record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, UserId User) : DomainEvent
+{
+    public override string Name => "credential_created";
+}

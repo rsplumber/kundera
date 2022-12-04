@@ -1,10 +1,13 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Users.Types;
+﻿using Core.Domains.Users.Types;
 
 namespace Core.Domains.Users.Events;
 
-[Event("user_username_added")]
-public sealed record UserUsernameAddedEvent(UserId Id, Username Username) : DomainEvent;
+public sealed record UserUsernameAddedEvent(UserId Id, Username Username) : DomainEvent
+{
+    public override string Name => "user_username_added";
+}
 
-[Event("user_username_removed")]
-public sealed record UserUsernameRemovedEvent(UserId Id, Username Username) : DomainEvent;
+public sealed record UserUsernameRemovedEvent(UserId Id, Username Username) : DomainEvent
+{
+    public override string Name => "user_username_removed";
+}

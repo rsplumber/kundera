@@ -1,4 +1,4 @@
-namespace Core.Domains.Contracts;
+namespace Core.Domains;
 
 public class DomainException : Exception
 {

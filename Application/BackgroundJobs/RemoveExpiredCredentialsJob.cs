@@ -1,4 +1,4 @@
-using Core.Domains.Credentials;
+using Core.Domains.Auth.Credentials;
 using Quartz;
 
 namespace Application.BackgroundJobs;

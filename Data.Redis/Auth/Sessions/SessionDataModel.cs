@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Sessions;
+namespace Managements.Data.Auth.Sessions;
 
 [Document(IndexName = "sessions", StorageType = StorageType.Json, Prefixes = new[] {"sessions"})]
 internal sealed class SessionDataModel

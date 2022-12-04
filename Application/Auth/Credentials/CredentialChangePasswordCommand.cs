@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using Core.Domains.Credentials;
-using Core.Domains.Credentials.Exceptions;
+using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Credentials.Exceptions;
 using FluentValidation;
 using Mediator;
 

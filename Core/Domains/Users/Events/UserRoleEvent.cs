@@ -1,11 +1,14 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Roles.Types;
+﻿using Core.Domains.Roles.Types;
 using Core.Domains.Users.Types;
 
 namespace Core.Domains.Users.Events;
 
-[Event("user_role_added")]
-public sealed record UserRoleAddedEvent(UserId Id, RoleId Role) : DomainEvent;
+public sealed record UserRoleAddedEvent(UserId Id, RoleId Role) : DomainEvent
+{
+    public override string Name => "user_role_added";
+}
 
-[Event("user_role_removed")]
-public sealed record UserRoleRemovedEvent(UserId Id, RoleId Role) : DomainEvent;
+public sealed record UserRoleRemovedEvent(UserId Id, RoleId Role) : DomainEvent
+{
+    public override string Name => "user_role_removed";
+}

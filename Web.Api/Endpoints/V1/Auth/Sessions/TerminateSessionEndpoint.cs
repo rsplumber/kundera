@@ -1,4 +1,4 @@
-﻿using Core.Domains.Sessions;
+﻿using Core.Domains.Auth.Sessions;
 using Core.Services;
 using FastEndpoints;
 using FluentValidation;

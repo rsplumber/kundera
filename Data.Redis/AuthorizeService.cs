@@ -2,12 +2,12 @@
 using Core.Domains;
 using Core.Domains.Users.Types;
 using Core.Services;
+using Managements.Data.Auth.Sessions;
 using Managements.Data.Groups;
 using Managements.Data.Permissions;
 using Managements.Data.Roles;
 using Managements.Data.Scopes;
 using Managements.Data.Services;
-using Managements.Data.Sessions;
 using Managements.Data.Users;
 using Redis.OM;
 
@@ -98,7 +98,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         var allRoleIds = new List<Guid>(userGroupRoleIds);
         if (user.Roles is not null)
         {
-            allRoleIds.AddRange(user.Roles);    
+            allRoleIds.AddRange(user.Roles);
         }
 
         return (await _dbProvider.RedisCollection<RoleDataModel>()

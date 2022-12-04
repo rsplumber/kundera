@@ -1,11 +1,14 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Groups.Types;
+﻿using Core.Domains.Groups.Types;
 using Core.Domains.Users.Types;
 
 namespace Core.Domains.Users.Events;
 
-[Event("user_joined_group")]
-public sealed record UserJoinedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
+public sealed record UserJoinedGroupEvent(UserId Id, GroupId Group) : DomainEvent
+{
+    public override string Name => "user_joined_group";
+}
 
-[Event("user_removed_group")]
-public sealed record UserRemovedGroupEvent(UserId Id, GroupId Group) : DomainEvent;
+public sealed record UserRemovedGroupEvent(UserId Id, GroupId Group) : DomainEvent
+{
+    public override string Name => "user_removed_group";
+}

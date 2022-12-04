@@ -1,11 +1,10 @@
-namespace Core.Domains.Contracts;
+namespace Core.Domains;
 
 public abstract class Entity
 {
-   
     private HashSet<IDomainEvent>? _domainEvents;
     public IReadOnlyCollection<IDomainEvent>? DomainEvents => _domainEvents;
-    
+
     protected void AddDomainEvent(IDomainEvent domainEvent)
     {
         _domainEvents ??= new HashSet<IDomainEvent>();

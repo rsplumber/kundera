@@ -31,6 +31,7 @@ internal sealed class ChangeGroupInfoCommandHandler : ICommandHandler<ChangeGrou
         {
             throw new GroupNotFoundException();
         }
+
         group.ChangeName(command.Name);
         group.ChangeDescription(command.Description);
         await _groupRepository.UpdateAsync(group, cancellationToken);
@@ -45,7 +46,7 @@ public sealed class ChangeGroupInfoCommandValidator : AbstractValidator<ChangeGr
         RuleFor(request => request.Group)
             .NotEmpty().WithMessage("Enter Group")
             .NotNull().WithMessage("Enter Group");
-        
+
         RuleFor(request => request.Name)
             .NotEmpty().WithMessage("Enter Name")
             .NotNull().WithMessage("Enter Name");

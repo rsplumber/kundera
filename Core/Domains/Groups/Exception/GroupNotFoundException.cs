@@ -1,6 +1,4 @@
-﻿using Core.Domains.Contracts;
-
-namespace Core.Domains.Groups.Exception;
+﻿namespace Core.Domains.Groups.Exception;
 
 public sealed class GroupNotFoundException : DomainException
 {

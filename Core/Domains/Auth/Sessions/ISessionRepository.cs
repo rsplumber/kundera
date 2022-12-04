@@ -1,7 +1,6 @@
-﻿using Core.Domains.Credentials;
-using Core.Domains.Users.Types;
+﻿using Core.Domains.Users.Types;
 
-namespace Core.Domains.Sessions;
+namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionRepository
 {

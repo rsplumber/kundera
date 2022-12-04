@@ -1,9 +1,8 @@
 ﻿using System.Net;
-using Core.Domains.Contracts;
-using Core.Domains.Credentials.Events;
+using Core.Domains.Auth.Credentials.Events;
 using Core.Domains.Users.Types;
 
-namespace Core.Domains.Credentials;
+namespace Core.Domains.Auth.Credentials;
 
 public class Credential : AggregateRoot
 {

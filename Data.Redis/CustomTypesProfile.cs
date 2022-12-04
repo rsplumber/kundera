@@ -1,17 +1,16 @@
 ﻿using System.Net;
 using AutoMapper;
 using Core.Domains;
-using Core.Domains.Contracts;
-using Core.Domains.Credentials;
+using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups.Types;
 using Core.Domains.Permissions.Types;
 using Core.Domains.Roles.Types;
 using Core.Domains.Scopes.Types;
 using Core.Domains.Services.Types;
-using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Domains.Users.Types;
-using Managements.Data.Credentials;
+using Managements.Data.Auth.Credentials;
 
 namespace Managements.Data;
 
@@ -103,7 +102,7 @@ internal sealed class CustomTypesProfile : Profile
 
         CreateMap<PermissionId, Guid>()
             .ConvertUsing(s => s.Value);
-        
+
         CreateMap<string, Token>().ConvertUsing(s => Token.From(s));
         CreateMap<Token, string>().ConvertUsing(token => token.Value);
 

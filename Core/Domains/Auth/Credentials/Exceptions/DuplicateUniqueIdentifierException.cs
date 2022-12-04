@@ -1,6 +1,4 @@
-﻿using Core.Domains.Contracts;
-
-namespace Core.Domains.Credentials.Exceptions;
+﻿namespace Core.Domains.Auth.Credentials.Exceptions;
 
 public sealed class DuplicateUniqueIdentifierException : DomainException
 {

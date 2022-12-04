@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Application.Auth.Certificates;
-using Core.Domains.Credentials.Exceptions;
-using Core.Domains.Sessions;
+using Core.Domains.Auth.Credentials.Exceptions;
+using Core.Domains.Auth.Sessions;
 using Core.Services;
 using FluentValidation;
 using Mediator;
@@ -45,7 +45,7 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             UserId = userId.Value,
             ScopeId = scopeId.Value
         }, cancellationToken);
-        
+
         await _sessionManagement.SaveAsync(certificate, userId, scopeId, cancellationToken);
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 

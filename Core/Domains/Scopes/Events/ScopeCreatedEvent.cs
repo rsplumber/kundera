@@ -1,7 +1,8 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Scopes.Types;
+﻿using Core.Domains.Scopes.Types;
 
 namespace Core.Domains.Scopes.Events;
 
-[Event("scope_created")]
-public sealed record ScopeCreatedEvent(ScopeId Id) : DomainEvent;
+public sealed record ScopeCreatedEvent(ScopeId Id) : DomainEvent
+{
+    public override string Name => "scope_created";
+}

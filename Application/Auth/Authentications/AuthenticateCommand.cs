@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Application.Auth.Certificates;
 using Application.Auth.Credentials;
-using Core.Domains.Credentials.Exceptions;
+using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Types;
 using Core.Services;

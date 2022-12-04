@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Core.Domains.Credentials;
+using Core.Domains.Auth.Credentials;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Credentials;
+namespace Managements.Data.Auth.Credentials;
 
 internal class CredentialRepository : ICredentialRepository
 {

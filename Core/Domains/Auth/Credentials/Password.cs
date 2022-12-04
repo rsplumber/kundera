@@ -1,6 +1,6 @@
-﻿using Core.Domains.Credentials.Exceptions;
+﻿using Core.Domains.Auth.Credentials.Exceptions;
 
-namespace Core.Domains.Credentials;
+namespace Core.Domains.Auth.Credentials;
 
 public record Password
 {

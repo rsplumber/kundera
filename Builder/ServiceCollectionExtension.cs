@@ -1,17 +1,17 @@
-﻿using Application.Auth.Sessions;
+﻿using System;
+using Application.Auth.Sessions;
 using Application.BackgroundJobs;
-using Core.Domains.Credentials;
+using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
-using Core.Domains.Sessions;
 using Core.Domains.Users;
 using Core.Hashing;
 using Core.Services;
 using Data.Seeder;
-using Hashing.HMAC;
 using Managements.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,30 +25,31 @@ public static class ServiceCollectionExtension
 {
     public static void AddKundera(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
+        services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Singleton);
         services.AddCap(x =>
         {
             x.UseInMemoryStorage();
             x.UseInMemoryMessageQueue();
         });
+
         services.TryAddSingleton<IHashService>(_ => new HmacHashingService(HashingType.HMACSHA384, 6));
-        services.AddScoped<ISessionManagement, SessionManagement>();
+        services.AddSingleton<ISessionManagement, SessionManagement>();
         services.Configure<SessionOptions>(configuration.GetSection("Sessions"));
 
-        services.AddScoped<IUserFactory, UserFactory>();
-        services.AddScoped<IServiceFactory, ServiceFactory>();
-        services.AddScoped<IScopeFactory, ScopeFactory>();
-        services.AddScoped<IRoleFactory, RoleFactory>();
-        services.AddScoped<IPermissionFactory, PermissionFactory>();
-        services.AddScoped<IGroupFactory, GroupFactory>();
-        services.AddScoped<ISessionFactory, SessionFactory>();
-        services.AddScoped<ICredentialFactory, CredentialFactory>();
-        services.AddTransient<RemoveExpiredCredentialsJob>();
-        services.AddTransient<RemoveExpiredSessionsJob>();
+        services.AddSingleton<IUserFactory, UserFactory>();
+        services.AddSingleton<IServiceFactory, ServiceFactory>();
+        services.AddSingleton<IScopeFactory, ScopeFactory>();
+        services.AddSingleton<IRoleFactory, RoleFactory>();
+        services.AddSingleton<IPermissionFactory, PermissionFactory>();
+        services.AddSingleton<IGroupFactory, GroupFactory>();
+        services.AddSingleton<ISessionFactory, SessionFactory>();
+        services.AddSingleton<ICredentialFactory, CredentialFactory>();
 
         services.AddData(configuration);
         services.AddDataSeeder();
 
+        services.AddSingleton<RemoveExpiredCredentialsJob>();
+        services.AddSingleton<RemoveExpiredSessionsJob>();
         services.AddQuartz(q =>
         {
             q.SchedulerId = "Kundera";

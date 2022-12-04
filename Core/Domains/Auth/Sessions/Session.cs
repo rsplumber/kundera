@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using Core.Domains.Contracts;
+using Core.Domains.Auth.Sessions.Events;
 using Core.Domains.Scopes.Types;
-using Core.Domains.Sessions.Events;
 using Core.Domains.Users.Types;
 
-namespace Core.Domains.Sessions;
+namespace Core.Domains.Auth.Sessions;
 
 public class Session : Entity
 {

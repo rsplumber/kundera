@@ -1,7 +1,8 @@
-﻿using Core.Domains.Contracts;
-using Core.Domains.Groups.Types;
+﻿using Core.Domains.Groups.Types;
 
 namespace Core.Domains.Groups.Events;
 
-[Event("group_parent_changed")]
-public record GroupParentChangedEvent(GroupId GroupId, GroupId? Parent, GroupId? PreviousParent) : DomainEvent;
+public record GroupParentChangedEvent(GroupId GroupId, GroupId? Parent, GroupId? PreviousParent) : DomainEvent
+{
+    public override string Name => "group_parent_changed";
+}

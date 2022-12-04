@@ -1,6 +1,4 @@
-﻿using Core.Domains.Contracts;
-
-namespace Core.Domains.Groups.Types;
+﻿namespace Core.Domains.Groups.Types;
 
 public sealed class GroupStatus : Enumeration
 {

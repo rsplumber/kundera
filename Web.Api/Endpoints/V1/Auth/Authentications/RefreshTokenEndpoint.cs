@@ -1,5 +1,4 @@
-﻿using Application.Auth;
-using Application.Auth.Authentications;
+﻿using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
 using Mediator;

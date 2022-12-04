@@ -1,4 +1,4 @@
-﻿namespace Core.Domains.Credentials;
+﻿namespace Core.Domains.Auth.Credentials;
 
 public interface ICredentialRepository
 {

@@ -1,7 +1,7 @@
 ﻿using Core.Domains.Scopes.Types;
 using Core.Domains.Users.Types;
 
-namespace Core.Domains.Sessions;
+namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionFactory
 {
