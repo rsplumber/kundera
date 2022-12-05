@@ -8,7 +8,10 @@ builder.WebHost.UseKestrel();
 builder.WebHost.UseUrls("http://+:5179");
 builder.Services.AddKundera(builder.Configuration);
 
-builder.Services.AddKunderaAuthorization(builder.Configuration);
+builder.Services.AddAuthentication(KunderaDefaults.Scheme)
+    .AddKundera(builder.Configuration);
+builder.Services.AddAuthorization();
+
 builder.Services.AddFastEndpoints();
 builder.Services.AddResponseCaching();
 builder.Services.AddSwaggerDoc(settings =>
@@ -22,7 +25,7 @@ builder.Services.AddSwaggerDoc(settings =>
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseResponseCaching(); 
+app.UseResponseCaching();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";
