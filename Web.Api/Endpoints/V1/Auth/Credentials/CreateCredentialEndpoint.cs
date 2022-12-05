@@ -27,7 +27,7 @@ internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialReques
             Username = req.Username,
             Password = req.Password,
             Type = req.Type,
-            IpAddress = HttpContext.Connection.LocalIpAddress,
+            IpAddress = HttpContext.Connection.RemoteIpAddress,
             UserId = req.Id
         };
 

@@ -11,7 +11,7 @@ internal sealed class RolesQueryHandler : IQueryHandler<RolesQuery, List<RolesRe
 
     public RolesQueryHandler(RedisConnectionProvider provider)
     {
-        _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
+        _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>(false);
     }
 
     public async ValueTask<List<RolesResponse>> Handle(RolesQuery query, CancellationToken cancellationToken)

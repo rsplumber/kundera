@@ -45,7 +45,7 @@ internal static class ServiceCollectionExtension
         services.AddSingleton<ICredentialRepository, CredentialRepository>();
         services.AddSingleton<ISessionRepository, SessionRepository>();
 
-        services.AddSingleton<IAuthorizeService, AuthorizeServiceTest>();
+        services.AddSingleton<IAuthorizeService, AuthorizeService>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }

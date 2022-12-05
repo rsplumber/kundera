@@ -13,7 +13,7 @@ internal sealed class SessionRepository : ISessionRepository
 
     public SessionRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _sessions = (RedisCollection<SessionDataModel>) provider.RedisCollection<SessionDataModel>(false);
+        _sessions = (RedisCollection<SessionDataModel>) provider.RedisCollection<SessionDataModel>();
         _mapper = mapper;
     }
 

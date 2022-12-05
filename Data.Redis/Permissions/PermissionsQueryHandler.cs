@@ -11,7 +11,7 @@ internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, 
 
     public PermissionsQueryHandler(RedisConnectionProvider provider)
     {
-        _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
+        _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>(false);
     }
 
     public async ValueTask<List<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)

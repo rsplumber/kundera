@@ -17,7 +17,7 @@ internal class UserRepository : IUserRepository
     {
         _mapper = mapper;
         _eventBus = eventBus;
-        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>(false);
+        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>();
     }
 
     public async Task AddAsync(User entity, CancellationToken cancellationToken = default)

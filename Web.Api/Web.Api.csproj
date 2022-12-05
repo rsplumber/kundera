@@ -14,7 +14,7 @@
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="5.4.1" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.4.1" />
-        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="0.0.92" />
+        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="0.0.93" />
     </ItemGroup>
 
     <ItemGroup>

@@ -28,7 +28,8 @@ internal static class ApplicationBuilderExtension
                 typeof(ScopeDataModel),
                 typeof(ServiceDataModel),
                 typeof(CredentialDataModel),
-                typeof(SessionDataModel)
+                typeof(SessionDataModel),
+                typeof(AuthorizeCacheDataModel),
             }.ForEach(type =>
             {
                 if (dbProvider.Connection.GetIndexInfo(type) is null)

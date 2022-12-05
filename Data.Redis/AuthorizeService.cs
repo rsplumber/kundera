@@ -22,7 +22,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _dbProvider = dbProvider;
     }
 
-    public async Task<Guid> AuthorizeAsync(string token, string action, string serviceSecret, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, IPAddress? ipAddress, CancellationToken cancellationToken = default)
     {
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
@@ -71,11 +71,63 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new UnAuthorizedException();
         }
 
-        // await _eventBus.PublishAsync(new OnAuthorizeEvent(user!.Id.Value,
-        //     sessionScope!.Id.Value,
-        //     service!.Id.Value,
-        //     action,
-        //     ipAddress ?? IPAddress.None), cancellationToken);
+        return user!.Id;
+
+        bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
+
+        bool InvalidUser() => user is null || user.Status != UserStatus.Active.Name;
+
+        bool InvalidSessionScope() => sessionScope is null || UserHasNotScopeRole();
+
+        bool UserHasNotScopeRole() => sessionScope.Roles is null || !roles.Any(role => sessionScope.Roles.Any(id => id == role.Id));
+
+        bool InvalidService() => service is null || sessionScope!.Services is null || sessionScope.Services.All(id => id != service.Id);
+
+        bool InvalidPermission() => permissions.All(permission => actions.All(action => permission!.Name != action.ToLower()));
+    }
+
+    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> requestRoles, string serviceSecret, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    {
+        var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
+        if (session is null)
+        {
+            throw new UnAuthorizedException();
+        }
+
+        if (Expired())
+        {
+            throw new SessionExpiredException();
+        }
+
+        var user = await _dbProvider.RedisCollection<UserDataModel>(false).FindByIdAsync(session.UserId.ToString());
+        if (InvalidUser())
+        {
+            throw new UnAuthorizedException();
+        }
+
+        var roles = await RolesAsync(user!);
+
+        var sessionScope = await _dbProvider.RedisCollection<ScopeDataModel>(false)
+            .FindByIdAsync(session.ScopeId.ToString());
+        if (InvalidSessionScope())
+        {
+            throw new UnAuthorizedException();
+        }
+
+        var service = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
+            .FirstOrDefaultAsync();
+        if (InvalidService())
+        {
+            if (service is null || service.Name != EntityBaseValues.KunderaServiceName)
+            {
+                throw new UnAuthorizedException();
+            }
+        }
+
+        if (InvalidRole())
+        {
+            throw new UnAuthorizedException();
+        }
 
         return user!.Id;
 
@@ -89,7 +141,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         bool InvalidService() => service is null || sessionScope!.Services is null || sessionScope.Services.All(id => id != service.Id);
 
-        bool InvalidPermission() => permissions.All(permission => permission is not null && permission.Name != action.ToLower());
+        bool InvalidRole() => roles.All(role => requestRoles.All(r => role.Name != r.ToLower()));
     }
 
     private async Task<ICollection<RoleDataModel>> RolesAsync(UserDataModel user)

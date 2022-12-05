@@ -28,7 +28,7 @@ internal sealed class AuthenticateEndpoint : Endpoint<AuthenticateRequest, Certi
             Username = req.Username,
             Password = req.Password,
             Type = req.Type,
-            IpAddress = HttpContext.Connection.LocalIpAddress,
+            IpAddress = HttpContext.Connection.RemoteIpAddress,
             ScopeSecret = req.ScopeSecret
         };
         var response = await _mediator.Send(command, ct);

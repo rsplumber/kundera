@@ -27,7 +27,7 @@ internal sealed class RefreshTokenEndpoint : Endpoint<RefreshTokenRequest, Certi
         {
             Token = req.Authorization,
             RefreshToken = req.RefreshToken,
-            IpAddress = HttpContext.Connection.LocalIpAddress
+            IpAddress = HttpContext.Connection.RemoteIpAddress
         };
         var response = await _mediator.Send(command, ct);
 

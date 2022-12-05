@@ -12,7 +12,7 @@ internal class CredentialRepository : ICredentialRepository
 
     public CredentialRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>(false);
+        _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>();
         _mapper = mapper;
     }
 

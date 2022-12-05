@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Auth.Sessions;
+﻿using Application.Auth.Sessions;
 using Application.BackgroundJobs;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;

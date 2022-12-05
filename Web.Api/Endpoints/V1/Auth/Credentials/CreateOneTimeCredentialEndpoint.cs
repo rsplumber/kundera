@@ -28,7 +28,7 @@ internal sealed class CreateOneTimeCredentialEndpoint : Endpoint<CreateOneTimeCr
             Password = req.Password,
             Type = req.Type,
             ExpireInMinutes = req.ExpireInMinutes,
-            IpAddress = HttpContext.Connection.LocalIpAddress,
+            IpAddress = HttpContext.Connection.RemoteIpAddress,
             UserId = req.Id
         };
 

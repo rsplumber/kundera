@@ -4,8 +4,14 @@ namespace Core.Services;
 
 public interface IAuthorizeService
 {
-    Task<Guid> AuthorizeAsync(string token,
-        string action,
+    Task<Guid> AuthorizePermissionAsync(string token,
+        IEnumerable<string> actions,
+        string serviceSecret,
+        IPAddress? ipAddress,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> AuthorizeRoleAsync(string token,
+        IEnumerable<string> roles,
         string serviceSecret,
         IPAddress? ipAddress,
         CancellationToken cancellationToken = default);
