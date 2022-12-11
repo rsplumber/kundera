@@ -8,7 +8,7 @@ namespace Application.Groups;
 
 public sealed record DeleteGroupCommand : ICommand
 {
-    public Guid Group { get; init; } = default!;
+    public Guid GroupId { get; init; } = default!;
 }
 
 internal sealed class DeleteGroupCommandHandler : ICommandHandler<DeleteGroupCommand>
@@ -23,7 +23,7 @@ internal sealed class DeleteGroupCommandHandler : ICommandHandler<DeleteGroupCom
 
     public async ValueTask<Unit> Handle(DeleteGroupCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.GroupId), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -39,7 +39,7 @@ public sealed class DeleteGroupCommandValidator : AbstractValidator<DeleteGroupC
 {
     public DeleteGroupCommandValidator()
     {
-        RuleFor(request => request.Group)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter a Group")
             .NotNull().WithMessage("Enter a Group");
     }

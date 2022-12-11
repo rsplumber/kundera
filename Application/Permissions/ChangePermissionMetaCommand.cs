@@ -9,7 +9,7 @@ namespace Application.Permissions;
 
 public sealed record ChangePermissionMetaCommand : ICommand
 {
-    public Guid Permission { get; init; } = default!;
+    public Guid PermissionId { get; init; } = default!;
 
     public IDictionary<string, string> Meta { get; init; } = ImmutableDictionary<string, string>.Empty;
 }
@@ -25,7 +25,7 @@ internal sealed class ChangePermissionMetaCommandHandler : ICommandHandler<Chang
 
     public async ValueTask<Unit> Handle(ChangePermissionMetaCommand command, CancellationToken cancellationToken)
     {
-        var permission = await _permissionRepository.FindAsync(PermissionId.From(command.Permission), cancellationToken);
+        var permission = await _permissionRepository.FindAsync(PermissionId.From(command.PermissionId), cancellationToken);
 
         if (permission is null)
         {
@@ -48,7 +48,7 @@ public sealed class ChangePermissionMetaCommandValidator : AbstractValidator<Cha
 {
     public ChangePermissionMetaCommandValidator()
     {
-        RuleFor(request => request.Permission)
+        RuleFor(request => request.PermissionId)
             .NotEmpty().WithMessage("Enter a Permission")
             .NotNull().WithMessage("Enter a Permission");
     }

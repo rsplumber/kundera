@@ -5,7 +5,7 @@ namespace Application.Services;
 
 public sealed record ServiceQuery : IQuery<ServiceResponse>
 {
-    public Guid Service { get; init; } = default!;
+    public Guid ServiceId { get; init; } = default!;
 }
 
 public sealed record ServiceResponse
@@ -23,7 +23,7 @@ public sealed class ServiceQueryValidator : AbstractValidator<ServiceQuery>
 {
     public ServiceQueryValidator()
     {
-        RuleFor(request => request.Service)
+        RuleFor(request => request.ServiceId)
             .NotEmpty().WithMessage("Enter a Service")
             .NotNull().WithMessage("Enter a Service");
     }

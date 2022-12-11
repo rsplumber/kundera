@@ -11,7 +11,7 @@ using Managements.Data.Services;
 using Managements.Data.Users;
 using Redis.OM;
 
-namespace Managements.Data;
+namespace Managements.Data.Auth;
 
 internal sealed class AuthorizeService : IAuthorizeService
 {
@@ -153,7 +153,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             allRoleIds.AddRange(user.Roles);
         }
 
-        return (await _dbProvider.RedisCollection<RoleDataModel>()
+        return (await _dbProvider.RedisCollection<RoleDataModel>(false)
                 .FindByIdsAsync(allRoleIds.Select(guid => guid.ToString())))
             .Values!;
 

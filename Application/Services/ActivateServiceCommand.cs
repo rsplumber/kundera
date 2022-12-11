@@ -8,7 +8,7 @@ namespace Application.Services;
 
 public sealed record ActivateServiceCommand : ICommand
 {
-    public Guid Service { get; init; } = default!;
+    public Guid ServiceId { get; init; } = default!;
 }
 
 internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateServiceCommand>
@@ -22,7 +22,7 @@ internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateSe
 
     public async ValueTask<Unit> Handle(ActivateServiceCommand command, CancellationToken cancellationToken)
     {
-        var service = await _serviceRepository.FindAsync(ServiceId.From(command.Service), cancellationToken);
+        var service = await _serviceRepository.FindAsync(ServiceId.From(command.ServiceId), cancellationToken);
         if (service is null)
         {
             throw new ServiceNotFoundException();
@@ -40,7 +40,7 @@ public sealed class ActivateServiceCommandValidator : AbstractValidator<Activate
 {
     public ActivateServiceCommandValidator()
     {
-        RuleFor(request => request.Service)
+        RuleFor(request => request.ServiceId)
             .NotEmpty().WithMessage("Enter a Service")
             .NotNull().WithMessage("Enter a Service");
     }

@@ -5,7 +5,7 @@ namespace Application.Users;
 
 public sealed record UserQuery : IQuery<UserResponse>
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 }
 
 public sealed record UserResponse
@@ -25,7 +25,7 @@ public sealed class UserQueryValidator : AbstractValidator<UserQuery>
 {
     public UserQueryValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter User")
             .NotNull().WithMessage("Enter User");
     }

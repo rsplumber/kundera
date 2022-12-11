@@ -8,7 +8,7 @@ namespace Application.Groups;
 
 public sealed record DisableGroupCommand : ICommand
 {
-    public Guid Group { get; set; } = default!;
+    public Guid GroupId { get; set; } = default!;
 }
 
 internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupCommand>
@@ -22,7 +22,7 @@ internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupC
 
     public async ValueTask<Unit> Handle(DisableGroupCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.GroupId), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -39,7 +39,7 @@ public sealed class DisableGroupCommandValidator : AbstractValidator<DisableGrou
 {
     public DisableGroupCommandValidator()
     {
-        RuleFor(request => request.Group)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter Group")
             .NotNull().WithMessage("Enter Group");
     }

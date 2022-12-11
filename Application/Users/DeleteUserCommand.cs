@@ -8,7 +8,7 @@ namespace Application.Users;
 
 public sealed record DeleteUserCommand : ICommand
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 }
 
 internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
@@ -23,7 +23,7 @@ internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserComma
 
     public async ValueTask<Unit> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
     {
-        var userId = UserId.From(command.User);
+        var userId = UserId.From(command.UserId);
         var user = await _userRepository.FindAsync(userId, cancellationToken);
         if (user is null)
         {
@@ -39,7 +39,7 @@ public sealed class DeleteUserCommandValidator : AbstractValidator<DeleteUserCom
 {
     public DeleteUserCommandValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter a User")
             .NotNull().WithMessage("Enter a User");
     }

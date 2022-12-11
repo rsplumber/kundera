@@ -15,7 +15,7 @@ internal sealed class RemoveRolePermissionEndpoint : Endpoint<RemoveRolePermissi
 
     public override void Configure()
     {
-        Delete("roles/{id:guid}/permission");
+        Delete("roles/{roleId:guid}/permission");
         Permissions("roles_remove_permission");
         Version(1);
     }

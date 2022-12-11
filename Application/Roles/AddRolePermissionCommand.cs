@@ -11,7 +11,7 @@ namespace Application.Roles;
 
 public sealed record AddRolePermissionCommand : ICommand
 {
-    public Guid Role { get; init; } = default!;
+    public Guid RoleId { get; init; } = default!;
 
     public Guid[] Permissions { get; init; } = default!;
 }
@@ -29,7 +29,7 @@ internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRoleP
 
     public async ValueTask<Unit> Handle(AddRolePermissionCommand command, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(command.Role), cancellationToken);
+        var role = await _roleRepository.FindAsync(RoleId.From(command.RoleId), cancellationToken);
         if (role is null)
         {
             throw new RoleNotFoundException();
@@ -56,7 +56,7 @@ public sealed class AddRolePermissionCommandValidator : AbstractValidator<AddRol
 {
     public AddRolePermissionCommandValidator()
     {
-        RuleFor(request => request.Role)
+        RuleFor(request => request.RoleId)
             .NotEmpty().WithMessage("Enter a Role")
             .NotNull().WithMessage("Enter a Role");
 

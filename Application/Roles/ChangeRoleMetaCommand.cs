@@ -9,7 +9,7 @@ namespace Application.Roles;
 
 public sealed record ChangeRoleMetaCommand : ICommand
 {
-    public Guid Role { get; init; } = default!;
+    public Guid RoleId { get; init; } = default!;
 
     public IDictionary<string, string> Meta { get; init; } = ImmutableDictionary<string, string>.Empty;
 };
@@ -25,7 +25,7 @@ internal sealed class ChangeRoleMetaCommandHandler : ICommandHandler<ChangeRoleM
 
     public async ValueTask<Unit> Handle(ChangeRoleMetaCommand command, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(command.Role), cancellationToken);
+        var role = await _roleRepository.FindAsync(RoleId.From(command.RoleId), cancellationToken);
         if (role is null)
         {
             throw new RoleNotFoundException();
@@ -47,7 +47,7 @@ public sealed class ChangeRoleMetaCommandValidator : AbstractValidator<ChangeRol
 {
     public ChangeRoleMetaCommandValidator()
     {
-        RuleFor(request => request.Role)
+        RuleFor(request => request.RoleId)
             .NotEmpty().WithMessage("Enter a Role")
             .NotNull().WithMessage("Enter a Role");
     }

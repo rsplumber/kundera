@@ -15,7 +15,7 @@ internal sealed class DeleteUserEndpoint : Endpoint<DeleteUserCommand>
 
     public override void Configure()
     {
-        Delete("users/{id:guid}");
+        Delete("users/{userId:guid}");
         Permissions("user_delete");
         Version(1);
     }

@@ -8,7 +8,7 @@ namespace Application.Roles;
 
 public sealed record DeleteRoleCommand : ICommand
 {
-    public Guid Role { get; init; } = default!;
+    public Guid RoleId { get; init; } = default!;
 }
 
 internal sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand>
@@ -22,7 +22,7 @@ internal sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleComma
 
     public async ValueTask<Unit> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(command.Role), cancellationToken);
+        var role = await _roleRepository.FindAsync(RoleId.From(command.RoleId), cancellationToken);
         if (role is null)
         {
             throw new RoleNotFoundException();
@@ -38,7 +38,7 @@ public sealed class DeleteRoleCommandValidator : AbstractValidator<DeleteRoleCom
 {
     public DeleteRoleCommandValidator()
     {
-        RuleFor(request => request.Role)
+        RuleFor(request => request.RoleId)
             .NotEmpty().WithMessage("Enter a Role")
             .NotNull().WithMessage("Enter a Role");
     }

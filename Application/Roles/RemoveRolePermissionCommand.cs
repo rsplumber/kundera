@@ -9,7 +9,7 @@ namespace Application.Roles;
 
 public sealed record RemoveRolePermissionCommand : ICommand
 {
-    public Guid Role { get; init; } = default!;
+    public Guid RoleId { get; init; } = default!;
 
     public Guid[] Permissions { get; init; } = default!;
 }
@@ -25,7 +25,7 @@ internal sealed class RemoveRolePermissionCommandHandler : ICommandHandler<Remov
 
     public async ValueTask<Unit> Handle(RemoveRolePermissionCommand command, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.FindAsync(RoleId.From(command.Role), cancellationToken);
+        var role = await _roleRepository.FindAsync(RoleId.From(command.RoleId), cancellationToken);
         if (role is null)
         {
             throw new RoleNotFoundException();
@@ -46,7 +46,7 @@ public sealed class RemoveRolePermissionCommandValidator : AbstractValidator<Rem
 {
     public RemoveRolePermissionCommandValidator()
     {
-        RuleFor(request => request.Role)
+        RuleFor(request => request.RoleId)
             .NotEmpty().WithMessage("Enter a Role")
             .NotNull().WithMessage("Enter a Role");
 

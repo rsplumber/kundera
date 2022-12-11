@@ -8,7 +8,7 @@ namespace Application.Permissions;
 
 public sealed record DeletePermissionCommand : ICommand
 {
-    public Guid Permission { get; init; } = default;
+    public Guid PermissionId { get; init; } = default;
 }
 
 internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePermissionCommand>
@@ -22,7 +22,7 @@ internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePer
 
     public async ValueTask<Unit> Handle(DeletePermissionCommand command, CancellationToken cancellationToken)
     {
-        var permissionId = PermissionId.From(command.Permission);
+        var permissionId = PermissionId.From(command.PermissionId);
         var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);
         if (permission is null)
         {
@@ -39,7 +39,7 @@ public sealed class DeletePermissionCommandValidator : AbstractValidator<DeleteP
 {
     public DeletePermissionCommandValidator()
     {
-        RuleFor(request => request.Permission)
+        RuleFor(request => request.PermissionId)
             .NotEmpty().WithMessage("Enter a Permission")
             .NotNull().WithMessage("Enter a Permission");
     }

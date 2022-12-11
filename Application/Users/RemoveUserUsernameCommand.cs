@@ -8,7 +8,7 @@ namespace Application.Users;
 
 public sealed record RemoveUserUsernameCommand : ICommand
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 
     public string Username { get; init; } = default!;
 }
@@ -24,7 +24,7 @@ internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveU
 
     public async ValueTask<Unit> Handle(RemoveUserUsernameCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.UserId), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
@@ -41,7 +41,7 @@ public sealed class RemoveUserUsernameCommandValidator : AbstractValidator<Remov
 {
     public RemoveUserUsernameCommandValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter User")
             .NotNull().WithMessage("Enter User");
 

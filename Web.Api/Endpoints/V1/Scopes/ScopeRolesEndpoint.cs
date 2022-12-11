@@ -16,7 +16,7 @@ internal sealed class ScopeRolesEndpoint : Endpoint<ScopeRolesQuery, List<ScopeR
 
     public override void Configure()
     {
-        Get("scopes/{id:guid}/roles");
+        Get("scopes/{scopeId:guid}/roles");
         Permissions("scopes_roles_list");
         Version(1);
     }

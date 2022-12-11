@@ -19,7 +19,6 @@ internal sealed class AuthorizePermissionEndpoint : Endpoint<AuthorizePermission
         Post("authorize/permission");
         AllowAnonymous();
         Version(1);
-        ResponseCache(5);
     }
 
     public override async Task HandleAsync(AuthorizePermissionRequest req, CancellationToken ct)

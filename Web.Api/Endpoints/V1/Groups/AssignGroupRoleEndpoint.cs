@@ -15,7 +15,7 @@ internal sealed class AssignGroupRoleEndpoint : Endpoint<AssignGroupRoleCommand>
 
     public override void Configure()
     {
-        Post("groups/{id:guid}/roles");
+        Post("groups/{groupId:guid}/roles");
         Permissions("groups_assign_role");
         Version(1);
     }

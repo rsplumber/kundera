@@ -15,7 +15,7 @@ internal sealed class DeletePermissionEndpoint : Endpoint<DeletePermissionComman
 
     public override void Configure()
     {
-        Delete("permissions/{id:guid}");
+        Delete("permissions/{permissionId:guid}");
         Permissions("permissions_delete");
         Version(1);
     }

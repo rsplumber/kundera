@@ -15,7 +15,7 @@ internal sealed class RemoveScopeServiceEndpoint : Endpoint<RemoveScopeServiceCo
 
     public override void Configure()
     {
-        Delete("scopes/{id:guid}/services");
+        Delete("scopes/{scopeId:guid}/services");
         Permissions("scopes_remove_service");
         Version(1);
     }

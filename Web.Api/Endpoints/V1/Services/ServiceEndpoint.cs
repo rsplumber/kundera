@@ -16,7 +16,7 @@ internal sealed class ServiceEndpoint : Endpoint<ServiceQuery, ServiceResponse>
 
     public override void Configure()
     {
-        Get("services/{id:guid}");
+        Get("services/{serviceId:guid}");
         Permissions("services_get");
         Version(1);
     }

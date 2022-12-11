@@ -6,7 +6,7 @@ namespace Application.Permissions;
 
 public sealed record PermissionQuery : IQuery<PermissionResponse>
 {
-    public Guid Permission { get; init; } = default!;
+    public Guid PermissionId { get; init; } = default!;
 }
 
 public sealed record PermissionResponse
@@ -22,7 +22,7 @@ public sealed class PermissionQueryValidator : AbstractValidator<PermissionQuery
 {
     public PermissionQueryValidator()
     {
-        RuleFor(request => request.Permission)
+        RuleFor(request => request.PermissionId)
             .NotEmpty().WithMessage("Enter Permission")
             .NotNull().WithMessage("Enter Permission");
     }

@@ -7,6 +7,7 @@ using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Users;
 using Core.Services;
+using Managements.Data.Auth;
 using Managements.Data.Auth.Credentials;
 using Managements.Data.Auth.Sessions;
 using Managements.Data.Groups;

@@ -15,7 +15,7 @@ internal sealed class DisableGroupEndpoint : Endpoint<DisableGroupCommand>
 
     public override void Configure()
     {
-        Post("groups/{id:guid}/disable");
+        Post("groups/{groupId:guid}/disable");
         Permissions("groups_disable");
         Version(1);
     }

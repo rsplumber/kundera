@@ -19,7 +19,6 @@ internal sealed class AuthorizeRoleEndpoint : Endpoint<AuthorizeRoleRequest, Gui
         Post("authorize/role");
         AllowAnonymous();
         Version(1);
-        ResponseCache(5);
     }
 
     public override async Task HandleAsync(AuthorizeRoleRequest req, CancellationToken ct)

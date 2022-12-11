@@ -17,7 +17,7 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 
     public async ValueTask<UserResponse> Handle(UserQuery query, CancellationToken cancellationToken)
     {
-        var user = await _users.FindByIdAsync(query.User.ToString());
+        var user = await _users.FindByIdAsync(query.UserId.ToString());
         if (user is null)
         {
             throw new UserNotFoundException();

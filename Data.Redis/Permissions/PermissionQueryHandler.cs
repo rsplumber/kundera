@@ -17,7 +17,7 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
 
     public async ValueTask<PermissionResponse> Handle(PermissionQuery query, CancellationToken cancellationToken)
     {
-        var permission = await _permissions.FindByIdAsync(query.Permission.ToString());
+        var permission = await _permissions.FindByIdAsync(query.PermissionId.ToString());
         if (permission is null)
         {
             throw new PermissionNotFoundException();

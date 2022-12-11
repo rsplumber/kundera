@@ -8,7 +8,7 @@ namespace Application.Services;
 
 public sealed record DeleteServiceCommand : ICommand
 {
-    public Guid Service { get; init; } = default!;
+    public Guid ServiceId { get; init; } = default!;
 }
 
 internal sealed class DeleteServiceCommandHandler : ICommandHandler<DeleteServiceCommand>
@@ -22,7 +22,7 @@ internal sealed class DeleteServiceCommandHandler : ICommandHandler<DeleteServic
 
     public async ValueTask<Unit> Handle(DeleteServiceCommand command, CancellationToken cancellationToken)
     {
-        var service = await _serviceRepository.FindAsync(ServiceId.From(command.Service), cancellationToken);
+        var service = await _serviceRepository.FindAsync(ServiceId.From(command.ServiceId), cancellationToken);
         if (service is null)
         {
             throw new ServiceNotFoundException();
@@ -38,7 +38,7 @@ public sealed class DeleteServiceCommandValidator : AbstractValidator<DeleteServ
 {
     public DeleteServiceCommandValidator()
     {
-        RuleFor(request => request.Service)
+        RuleFor(request => request.ServiceId)
             .NotEmpty().WithMessage("Enter a Service")
             .NotNull().WithMessage("Enter a Service");
     }

@@ -15,7 +15,7 @@ internal sealed class CreateTimePeriodicEndpoint : Endpoint<CreateTimePeriodicCr
 
     public override void Configure()
     {
-        Post("users/{id:guid}/credentials/time-periodic");
+        Post("users/{userId:guid}/credentials/time-periodic");
         Permissions("credentials_create_time-periodic");
         Version(1);
     }
@@ -29,7 +29,7 @@ internal sealed class CreateTimePeriodicEndpoint : Endpoint<CreateTimePeriodicCr
             Type = req.Type,
             ExpireInMinutes = req.ExpireInMinutes,
             IpAddress = HttpContext.Connection.RemoteIpAddress,
-            UserId = req.Id
+            UserId = req.UserId
         };
 
         await _mediator.Send(command, ct);
@@ -49,7 +49,7 @@ internal sealed class CreateTimePeriodicEndpointSummary : Summary<CreateTimePeri
 
 public record CreateTimePeriodicCredentialRequest
 {
-    public Guid Id { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 
     public string Username { get; init; } = default!;
 

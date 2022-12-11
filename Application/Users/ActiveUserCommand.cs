@@ -8,7 +8,7 @@ namespace Application.Users;
 
 public sealed record ActiveUserCommand : ICommand
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 }
 
 internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserCommand>
@@ -23,7 +23,7 @@ internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserComma
 
     public async ValueTask<Unit> Handle(ActiveUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.UserId), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
@@ -41,7 +41,7 @@ public sealed class ActiveUserCommandValidator : AbstractValidator<ActiveUserCom
 {
     public ActiveUserCommandValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter User")
             .NotNull().WithMessage("Enter User");
     }

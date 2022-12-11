@@ -5,7 +5,7 @@ namespace Application.Groups;
 
 public sealed record GroupQuery : IQuery<GroupResponse>
 {
-    public Guid Id { get; init; }
+    public Guid GroupId { get; init; }
 }
 
 public sealed record GroupResponse
@@ -36,7 +36,7 @@ public sealed class GroupQueryValidator : AbstractValidator<GroupQuery>
 {
     public GroupQueryValidator()
     {
-        RuleFor(request => request.Id)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter a group id")
             .NotNull().WithMessage("Enter a group id");
     }

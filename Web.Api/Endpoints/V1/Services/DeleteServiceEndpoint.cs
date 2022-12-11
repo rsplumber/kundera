@@ -15,7 +15,7 @@ internal sealed class DeleteServiceEndpoint : Endpoint<DeleteServiceCommand>
 
     public override void Configure()
     {
-        Delete("services/{id:guid}");
+        Delete("services/{serviceId:guid}");
         Permissions("services_delete");
         Version(1);
     }

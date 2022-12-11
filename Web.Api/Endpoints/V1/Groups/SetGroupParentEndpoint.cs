@@ -15,7 +15,7 @@ internal sealed class SetGroupParentEndpoint : Endpoint<SetGroupParentCommand>
 
     public override void Configure()
     {
-        Post("groups/{id:guid}/parent");
+        Post("groups/{groupId:guid}/parent");
         Permissions("groups_set_parent");
         Version(1);
     }

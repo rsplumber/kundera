@@ -17,7 +17,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
 
     public async ValueTask<ScopeResponse> Handle(ScopeQuery query, CancellationToken cancellationToken)
     {
-        var scope = await _scopes.FindByIdAsync(query.Scope.ToString());
+        var scope = await _scopes.FindByIdAsync(query.ScopeId.ToString());
         if (scope is null)
         {
             throw new RoleNotFoundException();

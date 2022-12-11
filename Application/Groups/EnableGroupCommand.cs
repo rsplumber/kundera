@@ -8,7 +8,7 @@ namespace Application.Groups;
 
 public sealed record EnableGroupCommand : ICommand
 {
-    public Guid Group { get; set; }
+    public Guid GroupId { get; set; }
 }
 
 internal sealed class EnableGroupCommandHandler : ICommandHandler<EnableGroupCommand>
@@ -22,7 +22,7 @@ internal sealed class EnableGroupCommandHandler : ICommandHandler<EnableGroupCom
 
     public async ValueTask<Unit> Handle(EnableGroupCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.GroupId), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -39,7 +39,7 @@ public sealed class EnableGroupCommandValidator : AbstractValidator<EnableGroupC
 {
     public EnableGroupCommandValidator()
     {
-        RuleFor(request => request.Group)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter a Group")
             .NotNull().WithMessage("Enter a Group");
     }

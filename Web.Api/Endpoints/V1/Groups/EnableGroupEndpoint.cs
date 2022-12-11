@@ -15,7 +15,7 @@ internal sealed class EnableGroupEndpoint : Endpoint<EnableGroupCommand>
 
     public override void Configure()
     {
-        Post("groups/{id:guid}/enable");
+        Post("groups/{groupId:guid}/enable");
         Permissions("groups_enable");
         Version(1);
     }

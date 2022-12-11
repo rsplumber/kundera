@@ -20,7 +20,7 @@ internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, Li
 
     public async ValueTask<List<ScopeRolesResponse>> Handle(ScopeRolesQuery query, CancellationToken cancellationToken)
     {
-        var scopeDataModel = await _scopes.FindByIdAsync(query.Scope.ToString());
+        var scopeDataModel = await _scopes.FindByIdAsync(query.ScopeId.ToString());
         if (scopeDataModel is null)
         {
             throw new ScopeNotFoundException();

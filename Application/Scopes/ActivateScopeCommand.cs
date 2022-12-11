@@ -8,7 +8,7 @@ namespace Application.Scopes;
 
 public sealed record ActivateScopeCommand : ICommand
 {
-    public Guid Scope { get; init; } = default!;
+    public Guid ScopeId { get; init; } = default!;
 }
 
 internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScopeCommand>
@@ -22,7 +22,7 @@ internal sealed class ActivateScopeCommandHandler : ICommandHandler<ActivateScop
 
     public async ValueTask<Unit> Handle(ActivateScopeCommand command, CancellationToken cancellationToken)
     {
-        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.ScopeId), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
@@ -40,7 +40,7 @@ public sealed class ActivateScopeCommandValidator : AbstractValidator<ActivateSc
 {
     public ActivateScopeCommandValidator()
     {
-        RuleFor(request => request.Scope)
+        RuleFor(request => request.ScopeId)
             .NotEmpty().WithMessage("Enter Scope")
             .NotNull().WithMessage("Enter Scope");
     }

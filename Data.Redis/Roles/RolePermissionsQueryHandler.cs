@@ -20,7 +20,7 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
 
     public async ValueTask<List<RolePermissionsResponse>> Handle(RolePermissionsQuery query, CancellationToken cancellationToken)
     {
-        var roleDataModel = await _roles.FindByIdAsync(query.Role.ToString());
+        var roleDataModel = await _roles.FindByIdAsync(query.RoleId.ToString());
         if (roleDataModel is null)
         {
             throw new RoleNotFoundException();

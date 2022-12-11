@@ -9,7 +9,7 @@ namespace Application.Groups;
 
 public sealed record RevokeGroupRoleCommand : ICommand
 {
-    public Guid Group { get; init; } = default!;
+    public Guid GroupId { get; init; } = default!;
 
     public Guid[] Roles { get; init; } = default!;
 }
@@ -25,7 +25,7 @@ internal sealed class RevokeGroupRoleCommandHandler : ICommandHandler<RevokeGrou
 
     public async ValueTask<Unit> Handle(RevokeGroupRoleCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.GroupId), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -46,7 +46,7 @@ public sealed class RevokeGroupRoleCommandValidator : AbstractValidator<RevokeGr
 {
     public RevokeGroupRoleCommandValidator()
     {
-        RuleFor(request => request.Group)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter a Group")
             .NotNull().WithMessage("Enter a Group");
 

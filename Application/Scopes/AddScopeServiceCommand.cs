@@ -11,7 +11,7 @@ namespace Application.Scopes;
 
 public sealed record AddScopeServiceCommand : ICommand
 {
-    public Guid Scope { get; init; } = default!;
+    public Guid ScopeId { get; init; } = default!;
 
     public Guid[] Services { get; init; } = default!;
 }
@@ -29,7 +29,7 @@ internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeSe
 
     public async ValueTask<Unit> Handle(AddScopeServiceCommand command, CancellationToken cancellationToken)
     {
-        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.ScopeId), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
@@ -56,7 +56,7 @@ public sealed class AddScopeServiceCommandValidator : AbstractValidator<AddScope
 {
     public AddScopeServiceCommandValidator()
     {
-        RuleFor(request => request.Scope)
+        RuleFor(request => request.ScopeId)
             .NotEmpty().WithMessage("Enter a Scope")
             .NotNull().WithMessage("Enter a Scope");
 

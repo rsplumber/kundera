@@ -5,7 +5,7 @@ namespace Application.Scopes;
 
 public sealed record ScopeRolesQuery : IQuery<List<ScopeRolesResponse>>
 {
-    public Guid Scope { get; init; } = default!;
+    public Guid ScopeId { get; init; } = default!;
 }
 
 public sealed record ScopeRolesResponse(Guid Id, string Name);
@@ -14,7 +14,7 @@ public sealed class ScopeRolesQueryValidator : AbstractValidator<ScopeRolesQuery
 {
     public ScopeRolesQueryValidator()
     {
-        RuleFor(request => request.Scope)
+        RuleFor(request => request.ScopeId)
             .NotEmpty().WithMessage("Enter a Scope")
             .NotNull().WithMessage("Enter a Scope");
     }

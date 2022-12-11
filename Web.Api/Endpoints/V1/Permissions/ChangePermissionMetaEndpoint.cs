@@ -15,7 +15,7 @@ internal sealed class ChangePermissionMetaEndpoint : Endpoint<ChangePermissionMe
 
     public override void Configure()
     {
-        Post("permissions/{id:guid}/meta");
+        Post("permissions/{permissionId:guid}/meta");
         AllowAnonymous();
         Permissions("permissions_change_meta");
         Version(1);

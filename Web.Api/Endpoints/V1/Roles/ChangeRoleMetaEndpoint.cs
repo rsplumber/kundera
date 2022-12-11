@@ -15,7 +15,7 @@ internal sealed class ChangeRoleMetaEndpoint : Endpoint<ChangeRoleMetaCommand>
 
     public override void Configure()
     {
-        Post("roles/{id:guid}/meta");
+        Post("roles/{roleId:guid}/meta");
         Permissions("roles_change_meta");
         Version(1);
     }

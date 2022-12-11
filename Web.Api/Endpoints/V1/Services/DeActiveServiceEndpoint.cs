@@ -15,7 +15,7 @@ internal sealed class DeActiveServiceEndpoint : Endpoint<ActivateServiceCommandV
 
     public override void Configure()
     {
-        Post("services/{id:guid}/de-activate");
+        Post("services/{serviceId:guid}/de-activate");
         Permissions("services_de-activate");
         Version(1);
     }

@@ -15,7 +15,7 @@ internal sealed class RevokeUserRoleEndpoint : Endpoint<RevokeUserRoleCommand>
 
     public override void Configure()
     {
-        Delete("users/{id:guid}/roles");
+        Delete("users/{userId:guid}/roles");
         Permissions("user_revoke_role");
         Version(1);
     }

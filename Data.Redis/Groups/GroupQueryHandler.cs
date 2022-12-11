@@ -20,7 +20,7 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
 
     public async ValueTask<GroupResponse> Handle(GroupQuery query, CancellationToken cancellationToken)
     {
-        var group = await _groups.FindByIdAsync(query.Id.ToString());
+        var group = await _groups.FindByIdAsync(query.GroupId.ToString());
         if (group is null)
         {
             throw new GroupNotFoundException();

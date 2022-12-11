@@ -15,7 +15,7 @@ internal sealed class DeleteRoleEndpoint : Endpoint<DeleteRoleCommand>
 
     public override void Configure()
     {
-        Delete("roles/{id:guid}");
+        Delete("roles/{roleId:guid}");
         Permissions("roles_delete");
         Version(1);
     }

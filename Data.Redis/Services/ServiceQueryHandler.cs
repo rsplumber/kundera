@@ -17,7 +17,7 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
 
     public async ValueTask<ServiceResponse> Handle(ServiceQuery query, CancellationToken cancellationToken)
     {
-        var service = await _services.FindByIdAsync(query.Service.ToString());
+        var service = await _services.FindByIdAsync(query.ServiceId.ToString());
         if (service is null)
         {
             throw new ServiceNotFoundException();

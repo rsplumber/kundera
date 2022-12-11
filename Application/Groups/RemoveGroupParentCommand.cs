@@ -8,7 +8,7 @@ namespace Application.Groups;
 
 public sealed record RemoveGroupParentCommand : ICommand
 {
-    public Guid Group { get; init; } = default!;
+    public Guid GroupId { get; init; } = default!;
 }
 
 internal sealed class RemoveGroupParentCommandHandler : ICommandHandler<RemoveGroupParentCommand>
@@ -22,7 +22,7 @@ internal sealed class RemoveGroupParentCommandHandler : ICommandHandler<RemoveGr
 
     public async ValueTask<Unit> Handle(RemoveGroupParentCommand command, CancellationToken cancellationToken)
     {
-        var group = await _groupRepository.FindAsync(GroupId.From(command.Group), cancellationToken);
+        var group = await _groupRepository.FindAsync(GroupId.From(command.GroupId), cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -38,7 +38,7 @@ public sealed class RemoveGroupParentCommandValidator : AbstractValidator<Remove
 {
     public RemoveGroupParentCommandValidator()
     {
-        RuleFor(request => request.Group)
+        RuleFor(request => request.GroupId)
             .NotEmpty().WithMessage("Enter a group id")
             .NotNull().WithMessage("Enter a group id");
     }

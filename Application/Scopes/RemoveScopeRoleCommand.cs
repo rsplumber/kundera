@@ -9,7 +9,7 @@ namespace Application.Scopes;
 
 public sealed record RemoveScopeRoleCommand : ICommand
 {
-    public Guid Scope { get; init; } = default!;
+    public Guid ScopeId { get; init; } = default!;
 
     public Guid[] Roles { get; init; } = default!;
 }
@@ -25,7 +25,7 @@ internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScop
 
     public async ValueTask<Unit> Handle(RemoveScopeRoleCommand command, CancellationToken cancellationToken)
     {
-        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.Scope), cancellationToken);
+        var scope = await _scopeRepository.FindAsync(ScopeId.From(command.ScopeId), cancellationToken);
         if (scope is null)
         {
             throw new ScopeNotFoundException();
@@ -46,7 +46,7 @@ public sealed class RemoveScopeRoleCommandValidator : AbstractValidator<RemoveSc
 {
     public RemoveScopeRoleCommandValidator()
     {
-        RuleFor(request => request.Scope)
+        RuleFor(request => request.ScopeId)
             .NotEmpty().WithMessage("Enter a Scope")
             .NotNull().WithMessage("Enter a Scope");
 

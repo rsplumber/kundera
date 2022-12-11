@@ -15,7 +15,7 @@ internal sealed class DeleteGroupEndpoint : Endpoint<DeleteGroupCommand>
 
     public override void Configure()
     {
-        Delete("groups/{id:guid}");
+        Delete("groups/{groupId:guid}");
         Permissions("groups_delete");
         Version(1);
     }

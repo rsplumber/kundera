@@ -15,7 +15,7 @@ internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialReques
 
     public override void Configure()
     {
-        Post("users/{id:guid}/credentials");
+        Post("users/{userId:guid}/credentials");
         Permissions("credentials_create");
         Version(1);
     }
@@ -28,7 +28,7 @@ internal sealed class CreateCredentialEndpoint : Endpoint<CreateCredentialReques
             Password = req.Password,
             Type = req.Type,
             IpAddress = HttpContext.Connection.RemoteIpAddress,
-            UserId = req.Id
+            UserId = req.UserId
         };
 
         await _mediator.Send(command, ct);
@@ -48,7 +48,7 @@ internal sealed class CreateCredentialEndpointSummary : Summary<CreateCredential
 
 public sealed record CreateCredentialRequest
 {
-    public Guid Id { get; set; } = default!;
+    public Guid UserId { get; set; } = default!;
 
     public string Username { get; set; } = default!;
 

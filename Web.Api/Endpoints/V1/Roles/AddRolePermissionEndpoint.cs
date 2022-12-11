@@ -15,7 +15,7 @@ internal sealed class AddRolePermissionEndpoint : Endpoint<AddRolePermissionComm
 
     public override void Configure()
     {
-        Post("roles/{id:guid}/permissions");
+        Post("roles/{roleId:guid}/permissions");
         Permissions("roles_add_permission");
         Version(1);
     }

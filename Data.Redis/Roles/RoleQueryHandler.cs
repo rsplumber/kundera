@@ -17,7 +17,7 @@ internal sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
 
     public async ValueTask<RoleResponse> Handle(RoleQuery query, CancellationToken cancellationToken)
     {
-        var role = await _roles.FindByIdAsync(query.Role.ToString());
+        var role = await _roles.FindByIdAsync(query.RoleId.ToString());
         if (role is null)
         {
             throw new RoleNotFoundException();

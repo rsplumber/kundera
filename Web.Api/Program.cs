@@ -13,7 +13,6 @@ builder.Services.AddAuthentication(KunderaDefaults.Scheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddFastEndpoints();
-builder.Services.AddResponseCaching();
 builder.Services.AddSwaggerDoc(settings =>
 {
     settings.Title = "Kundera - WebApi";
@@ -25,7 +24,6 @@ builder.Services.AddSwaggerDoc(settings =>
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseResponseCaching();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";
@@ -42,5 +40,3 @@ app.UseSwaggerUi3(s => s.ConfigureDefaults());
 app.UseKundera();
 
 await app.RunAsync();
-
-await app.WaitForShutdownAsync();

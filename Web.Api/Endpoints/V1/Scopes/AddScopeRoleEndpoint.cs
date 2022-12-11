@@ -15,7 +15,7 @@ internal sealed class AddScopeRoleEndpoint : Endpoint<AddScopeRoleCommand>
 
     public override void Configure()
     {
-        Post("scopes/{id:guid}/roles");
+        Post("scopes/{scopeId:guid}/roles");
         Permissions("scopes_add_role");
         Version(1);
     }

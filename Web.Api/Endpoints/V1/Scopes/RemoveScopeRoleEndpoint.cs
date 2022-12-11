@@ -15,7 +15,7 @@ internal sealed class RemoveScopeRoleEndpoint : Endpoint<RemoveScopeRoleCommand>
 
     public override void Configure()
     {
-        Delete("scopes/{id:guid}/roles");
+        Delete("scopes/{scopeId:guid}/roles");
         Permissions("scopes_remove_role");
         Version(1);
     }

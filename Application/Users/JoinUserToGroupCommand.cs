@@ -11,7 +11,7 @@ namespace Application.Users;
 
 public sealed record JoinUserToGroupCommand : ICommand
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 
     public Guid Group { get; init; } = default!;
 }
@@ -29,7 +29,7 @@ internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserTo
 
     public async ValueTask<Unit> Handle(JoinUserToGroupCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.UserId), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
@@ -52,7 +52,7 @@ public sealed class JoinUserToGroupCommandValidator : AbstractValidator<JoinUser
 {
     public JoinUserToGroupCommandValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter User")
             .NotNull().WithMessage("Enter User");
 

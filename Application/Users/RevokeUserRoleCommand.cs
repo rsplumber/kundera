@@ -9,7 +9,7 @@ namespace Application.Users;
 
 public sealed record RevokeUserRoleCommand : ICommand
 {
-    public Guid User { get; init; } = default!;
+    public Guid UserId { get; init; } = default!;
 
     public Guid[] Roles { get; init; } = default!;
 }
@@ -25,7 +25,7 @@ internal sealed class RevokeUserRoleCommandHandler : ICommandHandler<RevokeUserR
 
     public async ValueTask<Unit> Handle(RevokeUserRoleCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(UserId.From(command.User), cancellationToken);
+        var user = await _userRepository.FindAsync(UserId.From(command.UserId), cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException();
@@ -46,7 +46,7 @@ public sealed class RevokeUserRoleCommandValidator : AbstractValidator<RevokeUse
 {
     public RevokeUserRoleCommandValidator()
     {
-        RuleFor(request => request.User)
+        RuleFor(request => request.UserId)
             .NotEmpty().WithMessage("Enter a User")
             .NotNull().WithMessage("Enter a User");
 
