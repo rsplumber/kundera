@@ -6,7 +6,6 @@ using KunderaNet.FastEndpoints.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.UseUrls("http://+:5179");
-builder.Services.AddKundera(builder.Configuration);
 
 builder.Services.AddAuthentication(KunderaDefaults.Scheme)
     .AddKundera(builder.Configuration);
@@ -20,6 +19,8 @@ builder.Services.AddSwaggerDoc(settings =>
     settings.Version = "v1";
     settings.AddKunderaAuth();
 }, addJWTBearerAuth: false, maxEndpointVersion: 1);
+
+builder.Services.AddKundera(builder.Configuration);
 
 var app = builder.Build();
 app.UseAuthentication();
