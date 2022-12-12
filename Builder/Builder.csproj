@@ -14,7 +14,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />
-        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.2">
+        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
