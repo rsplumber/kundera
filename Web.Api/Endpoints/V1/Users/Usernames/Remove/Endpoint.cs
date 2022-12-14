@@ -1,0 +1,39 @@
+using Application.Users;
+using FastEndpoints;
+using Mediator;
+
+namespace Web.Api.Endpoints.V1.Users.Usernames.Remove;
+
+internal sealed class Endpoint : Endpoint<RemoveUserUsernameCommand>
+{
+    private readonly IMediator _mediator;
+
+    public Endpoint(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Delete("users/{userId:guid}/usernames");
+        Permissions("user_remove_username");
+        Version(1);
+    }
+
+    public override async Task HandleAsync(RemoveUserUsernameCommand req, CancellationToken ct)
+    {
+        await _mediator.Send(req, ct);
+
+        await SendNoContentAsync(ct);
+    }
+}
+
+internal sealed class EndpointSSummary : Summary<Endpoint>
+{
+    public EndpointSSummary()
+    {
+        Summary = "Remove user username in the system";
+        Description = "Remove user username in the system";
+        Response(204, "User username was successfully removed");
+    }
+}
