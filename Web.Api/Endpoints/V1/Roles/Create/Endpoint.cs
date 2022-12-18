@@ -1,7 +1,7 @@
 using Application.Roles;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Roles.Details;
 
 namespace Web.Api.Endpoints.V1.Roles.Create;
 
@@ -42,5 +42,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Create a new role in the system";
         Description = "Create a new role in the system";
         Response(201, "Role was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreateRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

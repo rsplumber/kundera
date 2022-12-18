@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Status.Activate;
@@ -35,5 +36,15 @@ internal sealed class ActivateScopeEndpointSummary : Summary<Endpoint>
         Summary = "Activate a scope in the system";
         Description = "Activate a scope in the system";
         Response(200, "Scopes was successfully Activated");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ActivateScopeCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter ScopeId")
+            .NotNull().WithMessage("Enter ScopeId");
     }
 }

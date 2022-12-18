@@ -1,7 +1,7 @@
 using Application.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Services.Details;
 
 namespace Web.Api.Endpoints.V1.Services.Create;
 
@@ -44,5 +44,15 @@ internal sealed class CreateServiceEndpointSummary : Summary<Endpoint>
         Summary = "Create a new Service in the system";
         Description = "Create a new Service in the system";
         Response(201, "Service was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreateServiceCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Credentials;
@@ -40,23 +39,5 @@ internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<Cr
             true);
 
         return Unit.Value;
-    }
-}
-
-public sealed class CreateOneTimeCredentialCommandValidator : AbstractValidator<CreateOneTimeCredentialCommand>
-{
-    public CreateOneTimeCredentialCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter valid UserId")
-            .NotNull().WithMessage("Enter valid UserId");
-
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
     }
 }

@@ -1,5 +1,6 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Roles.Revoke;
@@ -35,5 +36,19 @@ internal sealed class EndpointSSummary : Summary<Endpoint>
         Summary = "Revoke a role from a user in the system";
         Description = "Revoke a role from a user a in the system";
         Response(204, "Role was successfully revoked from the user");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RevokeUserRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter a UserId")
+            .NotNull().WithMessage("Enter a UserId");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter a at least one role")
+            .NotNull().WithMessage("Enter a at least one role");
     }
 }

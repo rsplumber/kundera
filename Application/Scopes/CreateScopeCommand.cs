@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Scopes;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Scopes;
@@ -22,15 +21,5 @@ internal sealed class CreateScopeCommandHandler : ICommandHandler<CreateScopeCom
     {
         var scope = await _scopeFactory.CreateAsync(command.Name);
         return scope;
-    }
-}
-
-public sealed class CreateScopeCommandValidator : AbstractValidator<CreateScopeCommand>
-{
-    public CreateScopeCommandValidator()
-    {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter a Name")
-            .NotNull().WithMessage("Enter a Name");
     }
 }

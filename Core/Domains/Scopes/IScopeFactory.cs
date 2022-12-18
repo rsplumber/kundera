@@ -25,8 +25,8 @@ internal sealed class ScopeFactory : IScopeFactory
 
     async Task<Scope> IScopeFactory.CreateAsync(Name name)
     {
-        var exists = await _scopeRepository.ExistsAsync(name);
-        if (exists)
+        var currentScope = await _scopeRepository.FindAsync(name);
+        if (currentScope is not null)
         {
             throw new ScopeAlreadyExistsException(name);
         }
@@ -39,8 +39,8 @@ internal sealed class ScopeFactory : IScopeFactory
 
     public async Task<Scope> CreateIdentityScopeAsync(ScopeSecret serviceSecret)
     {
-        var exists = await _scopeRepository.ExistsAsync(EntityBaseValues.IdentityScopeName);
-        if (exists)
+        var identityScope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
+        if (identityScope is not null)
         {
             throw new ScopeAlreadyExistsException(EntityBaseValues.IdentityScopeName);
         }

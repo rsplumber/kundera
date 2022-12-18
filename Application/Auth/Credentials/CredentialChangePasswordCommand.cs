@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Credentials.Exceptions;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Credentials;
@@ -42,23 +41,5 @@ internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<C
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class CredentialChangePasswordCommandValidator : AbstractValidator<CredentialChangePasswordCommand>
-{
-    public CredentialChangePasswordCommandValidator()
-    {
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
-
-        RuleFor(request => request.NewPassword)
-            .NotEmpty().WithMessage("Enter valid NewPassword")
-            .NotNull().WithMessage("Enter valid NewPassword");
     }
 }

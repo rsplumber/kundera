@@ -7,7 +7,9 @@ internal sealed class UserDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 
-    [Indexed] public List<string> Usernames { get; set; } = default!;
+    [Indexed]
+    [Searchable(PropertyName = "usernames_searchable")]
+    public List<string> Usernames { get; set; } = default!;
 
     [Indexed] public List<Guid> Groups { get; set; } = default!;
 

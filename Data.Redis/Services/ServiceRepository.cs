@@ -35,11 +35,6 @@ internal class ServiceRepository : IServiceRepository
         return _mapper.Map<Service>(dataModel);
     }
 
-    public async Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default)
-    {
-        return await _services.AnyAsync(model => model.Name == name.Value);
-    }
-
     public async Task<Service?> FindAsync(Name name, CancellationToken cancellationToken = default)
     {
         var dataModel = await _services.FirstOrDefaultAsync(model => model.Name == name.Value);

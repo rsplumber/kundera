@@ -8,8 +8,6 @@ public interface IServiceRepository
 
     Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
-
     Task<Service?> FindAsync(Name name, CancellationToken cancellationToken = default);
 
     Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default);

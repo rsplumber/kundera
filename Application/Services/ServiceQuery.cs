@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Mediator;
+﻿using Mediator;
 
 namespace Application.Services;
 
@@ -17,14 +16,4 @@ public sealed record ServiceResponse
     public string Secret { get; init; } = string.Empty;
 
     public string Status { get; init; } = string.Empty;
-};
-
-public sealed class ServiceQueryValidator : AbstractValidator<ServiceQuery>
-{
-    public ServiceQueryValidator()
-    {
-        RuleFor(request => request.ServiceId)
-            .NotEmpty().WithMessage("Enter a Service")
-            .NotNull().WithMessage("Enter a Service");
-    }
 }

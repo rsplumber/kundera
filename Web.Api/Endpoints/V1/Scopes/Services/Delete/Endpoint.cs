@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Services.Delete;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Remove scope service in the system";
         Description = "Remove scope service in the system";
         Response(204, "Scope service was successfully removed");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RemoveScopeServiceCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a ScopeId")
+            .NotNull().WithMessage("Enter a ScopeId");
+
+        RuleFor(request => request.Services)
+            .NotEmpty().WithMessage("Enter at least one service")
+            .NotNull().WithMessage("Enter at least one service");
     }
 }

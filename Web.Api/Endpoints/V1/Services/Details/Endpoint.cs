@@ -1,6 +1,7 @@
 ﻿using Application.Groups;
 using Application.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Services.Details;
@@ -36,6 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Service details";
         Description = "Service details";
         Response<GroupResponse>(200, "Service was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ServiceQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ServiceId)
+            .NotEmpty().WithMessage("Enter a ServiceId")
+            .NotNull().WithMessage("Enter a ServiceId");
     }
 }

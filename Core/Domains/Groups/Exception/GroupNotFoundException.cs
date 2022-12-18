@@ -1,6 +1,6 @@
 ﻿namespace Core.Domains.Groups.Exception;
 
-public sealed class GroupNotFoundException : DomainException
+public sealed class GroupNotFoundException : KeyNotFoundException
 {
     private const string DefaultMessage = "Group not found";
 

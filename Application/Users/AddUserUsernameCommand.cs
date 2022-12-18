@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -35,19 +34,5 @@ internal sealed class AddUserUsernameCommandHandler : ICommandHandler<AddUserUse
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class AddUserUsernameCommandValidator : AbstractValidator<AddUserUsernameCommand>
-{
-    public AddUserUsernameCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter a User")
-            .NotNull().WithMessage("Enter a User");
-
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter a Username")
-            .NotNull().WithMessage("Enter a Username");
     }
 }

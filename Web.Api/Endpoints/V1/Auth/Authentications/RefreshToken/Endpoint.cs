@@ -1,11 +1,12 @@
 ﻿using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Authentications.RefreshToken;
 
-internal sealed class Endpoint : Endpoint<RefreshTokenRequest, Certificate>
+internal sealed class Endpoint : Endpoint<Request, Certificate>
 {
     private readonly IMediator _mediator;
 
@@ -21,7 +22,7 @@ internal sealed class Endpoint : Endpoint<RefreshTokenRequest, Certificate>
         Version(1);
     }
 
-    public override async Task HandleAsync(RefreshTokenRequest req, CancellationToken ct)
+    public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var command = new RefreshCertificateCommand
         {
@@ -45,9 +46,23 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record RefreshTokenRequest
+internal sealed record Request
 {
     [FromHeader] public string Authorization { get; set; } = default!;
 
     public string RefreshToken { get; set; } = default!;
+}
+
+internal sealed class RequestValidator : Validator<Request>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Authorization)
+            .NotEmpty().WithMessage("Enter valid Token")
+            .NotNull().WithMessage("Enter valid Token");
+
+        RuleFor(request => request.RefreshToken)
+            .NotEmpty().WithMessage("Enter valid RefreshToken")
+            .NotNull().WithMessage("Enter valid RefreshToken");
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Auth.Credentials;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Credentials;
@@ -23,15 +22,5 @@ internal sealed class RemoveCredentialCommandHandler : ICommandHandler<RemoveCre
         await _credentialRepository.DeleteAsync(UniqueIdentifier.Parse(command.UniqueIdentifier), cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class RemoveCredentialCommandValidator : AbstractValidator<RemoveCredentialCommand>
-{
-    public RemoveCredentialCommandValidator()
-    {
-        RuleFor(request => request.UniqueIdentifier)
-            .NotEmpty().WithMessage("Enter valid UniqueIdentifier")
-            .NotNull().WithMessage("Enter valid UniqueIdentifier");
     }
 }

@@ -7,7 +7,9 @@ public class RoleDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 
-    [Indexed] public string Name { get; set; } = default!;
+    [Indexed]
+    [Searchable(PropertyName = "name_searchable")]
+    public string Name { get; set; } = default!;
 
     public Dictionary<string, string>? Meta { get; set; }
 

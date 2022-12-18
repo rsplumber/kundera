@@ -2,7 +2,6 @@
 using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -39,19 +38,5 @@ internal sealed class AssignUserRoleCommandHandler : ICommandHandler<AssignUserR
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class AssignUserRoleCommandValidator : AbstractValidator<AssignUserRoleCommand>
-{
-    public AssignUserRoleCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter a User")
-            .NotNull().WithMessage("Enter a User");
-
-        RuleFor(request => request.Roles)
-            .NotEmpty().WithMessage("Enter a at least one role")
-            .NotNull().WithMessage("Enter a at least one role");
     }
 }

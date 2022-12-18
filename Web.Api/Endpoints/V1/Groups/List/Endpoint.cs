@@ -35,6 +35,5 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Groups list";
         Description = "Groups list";
         Response<List<GroupResponse>>(200, "Groups was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
     }
 }

@@ -1,5 +1,6 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Groups.Left;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Remove a user from a group role in the system";
         Description = "Remove a user from a group in the system";
         Response(204, "User was successfully removed from the group");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RemoveUserFromGroupCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
+
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter Group")
+            .NotNull().WithMessage("Enter Group");
     }
 }

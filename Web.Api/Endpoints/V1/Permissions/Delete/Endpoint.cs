@@ -1,5 +1,6 @@
 using Application.Permissions;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Permissions.Delete;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Delete a permission in the system";
         Description = "Delete a permission in the system";
         Response(204, "Permission was successfully deleted");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeletePermissionCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.PermissionId)
+            .NotEmpty().WithMessage("Enter a PermissionId")
+            .NotNull().WithMessage("Enter a PermissionId");
     }
 }

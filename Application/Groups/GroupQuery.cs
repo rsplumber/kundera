@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Mediator;
+﻿using Mediator;
 
 namespace Application.Groups;
 
@@ -30,14 +29,4 @@ public sealed record GroupRoleResponse
     public Guid Id { get; init; }
 
     public string Name { get; init; } = string.Empty;
-}
-
-public sealed class GroupQueryValidator : AbstractValidator<GroupQuery>
-{
-    public GroupQueryValidator()
-    {
-        RuleFor(request => request.GroupId)
-            .NotEmpty().WithMessage("Enter a group id")
-            .NotNull().WithMessage("Enter a group id");
-    }
 }

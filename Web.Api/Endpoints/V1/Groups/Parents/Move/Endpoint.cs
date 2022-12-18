@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Parents.Move;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Move group parent in the system";
         Description = "Move group parent in the system";
         Response(200, "Parent was successfully moved");
+    }
+}
+
+internal sealed class RequestValidator : Validator<MoveGroupParentCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a Group")
+            .NotNull().WithMessage("Enter a Group");
+
+        RuleFor(request => request.To)
+            .NotEmpty().WithMessage("Enter a To")
+            .NotNull().WithMessage("Enter a To");
     }
 }

@@ -4,7 +4,6 @@ using Core.Domains.Scopes.Types;
 using Core.Domains.Services;
 using Core.Domains.Services.Exceptions;
 using Core.Domains.Services.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Scopes;
@@ -49,19 +48,5 @@ internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeSe
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class AddScopeServiceCommandValidator : AbstractValidator<AddScopeServiceCommand>
-{
-    public AddScopeServiceCommandValidator()
-    {
-        RuleFor(request => request.ScopeId)
-            .NotEmpty().WithMessage("Enter a Scope")
-            .NotNull().WithMessage("Enter a Scope");
-
-        RuleFor(request => request.Services)
-            .NotEmpty().WithMessage("Enter at least one service")
-            .NotNull().WithMessage("Enter at least one service");
     }
 }

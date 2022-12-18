@@ -1,6 +1,7 @@
 ﻿using Application.Groups;
 using Application.Permissions;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Permissions.Details;
@@ -36,6 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Permission details";
         Description = "Permission details";
         Response<GroupResponse>(200, "Permission was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<PermissionQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.PermissionId)
+            .NotEmpty().WithMessage("Enter PermissionId")
+            .NotNull().WithMessage("Enter PermissionId");
     }
 }

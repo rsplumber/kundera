@@ -1,10 +1,11 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Status.Suspend;
 
-internal sealed class Endpoint : Endpoint<ActiveUserCommand>
+internal sealed class Endpoint : Endpoint<SuspendUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -20,7 +21,7 @@ internal sealed class Endpoint : Endpoint<ActiveUserCommand>
         Version(1);
     }
 
-    public override async Task HandleAsync(ActiveUserCommand req, CancellationToken ct)
+    public override async Task HandleAsync(SuspendUserCommand req, CancellationToken ct)
     {
         await _mediator.Send(req, ct);
 
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Suspend a user in the system";
         Description = "Suspend a user in the system";
         Response(200, "Users was successfully Suspended");
+    }
+}
+
+internal sealed class RequestValidator : Validator<SuspendUserCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter UserId")
+            .NotNull().WithMessage("Enter UserId");
     }
 }

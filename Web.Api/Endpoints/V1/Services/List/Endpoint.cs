@@ -36,6 +36,5 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Services list";
         Description = "Services list";
         Response<GroupResponse>(200, "Services was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
     }
 }

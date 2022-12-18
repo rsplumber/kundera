@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -34,19 +33,5 @@ internal sealed class RemoveUserUsernameCommandHandler : ICommandHandler<RemoveU
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class RemoveUserUsernameCommandValidator : AbstractValidator<RemoveUserUsernameCommand>
-{
-    public RemoveUserUsernameCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter User")
-            .NotNull().WithMessage("Enter User");
-
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter Username")
-            .NotNull().WithMessage("Enter Username");
     }
 }

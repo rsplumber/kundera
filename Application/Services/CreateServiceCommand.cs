@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Services;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Services;
@@ -22,15 +21,5 @@ internal sealed class CreateServiceCommandHandler : ICommandHandler<CreateServic
     {
         var service = await _serviceFactory.CreateAsync(command.Name);
         return service;
-    }
-}
-
-public sealed class CreateServiceCommandValidator : AbstractValidator<CreateServiceCommand>
-{
-    public CreateServiceCommandValidator()
-    {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter a Name")
-            .NotNull().WithMessage("Enter a Name");
     }
 }

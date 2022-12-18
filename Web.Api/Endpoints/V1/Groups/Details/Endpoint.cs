@@ -1,5 +1,6 @@
 ﻿using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Details;
@@ -35,6 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Group details";
         Description = "Group details";
         Response<GroupResponse>(200, "Group was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<GroupQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a group id")
+            .NotNull().WithMessage("Enter a group id");
     }
 }

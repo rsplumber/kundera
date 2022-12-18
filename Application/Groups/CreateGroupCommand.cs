@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Types;
 using Core.Domains.Roles.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Groups;
@@ -31,19 +30,5 @@ internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCom
             command.Parent is not null ? GroupId.From(command.Parent.Value) : null);
 
         return group;
-    }
-}
-
-public sealed class CreateGroupCommandValidator : AbstractValidator<CreateGroupCommand>
-{
-    public CreateGroupCommandValidator()
-    {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter Name")
-            .NotNull().WithMessage("Enter Name");
-
-        RuleFor(request => request.Role)
-            .NotEmpty().WithMessage("Enter Name")
-            .NotNull().WithMessage("Enter Name");
     }
 }

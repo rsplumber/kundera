@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Role.Revoke;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Revoke a role from a group in the system";
         Description = "Revoke a role from a group a in the system";
         Response(204, "Role was successfully revoked from the user");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RevokeGroupRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a Group")
+            .NotNull().WithMessage("Enter a Group");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter a at least one role")
+            .NotNull().WithMessage("Enter a at least one role");
     }
 }

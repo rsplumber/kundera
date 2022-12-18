@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Status.Disable;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Disable a group in the system";
         Description = "Disable a group in the system";
         Response(200, "Group was successfully Disabled");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DisableGroupCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter GroupId")
+            .NotNull().WithMessage("Enter GroupId");
     }
 }

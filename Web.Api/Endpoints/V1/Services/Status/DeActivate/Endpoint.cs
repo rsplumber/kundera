@@ -1,10 +1,11 @@
 using Application.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Services.Status.DeActivate;
 
-internal sealed class Endpoint : Endpoint<ActivateServiceCommandValidator>
+internal sealed class Endpoint : Endpoint<DeActivateServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -20,7 +21,7 @@ internal sealed class Endpoint : Endpoint<ActivateServiceCommandValidator>
         Version(1);
     }
 
-    public override async Task HandleAsync(ActivateServiceCommandValidator req, CancellationToken ct)
+    public override async Task HandleAsync(DeActivateServiceCommand req, CancellationToken ct)
     {
         await _mediator.Send(req, ct);
 
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Activate a Service in the system";
         Description = "Activate a new Service in the system";
         Response(200, "Service was successfully activated");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeActivateServiceCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ServiceId)
+            .NotEmpty().WithMessage("Enter a ServiceId")
+            .NotNull().WithMessage("Enter a ServiceId");
     }
 }

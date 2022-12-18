@@ -4,7 +4,6 @@ using Core.Domains.Groups.Types;
 using Core.Domains.Roles;
 using Core.Domains.Roles.Exceptions;
 using Core.Domains.Roles.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Groups;
@@ -49,19 +48,5 @@ internal sealed class AssignGroupRoleCommandHandler : ICommandHandler<AssignGrou
         await _groupRepository.UpdateAsync(group, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class AssignGroupRoleCommandValidator : AbstractValidator<AssignGroupRoleCommand>
-{
-    public AssignGroupRoleCommandValidator()
-    {
-        RuleFor(request => request.GroupId)
-            .NotEmpty().WithMessage("Enter a Group")
-            .NotNull().WithMessage("Enter a Group");
-
-        RuleFor(request => request.Roles)
-            .NotEmpty().WithMessage("Enter a at least one role")
-            .NotNull().WithMessage("Enter a at least one role");
     }
 }

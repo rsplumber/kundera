@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -34,15 +33,5 @@ internal sealed class ActiveUserCommandHandler : ICommandHandler<ActiveUserComma
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class ActiveUserCommandValidator : AbstractValidator<ActiveUserCommand>
-{
-    public ActiveUserCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter User")
-            .NotNull().WithMessage("Enter User");
     }
 }

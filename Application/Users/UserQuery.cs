@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Mediator;
+﻿using Mediator;
 
 namespace Application.Users;
 
@@ -19,14 +18,4 @@ public sealed record UserResponse
     public List<Guid> Groups { get; init; } = Array.Empty<Guid>().ToList();
 
     public List<Guid>? Roles { get; init; } = Array.Empty<Guid>().ToList();
-}
-
-public sealed class UserQueryValidator : AbstractValidator<UserQuery>
-{
-    public UserQueryValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter User")
-            .NotNull().WithMessage("Enter User");
-    }
 }

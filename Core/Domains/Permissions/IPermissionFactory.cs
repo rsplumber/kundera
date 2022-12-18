@@ -19,8 +19,8 @@ internal sealed class PermissionFactory : IPermissionFactory
 
     public async Task<Permission> CreateAsync(Name name, IDictionary<string, string>? meta = null)
     {
-        var exists = await _permissionRepository.ExistsAsync(name);
-        if (exists)
+        var currentPermission = await _permissionRepository.FindAsync(name);
+        if (currentPermission is not null)
         {
             throw new PermissionAlreadyExistsException(name);
         }

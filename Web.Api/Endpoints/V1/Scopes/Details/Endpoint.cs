@@ -1,6 +1,7 @@
 ﻿using Application.Groups;
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Details;
@@ -36,6 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Scope details";
         Description = "Scope details";
         Response<GroupResponse>(200, "Scope was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ScopeQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a ScopeId")
+            .NotNull().WithMessage("Enter a ScopeId");
     }
 }

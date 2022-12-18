@@ -1,7 +1,7 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Users.Details;
 
 namespace Web.Api.Endpoints.V1.Users.Create;
 
@@ -45,5 +45,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Create a new user in the system";
         Description = "Create a new user in the system";
         Response(201, "User was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreateUserCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Username)
+            .NotEmpty().WithMessage("Enter Username")
+            .NotNull().WithMessage("Enter Username");
+
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter Group")
+            .NotNull().WithMessage("Enter Group");
     }
 }

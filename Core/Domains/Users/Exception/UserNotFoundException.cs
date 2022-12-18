@@ -1,6 +1,6 @@
 ﻿namespace Core.Domains.Users.Exception;
 
-public sealed class UserNotFoundException : DomainException
+public sealed class UserNotFoundException : KeyNotFoundException
 {
     private const string DefaultMessage = "User not found";
 

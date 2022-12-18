@@ -8,8 +8,6 @@ public interface IScopeRepository
 
     Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
-
     Task<Scope?> FindAsync(Name name, CancellationToken cancellationToken = default);
 
     Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default);

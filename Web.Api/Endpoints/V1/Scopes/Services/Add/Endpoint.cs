@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Services.Add;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Add scope service in the system";
         Description = "Add scope service in the system";
         Response(200, "Scope service was successfully added");
+    }
+}
+
+internal sealed class RequestValidator : Validator<AddScopeServiceCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a ScopeId")
+            .NotNull().WithMessage("Enter a ScopeId");
+
+        RuleFor(request => request.Services)
+            .NotEmpty().WithMessage("Enter at least one service")
+            .NotNull().WithMessage("Enter at least one service");
     }
 }

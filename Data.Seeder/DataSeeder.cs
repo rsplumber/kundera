@@ -123,8 +123,8 @@ public class DataSeeder
 
     private async Task SeedPermissions()
     {
-        var exists = await _permissionRepository.ExistsAsync("permissions_create");
-        if (exists) return;
+        var firstPermission = await _permissionRepository.FindAsync("permissions_create");
+        if (firstPermission is not null) return;
 
         await SeedPermissionPermissions();
         await SeedRolePermissions();
@@ -237,8 +237,8 @@ public class DataSeeder
 
     private async Task SeedServiceManAsync()
     {
-        var roleExists = await _roleRepository.ExistsAsync(EntityBaseValues.ServiceAdminRole);
-        if (roleExists) return;
+        var serviceAdminRole = await _roleRepository.FindAsync(EntityBaseValues.ServiceAdminRole);
+        if (serviceAdminRole is not null) return;
 
         var permissions = await Task.WhenAll(
             _permissionRepository.FindAsync("scopes_list"),
@@ -261,10 +261,15 @@ public class DataSeeder
             _permissionRepository.FindAsync("services_de-activate")
         );
 
+        if (permissions.Length != 18 || permissions.Any(permission => permission is null))
+        {
+            throw new ApplicationException("Cannot create service admin role");
+        }
+
         var role = await _roleFactory.CreateAsync(EntityBaseValues.ServiceAdminRole);
         foreach (var permission in permissions)
         {
-            role.AddPermission(permission.Id);
+            role.AddPermission(permission!.Id);
         }
 
         await _roleRepository.UpdateAsync(role);

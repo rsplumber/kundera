@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Services;
 using Core.Domains.Services.Exceptions;
 using Core.Domains.Services.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Services;
@@ -31,15 +30,5 @@ internal sealed class DeleteServiceCommandHandler : ICommandHandler<DeleteServic
         await _serviceRepository.DeleteAsync(service.Id, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class DeleteServiceCommandValidator : AbstractValidator<DeleteServiceCommand>
-{
-    public DeleteServiceCommandValidator()
-    {
-        RuleFor(request => request.ServiceId)
-            .NotEmpty().WithMessage("Enter a Service")
-            .NotNull().WithMessage("Enter a Service");
     }
 }

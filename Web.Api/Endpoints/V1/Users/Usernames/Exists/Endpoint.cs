@@ -1,6 +1,7 @@
 ﻿using Application.Groups;
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Usernames.Exists;
@@ -36,6 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "UserExist check";
         Description = "UserExist check";
         Response<GroupResponse>(200, "UserExist was successfully checked");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ExistUserUsernameQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Username)
+            .NotEmpty().WithMessage("Enter Username")
+            .NotNull().WithMessage("Enter Username");
     }
 }

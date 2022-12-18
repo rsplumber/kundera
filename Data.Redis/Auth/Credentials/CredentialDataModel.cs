@@ -11,13 +11,13 @@ internal sealed class CredentialDataModel
 
     public PasswordType Password { get; set; } = default!;
 
-    public string? LastIpAddress { get; set; }
+    [Indexed] public string? LastIpAddress { get; set; }
 
-    [Indexed] public DateTime LastLoggedIn { get; set; }
+    [Indexed(Sortable = true)] public DateTime LastLoggedIn { get; set; }
 
-    [Indexed] public DateTime? ExpiresAt { get; set; }
+    [Indexed(Sortable = true)] public DateTime? ExpiresAt { get; set; }
 
-    [Indexed] public DateTime CreatedDate { get; set; }
+    [Indexed(Sortable = true)] public DateTime CreatedDate { get; set; }
 
     [Indexed] public bool OneTime { get; set; }
 }

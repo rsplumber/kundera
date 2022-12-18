@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Roles;
 using Core.Domains.Roles.Exceptions;
 using Core.Domains.Roles.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Roles;
@@ -31,15 +30,5 @@ internal sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleComma
         await _roleRepository.DeleteAsync(role.Id, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class DeleteRoleCommandValidator : AbstractValidator<DeleteRoleCommand>
-{
-    public DeleteRoleCommandValidator()
-    {
-        RuleFor(request => request.RoleId)
-            .NotEmpty().WithMessage("Enter a Role")
-            .NotNull().WithMessage("Enter a Role");
     }
 }

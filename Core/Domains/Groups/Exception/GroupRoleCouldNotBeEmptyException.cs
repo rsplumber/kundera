@@ -1,6 +1,6 @@
 ﻿namespace Core.Domains.Groups.Exception;
 
-public sealed class GroupRoleCouldNotBeEmptyException : DomainException
+public sealed class GroupRoleCouldNotBeEmptyException : ApplicationException
 {
     private const string DefaultMessage = "Group's roles could not be empty";
 

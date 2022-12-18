@@ -12,11 +12,7 @@ public interface IPermissionRepository
 
     Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
-
     Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default);
 
-    Task<Permission> FindAsync(Name name, CancellationToken cancellationToken = default);
-
-    Task<IEnumerable<Permission>> FindAsync(IEnumerable<PermissionId> permissionIds, CancellationToken cancellationToken = default);
+    Task<Permission?> FindAsync(Name name, CancellationToken cancellationToken = default);
 }

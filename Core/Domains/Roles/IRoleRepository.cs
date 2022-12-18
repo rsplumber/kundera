@@ -8,8 +8,6 @@ public interface IRoleRepository
 
     Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(Name name, CancellationToken cancellationToken = default);
-
     Task<Role?> FindAsync(Name name, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(Role entity, CancellationToken cancellationToken = default);

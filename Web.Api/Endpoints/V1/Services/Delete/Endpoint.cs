@@ -1,5 +1,6 @@
 using Application.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Services.Delete;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Delete a service in the system";
         Description = "Delete a service in the system";
         Response(204, "Service was successfully deleted");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeleteServiceCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ServiceId)
+            .NotEmpty().WithMessage("Enter a ServiceId")
+            .NotNull().WithMessage("Enter a ServiceId");
     }
 }

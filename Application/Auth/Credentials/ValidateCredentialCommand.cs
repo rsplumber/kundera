@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Auth.Credentials;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Credentials;
@@ -37,15 +36,5 @@ internal sealed class ValidateCredentialCommandHandler : ICommandHandler<Validat
         return credential;
 
         bool Expired() => DateTime.UtcNow >= credential.ExpiresAt;
-    }
-}
-
-public sealed class ValidateCredentialCommandValidator : AbstractValidator<ValidateCredentialCommand>
-{
-    public ValidateCredentialCommandValidator()
-    {
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
     }
 }

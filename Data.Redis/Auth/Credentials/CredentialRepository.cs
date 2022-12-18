@@ -16,28 +16,23 @@ internal class CredentialRepository : ICredentialRepository
         _mapper = mapper;
     }
 
-    public async Task AddAsync(Credential entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Credential credential, CancellationToken cancellationToken = default)
     {
-        var dataModel = _mapper.Map<CredentialDataModel>(entity);
+        var dataModel = _mapper.Map<CredentialDataModel>(credential);
         await _credentials.InsertAsync(dataModel);
     }
 
-    public async Task<Credential?> FindAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
+    public async Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _credentials.FindByIdAsync(id.Value);
+        var dataModel = await _credentials.FindByIdAsync(uniqueIdentifier.Value);
         return _mapper.Map<Credential>(dataModel);
     }
 
-    public async Task DeleteAsync(UniqueIdentifier id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _credentials.FindByIdAsync(id.Value);
+        var dataModel = await _credentials.FindByIdAsync(uniqueIdentifier.Value);
         if (dataModel is null) return;
         await _credentials.DeleteAsync(dataModel);
-    }
-
-    public async Task<bool> ExistsAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
-    {
-        return await _credentials.AnyAsync(model => model.Id == uniqueIdentifier.Value);
     }
 
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)

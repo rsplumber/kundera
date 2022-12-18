@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Roles.Add;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Add scope role in the system";
         Description = "Add scope role in the system";
         Response(200, "Scope role was successfully added");
+    }
+}
+
+internal sealed class RequestValidator : Validator<AddScopeRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a ScopeId")
+            .NotNull().WithMessage("Enter a ScopeId");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter at least one role")
+            .NotNull().WithMessage("Enter at least one role");
     }
 }

@@ -1,5 +1,6 @@
 using Application.Roles;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Roles.Permissions.Add;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Add role permission in the system";
         Description = "Add role permission in the system";
         Response(200, "Role permission was successfully added");
+    }
+}
+
+internal sealed class RequestValidator : Validator<AddRolePermissionCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.RoleId)
+            .NotEmpty().WithMessage("Enter a RoleId")
+            .NotNull().WithMessage("Enter a RoleId");
+
+        RuleFor(request => request.Permissions)
+            .NotEmpty().WithMessage("Enter a at least one permission")
+            .NotNull().WithMessage("Enter a at least one permission");
     }
 }

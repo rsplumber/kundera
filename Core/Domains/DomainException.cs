@@ -1,8 +1,0 @@
-namespace Core.Domains;
-
-public class DomainException : Exception
-{
-    public DomainException(string message) : base(message)
-    {
-    }
-}

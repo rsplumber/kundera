@@ -24,8 +24,8 @@ internal sealed class ServiceFactory : IServiceFactory
 
     public async Task<Service> CreateAsync(Name name)
     {
-        var exists = await _serviceRepository.ExistsAsync(name);
-        if (exists)
+        var currentService = await _serviceRepository.FindAsync(name);
+        if (currentService is not null)
         {
             throw new ServiceAlreadyExistsException(name);
         }
@@ -37,8 +37,8 @@ internal sealed class ServiceFactory : IServiceFactory
 
     public async Task<Service> CreateKunderaServiceAsync(ServiceSecret serviceSecret)
     {
-        var exists = await _serviceRepository.ExistsAsync(EntityBaseValues.KunderaServiceName);
-        if (exists)
+        var kunderaService = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
+        if (kunderaService is not null)
         {
             throw new ServiceAlreadyExistsException(EntityBaseValues.KunderaServiceName);
         }

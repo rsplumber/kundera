@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Status.Enable;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Enable a group in the system";
         Description = "Enable a group in the system";
         Response(200, "Group was successfully Enabled");
+    }
+}
+
+internal sealed class RequestValidator : Validator<EnableGroupCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a GroupId")
+            .NotNull().WithMessage("Enter a GroupId");
     }
 }

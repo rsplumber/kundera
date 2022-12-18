@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Exception;
 using Core.Domains.Groups.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Groups;
@@ -40,19 +39,5 @@ internal sealed class SetGroupParentCommandHandler : ICommandHandler<SetGroupPar
         await _groupRepository.UpdateAsync(group, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class SetGroupParentCommandValidator : AbstractValidator<SetGroupParentCommand>
-{
-    public SetGroupParentCommandValidator()
-    {
-        RuleFor(request => request.GroupId)
-            .NotEmpty().WithMessage("Enter a Group")
-            .NotNull().WithMessage("Enter a Group");
-
-        RuleFor(request => request.Parent)
-            .NotEmpty().WithMessage("Enter a at least one role")
-            .NotNull().WithMessage("Enter a at least one role");
     }
 }

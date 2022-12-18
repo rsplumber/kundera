@@ -1,5 +1,6 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Groups.Join;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Joint a user to a group role in the system";
         Description = "Joint a user to a group in the system";
         Response(200, "User was successfully joined to the group");
+    }
+}
+
+internal sealed class RequestValidator : Validator<JoinUserToGroupCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter UserId")
+            .NotNull().WithMessage("Enter UserId");
+
+        RuleFor(request => request.Group)
+            .NotEmpty().WithMessage("Enter Group")
+            .NotNull().WithMessage("Enter Group");
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Permissions;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Permissions;
@@ -24,15 +23,5 @@ internal sealed class CreatePermissionCommandHandler : ICommandHandler<CreatePer
     {
         var permission = await _permissionFactory.CreateAsync(command.Name, command.Meta);
         return permission;
-    }
-}
-
-public sealed class CreatePermissionCommandValidator : AbstractValidator<CreatePermissionCommand>
-{
-    public CreatePermissionCommandValidator()
-    {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter a Name")
-            .NotNull().WithMessage("Enter a Name");
     }
 }

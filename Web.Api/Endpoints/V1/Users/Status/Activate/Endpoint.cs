@@ -1,5 +1,6 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Status.Activate;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Activate a user in the system";
         Description = "Activate a user in the system";
         Response(200, "Users was successfully Activated");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ActiveUserCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter User")
+            .NotNull().WithMessage("Enter User");
     }
 }

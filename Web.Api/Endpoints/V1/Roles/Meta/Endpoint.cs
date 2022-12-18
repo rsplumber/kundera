@@ -1,5 +1,6 @@
 using Application.Roles;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Roles.Meta;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Change role meta in the system";
         Description = "Change role meta in the system";
         Response(200, "Role meta was successfully changed");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ChangeRoleMetaCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.RoleId)
+            .NotEmpty().WithMessage("Enter a RoleId")
+            .NotNull().WithMessage("Enter a RoleId");
     }
 }

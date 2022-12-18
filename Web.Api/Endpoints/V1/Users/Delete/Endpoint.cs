@@ -1,5 +1,6 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Delete;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Delete a user in the system";
         Description = "Delete a user in the system";
         Response(204, "User was successfully deleted");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeleteUserCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter a UserId")
+            .NotNull().WithMessage("Enter a UserId");
     }
 }

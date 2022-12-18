@@ -3,7 +3,6 @@ using Application.Auth.Certificates;
 using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Auth.Sessions;
 using Core.Services;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Authentications;
@@ -50,19 +49,5 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 
         return certificate;
-    }
-}
-
-public sealed class RefreshCertificateCommandValidator : AbstractValidator<RefreshCertificateCommand>
-{
-    public RefreshCertificateCommandValidator()
-    {
-        RuleFor(request => request.Token)
-            .NotEmpty().WithMessage("Enter valid Token")
-            .NotNull().WithMessage("Enter valid Token");
-
-        RuleFor(request => request.RefreshToken)
-            .NotEmpty().WithMessage("Enter valid RefreshToken")
-            .NotNull().WithMessage("Enter valid RefreshToken");
     }
 }

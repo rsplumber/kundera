@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Services;
 using Core.Domains.Services.Exceptions;
 using Core.Domains.Services.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Services;
@@ -33,15 +32,5 @@ internal sealed class ActivateServiceCommandHandler : ICommandHandler<ActivateSe
         await _serviceRepository.UpdateAsync(service, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class ActivateServiceCommandValidator : AbstractValidator<ActivateServiceCommand>
-{
-    public ActivateServiceCommandValidator()
-    {
-        RuleFor(request => request.ServiceId)
-            .NotEmpty().WithMessage("Enter a Service")
-            .NotNull().WithMessage("Enter a Service");
     }
 }

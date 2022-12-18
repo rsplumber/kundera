@@ -1,7 +1,7 @@
 using Application.Permissions;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Permissions.Details;
 
 namespace Web.Api.Endpoints.V1.Permissions.Create;
 
@@ -43,5 +43,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Create a new Permission in the system";
         Description = "Create a new Permission in the system";
         Response(201, "Permission was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreatePermissionCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

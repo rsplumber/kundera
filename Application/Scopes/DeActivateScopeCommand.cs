@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Scopes;
 using Core.Domains.Scopes.Exceptions;
 using Core.Domains.Scopes.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Scopes;
@@ -33,15 +32,5 @@ internal sealed class DeActivateScopeCommandHandler : ICommandHandler<DeActivate
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class DeActivateScopeCommandValidator : AbstractValidator<DeActivateScopeCommand>
-{
-    public DeActivateScopeCommandValidator()
-    {
-        RuleFor(request => request.ScopeId)
-            .NotEmpty().WithMessage("Enter a Scope")
-            .NotNull().WithMessage("Enter a Scope");
     }
 }

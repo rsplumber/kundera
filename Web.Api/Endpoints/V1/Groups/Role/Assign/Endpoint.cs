@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Role.Assign;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Assign a role to a group in the system";
         Description = "Assign a role to a group in the system";
         Response(200, "Role was successfully assigned to the group");
+    }
+}
+
+internal sealed class RequestValidator : Validator<AssignGroupRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a Group")
+            .NotNull().WithMessage("Enter a Group");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter a at least one role")
+            .NotNull().WithMessage("Enter a at least one role");
     }
 }

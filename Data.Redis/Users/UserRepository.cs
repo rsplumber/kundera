@@ -33,11 +33,6 @@ internal class UserRepository : IUserRepository
         return _mapper.Map<User>(dataModel);
     }
 
-    public async Task<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default)
-    {
-        return await _users.AnyAsync(model => model.Usernames.Contains(username.Value));
-    }
-
     public async Task<User?> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
         var dataModel = await _users.Where(model => model.Usernames.Contains(username))

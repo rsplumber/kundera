@@ -23,8 +23,8 @@ internal sealed class UserFactory : IUserFactory
 
     public async Task<User> CreateAsync(Username username, GroupId groupId)
     {
-        var exists = await _userRepository.ExistsAsync(username);
-        if (exists)
+        var currentUser = await _userRepository.FindAsync(username);
+        if (currentUser is not null)
         {
             throw new UserDuplicateIdentifierException(username);
         }

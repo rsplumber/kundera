@@ -1,7 +1,7 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Scopes.Details;
 
 namespace Web.Api.Endpoints.V1.Scopes.Create;
 
@@ -44,5 +44,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Create a new role in the system";
         Description = "Create a new role in the system";
         Response(201, "Scope was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreateScopeCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter a Name")
+            .NotNull().WithMessage("Enter a Name");
     }
 }

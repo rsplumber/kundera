@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -32,15 +31,5 @@ internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserComma
 
         await _userRepository.DeleteAsync(userId, cancellationToken);
         return Unit.Value;
-    }
-}
-
-public sealed class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
-{
-    public DeleteUserCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter a User")
-            .NotNull().WithMessage("Enter a User");
     }
 }

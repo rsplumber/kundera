@@ -1,10 +1,11 @@
 using Application.Users;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Users.Status.Block;
 
-internal sealed class Endpoint : Endpoint<ActiveUserCommand>
+internal sealed class Endpoint : Endpoint<BlockUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -20,7 +21,7 @@ internal sealed class Endpoint : Endpoint<ActiveUserCommand>
         Version(1);
     }
 
-    public override async Task HandleAsync(ActiveUserCommand req, CancellationToken ct)
+    public override async Task HandleAsync(BlockUserCommand req, CancellationToken ct)
     {
         await _mediator.Send(req, ct);
 
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Block a user in the system";
         Description = "Block a user in the system";
         Response(200, "Users was successfully Blocked");
+    }
+}
+
+internal sealed class RequestValidator : Validator<BlockUserCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UserId)
+            .NotEmpty().WithMessage("Enter UserId")
+            .NotNull().WithMessage("Enter UserId");
+
+        RuleFor(request => request.Reason)
+            .NotEmpty().WithMessage("Enter Reason")
+            .NotNull().WithMessage("Enter Reason");
     }
 }

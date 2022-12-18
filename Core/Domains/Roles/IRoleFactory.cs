@@ -19,8 +19,8 @@ internal sealed class RoleFactory : IRoleFactory
 
     public async Task<Role> CreateAsync(Name name, IDictionary<string, string>? meta = null)
     {
-        var exists = await _roleRepository.ExistsAsync(name);
-        if (exists)
+        var currentRole = await _roleRepository.FindAsync(name);
+        if (currentRole is not null)
         {
             throw new RoleAlreadyExistsException(name);
         }

@@ -1,7 +1,9 @@
+using System.Text.Json;
 using Builder;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using KunderaNet.FastEndpoints.Authorization;
+using Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
@@ -27,9 +29,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(config =>
 {
+    config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     config.Endpoints.RoutePrefix = "api";
     config.Versioning.Prefix = "v";
     config.Versioning.PrependToRoute = true;
+    config.Endpoints.Configurator = ep =>
+    {
+        // ep.PostProcessors(0, new ExceptionErrorBuilder());
+        ep.Description(b => b.Produces<CustomErrorResponse>(400));
+    };
+    config.Errors.ResponseBuilder = (failures, _, _) =>
+    {
+        return new CustomErrorResponse
+        {
+            Message = "Validation failed",
+            Errors = failures.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}").ToList()
+        };
+    };
 });
 
 // if (app.Environment.IsDevelopment())

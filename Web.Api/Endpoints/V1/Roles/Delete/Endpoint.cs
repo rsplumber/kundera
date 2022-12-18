@@ -1,5 +1,6 @@
 using Application.Roles;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Roles.Delete;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Delete a role in the system";
         Description = "Delete a role in the system";
         Response(204, "Role was successfully deleted");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeleteRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.RoleId)
+            .NotEmpty().WithMessage("Enter a RoleId")
+            .NotNull().WithMessage("Enter a RoleId");
     }
 }

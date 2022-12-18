@@ -7,7 +7,9 @@ internal sealed class GroupDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 
-    [Indexed] public string Name { get; set; } = default!;
+    [Indexed]
+    [Searchable(PropertyName = "name_searchable")]
+    public string Name { get; set; } = default!;
 
     public string Description { get; set; } = default!;
 

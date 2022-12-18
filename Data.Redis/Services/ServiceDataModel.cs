@@ -7,7 +7,9 @@ public class ServiceDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 
-    [Indexed] public string Name { get; set; } = default!;
+    [Indexed]
+    [Searchable(PropertyName = "name_searchable")]
+    public string Name { get; set; } = default!;
 
     [Indexed] public string Secret { get; set; } = default!;
 

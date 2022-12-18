@@ -1,6 +1,5 @@
 ﻿using Core.Domains.Groups.Types;
 using Core.Domains.Users;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -26,19 +25,5 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
         var user = await _userFactory.CreateAsync(command.Username, GroupId.From(command.Group));
 
         return user;
-    }
-}
-
-public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
-{
-    public CreateUserCommandValidator()
-    {
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter Username")
-            .NotNull().WithMessage("Enter Username");
-
-        RuleFor(request => request.Group)
-            .NotEmpty().WithMessage("Enter Group")
-            .NotNull().WithMessage("Enter Group");
     }
 }

@@ -29,8 +29,8 @@ internal sealed class CredentialFactory : ICredentialFactory
 
     public async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, IPAddress? ipAddress = null, int expireInMinutes = 0, bool oneTime = false)
     {
-        var exists = await _credentialRepository.ExistsAsync(uniqueIdentifier);
-        if (exists)
+        var currentCredential = await _credentialRepository.FindAsync(uniqueIdentifier);
+        if (currentCredential is not null)
         {
             throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
         }

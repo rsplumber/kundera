@@ -1,6 +1,7 @@
 ﻿using Application.Auth.Authentications;
 using Core.Services;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Authentications.Authenticate;
@@ -56,4 +57,22 @@ internal sealed record Request
     public string? Type { get; set; }
 
     [FromHeader] public string ScopeSecret { get; set; } = default!;
+}
+
+internal sealed class RequestValidator : Validator<Request>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Username)
+            .NotEmpty().WithMessage("Enter valid Username")
+            .NotNull().WithMessage("Enter valid Username");
+
+        RuleFor(request => request.Password)
+            .NotEmpty().WithMessage("Enter valid Password")
+            .NotNull().WithMessage("Enter valid Password");
+
+        RuleFor(request => request.ScopeSecret)
+            .NotEmpty().WithMessage("Enter valid ScopeSecret")
+            .NotNull().WithMessage("Enter valid ScopeSecret");
+    }
 }

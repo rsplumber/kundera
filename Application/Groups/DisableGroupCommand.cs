@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Exception;
 using Core.Domains.Groups.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Groups;
@@ -32,15 +31,5 @@ internal sealed class DisableGroupCommandHandler : ICommandHandler<DisableGroupC
         await _groupRepository.UpdateAsync(group, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class DisableGroupCommandValidator : AbstractValidator<DisableGroupCommand>
-{
-    public DisableGroupCommandValidator()
-    {
-        RuleFor(request => request.GroupId)
-            .NotEmpty().WithMessage("Enter Group")
-            .NotNull().WithMessage("Enter Group");
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Permissions;
 using Core.Domains.Permissions.Exceptions;
 using Core.Domains.Permissions.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Permissions;
@@ -32,15 +31,5 @@ internal sealed class DeletePermissionCommandHandler : ICommandHandler<DeletePer
         await _permissionRepository.DeleteAsync(permissionId, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class DeletePermissionCommandValidator : AbstractValidator<DeletePermissionCommand>
-{
-    public DeletePermissionCommandValidator()
-    {
-        RuleFor(request => request.PermissionId)
-            .NotEmpty().WithMessage("Enter a Permission")
-            .NotNull().WithMessage("Enter a Permission");
     }
 }

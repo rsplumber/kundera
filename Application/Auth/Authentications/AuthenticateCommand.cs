@@ -5,7 +5,6 @@ using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Types;
 using Core.Services;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Auth.Authentications;
@@ -69,23 +68,5 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
         await _sessionManagement.SaveAsync(certificate, credential.User, scope.Id, cancellationToken);
 
         return certificate;
-    }
-}
-
-public sealed class AuthenticateCommandValidator : AbstractValidator<AuthenticateCommand>
-{
-    public AuthenticateCommandValidator()
-    {
-        RuleFor(request => request.Username)
-            .NotEmpty().WithMessage("Enter valid Username")
-            .NotNull().WithMessage("Enter valid Username");
-
-        RuleFor(request => request.Password)
-            .NotEmpty().WithMessage("Enter valid Password")
-            .NotNull().WithMessage("Enter valid Password");
-
-        RuleFor(request => request.ScopeSecret)
-            .NotEmpty().WithMessage("Enter valid ScopeSecret")
-            .NotNull().WithMessage("Enter valid ScopeSecret");
     }
 }

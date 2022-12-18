@@ -2,7 +2,6 @@
 using Core.Domains.Permissions;
 using Core.Domains.Permissions.Exceptions;
 using Core.Domains.Permissions.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Permissions;
@@ -41,15 +40,5 @@ internal sealed class ChangePermissionMetaCommandHandler : ICommandHandler<Chang
         await _permissionRepository.UpdateAsync(permission, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class ChangePermissionMetaCommandValidator : AbstractValidator<ChangePermissionMetaCommand>
-{
-    public ChangePermissionMetaCommandValidator()
-    {
-        RuleFor(request => request.PermissionId)
-            .NotEmpty().WithMessage("Enter a Permission")
-            .NotNull().WithMessage("Enter a Permission");
     }
 }

@@ -8,8 +8,6 @@ public interface IUserRepository
 
     Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(Username username, CancellationToken cancellationToken = default);
-
     Task<User?> FindAsync(Username username, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(User entity, CancellationToken cancellationToken = default);

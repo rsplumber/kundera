@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Roles.Delete;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Remove scope role in the system";
         Description = "Remove scope role in the system";
         Response(204, "Scope role was successfully removed");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RemoveScopeRoleCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a Scope")
+            .NotNull().WithMessage("Enter a Scope");
+
+        RuleFor(request => request.Roles)
+            .NotEmpty().WithMessage("Enter at least one role")
+            .NotNull().WithMessage("Enter at least one role");
     }
 }

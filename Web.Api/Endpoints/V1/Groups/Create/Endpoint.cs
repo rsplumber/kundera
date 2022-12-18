@@ -1,7 +1,7 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
-using Web.Api.Endpoints.V1.Groups.Details;
 
 namespace Web.Api.Endpoints.V1.Groups.Create;
 
@@ -46,5 +46,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Creates a new group in the system";
         Description = "Creates a new group in the system";
         Response(201, "Group was successfully created");
+    }
+}
+
+internal sealed class RequestValidator : Validator<CreateGroupCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty().WithMessage("Enter Name")
+            .NotNull().WithMessage("Enter Name");
+
+        RuleFor(request => request.Role)
+            .NotEmpty().WithMessage("Enter Name")
+            .NotNull().WithMessage("Enter Name");
     }
 }

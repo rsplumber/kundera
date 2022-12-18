@@ -2,7 +2,6 @@
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Exceptions;
 using Core.Domains.Scopes.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Scopes;
@@ -39,19 +38,5 @@ internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScop
         await _scopeRepository.UpdateAsync(scope, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class RemoveScopeRoleCommandValidator : AbstractValidator<RemoveScopeRoleCommand>
-{
-    public RemoveScopeRoleCommandValidator()
-    {
-        RuleFor(request => request.ScopeId)
-            .NotEmpty().WithMessage("Enter a Scope")
-            .NotNull().WithMessage("Enter a Scope");
-
-        RuleFor(request => request.Roles)
-            .NotEmpty().WithMessage("Enter at least one role")
-            .NotNull().WithMessage("Enter at least one role");
     }
 }

@@ -1,5 +1,6 @@
 using Application.Groups;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Groups.Parents.Set;
@@ -35,5 +36,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Set a parent to a group in the system";
         Description = "Set a parent to a group in the system";
         Response(200, "Parent was successfully set to the group");
+    }
+}
+
+internal sealed class RequestValidator : Validator<SetGroupParentCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.GroupId)
+            .NotEmpty().WithMessage("Enter a GroupId")
+            .NotNull().WithMessage("Enter a GroupId");
+
+        RuleFor(request => request.Parent)
+            .NotEmpty().WithMessage("Enter a Parent")
+            .NotNull().WithMessage("Enter a Parent");
     }
 }

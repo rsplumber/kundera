@@ -1,5 +1,6 @@
 using Application.Permissions;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Permissions.Meta;
@@ -36,5 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Change permission meta in the system";
         Description = "Change permission meta in the system";
         Response(200, "Permission meta was successfully changed");
+    }
+}
+
+internal sealed class RequestValidator : Validator<ChangePermissionMetaCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.PermissionId)
+            .NotEmpty().WithMessage("Enter a PermissionId")
+            .NotNull().WithMessage("Enter a PermissionId");
     }
 }

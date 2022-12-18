@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Mediator;
+﻿using Mediator;
 
 namespace Application.Scopes;
 
@@ -21,14 +20,4 @@ public sealed record ScopeResponse
     public IEnumerable<Guid>? Roles { get; init; }
 
     public IEnumerable<Guid>? Services { get; init; }
-}
-
-public sealed class ScopeQueryValidator : AbstractValidator<ScopeQuery>
-{
-    public ScopeQueryValidator()
-    {
-        RuleFor(request => request.ScopeId)
-            .NotEmpty().WithMessage("Enter a Scope")
-            .NotNull().WithMessage("Enter a Scope");
-    }
 }

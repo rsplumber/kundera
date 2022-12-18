@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Exception;
 using Core.Domains.Groups.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Groups;
@@ -36,22 +35,5 @@ internal sealed class ChangeGroupInfoCommandHandler : ICommandHandler<ChangeGrou
         group.ChangeDescription(command.Description);
         await _groupRepository.UpdateAsync(group, cancellationToken);
         return Unit.Value;
-    }
-}
-
-public sealed class ChangeGroupInfoCommandValidator : AbstractValidator<ChangeGroupInfoCommand>
-{
-    public ChangeGroupInfoCommandValidator()
-    {
-        RuleFor(request => request.Group)
-            .NotEmpty().WithMessage("Enter Group")
-            .NotNull().WithMessage("Enter Group");
-
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter Name")
-            .NotNull().WithMessage("Enter Name");
-
-        RuleFor(request => request.Description)
-            .MaximumLength(500).WithMessage("Description maximum length is 500");
     }
 }

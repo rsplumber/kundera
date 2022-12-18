@@ -42,11 +42,6 @@ internal sealed class SessionRepository : ISessionRepository
         await _sessions.DeleteAsync(dataModel);
     }
 
-    public async Task<bool> ExistsAsync(Token id, CancellationToken cancellationToken = default)
-    {
-        return await _sessions.AnyAsync(model => model.Id == id.Value);
-    }
-
     public async Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.ToListAsync();

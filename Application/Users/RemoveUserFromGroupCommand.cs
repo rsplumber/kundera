@@ -4,7 +4,6 @@ using Core.Domains.Groups.Types;
 using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Users;
@@ -45,19 +44,5 @@ internal sealed class RemoveUserFromGroupCommandHandler : ICommandHandler<Remove
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
-    }
-}
-
-public sealed class RemoveUserFromGroupCommandValidator : AbstractValidator<RemoveUserFromGroupCommand>
-{
-    public RemoveUserFromGroupCommandValidator()
-    {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter User")
-            .NotNull().WithMessage("Enter User");
-
-        RuleFor(request => request.Group)
-            .NotEmpty().WithMessage("Enter Group")
-            .NotNull().WithMessage("Enter Group");
     }
 }

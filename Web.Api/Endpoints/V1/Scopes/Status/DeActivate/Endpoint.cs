@@ -1,5 +1,6 @@
 using Application.Scopes;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Scopes.Status.DeActivate;
@@ -35,5 +36,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "DeActivate a scope in the system";
         Description = "DeActivate a scope in the system";
         Response(200, "Scopes was successfully DeActivated");
+    }
+}
+
+internal sealed class RequestValidator : Validator<DeActivateScopeCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.ScopeId)
+            .NotEmpty().WithMessage("Enter a ScopeId")
+            .NotNull().WithMessage("Enter a ScopeId");
     }
 }

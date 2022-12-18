@@ -1,6 +1,7 @@
 ﻿using Application.Groups;
 using Application.Roles;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Roles.Details;
@@ -36,6 +37,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Role details";
         Description = "Role details";
         Response<GroupResponse>(200, "Role was successfully received");
-        Response<ValidationFailureResponse>(400, "The request did not pass validation checks");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RoleQuery>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.RoleId)
+            .NotEmpty().WithMessage("Enter RoleId")
+            .NotNull().WithMessage("Enter RoleId");
     }
 }

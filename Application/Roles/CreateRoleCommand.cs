@@ -1,5 +1,4 @@
 ﻿using Core.Domains.Roles;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Roles;
@@ -24,15 +23,5 @@ internal sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleComma
     {
         var role = await _roleFactory.CreateAsync(command.Name, command.Meta);
         return role;
-    }
-}
-
-public sealed class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
-{
-    public CreateRoleCommandValidator()
-    {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage("Enter a Name")
-            .NotNull().WithMessage("Enter a Name");
     }
 }

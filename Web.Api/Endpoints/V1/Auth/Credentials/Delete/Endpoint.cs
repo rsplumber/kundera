@@ -1,5 +1,6 @@
 ﻿using Application.Auth.Credentials;
 using FastEndpoints;
+using FluentValidation;
 using Mediator;
 
 namespace Web.Api.Endpoints.V1.Auth.Credentials.Delete;
@@ -34,5 +35,15 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Remove Credential";
         Description = "remove a Credential";
         Response(204, "Credential removed successfully");
+    }
+}
+
+internal sealed class RequestValidator : Validator<RemoveCredentialCommand>
+{
+    public RequestValidator()
+    {
+        RuleFor(request => request.UniqueIdentifier)
+            .NotEmpty().WithMessage("Enter valid UniqueIdentifier")
+            .NotNull().WithMessage("Enter valid UniqueIdentifier");
     }
 }
