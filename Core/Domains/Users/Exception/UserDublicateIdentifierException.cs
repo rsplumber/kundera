@@ -1,8 +1,10 @@
 ﻿namespace Core.Domains.Users.Exception;
 
-public sealed class UserDuplicateIdentifierException : ApplicationException
+public sealed class UserDuplicateIdentifierException : KunderaException
 {
-    public UserDuplicateIdentifierException(string identifier) : base($"User {identifier} exists")
+    private const int DefaultCode = 400;
+
+    public UserDuplicateIdentifierException(string identifier) : base(DefaultCode, $"User {identifier} exists")
     {
     }
 }

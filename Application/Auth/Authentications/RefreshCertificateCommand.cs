@@ -34,7 +34,7 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
         var session = await _sessionManagement.GetAsync(token, cancellationToken);
         if (session is null || session.RefreshToken != refreshToken)
         {
-            throw new UnAuthenticateException();
+            throw new UnAuthorizedException();
         }
 
         var userId = session.User;

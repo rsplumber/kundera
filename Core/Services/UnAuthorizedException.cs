@@ -1,10 +1,11 @@
 ﻿namespace Core.Services;
 
-public class UnAuthorizedException : ApplicationException
+public sealed class UnAuthorizedException : KunderaException
 {
-    private const string DefaultMessage = "UnAuthorized";
+    private const int DefaultCode = 401;
+    private const string DefaultMessage = "Unauthorized";
 
-    public UnAuthorizedException() : base(DefaultMessage)
+    public UnAuthorizedException() : base(DefaultCode, DefaultMessage)
     {
     }
 }

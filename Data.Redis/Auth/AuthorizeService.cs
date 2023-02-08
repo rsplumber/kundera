@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Core.Domains;
+using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Users.Types;
 using Core.Services;
 using Managements.Data.Auth.Sessions;
@@ -38,7 +39,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         var user = await _dbProvider.RedisCollection<UserDataModel>(false).FindByIdAsync(session.UserId.ToString());
         if (InvalidUser())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         var roles = await RolesAsync(user!);
@@ -47,7 +48,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             .FindByIdAsync(session.ScopeId.ToString());
         if (InvalidSessionScope())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         var service = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
@@ -56,7 +57,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         {
             if (service is null || service.Name != EntityBaseValues.KunderaServiceName)
             {
-                throw new UnAuthorizedException();
+                throw new ForbiddenException();
             }
         }
 
@@ -68,7 +69,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             .FindByIdsAsync(permissionIds.Select(guid => guid.ToString()))).Values;
         if (InvalidPermission())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         return user!.Id;
@@ -91,7 +92,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         if (Expired())
@@ -102,7 +103,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         var user = await _dbProvider.RedisCollection<UserDataModel>(false).FindByIdAsync(session.UserId.ToString());
         if (InvalidUser())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         var roles = await RolesAsync(user!);
@@ -111,7 +112,7 @@ internal sealed class AuthorizeService : IAuthorizeService
             .FindByIdAsync(session.ScopeId.ToString());
         if (InvalidSessionScope())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         var service = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
@@ -120,13 +121,13 @@ internal sealed class AuthorizeService : IAuthorizeService
         {
             if (service is null || service.Name != EntityBaseValues.KunderaServiceName)
             {
-                throw new UnAuthorizedException();
+                throw new ForbiddenException();
             }
         }
 
         if (InvalidRole())
         {
-            throw new UnAuthorizedException();
+            throw new ForbiddenException();
         }
 
         return user!.Id;

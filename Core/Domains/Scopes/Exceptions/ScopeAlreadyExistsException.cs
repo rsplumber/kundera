@@ -1,8 +1,10 @@
 namespace Core.Domains.Scopes.Exceptions;
 
-public sealed class ScopeAlreadyExistsException : NotSupportedException
+public sealed class ScopeAlreadyExistsException : KunderaException
 {
-    public ScopeAlreadyExistsException(string scope) : base($"{scope} already exists")
+    private const int DefaultCode = 400;
+
+    public ScopeAlreadyExistsException(string scope) : base(DefaultCode, $"{scope} already exists")
     {
     }
 }

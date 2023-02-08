@@ -1,10 +1,11 @@
 ﻿namespace Core.Domains.Users.Exception;
 
-public sealed class UserNotFoundException : KeyNotFoundException
+public sealed class UserNotFoundException : KunderaException
 {
+    private const int DefaultCode = 404;
     private const string DefaultMessage = "User not found";
 
-    public UserNotFoundException() : base(DefaultMessage)
+    public UserNotFoundException() : base(DefaultCode,DefaultMessage)
     {
     }
 }

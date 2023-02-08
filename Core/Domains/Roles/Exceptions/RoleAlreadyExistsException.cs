@@ -1,8 +1,10 @@
 namespace Core.Domains.Roles.Exceptions;
 
-public sealed class RoleAlreadyExistsException : NotSupportedException
+public sealed class RoleAlreadyExistsException : KunderaException
 {
-    public RoleAlreadyExistsException(string role) : base($"{role} already exists")
+    private const int DefaultCode = 400;
+
+    public RoleAlreadyExistsException(string role) : base(DefaultCode, $"{role} already exists")
     {
     }
 }

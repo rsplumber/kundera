@@ -44,10 +44,15 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
             Type = command.Type
         }, cancellationToken);
 
-        var scope = await _scopeRepository.FindAsync(ScopeSecret.From(command.ScopeSecret), cancellationToken);
-        if (credential is null || scope is null)
+        if (credential is null)
         {
-            throw new UnAuthenticateException();
+            throw new WrongUsernamePasswordException();
+        }
+
+        var scope = await _scopeRepository.FindAsync(ScopeSecret.From(command.ScopeSecret), cancellationToken);
+        if (scope is null)
+        {
+            throw new InvalidScopeException();
         }
 
         try
@@ -56,7 +61,7 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
         }
         catch
         {
-            throw new UnAuthenticateException();
+            throw new WrongUsernamePasswordException();
         }
 
         var certificate = await _mediator.Send(new GenerateCertificateCommand

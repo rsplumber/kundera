@@ -1,8 +1,10 @@
 ﻿namespace Core.Domains.Auth.Credentials.Exceptions;
 
-public sealed class DuplicateUniqueIdentifierException : ApplicationException
+public sealed class DuplicateUniqueIdentifierException : KunderaException
 {
-    public DuplicateUniqueIdentifierException(string identifier) : base($"{identifier} already exists")
+    private const int DefaultCode = 400;
+
+    public DuplicateUniqueIdentifierException(string identifier) : base(DefaultCode, $"{identifier} already exists")
     {
     }
 }

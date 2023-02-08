@@ -1,8 +1,10 @@
 namespace Core.Domains.Permissions.Exceptions;
 
-public sealed class PermissionAlreadyExistsException : NotSupportedException
+public sealed class PermissionAlreadyExistsException : KunderaException
 {
-    public PermissionAlreadyExistsException(string permission) : base($"{permission} already exists")
+    private const int DefaultCode = 400;
+
+    public PermissionAlreadyExistsException(string permission) : base(DefaultCode, $"{permission} already exists")
     {
     }
 }

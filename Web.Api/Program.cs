@@ -9,10 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.UseUrls("http://+:5179");
 
+builder.Services.AddSingleton<ExceptionHandlerMiddleware>();
+
 builder.Services.AddAuthentication(KunderaDefaults.Scheme)
     .AddKundera(builder.Configuration);
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors();
 builder.Services.AddFastEndpoints();
 builder.Services.AddSwaggerDoc(settings =>
 {
@@ -25,6 +28,14 @@ builder.Services.AddSwaggerDoc(settings =>
 builder.Services.AddKundera(builder.Configuration);
 
 var app = builder.Build();
+
+
+app.UseCors(b => b.AllowAnyHeader()
+    .AllowAnyMethod()
+    .SetIsOriginAllowed(_ => true)
+    .AllowCredentials());
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(config =>
@@ -33,19 +44,6 @@ app.UseFastEndpoints(config =>
     config.Endpoints.RoutePrefix = "api";
     config.Versioning.Prefix = "v";
     config.Versioning.PrependToRoute = true;
-    config.Endpoints.Configurator = ep =>
-    {
-        // ep.PostProcessors(0, new ExceptionErrorBuilder());
-        ep.Description(b => b.Produces<CustomErrorResponse>(400));
-    };
-    config.Errors.ResponseBuilder = (failures, _, _) =>
-    {
-        return new CustomErrorResponse
-        {
-            Message = "Validation failed",
-            Errors = failures.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}").ToList()
-        };
-    };
 });
 
 // if (app.Environment.IsDevelopment())

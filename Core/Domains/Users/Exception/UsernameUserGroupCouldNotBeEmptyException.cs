@@ -1,10 +1,11 @@
 ﻿namespace Core.Domains.Users.Exception;
 
-public sealed class UsernameGroupCouldNotBeEmptyException : KeyNotFoundException
+public sealed class UsernameGroupCouldNotBeEmptyException : KunderaException
 {
+    private const int DefaultCode = 400;
     private const string DefaultMessage = "Username's group could not be empty";
 
-    public UsernameGroupCouldNotBeEmptyException() : base(DefaultMessage)
+    public UsernameGroupCouldNotBeEmptyException() : base(DefaultCode, DefaultMessage)
     {
     }
 }
