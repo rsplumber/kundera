@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Builder;
+using Elastic.Apm.NetCoreAll;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using KunderaNet.FastEndpoints.Authorization;
@@ -35,9 +36,12 @@ app.UseCors(b => b.AllowAnyHeader()
     .SetIsOriginAllowed(_ => true)
     .AllowCredentials());
 
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAllElasticApm(builder.Configuration);
+
 app.UseFastEndpoints(config =>
 {
     config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.19.0" />
         <PackageReference Include="FastEndpoints" Version="5.5.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.5.0" />
         <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="0.1.0" />
