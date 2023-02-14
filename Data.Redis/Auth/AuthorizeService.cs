@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Core.Domains;
-using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Users.Types;
 using Core.Services;
 using Managements.Data.Auth.Sessions;

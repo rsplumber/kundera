@@ -24,7 +24,6 @@ internal sealed class Endpoint : Endpoint<ScopesQuery, List<ScopesResponse>>
     public override async Task HandleAsync(ScopesQuery req, CancellationToken ct)
     {
         var response = await _mediator.Send(req, ct);
-
         await SendOkAsync(response, ct);
     }
 }
