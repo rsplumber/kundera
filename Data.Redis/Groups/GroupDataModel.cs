@@ -2,7 +2,7 @@
 
 namespace Managements.Data.Groups;
 
-[Document(IndexName = "groups", StorageType = StorageType.Json, Prefixes = new[] {"groups"})]
+[Document(IndexName = "groups", StorageType = StorageType.Json, Prefixes = new[] { "groups" })]
 internal sealed class GroupDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;

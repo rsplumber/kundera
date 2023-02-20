@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Users.Types;
 using Mediator;
 
@@ -13,11 +12,9 @@ public sealed record CreateTimePeriodicCredentialCommand : ICommand
 
     public string Password { get; init; } = default!;
 
-    public int ExpireInMinutes { get; init; } = default!;
+    public int ExpireInMinutes { get; init; }
 
-    public string? Type { get; init; }
-
-    public IPAddress? IpAddress { get; init; }
+    public bool? SingleSession { get; set; }
 }
 
 internal sealed class CreateTimePeriodicCredentialCommandHandler : ICommandHandler<CreateTimePeriodicCredentialCommand>
@@ -31,11 +28,12 @@ internal sealed class CreateTimePeriodicCredentialCommandHandler : ICommandHandl
 
     public async ValueTask<Unit> Handle(CreateTimePeriodicCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateAsync(UniqueIdentifier.From(command.Username, command.Type),
+        await _credentialFactory.CreateTimePeriodicAsync(command.Username,
             command.Password,
             UserId.From(command.UserId),
-            command.IpAddress,
-            command.ExpireInMinutes);
+            command.ExpireInMinutes,
+            command.SingleSession
+        );
 
         return Unit.Value;
     }

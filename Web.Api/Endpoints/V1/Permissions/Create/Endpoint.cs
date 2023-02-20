@@ -25,11 +25,11 @@ internal sealed class Endpoint : Endpoint<CreatePermissionCommand>
     {
         var service = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {service.Id}, new PermissionResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { service.Id }, new PermissionResponse
             {
                 Id = service.Id.Value,
                 Name = service.Name,
-                Meta = (Dictionary<string, string>) service.Meta
+                Meta = (Dictionary<string, string>)service.Meta
             },
             generateAbsoluteUrl: true,
             cancellation: ct);

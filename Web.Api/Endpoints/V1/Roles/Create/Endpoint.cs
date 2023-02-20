@@ -25,7 +25,7 @@ internal sealed class Endpoint : Endpoint<CreateRoleCommand>
     {
         var role = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {role.Id}, new RoleResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { role.Id }, new RoleResponse
             {
                 Id = role.Id.Value,
                 Name = role.Name

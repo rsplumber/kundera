@@ -28,7 +28,6 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
         {
             Username = req.Username,
             Password = req.Password,
-            Type = req.Type,
             IpAddress = HttpContext.Connection.RemoteIpAddress,
             ScopeSecret = req.ScopeSecret
         };
@@ -53,8 +52,6 @@ internal sealed record Request
     public string Username { get; set; } = default!;
 
     public string Password { get; set; } = default!;
-
-    public string? Type { get; set; }
 
     [FromHeader] public string ScopeSecret { get; set; } = default!;
 }

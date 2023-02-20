@@ -106,8 +106,11 @@ internal sealed class CustomTypesProfile : Profile
         CreateMap<string, Token>().ConvertUsing(s => Token.From(s));
         CreateMap<Token, string>().ConvertUsing(token => token.Value);
 
-        CreateMap<string, UniqueIdentifier>().ConvertUsing(id => UniqueIdentifier.Parse(id));
-        CreateMap<UniqueIdentifier, string>().ConvertUsing(identifier => identifier.Value);
+        CreateMap<Guid, CredentialId>()
+            .ConvertUsing(s => CredentialId.From(s));
+
+        CreateMap<CredentialId, Guid>()
+            .ConvertUsing(s => s.Value);
 
         CreateMap<Password, PasswordType>().ConvertUsing(password => new PasswordType
         {

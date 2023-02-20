@@ -25,7 +25,7 @@ internal sealed class Endpoint : Endpoint<CreateGroupCommand>
     {
         var group = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {group.Id}, new GroupResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { group.Id }, new GroupResponse
             {
                 Id = group.Id.Value,
                 Description = group.Description,

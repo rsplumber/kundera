@@ -5,7 +5,7 @@ public sealed class UserNotFoundException : KunderaException
     private const int DefaultCode = 404;
     private const string DefaultMessage = "User not found";
 
-    public UserNotFoundException() : base(DefaultCode,DefaultMessage)
+    public UserNotFoundException() : base(DefaultCode, DefaultMessage)
     {
     }
 }

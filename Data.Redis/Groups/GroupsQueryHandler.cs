@@ -11,7 +11,7 @@ internal sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, List<Group
 
     public GroupsQueryHandler(RedisConnectionProvider provider)
     {
-        _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>(false);
+        _groups = (RedisCollection<GroupDataModel>)provider.RedisCollection<GroupDataModel>(false);
     }
 
     public async ValueTask<List<GroupsResponse>> Handle(GroupsQuery query, CancellationToken cancellationToken)

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains;
+﻿using Core.Domains;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
@@ -109,11 +108,10 @@ public class DataSeeder
             user = await _userFactory.CreateAsync(_adminUsername, group.Id);
         }
 
-        var uniqueIdentifier = UniqueIdentifier.From(_adminUsername);
-        var credential = await _credentialRepository.FindAsync(uniqueIdentifier);
-        if (credential is null)
+        var credentials = await _credentialRepository.FindAsync(_adminUsername);
+        if (!credentials.Any(credential => credential.Password.Check(_adminPassword)))
         {
-            await _credentialFactory.CreateAsync(uniqueIdentifier, _adminPassword, user.Id, IPAddress.None);
+            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword, user.Id);
         }
 
         await SeedPermissions();

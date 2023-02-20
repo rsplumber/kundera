@@ -17,7 +17,7 @@ internal class ScopeRepository : IScopeRepository
 
     public ScopeRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
-        _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>();
+        _scopes = (RedisCollection<ScopeDataModel>)provider.RedisCollection<ScopeDataModel>();
         _mapper = mapper;
         _eventBus = eventBus;
     }

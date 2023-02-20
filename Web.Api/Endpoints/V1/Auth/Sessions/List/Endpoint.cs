@@ -26,7 +26,8 @@ internal sealed class Endpoint : Endpoint<Request>
         var sessions = await _sessionManagement.GetAllAsync(UserId.From(req.Id), ct);
         var response = sessions.Select(session => new
         {
-            session.Id, Scope = session.Scope, session.ExpiresAt, UserId = session.User, session.LastIpAddress, session.LastUsageDate
+            session.Id, Scope = session.Scope, ExpiresAt = session.ExpirationDateUtc, UserId = session.User, session.LastIpAddress,
+            LastUsageDate = session.LastUsageDateUtc
         });
 
         await SendOkAsync(response, ct);

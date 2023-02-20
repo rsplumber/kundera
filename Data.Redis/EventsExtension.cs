@@ -12,7 +12,7 @@ internal static class EventsExtension
         var domainEvents = entity.DomainEvents.ToList();
         foreach (var domainEvent in domainEvents)
         {
-            var eventAttribute = (DomainEvent) domainEvent;
+            var eventAttribute = (DomainEvent)domainEvent;
             await eventBus.PublishAsync(eventAttribute.Name, domainEvent);
         }
 

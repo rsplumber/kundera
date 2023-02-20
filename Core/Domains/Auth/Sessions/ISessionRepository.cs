@@ -1,4 +1,5 @@
-﻿using Core.Domains.Users.Types;
+﻿using Core.Domains.Auth.Credentials;
+using Core.Domains.Users.Types;
 
 namespace Core.Domains.Auth.Sessions;
 
@@ -7,6 +8,8 @@ public interface ISessionRepository
     Task AddAsync(Session entity, CancellationToken cancellationToken = default);
 
     Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default);
+
+    Task<Session?> FindAsync(CredentialId credentialId, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(Session entity, CancellationToken cancellationToken = default);
 

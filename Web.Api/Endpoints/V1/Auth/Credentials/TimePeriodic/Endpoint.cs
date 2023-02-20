@@ -27,10 +27,9 @@ internal sealed class Endpoint : Endpoint<Request>
         {
             Username = req.Username,
             Password = req.Password,
-            Type = req.Type,
             ExpireInMinutes = req.ExpireInMinutes,
-            IpAddress = HttpContext.Connection.RemoteIpAddress,
-            UserId = req.UserId
+            UserId = req.UserId,
+            SingleSession = req.SingleSession
         };
 
         await _mediator.Send(command, ct);
@@ -58,7 +57,7 @@ internal sealed record Request
 
     public int ExpireInMinutes { get; init; } = default!;
 
-    public string? Type { get; init; } = default;
+    public bool? SingleSession { get; set; } = default;
 }
 
 internal sealed class RequestValidator : Validator<Request>

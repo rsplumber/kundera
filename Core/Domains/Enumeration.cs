@@ -29,7 +29,7 @@ public abstract class Enumeration : IComparable
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != GetType()) return false;
-        return Equals((Enumeration) obj);
+        return Equals((Enumeration)obj);
     }
 
     public override int GetHashCode()
@@ -37,5 +37,5 @@ public abstract class Enumeration : IComparable
         return Id;
     }
 
-    public int CompareTo(object? other) => other is null ? int.MinValue : Id.CompareTo(((Enumeration) other).Id);
+    public int CompareTo(object? other) => other is null ? int.MinValue : Id.CompareTo(((Enumeration)other).Id);
 }

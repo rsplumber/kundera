@@ -2,7 +2,7 @@
 
 namespace Managements.Data.Roles;
 
-[Document(IndexName = "roles", StorageType = StorageType.Json, Prefixes = new[] {"role"})]
+[Document(IndexName = "roles", StorageType = StorageType.Json, Prefixes = new[] { "role" })]
 public class RoleDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }

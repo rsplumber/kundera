@@ -12,7 +12,7 @@ internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUse
 
     public ExistUserUsernameQueryHandler(RedisConnectionProvider provider)
     {
-        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>(false);
+        _users = (RedisCollection<UserDataModel>)provider.RedisCollection<UserDataModel>(false);
     }
 
     public async ValueTask<Guid> Handle(ExistUserUsernameQuery query, CancellationToken cancellationToken)

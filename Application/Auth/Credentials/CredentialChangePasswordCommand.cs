@@ -22,7 +22,6 @@ internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<C
 {
     private readonly ICredentialRepository _credentialRepository;
 
-
     public CredentialChangePasswordCommandHandler(ICredentialRepository credentialRepository)
     {
         _credentialRepository = credentialRepository;
@@ -30,7 +29,8 @@ internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<C
 
     public async ValueTask<Unit> Handle(CredentialChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        var credential = await _credentialRepository.FindAsync(UniqueIdentifier.From(command.Username, command.Type), cancellationToken);
+        var credentials = await _credentialRepository.FindAsync(command.Username, cancellationToken);
+        var credential = credentials.FirstOrDefault(credential => credential.Password.Check(command.Password));
         if (credential is null)
         {
             throw new CredentialNotFoundException();

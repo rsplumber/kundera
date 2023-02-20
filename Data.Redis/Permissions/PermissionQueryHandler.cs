@@ -12,7 +12,7 @@ internal sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, Pe
 
     public PermissionQueryHandler(RedisConnectionProvider provider)
     {
-        _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>(false);
+        _permissions = (RedisCollection<PermissionDataModel>)provider.RedisCollection<PermissionDataModel>(false);
     }
 
     public async ValueTask<PermissionResponse> Handle(PermissionQuery query, CancellationToken cancellationToken)

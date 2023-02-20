@@ -12,7 +12,7 @@ internal sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 
     public UserQueryHandler(RedisConnectionProvider provider)
     {
-        _users = (RedisCollection<UserDataModel>) provider.RedisCollection<UserDataModel>(false);
+        _users = (RedisCollection<UserDataModel>)provider.RedisCollection<UserDataModel>(false);
     }
 
     public async ValueTask<UserResponse> Handle(UserQuery query, CancellationToken cancellationToken)

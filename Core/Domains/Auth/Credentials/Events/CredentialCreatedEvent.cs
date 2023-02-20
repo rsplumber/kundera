@@ -2,7 +2,7 @@
 
 namespace Core.Domains.Auth.Credentials.Events;
 
-public sealed record CredentialCreatedEvent(UniqueIdentifier UniqueIdentifier, UserId User) : DomainEvent
+public sealed record CredentialCreatedEvent(CredentialId CredentialId, UserId User) : DomainEvent
 {
     public override string Name => "credential_created";
 }

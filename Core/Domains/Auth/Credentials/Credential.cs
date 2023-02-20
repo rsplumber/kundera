@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Credentials.Events;
+using Core.Domains.Users;
 using Core.Domains.Users.Types;
 
 namespace Core.Domains.Auth.Credentials;
@@ -10,53 +11,57 @@ public class Credential : AggregateRoot
     {
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, IPAddress? lastIpAddress = null)
+    internal Credential(string username, string password, UserId user)
     {
-        Id = uniqueIdentifier;
-        User = user;
+        Username = Username.From(username);
         Password = Password.Create(password);
-        LastIpAddress = lastIpAddress ?? IPAddress.None;
-        LastLoggedIn = DateTime.UtcNow;
-        CreatedDate = DateTime.UtcNow;
-        AddDomainEvent(new CredentialCreatedEvent(uniqueIdentifier, user));
+        User = user;
+        CreatedDateUtc = DateTime.UtcNow;
+        AddDomainEvent(new CredentialCreatedEvent(Id, user));
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
-        this(uniqueIdentifier, password, user, lastIpAddress)
+    internal Credential(string username, string password, UserId user, int expireInMinutes) :
+        this(username, password, user)
     {
         if (expireInMinutes > 0)
         {
-            ExpiresAt = DateTime.UtcNow.AddMinutes(expireInMinutes);
+            ExpiresAtUtc = DateTime.UtcNow.AddMinutes(expireInMinutes);
         }
     }
 
-    internal Credential(UniqueIdentifier uniqueIdentifier, string password, UserId user, bool oneTime, int expireInMinutes = 0, IPAddress? lastIpAddress = null) :
-        this(uniqueIdentifier, password, user, expireInMinutes, lastIpAddress)
+    internal Credential(string username, string password, UserId user, bool oneTime, int expireInMinutes = 0) :
+        this(username, password, user, expireInMinutes)
     {
         OneTime = oneTime;
     }
 
 
-    public UniqueIdentifier Id { get; internal set; } = default!;
+    public CredentialId Id { get; internal set; } = CredentialId.Generate();
+
+    public Username Username { get; internal set; } = default!;
 
     public UserId User { get; internal set; } = default!;
 
     public Password Password { get; internal set; } = default!;
 
-    public IPAddress LastIpAddress { get; internal set; } = default!;
+    public IPAddress LastIpAddress { get; internal set; } = IPAddress.None;
 
-    public DateTime LastLoggedIn { get; internal set; }
+    public DateTime? LastLoggedInUtc { get; internal set; }
 
-    public DateTime? ExpiresAt { get; internal set; }
+    public DateTime? ExpiresAtUtc { get; internal set; }
+
+    public int? SessionExpireTimeInMinutes { get; internal set; }
 
     public bool OneTime { get; internal set; }
 
-    public DateTime CreatedDate { get; internal set; }
+    public bool SingleSession { get; init; }
+
+    public DateTime CreatedDateUtc { get; internal set; }
 
     public void UpdateActivityInfo(IPAddress ipAddress)
     {
         LastIpAddress = ipAddress;
-        LastLoggedIn = DateTime.UtcNow;
+        LastLoggedInUtc = DateTime.UtcNow;
     }
 
     public void ChangePassword(string password, string newPassword)

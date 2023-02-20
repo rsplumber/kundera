@@ -14,8 +14,8 @@ internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermission
 
     public RolePermissionsQueryHandler(RedisConnectionProvider provider)
     {
-        _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>(false);
-        _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>(false);
+        _roles = (RedisCollection<RoleDataModel>)provider.RedisCollection<RoleDataModel>(false);
+        _permissions = (RedisCollection<PermissionDataModel>)provider.RedisCollection<PermissionDataModel>(false);
     }
 
     public async ValueTask<List<RolePermissionsResponse>> Handle(RolePermissionsQuery query, CancellationToken cancellationToken)

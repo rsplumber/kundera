@@ -25,7 +25,7 @@ internal sealed class Endpoint : Endpoint<CreateScopeCommand>
     {
         var scope = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {scope.Id}, new ScopeResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { scope.Id }, new ScopeResponse
             {
                 Id = scope.Id.Value,
                 Name = scope.Name,

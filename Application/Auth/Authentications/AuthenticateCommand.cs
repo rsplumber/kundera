@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Application.Auth.Certificates;
-using Application.Auth.Credentials;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Types;
+using Core.Domains.Users;
 using Core.Services;
 using Mediator;
 
@@ -15,8 +15,6 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
 
     public string Password { get; set; } = default!;
 
-    public string? Type { get; set; }
-
     public string ScopeSecret { get; init; } = default!;
 
     public IPAddress? IpAddress { get; init; }
@@ -24,54 +22,48 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
 
 internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateCommand, Certificate>
 {
-    private readonly IMediator _mediator;
     private readonly ISessionManagement _sessionManagement;
     private readonly IScopeRepository _scopeRepository;
+    private readonly ICredentialRepository _credentialRepository;
 
 
-    public AuthenticateCommandHandler(IMediator mediator, ISessionManagement sessionManagement, IScopeRepository scopeRepository)
+    public AuthenticateCommandHandler(ISessionManagement sessionManagement,
+        IScopeRepository scopeRepository,
+        ICredentialRepository credentialRepository)
     {
-        _mediator = mediator;
         _sessionManagement = sessionManagement;
         _scopeRepository = scopeRepository;
+        _credentialRepository = credentialRepository;
     }
 
     public async ValueTask<Certificate> Handle(AuthenticateCommand command, CancellationToken cancellationToken)
     {
-        var credential = await _mediator.Send(new ValidateCredentialCommand
-        {
-            Username = command.Username,
-            Type = command.Type
-        }, cancellationToken);
-
-        if (credential is null)
-        {
-            throw new WrongUsernamePasswordException();
-        }
-
+        var credentials = await _credentialRepository.FindAsync(command.Username, cancellationToken);
+        var credential = credentials.SingleOrDefault(credential => credential.Username == command.Username && credential.Password.Check(command.Password));
         var scope = await _scopeRepository.FindAsync(ScopeSecret.From(command.ScopeSecret), cancellationToken);
-        if (scope is null)
-        {
-            throw new InvalidScopeException();
-        }
-
-        try
-        {
-            credential.Password.Check(command.Password);
-        }
-        catch
+        if (credential is null || scope is null)
         {
             throw new WrongUsernamePasswordException();
         }
 
-        var certificate = await _mediator.Send(new GenerateCertificateCommand
+        if (CredentialExpired())
         {
-            UserId = credential.User.Value,
-            ScopeId = scope.Id.Value
-        }, cancellationToken);
+            await _credentialRepository.DeleteAsync(credential.Id, cancellationToken);
+            throw new WrongUsernamePasswordException();
+        }
 
-        await _sessionManagement.SaveAsync(certificate, credential.User, scope.Id, cancellationToken);
+        if (credential.OneTime)
+        {
+            await _credentialRepository.DeleteAsync(credential.Id, cancellationToken);
+        }
 
-        return certificate;
+        if (!credential.Password.Check(command.Password))
+        {
+            throw new WrongUsernamePasswordException();
+        }
+
+        return await _sessionManagement.SaveAsync(credential, scope, cancellationToken);
+
+        bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }
 }

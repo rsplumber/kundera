@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Users.Types;
 using Redis.OM;
@@ -13,7 +14,7 @@ internal sealed class SessionRepository : ISessionRepository
 
     public SessionRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _sessions = (RedisCollection<SessionDataModel>) provider.RedisCollection<SessionDataModel>();
+        _sessions = (RedisCollection<SessionDataModel>)provider.RedisCollection<SessionDataModel>();
         _mapper = mapper;
     }
 
@@ -26,6 +27,12 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _sessions.FindByIdAsync(id.Value);
+        return _mapper.Map<Session>(dataModel);
+    }
+
+    public async Task<Session?> FindAsync(CredentialId credentialId, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _sessions.Where(model => model.CredentialId == credentialId.Value).FirstOrDefaultAsync();
         return _mapper.Map<Session>(dataModel);
     }
 

@@ -12,7 +12,7 @@ internal sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeRespons
 
     public ScopeQueryHandler(RedisConnectionProvider provider)
     {
-        _scopes = (RedisCollection<ScopeDataModel>) provider.RedisCollection<ScopeDataModel>(false);
+        _scopes = (RedisCollection<ScopeDataModel>)provider.RedisCollection<ScopeDataModel>(false);
     }
 
     public async ValueTask<ScopeResponse> Handle(ScopeQuery query, CancellationToken cancellationToken)

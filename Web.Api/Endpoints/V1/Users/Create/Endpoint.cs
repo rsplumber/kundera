@@ -25,7 +25,7 @@ internal sealed class Endpoint : Endpoint<CreateUserCommand>
     {
         var user = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {user.Id}, new UserResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { user.Id }, new UserResponse
             {
                 Id = user.Id.Value,
                 Usernames = user.Usernames.Select(username => username.Value).ToList(),

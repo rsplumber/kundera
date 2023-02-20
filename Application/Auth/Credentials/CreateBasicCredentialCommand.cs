@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Users.Types;
 using Mediator;
 
@@ -13,9 +12,7 @@ public sealed record CreateBasicCredentialCommand : ICommand
 
     public string Password { get; set; } = default!;
 
-    public string? Type { get; set; }
-
-    public IPAddress? IpAddress { get; set; }
+    public bool? SingleSession { get; set; }
 }
 
 internal sealed class CreateBasicCredentialCommandHandler : ICommandHandler<CreateBasicCredentialCommand>
@@ -29,10 +26,10 @@ internal sealed class CreateBasicCredentialCommandHandler : ICommandHandler<Crea
 
     public async ValueTask<Unit> Handle(CreateBasicCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateAsync(UniqueIdentifier.From(command.Username, command.Type),
+        await _credentialFactory.CreateAsync(command.Username,
             command.Password,
             UserId.From(command.UserId),
-            command.IpAddress);
+            command.SingleSession);
 
         return Unit.Value;
     }

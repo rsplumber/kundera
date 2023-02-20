@@ -25,7 +25,7 @@ internal sealed class Endpoint : Endpoint<CreateServiceCommand>
     {
         var service = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new {service.Id}, new ServiceResponse
+        await SendCreatedAtAsync<Details.Endpoint>(new { service.Id }, new ServiceResponse
             {
                 Id = service.Id.Value,
                 Name = service.Name,

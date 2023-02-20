@@ -27,10 +27,8 @@ internal sealed class Endpoint : Endpoint<Request>
         {
             Username = req.Username,
             Password = req.Password,
-            Type = req.Type,
             ExpireInMinutes = req.ExpireInMinutes,
-            IpAddress = HttpContext.Connection.RemoteIpAddress,
-            UserId = req.UserId
+            UserId = req.UserId,
         };
 
         await _mediator.Send(command, ct);
@@ -55,8 +53,6 @@ internal sealed record Request
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
-
-    public string? Type { get; init; }
 
     public int ExpireInMinutes { get; init; } = 0;
 }

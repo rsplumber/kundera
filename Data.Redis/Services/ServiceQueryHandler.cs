@@ -12,7 +12,7 @@ internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceR
 
     public ServiceQueryHandler(RedisConnectionProvider provider)
     {
-        _services = (RedisCollection<ServiceDataModel>) provider.RedisCollection<ServiceDataModel>(false);
+        _services = (RedisCollection<ServiceDataModel>)provider.RedisCollection<ServiceDataModel>(false);
     }
 
     public async ValueTask<ServiceResponse> Handle(ServiceQuery query, CancellationToken cancellationToken)

@@ -16,7 +16,7 @@ internal class PermissionRepository : IPermissionRepository
 
     public PermissionRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
-        _permissions = (RedisCollection<PermissionDataModel>) provider.RedisCollection<PermissionDataModel>();
+        _permissions = (RedisCollection<PermissionDataModel>)provider.RedisCollection<PermissionDataModel>();
         _mapper = mapper;
         _eventBus = eventBus;
     }

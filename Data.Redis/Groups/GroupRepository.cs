@@ -19,7 +19,7 @@ internal class GroupRepository : IGroupRepository
     {
         _mapper = mapper;
         _eventBus = eventBus;
-        _groups = (RedisCollection<GroupDataModel>) provider.RedisCollection<GroupDataModel>();
+        _groups = (RedisCollection<GroupDataModel>)provider.RedisCollection<GroupDataModel>();
     }
 
     public async Task AddAsync(Group entity, CancellationToken cancellationToken = default)

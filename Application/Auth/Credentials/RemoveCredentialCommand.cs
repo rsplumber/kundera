@@ -1,11 +1,12 @@
 ﻿using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Credentials.Exceptions;
 using Mediator;
 
 namespace Application.Auth.Credentials;
 
 public sealed record RemoveCredentialCommand : ICommand
 {
-    public string UniqueIdentifier { get; set; } = default!;
+    public Guid Id { get; set; } = default!;
 }
 
 internal sealed class RemoveCredentialCommandHandler : ICommandHandler<RemoveCredentialCommand>
@@ -19,7 +20,14 @@ internal sealed class RemoveCredentialCommandHandler : ICommandHandler<RemoveCre
 
     public async ValueTask<Unit> Handle(RemoveCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialRepository.DeleteAsync(UniqueIdentifier.Parse(command.UniqueIdentifier), cancellationToken);
+        var credentialId = CredentialId.From(command.Id);
+        var credential = await _credentialRepository.FindAsync(credentialId, cancellationToken);
+        if (credential is null)
+        {
+            throw new CredentialNotFoundException();
+        }
+
+        await _credentialRepository.DeleteAsync(credentialId, cancellationToken);
 
         return Unit.Value;
     }

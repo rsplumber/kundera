@@ -16,7 +16,7 @@ internal class RoleRepository : IRoleRepository
 
     public RoleRepository(RedisConnectionProvider provider, IMapper mapper, ICapPublisher eventBus)
     {
-        _roles = (RedisCollection<RoleDataModel>) provider.RedisCollection<RoleDataModel>();
+        _roles = (RedisCollection<RoleDataModel>)provider.RedisCollection<RoleDataModel>();
         _mapper = mapper;
         _eventBus = eventBus;
     }

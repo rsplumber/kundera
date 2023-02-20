@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using Application.Auth.Certificates;
-using Core.Domains.Auth.Credentials.Exceptions;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
+using Core.Domains.Scopes;
 using Core.Services;
 using Mediator;
 
@@ -18,13 +18,17 @@ public sealed record RefreshCertificateCommand : ICommand<Certificate>
 
 internal sealed class RefreshCertificateCommandHandler : ICommandHandler<RefreshCertificateCommand, Certificate>
 {
-    private readonly IMediator _mediator;
     private readonly ISessionManagement _sessionManagement;
+    private readonly ICredentialRepository _credentialRepository;
+    private readonly IScopeRepository _scopeRepository;
 
-    public RefreshCertificateCommandHandler(IMediator mediator, ISessionManagement sessionManagement)
+    public RefreshCertificateCommandHandler(ISessionManagement sessionManagement,
+        ICredentialRepository credentialRepository,
+        IScopeRepository scopeRepository)
     {
-        _mediator = mediator;
         _sessionManagement = sessionManagement;
+        _credentialRepository = credentialRepository;
+        _scopeRepository = scopeRepository;
     }
 
     public async ValueTask<Certificate> Handle(RefreshCertificateCommand command, CancellationToken cancellationToken)
@@ -37,15 +41,19 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
-        var userId = session.User;
-        var scopeId = session.Scope;
-        var certificate = await _mediator.Send(new GenerateCertificateCommand
+        var credential = await _credentialRepository.FindAsync(session.Credential, cancellationToken);
+        if (credential is null)
         {
-            UserId = userId.Value,
-            ScopeId = scopeId.Value
-        }, cancellationToken);
+            throw new UnAuthorizedException();
+        }
 
-        await _sessionManagement.SaveAsync(certificate, userId, scopeId, cancellationToken);
+        var scope = await _scopeRepository.FindAsync(session.Scope, cancellationToken);
+        if (scope is null)
+        {
+            throw new UnAuthorizedException();
+        }
+
+        var certificate = await _sessionManagement.SaveAsync(credential, scope, cancellationToken);
         await _sessionManagement.DeleteAsync(token, cancellationToken);
 
         return certificate;

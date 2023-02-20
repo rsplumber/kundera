@@ -1,12 +1,13 @@
-﻿using Core.Domains.Auth.Sessions;
-using Core.Domains.Scopes.Types;
+﻿using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Sessions;
+using Core.Domains.Scopes;
 using Core.Domains.Users.Types;
 
 namespace Core.Services;
 
 public interface ISessionManagement
 {
-    Task SaveAsync(Certificate certificate, UserId userId, ScopeId scopeId, CancellationToken cancellationToken = default);
+    Task<Certificate> SaveAsync(Credential credential, Scope scope, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(Token token, CancellationToken cancellationToken = default);
 

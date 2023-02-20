@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Domains.Auth.Credentials;
+using Core.Domains.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -12,7 +13,7 @@ internal class CredentialRepository : ICredentialRepository
 
     public CredentialRepository(RedisConnectionProvider provider, IMapper mapper)
     {
-        _credentials = (RedisCollection<CredentialDataModel>) provider.RedisCollection<CredentialDataModel>();
+        _credentials = (RedisCollection<CredentialDataModel>)provider.RedisCollection<CredentialDataModel>();
         _mapper = mapper;
     }
 
@@ -22,15 +23,21 @@ internal class CredentialRepository : ICredentialRepository
         await _credentials.InsertAsync(dataModel);
     }
 
-    public async Task<Credential?> FindAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
+    public async Task<Credential?> FindAsync(CredentialId id, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _credentials.FindByIdAsync(uniqueIdentifier.Value);
+        var dataModel = await _credentials.FindByIdAsync(id.Value.ToString());
         return _mapper.Map<Credential>(dataModel);
     }
 
-    public async Task DeleteAsync(UniqueIdentifier uniqueIdentifier, CancellationToken cancellationToken = default)
+    public async Task<List<Credential>> FindAsync(Username username, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _credentials.FindByIdAsync(uniqueIdentifier.Value);
+        var credentials = await _credentials.Where(model => model.Username == username.Value).ToListAsync();
+        return credentials.Select(model => _mapper.Map<Credential>(model)).ToList();
+    }
+
+    public async Task DeleteAsync(CredentialId id, CancellationToken cancellationToken = default)
+    {
+        var dataModel = await _credentials.FindByIdAsync(id.Value.ToString());
         if (dataModel is null) return;
         await _credentials.DeleteAsync(dataModel);
     }
@@ -39,8 +46,8 @@ internal class CredentialRepository : ICredentialRepository
     {
         var credentials = await _credentials.ToListAsync();
         var expiredCredentials = credentials
-            .Where(model => model.ExpiresAt is not null)
-            .Where(model => DateTime.UtcNow >= model.ExpiresAt!.Value.ToUniversalTime());
+            .Where(model => model.ExpiresAtUtc is not null)
+            .Where(model => DateTime.UtcNow >= model.ExpiresAtUtc!.Value.ToUniversalTime());
 
         foreach (var credential in expiredCredentials)
         {

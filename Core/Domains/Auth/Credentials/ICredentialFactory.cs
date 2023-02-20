@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials.Exceptions;
+﻿using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Core.Domains.Users.Types;
@@ -8,12 +7,21 @@ namespace Core.Domains.Auth.Credentials;
 
 public interface ICredentialFactory
 {
-    Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier,
+    Task<Credential> CreateAsync(string username,
         string password,
         UserId user,
-        IPAddress? ipAddress = null,
-        int expireInMinutes = 0,
-        bool oneTime = false);
+        bool? singleSession = false);
+
+    Task<Credential> CreateOneTimeAsync(string username,
+        string password,
+        UserId user,
+        int expireInMinutes = 0);
+
+    Task<Credential> CreateTimePeriodicAsync(string username,
+        string password,
+        UserId user,
+        int expireInMinutes,
+        bool? singleSession = false);
 }
 
 internal sealed class CredentialFactory : ICredentialFactory
@@ -27,13 +35,42 @@ internal sealed class CredentialFactory : ICredentialFactory
         _userRepository = userRepository;
     }
 
-    public async Task<Credential> CreateAsync(UniqueIdentifier uniqueIdentifier, string password, UserId userId, IPAddress? ipAddress = null, int expireInMinutes = 0, bool oneTime = false)
+    public async Task<Credential> CreateAsync(string username, string password, UserId user, bool? singleSession = false)
     {
-        var currentCredential = await _credentialRepository.FindAsync(uniqueIdentifier);
-        if (currentCredential is not null)
+        await ValidateAsync(username, password, user);
+        var credential = new Credential(username, password, user)
         {
-            throw new DuplicateUniqueIdentifierException(uniqueIdentifier);
-        }
+            SingleSession = singleSession ?? false
+        };
+        await _credentialRepository.AddAsync(credential);
+        return credential;
+    }
+
+    public async Task<Credential> CreateOneTimeAsync(string username, string password, UserId user, int expireInMinutes = 0)
+    {
+        await ValidateAsync(username, password, user);
+        var credential = new Credential(username, password, user, true, expireInMinutes)
+        {
+            SingleSession = true
+        };
+        await _credentialRepository.AddAsync(credential);
+        return credential;
+    }
+
+    public async Task<Credential> CreateTimePeriodicAsync(string username, string password, UserId user, int expireInMinutes, bool? singleSession = false)
+    {
+        await ValidateAsync(username, password, user);
+        var credential = new Credential(username, password, user, expireInMinutes)
+        {
+            SingleSession = singleSession ?? false
+        };
+        await _credentialRepository.AddAsync(credential);
+        return credential;
+    }
+
+    private async Task ValidateAsync(string username, string password, UserId userId)
+    {
+        var usernameType = Username.From(username);
 
         var user = await _userRepository.FindAsync(userId);
         if (user is null)
@@ -41,14 +78,15 @@ internal sealed class CredentialFactory : ICredentialFactory
             throw new UserNotFoundException();
         }
 
-        var requestedUsername = Username.From(uniqueIdentifier.Username);
-        if (!user.Has(requestedUsername))
+        if (!user.Has(usernameType))
         {
             throw new UsernameNotFoundException();
         }
 
-        var credential = new Credential(uniqueIdentifier, password, userId, oneTime, expireInMinutes, ipAddress);
-        await _credentialRepository.AddAsync(credential);
-        return credential;
+        var currentCredentials = await _credentialRepository.FindAsync(usernameType);
+        if (currentCredentials.Any(credential => credential.Username == usernameType && credential.Password.Check(password)))
+        {
+            throw new DuplicateUniqueIdentifierException(username);
+        }
     }
 }

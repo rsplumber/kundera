@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Users.Types;
 using Mediator;
 
@@ -14,10 +13,6 @@ public sealed record CreateOneTimeCredentialCommand : ICommand
     public string Password { get; init; } = default!;
 
     public int ExpireInMinutes { get; init; } = 0;
-
-    public string? Type { get; init; }
-
-    public IPAddress? IpAddress { get; init; }
 }
 
 internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<CreateOneTimeCredentialCommand>
@@ -31,12 +26,10 @@ internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<Cr
 
     public async ValueTask<Unit> Handle(CreateOneTimeCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateAsync(UniqueIdentifier.From(command.Username, command.Type),
+        await _credentialFactory.CreateOneTimeAsync(command.Username,
             command.Password,
             UserId.From(command.UserId),
-            command.IpAddress,
-            command.ExpireInMinutes,
-            true);
+            command.ExpireInMinutes);
 
         return Unit.Value;
     }

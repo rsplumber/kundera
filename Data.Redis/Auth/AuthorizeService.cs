@@ -182,7 +182,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
                 async Task FetchChildrenAsync(GroupDataModel group)
                 {
-                    if (group.Children is {Count: 0}) return;
+                    if (group.Children is { Count: 0 }) return;
                     var ids = group.Children!.Select(groupId => groupId.ToString()).ToArray();
                     var children = (await groupsDbCollection.FindByIdsAsync(ids)).Values;
                     dataModels.AddRange(children!);

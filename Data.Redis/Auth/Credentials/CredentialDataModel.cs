@@ -2,24 +2,30 @@
 
 namespace Managements.Data.Auth.Credentials;
 
-[Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] {"credentials"})]
+[Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] { "credentials" })]
 internal sealed class CredentialDataModel
 {
     [RedisIdField] [Indexed] public string Id { get; set; } = default!;
+
+    [Indexed] public string Username { get; set; } = default!;
 
     [Indexed] public Guid UserId { get; set; }
 
     public PasswordType Password { get; set; } = default!;
 
-    [Indexed] public string? LastIpAddress { get; set; }
+    [Indexed] public string LastIpAddress { get; set; } = default!;
 
-    [Indexed(Sortable = true)] public DateTime LastLoggedIn { get; set; }
+    [Indexed(Sortable = true)] public DateTime? LastLoggedInUtc { get; set; }
 
-    [Indexed(Sortable = true)] public DateTime? ExpiresAt { get; set; }
+    [Indexed(Sortable = true)] public DateTime? ExpiresAtUtc { get; set; }
 
-    [Indexed(Sortable = true)] public DateTime CreatedDate { get; set; }
+    [Indexed(Sortable = true)] public DateTime CreatedDateUtc { get; set; }
 
     [Indexed] public bool OneTime { get; set; }
+
+    [Indexed] public int? SessionExpireTimeInMinutes { get; set; }
+
+    [Indexed] public bool SingleSession { get; set; }
 }
 
 internal sealed class PasswordType

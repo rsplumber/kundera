@@ -16,7 +16,7 @@ internal sealed class Endpoint : Endpoint<RemoveCredentialCommand>
 
     public override void Configure()
     {
-        Delete("users/credentials/{uniqueIdentifier}");
+        Delete("users/credentials/{id}");
         Permissions("credentials_delete");
         Version(1);
     }
@@ -42,8 +42,8 @@ internal sealed class RequestValidator : Validator<RemoveCredentialCommand>
 {
     public RequestValidator()
     {
-        RuleFor(request => request.UniqueIdentifier)
-            .NotEmpty().WithMessage("Enter valid UniqueIdentifier")
-            .NotNull().WithMessage("Enter valid UniqueIdentifier");
+        RuleFor(request => request.Id)
+            .NotEmpty().WithMessage("Enter valid id")
+            .NotNull().WithMessage("Enter valid id");
     }
 }
