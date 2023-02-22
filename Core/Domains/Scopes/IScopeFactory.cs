@@ -1,17 +1,16 @@
 ﻿using Core.Domains.Scopes.Exceptions;
-using Core.Domains.Scopes.Types;
 using Core.Hashing;
 
 namespace Core.Domains.Scopes;
 
 public interface IScopeFactory
 {
-    Task<Scope> CreateAsync(Name name);
+    Task<Scope> CreateAsync(string name);
 
-    Task<Scope> CreateIdentityScopeAsync(ScopeSecret serviceSecret);
+    Task<Scope> CreateIdentityScopeAsync(string scopeSecret);
 }
 
-internal sealed class ScopeFactory : IScopeFactory
+public sealed class ScopeFactory : IScopeFactory
 {
     private readonly IScopeRepository _scopeRepository;
     private readonly IHashService _hashService;
@@ -23,9 +22,9 @@ internal sealed class ScopeFactory : IScopeFactory
         _hashService = hashService;
     }
 
-    async Task<Scope> IScopeFactory.CreateAsync(Name name)
+    async Task<Scope> IScopeFactory.CreateAsync(string name)
     {
-        var currentScope = await _scopeRepository.FindAsync(name);
+        var currentScope = await _scopeRepository.FindByNameAsync(name);
         if (currentScope is not null)
         {
             throw new ScopeAlreadyExistsException(name);
@@ -37,15 +36,15 @@ internal sealed class ScopeFactory : IScopeFactory
         return scope;
     }
 
-    public async Task<Scope> CreateIdentityScopeAsync(ScopeSecret serviceSecret)
+    public async Task<Scope> CreateIdentityScopeAsync(string scopeSecret)
     {
-        var identityScope = await _scopeRepository.FindAsync(EntityBaseValues.IdentityScopeName);
+        var identityScope = await _scopeRepository.FindBySecretAsync(EntityBaseValues.IdentityScopeName);
         if (identityScope is not null)
         {
             throw new ScopeAlreadyExistsException(EntityBaseValues.IdentityScopeName);
         }
 
-        var scope = new Scope(EntityBaseValues.IdentityScopeName, serviceSecret);
+        var scope = new Scope(EntityBaseValues.IdentityScopeName, scopeSecret);
         await _scopeRepository.AddAsync(scope);
 
         return scope;

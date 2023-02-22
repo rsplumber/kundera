@@ -5,9 +5,11 @@ namespace Managements.Data.Auth.Credentials;
 [Document(IndexName = "credentials", StorageType = StorageType.Json, Prefixes = new[] { "credentials" })]
 internal sealed class CredentialDataModel
 {
-    [RedisIdField] [Indexed] public string Id { get; set; } = default!;
+    [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 
-    [Indexed] public string Username { get; set; } = default!;
+    [Indexed]
+    [Searchable(PropertyName = "username_searchable")]
+    public string Username { get; set; } = default!;
 
     [Indexed] public Guid UserId { get; set; }
 

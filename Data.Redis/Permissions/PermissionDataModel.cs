@@ -3,7 +3,7 @@
 namespace Managements.Data.Permissions;
 
 [Document(IndexName = "permissions", StorageType = StorageType.Json, Prefixes = new[] { "permission" })]
-public class PermissionDataModel
+internal sealed class PermissionDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 

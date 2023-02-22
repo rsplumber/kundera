@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Services;
-using Core.Domains.Services.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -29,21 +27,21 @@ internal class ServiceRepository : IServiceRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Service?> FindAsync(ServiceId id, CancellationToken cancellationToken = default)
+    public async Task<Service?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _services.FindByIdAsync(id.ToString());
         return _mapper.Map<Service>(dataModel);
     }
 
-    public async Task<Service?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    public async Task<Service?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _services.FirstOrDefaultAsync(model => model.Name == name.Value);
+        var dataModel = await _services.FirstOrDefaultAsync(model => model.Name == name);
         return _mapper.Map<Service>(dataModel);
     }
 
-    public async Task<Service?> FindAsync(ServiceSecret secret, CancellationToken cancellationToken = default)
+    public async Task<Service?> FindBySecretAsync(string secret, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _services.Where(model => model.Secret == secret.Value).FirstOrDefaultAsync();
+        var dataModel = await _services.Where(model => model.Secret == secret).FirstOrDefaultAsync();
         return _mapper.Map<Service>(dataModel);
     }
 
@@ -54,7 +52,7 @@ internal class ServiceRepository : IServiceRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public Task DeleteAsync(ServiceId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

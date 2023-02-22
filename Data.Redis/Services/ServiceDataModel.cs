@@ -3,7 +3,7 @@
 namespace Managements.Data.Services;
 
 [Document(IndexName = "services", StorageType = StorageType.Json, Prefixes = new[] { "service" })]
-public class ServiceDataModel
+internal sealed class ServiceDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; }
 

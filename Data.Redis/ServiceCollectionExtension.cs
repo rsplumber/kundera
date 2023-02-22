@@ -1,4 +1,5 @@
-﻿using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Authorizations;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
@@ -6,7 +7,6 @@ using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Users;
-using Core.Services;
 using Managements.Data.Auth;
 using Managements.Data.Auth.Credentials;
 using Managements.Data.Auth.Sessions;
@@ -23,7 +23,7 @@ using Redis.OM;
 
 namespace Managements.Data;
 
-internal static class ServiceCollectionExtension
+public static class ServiceCollectionExtension
 {
     public static void AddData(this IServiceCollection services, IConfiguration configuration)
     {

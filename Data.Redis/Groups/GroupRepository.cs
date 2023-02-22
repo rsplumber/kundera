@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Groups;
-using Core.Domains.Groups.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -29,9 +27,9 @@ internal class GroupRepository : IGroupRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Group?> FindAsync(GroupId id, CancellationToken cancellationToken = default)
+    public async Task<Group?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _groups.FindByIdAsync(id.Value.ToString());
+        var dataModel = await _groups.FindByIdAsync(id.ToString());
         return _mapper.Map<Group>(dataModel);
     }
 
@@ -42,14 +40,14 @@ internal class GroupRepository : IGroupRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Group?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    public async Task<Group?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _groups.FirstOrDefaultAsync(model => model.Name == name.Value);
+        var dataModel = await _groups.FirstOrDefaultAsync(model => model.Name == name);
 
         return _mapper.Map<Group>(dataModel);
     }
 
-    public Task DeleteAsync(GroupId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

@@ -1,8 +1,6 @@
-﻿using Core.Domains.Roles.Types;
+﻿namespace Core.Domains.Roles.Events;
 
-namespace Core.Domains.Roles.Events;
-
-public sealed record RoleCreatedEvent(RoleId Id) : DomainEvent
+public sealed record RoleCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "role_created";
+    public override string Name => "kundera_role_created";
 }

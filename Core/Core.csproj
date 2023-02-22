@@ -7,16 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ValueOf" Version="2.0.31" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <InternalsVisibleTo Include="Builder" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Domains\Auth" />
-    </ItemGroup>
-    
 </Project>

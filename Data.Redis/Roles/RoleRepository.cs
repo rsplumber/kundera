@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Roles;
-using Core.Domains.Roles.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -28,15 +26,15 @@ internal class RoleRepository : IRoleRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Role?> FindAsync(RoleId id, CancellationToken cancellationToken = default)
+    public async Task<Role?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _roles.FindByIdAsync(id.ToString());
         return _mapper.Map<Role>(dataModel);
     }
 
-    public async Task<Role?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    public async Task<Role?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _roles.FirstOrDefaultAsync(model => model.Name == name.Value);
+        var dataModel = await _roles.FirstOrDefaultAsync(model => model.Name == name);
         return _mapper.Map<Role>(dataModel);
     }
 
@@ -47,7 +45,7 @@ internal class RoleRepository : IRoleRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public Task DeleteAsync(RoleId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

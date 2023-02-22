@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains;
 using Core.Domains.Users;
 
 namespace Managements.Data.Users;
@@ -7,6 +8,11 @@ internal sealed class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
+        CreateMap<string, UserStatus>()
+            .ConvertUsing(u => Enumeration.GetAll<UserStatus>().First(status => status.Name == u));
+
+        CreateMap<UserStatus, string>()
+            .ConvertUsing(u => u.Name);
         DisableConstructorMapping();
         CreateMap<UserDataModel, User>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
@@ -17,7 +23,7 @@ internal sealed class UserMappingProfile : Profile
             .ForMember(user => user.Roles, expression => expression.MapFrom(model => model.Roles))
             .ForMember(user => user.Status, expression => expression.MapFrom(model => model.Status))
             .ForMember(user => user.StatusChangeReason, expression => expression.MapFrom(model => model.StatusChangeReason))
-            .ForMember(user => user.StatusChangeDate, expression => expression.MapFrom(model => model.StatusChangeDate.ToUniversalTime()))
+            .ForMember(user => user.StatusChangeDateUtc, expression => expression.MapFrom(model => model.StatusChangeDateUtc))
             .ReverseMap();
     }
 }

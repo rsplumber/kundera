@@ -1,27 +1,25 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Credentials.Events;
-using Core.Domains.Users;
-using Core.Domains.Users.Types;
 
 namespace Core.Domains.Auth.Credentials;
 
-public class Credential : AggregateRoot
+public class Credential : BaseEntity
 {
     protected Credential()
     {
     }
 
-    internal Credential(string username, string password, UserId user)
+    internal Credential(string username, string password, Guid userId)
     {
-        Username = Username.From(username);
+        Username = username;
         Password = Password.Create(password);
-        User = user;
+        UserId = userId;
         CreatedDateUtc = DateTime.UtcNow;
-        AddDomainEvent(new CredentialCreatedEvent(Id, user));
+        AddDomainEvent(new CredentialCreatedEvent(Id, userId));
     }
 
-    internal Credential(string username, string password, UserId user, int expireInMinutes) :
-        this(username, password, user)
+    internal Credential(string username, string password, Guid userId, int expireInMinutes) :
+        this(username, password, userId)
     {
         if (expireInMinutes > 0)
         {
@@ -29,22 +27,22 @@ public class Credential : AggregateRoot
         }
     }
 
-    internal Credential(string username, string password, UserId user, bool oneTime, int expireInMinutes = 0) :
-        this(username, password, user, expireInMinutes)
+    internal Credential(string username, string password, Guid userId, bool oneTime, int expireInMinutes = 0) :
+        this(username, password, userId, expireInMinutes)
     {
         OneTime = oneTime;
     }
 
 
-    public CredentialId Id { get; internal set; } = CredentialId.Generate();
+    public Guid Id { get; internal set; } = Guid.NewGuid();
 
-    public Username Username { get; internal set; } = default!;
+    public string Username { get; internal set; } = default!;
 
-    public UserId User { get; internal set; } = default!;
+    public Guid UserId { get; internal set; }
 
     public Password Password { get; internal set; } = default!;
 
-    public IPAddress LastIpAddress { get; internal set; } = IPAddress.None;
+    public string? LastIpAddress { get; internal set; }
 
     public DateTime? LastLoggedInUtc { get; internal set; }
 
@@ -60,7 +58,7 @@ public class Credential : AggregateRoot
 
     public void UpdateActivityInfo(IPAddress ipAddress)
     {
-        LastIpAddress = ipAddress;
+        LastIpAddress = ipAddress.ToString();
         LastLoggedInUtc = DateTime.UtcNow;
     }
 

@@ -1,6 +1,6 @@
-﻿using Application.Permissions;
-using Core.Domains.Permissions.Exceptions;
+﻿using Core.Domains.Permissions.Exceptions;
 using Mediator;
+using Queries.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 

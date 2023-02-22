@@ -1,20 +1,16 @@
-﻿using Core.Domains.Auth.Credentials;
-using Core.Domains.Scopes.Types;
-using Core.Domains.Users.Types;
-
-namespace Core.Domains.Auth.Sessions;
+﻿namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionFactory
 {
-    public Task<Session> CreateAsync(Token token,
-        Token refreshToken,
-        CredentialId credentialId,
-        ScopeId scope,
-        UserId user,
+    public Task<Session> CreateAsync(string token,
+        string refreshToken,
+        Guid credentialId,
+        Guid scopeId,
+        Guid userId,
         DateTime expireDate);
 }
 
-internal sealed class SessionFactory : ISessionFactory
+public sealed class SessionFactory : ISessionFactory
 {
     private readonly ISessionRepository _sessionRepository;
 
@@ -23,11 +19,11 @@ internal sealed class SessionFactory : ISessionFactory
         _sessionRepository = sessionRepository;
     }
 
-    public async Task<Session> CreateAsync(Token token,
-        Token refreshToken,
-        CredentialId credentialId,
-        ScopeId scopeId,
-        UserId userId,
+    public async Task<Session> CreateAsync(string token,
+        string refreshToken,
+        Guid credentialId,
+        Guid scopeId,
+        Guid userId,
         DateTime expireDate)
     {
         var session = new Session(token, refreshToken, credentialId, scopeId, userId, expireDate);

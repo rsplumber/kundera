@@ -1,8 +1,6 @@
-﻿using Core.Domains.Users.Types;
+﻿namespace Core.Domains.Users.Events;
 
-namespace Core.Domains.Users.Events;
-
-public sealed record UserCreatedEvent(UserId UserId) : DomainEvent
+public sealed record UserCreatedEvent(Guid UserId) : DomainEvent
 {
-    public override string Name => "user_created";
+    public override string Name => "kundera_user_created";
 }

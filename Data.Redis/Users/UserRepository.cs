@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Domains.Users;
-using Core.Domains.Users.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -27,13 +26,13 @@ internal class UserRepository : IUserRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<User?> FindAsync(UserId id, CancellationToken cancellationToken = default)
+    public async Task<User?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _users.FindByIdAsync(id.Value.ToString());
+        var dataModel = await _users.FindByIdAsync(id.ToString());
         return _mapper.Map<User>(dataModel);
     }
 
-    public async Task<User?> FindAsync(Username username, CancellationToken cancellationToken = default)
+    public async Task<User?> FindByUsernameAsync(string username, CancellationToken cancellationToken = default)
     {
         var dataModel = await _users.Where(model => model.Usernames.Contains(username))
             .FirstOrDefaultAsync();
@@ -47,7 +46,7 @@ internal class UserRepository : IUserRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public Task DeleteAsync(UserId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

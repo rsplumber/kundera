@@ -1,7 +1,7 @@
-﻿using Application.Groups;
-using Core.Domains.Groups.Exception;
+﻿using Core.Domains.Groups.Exception;
 using Managements.Data.Roles;
 using Mediator;
+using Queries.Groups;
 using Redis.OM;
 using Redis.OM.Searching;
 
@@ -39,7 +39,7 @@ internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupRespons
                 Id = model!.Id,
                 Name = model.Name
             }),
-            StatusChangedDate = group.StatusChangeDate
+            StatusChangedDate = group.StatusChangeDateUtc
         };
     }
 }

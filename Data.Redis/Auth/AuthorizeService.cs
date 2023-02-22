@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Core.Domains;
-using Core.Domains.Users.Types;
-using Core.Services;
+﻿using Core.Domains;
+using Core.Domains.Auth.Authorizations;
+using Core.Domains.Users;
 using Managements.Data.Auth.Sessions;
 using Managements.Data.Groups;
 using Managements.Data.Permissions;
@@ -22,7 +21,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _dbProvider = dbProvider;
     }
 
-    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, CancellationToken cancellationToken = default)
     {
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
@@ -73,7 +72,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return user!.Id;
 
-        bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
+        bool Expired() => DateTime.UtcNow >= session.ExpirationDateUtc;
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active.Name;
 
@@ -86,7 +85,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         bool InvalidPermission() => permissions.All(permission => actions.All(action => permission!.Name != action.ToLower()));
     }
 
-    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> requestRoles, string serviceSecret, IPAddress? ipAddress, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> requestRoles, string serviceSecret, CancellationToken cancellationToken = default)
     {
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
@@ -131,7 +130,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return user!.Id;
 
-        bool Expired() => DateTime.UtcNow >= session.ExpiresAt;
+        bool Expired() => DateTime.UtcNow >= session.ExpirationDateUtc;
 
         bool InvalidUser() => user is null || user.Status != UserStatus.Active.Name;
 

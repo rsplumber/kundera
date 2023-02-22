@@ -1,5 +1,5 @@
-﻿using Application.Users;
-using Mediator;
+﻿using Mediator;
+using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 

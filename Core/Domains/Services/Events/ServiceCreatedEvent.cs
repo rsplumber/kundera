@@ -1,8 +1,6 @@
-﻿using Core.Domains.Services.Types;
+﻿namespace Core.Domains.Services.Events;
 
-namespace Core.Domains.Services.Events;
-
-public sealed record ServiceCreatedEvent(ServiceId Id) : DomainEvent
+public sealed record ServiceCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "service_created";
+    public override string Name => "kundera_service_created";
 }

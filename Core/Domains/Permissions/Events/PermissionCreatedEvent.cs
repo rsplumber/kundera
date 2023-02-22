@@ -1,8 +1,6 @@
-﻿using Core.Domains.Permissions.Types;
+﻿namespace Core.Domains.Permissions.Events;
 
-namespace Core.Domains.Permissions.Events;
-
-public sealed record PermissionCreatedEvent(PermissionId Id) : DomainEvent
+public sealed record PermissionCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "permission_created";
+    public override string Name => "kundera_permission_created";
 }

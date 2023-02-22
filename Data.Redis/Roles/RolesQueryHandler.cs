@@ -1,5 +1,5 @@
-﻿using Application.Roles;
-using Mediator;
+﻿using Mediator;
+using Queries.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
 

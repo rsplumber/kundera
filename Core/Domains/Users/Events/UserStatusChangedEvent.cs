@@ -1,8 +1,6 @@
-﻿using Core.Domains.Users.Types;
+﻿namespace Core.Domains.Users.Events;
 
-namespace Core.Domains.Users.Events;
-
-public sealed record UserStatusChangedEvent(UserId UserId, UserStatus UserStatus) : DomainEvent
+public sealed record UserStatusChangedEvent(Guid UserId, UserStatus UserStatus) : DomainEvent
 {
-    public override string Name => "user_status";
+    public override string Name => "kundera_user_status";
 }

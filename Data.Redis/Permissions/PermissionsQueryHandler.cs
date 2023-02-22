@@ -1,5 +1,5 @@
-﻿using Application.Permissions;
-using Mediator;
+﻿using Mediator;
+using Queries.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 

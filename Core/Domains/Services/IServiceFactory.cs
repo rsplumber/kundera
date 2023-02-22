@@ -1,17 +1,16 @@
 ﻿using Core.Domains.Services.Exceptions;
-using Core.Domains.Services.Types;
 using Core.Hashing;
 
 namespace Core.Domains.Services;
 
 public interface IServiceFactory
 {
-    Task<Service> CreateAsync(Name name);
+    Task<Service> CreateAsync(string name);
 
-    Task<Service> CreateKunderaServiceAsync(ServiceSecret serviceSecret);
+    Task<Service> CreateKunderaServiceAsync(string serviceSecret);
 }
 
-internal sealed class ServiceFactory : IServiceFactory
+public sealed class ServiceFactory : IServiceFactory
 {
     private readonly IServiceRepository _serviceRepository;
     private readonly IHashService _hashService;
@@ -22,9 +21,9 @@ internal sealed class ServiceFactory : IServiceFactory
         _hashService = hashService;
     }
 
-    public async Task<Service> CreateAsync(Name name)
+    public async Task<Service> CreateAsync(string name)
     {
-        var currentService = await _serviceRepository.FindAsync(name);
+        var currentService = await _serviceRepository.FindByNameAsync(name);
         if (currentService is not null)
         {
             throw new ServiceAlreadyExistsException(name);
@@ -35,9 +34,9 @@ internal sealed class ServiceFactory : IServiceFactory
         return service;
     }
 
-    public async Task<Service> CreateKunderaServiceAsync(ServiceSecret serviceSecret)
+    public async Task<Service> CreateKunderaServiceAsync(string serviceSecret)
     {
-        var kunderaService = await _serviceRepository.FindAsync(EntityBaseValues.KunderaServiceName);
+        var kunderaService = await _serviceRepository.FindBySecretAsync(EntityBaseValues.KunderaServiceName);
         if (kunderaService is not null)
         {
             throw new ServiceAlreadyExistsException(EntityBaseValues.KunderaServiceName);

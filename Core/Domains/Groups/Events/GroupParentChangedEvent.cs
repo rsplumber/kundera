@@ -1,8 +1,6 @@
-﻿using Core.Domains.Groups.Types;
+﻿namespace Core.Domains.Groups.Events;
 
-namespace Core.Domains.Groups.Events;
-
-public record GroupParentChangedEvent(GroupId GroupId, GroupId? Parent, GroupId? PreviousParent) : DomainEvent
+public record GroupParentChangedEvent(Guid GroupId, Guid? ParentId, Guid? PreviousParentId) : DomainEvent
 {
-    public override string Name => "group_parent_changed";
+    public override string Name => "kundera_group_parent_changed";
 }

@@ -3,7 +3,7 @@
 namespace Managements.Data.Scopes;
 
 [Document(IndexName = "scopes", StorageType = StorageType.Json, Prefixes = new[] { "scope" })]
-public class ScopeDataModel
+internal sealed class ScopeDataModel
 {
     [RedisIdField] [Indexed] public Guid Id { get; set; } = default!;
 

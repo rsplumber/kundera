@@ -19,5 +19,5 @@ internal sealed class UserDataModel
 
     public string? StatusChangeReason { get; set; }
 
-    public DateTime StatusChangeDate { get; set; } = default!;
+    public DateTime StatusChangeDateUtc { get; set; } = default!;
 }

@@ -1,19 +1,17 @@
 ﻿using Core.Domains.Groups.Exception;
-using Core.Domains.Groups.Types;
 using Core.Domains.Roles;
 using Core.Domains.Roles.Exceptions;
-using Core.Domains.Roles.Types;
 
 namespace Core.Domains.Groups;
 
 public interface IGroupFactory
 {
-    Task<Group> CreateAsync(Name name, RoleId role, GroupId? parent = null);
+    Task<Group> CreateAsync(string name, Guid roleId, Guid? parentId = null);
 
     Task<Group> CreateAdministratorAsync();
 }
 
-internal sealed class GroupFactory : IGroupFactory
+public sealed class GroupFactory : IGroupFactory
 {
     private readonly IGroupRepository _groupRepository;
     private readonly IRoleRepository _roleRepository;
@@ -25,9 +23,9 @@ internal sealed class GroupFactory : IGroupFactory
         _roleRepository = roleRepository;
     }
 
-    public async Task<Group> CreateAsync(Name name, RoleId roleId, GroupId? parent = null)
+    public async Task<Group> CreateAsync(string name, Guid roleId, Guid? parent = null)
     {
-        var existsGroup = await _groupRepository.FindAsync(name);
+        var existsGroup = await _groupRepository.FindByNameAsync(name);
         if (existsGroup is not null)
         {
             throw new GroupNameDuplicateException();
@@ -42,11 +40,11 @@ internal sealed class GroupFactory : IGroupFactory
         Group? selectedParent;
         if (parent is null)
         {
-            selectedParent = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+            selectedParent = await _groupRepository.FindByNameAsync(EntityBaseValues.AdministratorGroup);
         }
         else
         {
-            selectedParent = await _groupRepository.FindAsync(parent);
+            selectedParent = await _groupRepository.FindAsync(parent.Value);
         }
 
         if (selectedParent is null)
@@ -66,13 +64,13 @@ internal sealed class GroupFactory : IGroupFactory
 
     public async Task<Group> CreateAdministratorAsync()
     {
-        var existsGroup = await _groupRepository.FindAsync(EntityBaseValues.AdministratorGroup);
+        var existsGroup = await _groupRepository.FindByNameAsync(EntityBaseValues.AdministratorGroup);
         if (existsGroup is not null)
         {
             throw new GroupNameDuplicateException();
         }
 
-        var role = await _roleRepository.FindAsync(EntityBaseValues.SuperAdminRole);
+        var role = await _roleRepository.FindByNameAsync(EntityBaseValues.SuperAdminRole);
         if (role is null)
         {
             throw new RoleNotFoundException();

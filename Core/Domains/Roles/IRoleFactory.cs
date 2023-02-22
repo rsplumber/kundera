@@ -4,10 +4,10 @@ namespace Core.Domains.Roles;
 
 public interface IRoleFactory
 {
-    Task<Role> CreateAsync(Name name, IDictionary<string, string>? meta = null);
+    Task<Role> CreateAsync(string name, IDictionary<string, string>? meta = null);
 }
 
-internal sealed class RoleFactory : IRoleFactory
+public sealed class RoleFactory : IRoleFactory
 {
     private readonly IRoleRepository _roleRepository;
 
@@ -17,9 +17,9 @@ internal sealed class RoleFactory : IRoleFactory
         _roleRepository = roleRepository;
     }
 
-    public async Task<Role> CreateAsync(Name name, IDictionary<string, string>? meta = null)
+    public async Task<Role> CreateAsync(string name, IDictionary<string, string>? meta = null)
     {
-        var currentRole = await _roleRepository.FindAsync(name);
+        var currentRole = await _roleRepository.FindByNameAsync(name);
         if (currentRole is not null)
         {
             throw new RoleAlreadyExistsException(name);

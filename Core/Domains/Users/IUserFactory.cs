@@ -1,16 +1,15 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Exception;
-using Core.Domains.Groups.Types;
 using Core.Domains.Users.Exception;
 
 namespace Core.Domains.Users;
 
 public interface IUserFactory
 {
-    Task<User> CreateAsync(Username username, GroupId groupId);
+    Task<User> CreateAsync(string username, Guid groupId);
 }
 
-internal sealed class UserFactory : IUserFactory
+public sealed class UserFactory : IUserFactory
 {
     private readonly IUserRepository _userRepository;
     private readonly IGroupRepository _groupRepository;
@@ -21,9 +20,9 @@ internal sealed class UserFactory : IUserFactory
         _groupRepository = groupRepository;
     }
 
-    public async Task<User> CreateAsync(Username username, GroupId groupId)
+    public async Task<User> CreateAsync(string username, Guid groupId)
     {
-        var currentUser = await _userRepository.FindAsync(username);
+        var currentUser = await _userRepository.FindByUsernameAsync(username);
         if (currentUser is not null)
         {
             throw new UserDuplicateIdentifierException(username);

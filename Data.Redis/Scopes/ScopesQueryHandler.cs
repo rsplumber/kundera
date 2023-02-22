@@ -1,5 +1,5 @@
-﻿using Application.Scopes;
-using Mediator;
+﻿using Mediator;
+using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 

@@ -1,23 +1,20 @@
-﻿using Core.Domains.Auth.Credentials;
-using Core.Domains.Users.Types;
-
-namespace Core.Domains.Auth.Sessions;
+﻿namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionRepository
 {
     Task AddAsync(Session entity, CancellationToken cancellationToken = default);
 
-    Task<Session?> FindAsync(Token id, CancellationToken cancellationToken = default);
+    Task<Session?> FindAsync(string token, CancellationToken cancellationToken = default);
 
-    Task<Session?> FindAsync(CredentialId credentialId, CancellationToken cancellationToken = default);
+    Task<Session?> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(Session entity, CancellationToken cancellationToken = default);
 
-    Task DeleteAsync(Token id, CancellationToken cancellationToken = default);
+    Task DeleteAsync(string token, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Session>> FindAsync(UserId userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Session>> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 
     Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
 }

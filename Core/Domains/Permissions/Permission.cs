@@ -1,15 +1,14 @@
 ﻿using Core.Domains.Permissions.Events;
-using Core.Domains.Permissions.Types;
 
 namespace Core.Domains.Permissions;
 
-public class Permission : AggregateRoot
+public class Permission : BaseEntity
 {
     protected Permission()
     {
     }
 
-    internal Permission(Name name, IDictionary<string, string>? meta = null)
+    internal Permission(string name, IDictionary<string, string>? meta = null)
     {
         Name = name;
         if (meta is not null)
@@ -23,11 +22,11 @@ public class Permission : AggregateRoot
         AddDomainEvent(new PermissionCreatedEvent(Id));
     }
 
-    public PermissionId Id { get; set; } = PermissionId.Generate();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public Name Name { get; internal set; } = default!;
+    public string Name { get; internal set; } = default!;
 
     public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();
 
-    public void ChangeName(Name name) => Name = name;
+    public void ChangeName(string name) => Name = name;
 }

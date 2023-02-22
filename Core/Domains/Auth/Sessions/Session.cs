@@ -1,59 +1,54 @@
 ﻿using System.Net;
-using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions.Events;
-using Core.Domains.Scopes.Types;
-using Core.Domains.Users.Types;
 
 namespace Core.Domains.Auth.Sessions;
 
-public class Session : Entity
+public class Session : BaseEntity
 {
     protected Session()
     {
     }
 
-    internal Session(Token token,
-        Token refreshToken,
-        CredentialId credentialId,
-        ScopeId scope,
-        UserId user,
-        DateTime expireDate,
-        IPAddress? lastIpAddress = null)
+    internal Session(string token,
+        string refreshToken,
+        Guid credentialId,
+        Guid scopeId,
+        Guid userId,
+        DateTime expireDate)
     {
         Id = token;
         RefreshToken = refreshToken;
-        Credential = credentialId;
-        Scope = scope;
-        User = user;
+        CredentialId = credentialId;
+        ScopeId = scopeId;
+        UserId = userId;
         ExpirationDateUtc = expireDate;
-        LastIpAddress = lastIpAddress ?? IPAddress.None;
         LastUsageDateUtc = DateTime.UtcNow;
         CreatedDateUtc = DateTime.UtcNow;
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
-    public Token Id { get; internal set; } = default!;
+    public string Id { get; internal set; } = default!;
 
-    public Token RefreshToken { get; internal set; } = default!;
+    public string RefreshToken { get; internal set; } = default!;
 
-    public CredentialId Credential { get; internal set; } = default!;
+    public Guid CredentialId { get; internal set; }
 
-    public ScopeId Scope { get; internal set; } = default!;
+    public Guid ScopeId { get; internal set; }
 
-    public UserId User { get; internal set; } = default!;
+    public Guid UserId { get; internal set; }
 
     public DateTime ExpirationDateUtc { get; internal set; }
 
     public DateTime LastUsageDateUtc { get; internal set; }
 
-    public IPAddress LastIpAddress { get; internal set; } = default!;
+    public string? LastIpAddress { get; internal set; }
 
     public DateTime CreatedDateUtc { get; internal set; }
 
 
     public void UpdateUsage(DateTime lastUsageDate, IPAddress? ipAddress)
     {
-        LastIpAddress = ipAddress ?? IPAddress.None;
+        LastIpAddress = ipAddress?.ToString();
         LastUsageDateUtc = lastUsageDate;
     }
 }

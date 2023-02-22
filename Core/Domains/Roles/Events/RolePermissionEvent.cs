@@ -1,14 +1,11 @@
-﻿using Core.Domains.Permissions.Types;
-using Core.Domains.Roles.Types;
+﻿namespace Core.Domains.Roles.Events;
 
-namespace Core.Domains.Roles.Events;
-
-public sealed record RolePermissionAddedEvent(RoleId Id, PermissionId Permission) : DomainEvent
+public sealed record RolePermissionAddedEvent(Guid Id, Guid Permission) : DomainEvent
 {
-    public override string Name => "role_permission_added";
+    public override string Name => "kundera_role_permission_added";
 }
 
-public sealed record RolePermissionRemovedEvent(RoleId Id, PermissionId Permission) : DomainEvent
+public sealed record RolePermissionRemovedEvent(Guid Id, Guid Permission) : DomainEvent
 {
-    public override string Name => "role_permission_removed";
+    public override string Name => "kundera_role_permission_removed";
 }

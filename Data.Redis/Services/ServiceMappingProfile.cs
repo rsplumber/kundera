@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains;
 using Core.Domains.Services;
 
 namespace Managements.Data.Services;
@@ -7,8 +8,12 @@ public class ServiceMappingProfile : Profile
 {
     public ServiceMappingProfile()
     {
-        DisableConstructorMapping();
+        CreateMap<string, ServiceStatus>()
+            .ConvertUsing(s => Enumeration.GetAll<ServiceStatus>().First(status => status.Name == s));
 
+        CreateMap<ServiceStatus, string>()
+            .ConvertUsing(s => s.Name);
+        DisableConstructorMapping();
         CreateMap<ServiceDataModel, Service>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()

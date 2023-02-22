@@ -1,8 +1,6 @@
-﻿using Core.Domains.Scopes.Types;
+﻿namespace Core.Domains.Scopes.Events;
 
-namespace Core.Domains.Scopes.Events;
-
-public sealed record ScopeCreatedEvent(ScopeId Id) : DomainEvent
+public sealed record ScopeCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "scope_created";
+    public override string Name => "kundera_scope_created";
 }

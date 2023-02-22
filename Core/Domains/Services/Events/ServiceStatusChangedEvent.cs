@@ -1,8 +1,6 @@
-﻿using Core.Domains.Services.Types;
+﻿namespace Core.Domains.Services.Events;
 
-namespace Core.Domains.Services.Events;
-
-public sealed record ServiceStatusChangedEvent(ServiceId Id) : DomainEvent
+public sealed record ServiceStatusChangedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "service_status_changed";
+    public override string Name => "kundera_service_status_changed";
 }

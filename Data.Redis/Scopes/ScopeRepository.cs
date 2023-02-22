@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Scopes;
-using Core.Domains.Scopes.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -29,21 +27,21 @@ internal class ScopeRepository : IScopeRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Scope?> FindAsync(ScopeId id, CancellationToken cancellationToken = default)
+    public async Task<Scope?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _scopes.FindByIdAsync(id.ToString());
         return _mapper.Map<Scope>(dataModel);
     }
 
-    public async Task<Scope?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    public async Task<Scope?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Name == name.Value);
+        var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Name == name);
         return _mapper.Map<Scope>(dataModel);
     }
 
-    public async Task<Scope?> FindAsync(ScopeSecret secret, CancellationToken cancellationToken = default)
+    public async Task<Scope?> FindBySecretAsync(string secret, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Secret == secret.Value);
+        var dataModel = await _scopes.FirstOrDefaultAsync(model => model.Secret == secret);
         return _mapper.Map<Scope>(dataModel);
     }
 
@@ -54,7 +52,7 @@ internal class ScopeRepository : IScopeRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public Task DeleteAsync(ScopeId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

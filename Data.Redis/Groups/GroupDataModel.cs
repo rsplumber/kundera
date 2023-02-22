@@ -19,7 +19,7 @@ internal sealed class GroupDataModel
 
     [Indexed] public List<Guid>? Children { get; set; }
 
-    public DateTime StatusChangeDate { get; set; } = default!;
-
     [Indexed] public List<Guid> Roles { get; set; } = default!;
+
+    public DateTime StatusChangeDateUtc { get; set; } = default!;
 }

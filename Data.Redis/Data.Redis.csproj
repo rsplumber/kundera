@@ -18,10 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Application\Application.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <InternalsVisibleTo Include="Builder" />
+      <ProjectReference Include="..\Queries\Queries.csproj" />
     </ItemGroup>
 
 </Project>

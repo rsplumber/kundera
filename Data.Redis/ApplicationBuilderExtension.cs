@@ -12,7 +12,7 @@ using Redis.OM;
 
 namespace Managements.Data;
 
-internal static class ApplicationBuilderExtension
+public static class ApplicationBuilderExtension
 {
     public static void UseData(this IApplicationBuilder app)
     {

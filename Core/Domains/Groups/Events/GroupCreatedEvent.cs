@@ -1,8 +1,6 @@
-﻿using Core.Domains.Groups.Types;
+﻿namespace Core.Domains.Groups.Events;
 
-namespace Core.Domains.Groups.Events;
-
-public sealed record GroupCreatedEvent(GroupId GroupId) : DomainEvent
+public sealed record GroupCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "group_created";
+    public override string Name => "kundera_group_created";
 }

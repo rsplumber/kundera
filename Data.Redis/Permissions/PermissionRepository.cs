@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Permissions;
-using Core.Domains.Permissions.Types;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -28,7 +26,7 @@ internal class PermissionRepository : IPermissionRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public async Task<Permission?> FindAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public async Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _permissions.FindByIdAsync(id.ToString());
         return _mapper.Map<Permission>(dataModel);
@@ -40,9 +38,9 @@ internal class PermissionRepository : IPermissionRepository
         return _mapper.Map<List<Permission>>(dataModels);
     }
 
-    public async Task<Permission?> FindAsync(Name name, CancellationToken cancellationToken = default)
+    public async Task<Permission?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _permissions.FirstOrDefaultAsync(model => model.Name == name.Value);
+        var dataModel = await _permissions.FirstOrDefaultAsync(model => model.Name == name);
         return _mapper.Map<Permission>(dataModel);
     }
 
@@ -53,7 +51,7 @@ internal class PermissionRepository : IPermissionRepository
         await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
-    public Task DeleteAsync(PermissionId id, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

@@ -1,24 +1,23 @@
 ﻿using Core.Domains.Services.Events;
-using Core.Domains.Services.Types;
 using Core.Hashing;
 
 namespace Core.Domains.Services;
 
-public class Service : AggregateRoot
+public class Service : BaseEntity
 {
     protected Service()
     {
     }
 
-    internal Service(Name name, IHashService hashService)
+    internal Service(string name, IHashService hashService)
     {
         Name = name;
-        Secret = ServiceSecret.From(hashService.Hash(Id.ToString(), Name.Value));
+        Secret = hashService.Hash(Id.ToString(), Name);
         ChangeStatus(ServiceStatus.Active);
         AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
-    internal Service(Name name, ServiceSecret serviceSecret)
+    internal Service(string name, string serviceSecret)
     {
         Name = name;
         Secret = serviceSecret;
@@ -26,15 +25,15 @@ public class Service : AggregateRoot
         AddDomainEvent(new ServiceCreatedEvent(Id));
     }
 
-    public ServiceId Id { get; set; } = ServiceId.Generate();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public Name Name { get; internal set; } = default!;
+    public string Name { get; internal set; } = default!;
 
-    public ServiceSecret Secret { get; internal set; } = default!;
+    public string Secret { get; internal set; } = default!;
 
     public ServiceStatus Status { get; internal set; } = default!;
 
-    public void ChangeName(Name name) => Name = name;
+    public void ChangeName(string name) => Name = name;
 
     public void Activate() => ChangeStatus(ServiceStatus.Active);
 

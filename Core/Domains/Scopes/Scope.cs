@@ -1,26 +1,23 @@
-﻿using Core.Domains.Roles.Types;
-using Core.Domains.Scopes.Events;
-using Core.Domains.Scopes.Types;
-using Core.Domains.Services.Types;
+﻿using Core.Domains.Scopes.Events;
 using Core.Hashing;
 
 namespace Core.Domains.Scopes;
 
-public class Scope : AggregateRoot
+public class Scope : BaseEntity
 {
     protected Scope()
     {
     }
 
-    internal Scope(Name name, IHashService hashService)
+    internal Scope(string name, IHashService hashService)
     {
         Name = name;
-        Secret = ScopeSecret.From(hashService.Hash(Id.ToString(), Name.Value));
+        Secret = hashService.Hash(Id.ToString(), Name);
         ChangeStatus(ScopeStatus.Active);
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    internal Scope(Name name, ScopeSecret scopeSecret)
+    internal Scope(string name, string scopeSecret)
     {
         Name = name;
         Secret = scopeSecret;
@@ -28,19 +25,19 @@ public class Scope : AggregateRoot
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    public ScopeId Id { get; internal set; } = ScopeId.Generate();
+    public Guid Id { get; internal set; } = Guid.NewGuid();
 
-    public Name Name { get; internal set; } = default!;
+    public string Name { get; internal set; } = default!;
 
-    public ScopeSecret Secret { get; internal set; } = default!;
+    public string Secret { get; internal set; } = default!;
 
     public ScopeStatus Status { get; internal set; } = default!;
 
-    public IReadOnlyCollection<ServiceId> Services { get; internal set; } = new List<ServiceId>();
+    public HashSet<Guid> Services { get; internal set; } = new();
 
-    public IReadOnlyCollection<RoleId> Roles { get; internal set; } = new List<RoleId>();
+    public HashSet<Guid> Roles { get; internal set; } = new();
 
-    public void ChangeName(Name name) => Name = name;
+    public void ChangeName(string name) => Name = name;
 
     public void Activate() => ChangeStatus(ScopeStatus.Active);
 
@@ -52,53 +49,41 @@ public class Scope : AggregateRoot
         AddDomainEvent(new ScopeStatusChangedEvent(Id));
     }
 
-    public void AddService(ServiceId service)
+    public void AddService(Guid service)
     {
-        if (Has(service)) return;
-
-        var modifiableServices = Services.ToList();
-        modifiableServices.Add(service);
-        Services = modifiableServices;
+        if (HasService(service)) return;
+        Services.Add(service);
         AddDomainEvent(new ScopeServiceAddedEvent(Id, service));
     }
 
-    public void RemoveService(ServiceId service)
+    public void RemoveService(Guid service)
     {
-        if (!Has(service)) return;
-
-        var modifiableServices = Services.ToList();
-        modifiableServices.Remove(service);
-        Services = modifiableServices;
+        if (!HasService(service)) return;
+        Services.Remove(service);
         AddDomainEvent(new ScopeServiceRemovedEvent(Id, service));
     }
 
-    public bool Has(ServiceId service)
+    public bool HasService(Guid service)
     {
         return Services.Any(id => id == service);
     }
 
 
-    public void AddRole(RoleId role)
+    public void AddRole(Guid role)
     {
-        if (Has(role)) return;
-
-        var modifiableRoles = Roles.ToList();
-        modifiableRoles.Add(role);
-        Roles = modifiableRoles;
+        if (HasRole(role)) return;
+        Roles.Add(role);
         AddDomainEvent(new ScopeRoleAddedEvent(Id, role));
     }
 
-    public void RemoveRole(RoleId role)
+    public void RemoveRole(Guid role)
     {
-        if (!Has(role)) return;
-
-        var modifiableRoles = Roles.ToList();
-        modifiableRoles.Remove(role);
-        Roles = modifiableRoles;
+        if (!HasRole(role)) return;
+        Roles.Remove(role);
         AddDomainEvent(new ScopeRoleRemovedEvent(Id, role));
     }
 
-    public bool Has(RoleId role)
+    public bool HasRole(Guid role)
     {
         return Roles.Any(id => id == role);
     }

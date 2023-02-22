@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains;
 using Core.Domains.Scopes;
 
 namespace Managements.Data.Scopes;
@@ -7,8 +8,12 @@ public class ScopeMappingProfile : Profile
 {
     public ScopeMappingProfile()
     {
-        DisableConstructorMapping();
+        CreateMap<string, ScopeStatus>()
+            .ConvertUsing(s => Enumeration.GetAll<ScopeStatus>().First(status => status.Name == s));
 
+        CreateMap<ScopeStatus, string>()
+            .ConvertUsing(s => s.Name);
+        DisableConstructorMapping();
         CreateMap<ScopeDataModel, Scope>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
             .IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
