@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Mediator.Abstractions" Version="2.1.0-preview.5" />
+        <PackageReference Include="Mediator.Abstractions" Version="2.1.0-preview.11" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup>
