@@ -6,7 +6,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
 
-internal sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUsernameQuery, Guid>
+public sealed class ExistUserUsernameQueryHandler : IQueryHandler<ExistUserUsernameQuery, Guid>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 

@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
-internal sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesResponse>>
+public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesResponse>>
 {
     private IRedisCollection<ScopeDataModel> _scopes;
 

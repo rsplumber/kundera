@@ -6,7 +6,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
 
-internal sealed class UserSessionsQueryHandler : IQueryHandler<UserSessionsQuery, List<UserSessionResponse>>
+public sealed class UserSessionsQueryHandler : IQueryHandler<UserSessionsQuery, List<UserSessionResponse>>
 {
     private readonly IRedisCollection<SessionDataModel> _sessions;
 

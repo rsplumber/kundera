@@ -7,7 +7,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Roles;
 
-internal sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermissionsQuery, List<RolePermissionsResponse>>
+public sealed class RolePermissionsQueryHandler : IQueryHandler<RolePermissionsQuery, List<RolePermissionsResponse>>
 {
     private readonly IRedisCollection<RoleDataModel> _roles;
     private readonly IRedisCollection<PermissionDataModel> _permissions;

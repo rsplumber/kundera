@@ -6,7 +6,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
-internal sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery, List<ScopeSessionResponse>>
+public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery, List<ScopeSessionResponse>>
 {
     private readonly IRedisCollection<SessionDataModel> _sessions;
 

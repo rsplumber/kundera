@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Users;
 
-internal sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
+public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
 {
     private readonly IRedisCollection<UserDataModel> _users;
 

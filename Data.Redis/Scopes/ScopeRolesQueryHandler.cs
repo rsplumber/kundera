@@ -7,7 +7,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Scopes;
 
-internal sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, List<ScopeRolesResponse>>
+public sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, List<ScopeRolesResponse>>
 {
     private readonly IRedisCollection<ScopeDataModel> _scopes;
     private readonly IRedisCollection<RoleDataModel> _roles;

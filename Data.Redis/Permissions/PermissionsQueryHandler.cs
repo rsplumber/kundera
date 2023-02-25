@@ -5,7 +5,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Permissions;
 
-internal sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, List<PermissionsResponse>>
+public sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, List<PermissionsResponse>>
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 

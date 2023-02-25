@@ -1,7 +1,6 @@
 ﻿using Core.Domains.Auth.Authorizations;
 using FastEndpoints;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Endpoints.V1.Auth.Authorizations.Permission;
 
@@ -39,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
         Summary = "Permission Authorize";
         Description = "Authorize a permission by Token";
         Response<Guid>(200, "Authorized successfully");
-        Response<ForbidResult>(401, "UnAuthorized");
+        Response(401, "UnAuthorized");
     }
 }
 
@@ -49,7 +48,7 @@ internal sealed record Request
 
     public string[] Actions { get; init; } = default!;
 
-    public string ServiceSecret { get; init; } = default!;
+    [FromHeader("service_secret")] public string ServiceSecret { get; init; } = default!;
 }
 
 internal sealed class RequestValidator : Validator<Request>

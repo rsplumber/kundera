@@ -52,7 +52,7 @@ internal sealed record Request
 
     public string Password { get; set; } = default!;
 
-    [FromHeader] public string ScopeSecret { get; set; } = default!;
+    [FromHeader("scope_secret")] public string ScopeSecret { get; set; } = default!;
 }
 
 internal sealed class RequestValidator : Validator<Request>

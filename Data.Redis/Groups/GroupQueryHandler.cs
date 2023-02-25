@@ -7,7 +7,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Groups;
 
-internal sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
+public sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
 {
     private readonly IRedisCollection<GroupDataModel> _groups;
     private readonly IRedisCollection<RoleDataModel> _roles;

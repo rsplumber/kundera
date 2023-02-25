@@ -4,7 +4,7 @@ using Core.Domains.Users;
 
 namespace Managements.Data.Users;
 
-internal sealed class UserMappingProfile : Profile
+public sealed class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {

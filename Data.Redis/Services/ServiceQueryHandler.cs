@@ -6,7 +6,7 @@ using Redis.OM.Searching;
 
 namespace Managements.Data.Services;
 
-internal sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceResponse>
+public sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceResponse>
 {
     private readonly IRedisCollection<ServiceDataModel> _services;
 
