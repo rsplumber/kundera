@@ -7,11 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="DotNetCore.CAP.Dashboard" Version="7.0.3" />
         <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.19.0" />
         <PackageReference Include="FastEndpoints" Version="5.7.2" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.7.2" />
-        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="0.1.1" />
         <PackageReference Include="Mediator.Abstractions" Version="2.1.0-preview.11" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -21,6 +24,7 @@
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="7.0.3" />
         <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="7.0.0" />
+        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.0.1" />
         <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

@@ -22,12 +22,12 @@ public static class ServiceCollectionExtension
                 .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
                 .WithDescription("RemoveExpiredCredentials")
             );
-            q.ScheduleJob<RemoveExpiredSessionsJob>(trigger => trigger
-                .WithIdentity("RemoveExpiredSessionsJob")
-                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-                .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
-                .WithDescription("RemoveExpiredSessionsJob")
-            );
+            // q.ScheduleJob<RemoveExpiredSessionsJob>(trigger => trigger
+            //     .WithIdentity("RemoveExpiredSessionsJob")
+            //     .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
+            //     .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
+            //     .WithDescription("RemoveExpiredSessionsJob")
+            // );
         });
         services.AddQuartzServer(options => { options.WaitForJobsToComplete = true; });
     }

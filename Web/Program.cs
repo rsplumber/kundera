@@ -14,6 +14,7 @@ using FastEndpoints.Swagger;
 using Jobs;
 using KunderaNet.FastEndpoints.Authorization;
 using Managements.Data;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savorboard.CAP.InMemoryMessageQueue;
 using Seeders;
@@ -21,7 +22,15 @@ using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
-builder.WebHost.UseUrls("http://+:5179");
+builder.WebHost.ConfigureKestrel((_, options) =>
+{
+    options.ListenAnyIP(5178, _ => { });
+    options.ListenAnyIP(5179, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+        listenOptions.UseHttps();
+    });
+});
 
 builder.Services.AddSingleton<ExceptionHandlerMiddleware>();
 

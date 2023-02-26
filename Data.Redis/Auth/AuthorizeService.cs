@@ -23,6 +23,10 @@ internal sealed class AuthorizeService : IAuthorizeService
 
     public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, CancellationToken cancellationToken = default)
     {
+ 
+ 
+
+
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
         {
