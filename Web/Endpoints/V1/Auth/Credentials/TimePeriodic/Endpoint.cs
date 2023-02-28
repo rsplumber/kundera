@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<Request>
     public override void Configure()
     {
         Post("users/{userId:guid}/credentials/time-periodic");
-        Permissions("credentials_create_time-periodic");
+        Permissions("kundera_credentials_create_time-periodic");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DisableGroupCommand>
     public override void Configure()
     {
         Post("groups/{groupId:guid}/disable");
-        Permissions("groups_disable");
+        Permissions("kundera_groups_disable");
         Version(1);
     }
 

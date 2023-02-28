@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<PermissionsQuery, List<PermissionsResp
     public override void Configure()
     {
         Get("permissions");
-        Permissions("permissions_list");
+        Permissions("kundera_permissions_list");
         Version(1);
     }
 

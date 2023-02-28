@@ -12,7 +12,5 @@ public interface ISessionManagement
 
     Task<Session?> GetAsync(string token, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default);
-
-    Task<IEnumerable<Session>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<Session?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken = default);
 }

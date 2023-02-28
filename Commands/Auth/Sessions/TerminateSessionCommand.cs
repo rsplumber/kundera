@@ -19,7 +19,7 @@ internal sealed class TerminateSessionCommandHandler : ICommandHandler<Terminate
 
     public async ValueTask<Unit> Handle(TerminateSessionCommand command, CancellationToken cancellationToken)
     {
-        var session = await _sessionManagement.GetAsync(command.Id, cancellationToken);
+        var session = await _sessionManagement.GetByRefreshTokenAsync(command.Id, cancellationToken);
         if (session is null)
         {
             throw new SessionNotFoundException();

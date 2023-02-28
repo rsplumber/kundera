@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveCredentialCommand>
     public override void Configure()
     {
         Delete("users/credentials/{id}");
-        Permissions("credentials_delete");
+        Permissions("kundera_credentials_delete");
         Version(1);
     }
 

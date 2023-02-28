@@ -21,15 +21,18 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
     private readonly ISessionManagement _sessionManagement;
     private readonly IScopeRepository _scopeRepository;
     private readonly ICredentialRepository _credentialRepository;
+    private readonly ISessionRepository _sessionRepository;
 
 
     public AuthenticateCommandHandler(ISessionManagement sessionManagement,
         IScopeRepository scopeRepository,
-        ICredentialRepository credentialRepository)
+        ICredentialRepository credentialRepository,
+        ISessionRepository sessionRepository)
     {
         _sessionManagement = sessionManagement;
         _scopeRepository = scopeRepository;
         _credentialRepository = credentialRepository;
+        _sessionRepository = sessionRepository;
     }
 
     public async ValueTask<Certificate> Handle(AuthenticateCommand command, CancellationToken cancellationToken)
@@ -56,6 +59,15 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
         if (!credential.Password.Check(command.Password))
         {
             throw new WrongUsernamePasswordException();
+        }
+
+        if (credential.SingleSession)
+        {
+            var currentCredentialSessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
+            foreach (var currentCredentialSession in currentCredentialSessions)
+            {
+                await _sessionRepository.DeleteAsync(currentCredentialSession.Id, cancellationToken);
+            }
         }
 
         return await _sessionManagement.SaveAsync(credential, scope, cancellationToken);

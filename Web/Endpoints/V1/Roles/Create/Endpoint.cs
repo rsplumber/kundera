@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<CreateRoleCommand>
     public override void Configure()
     {
         Post("roles");
-        Permissions("roles_create");
+        Permissions("kundera_roles_create");
         Version(1);
     }
 

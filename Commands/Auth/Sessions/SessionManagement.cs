@@ -39,15 +39,6 @@ internal sealed class SessionManagement : ISessionManagement
             expiresAt = DateTime.UtcNow.AddMinutes(credential.SessionExpireTimeInMinutes.Value);
         }
 
-        if (credential.SingleSession)
-        {
-            var currentSession = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
-            if (currentSession is not null)
-            {
-                await _sessionRepository.DeleteAsync(currentSession.Id, cancellationToken);
-            }
-        }
-
         await _sessionFactory.CreateAsync(
             certificate.Token,
             certificate.RefreshToken,
@@ -69,13 +60,8 @@ internal sealed class SessionManagement : ISessionManagement
         return await _sessionRepository.FindAsync(token, cancellationToken);
     }
 
-    public async Task<IEnumerable<Session>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<Session?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        return await _sessionRepository.FindAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<Session>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        return await _sessionRepository.FindByUserIdAsync(userId, cancellationToken);
+        return await _sessionRepository.FindByRefreshTokenAsync(token, cancellationToken);
     }
 }

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RevokeGroupRoleCommand>
     public override void Configure()
     {
         Delete("groups/{groupId:guid}/roles");
-        Permissions("groups_revoke_role");
+        Permissions("kundera_groups_revoke_role");
         Version(1);
     }
 

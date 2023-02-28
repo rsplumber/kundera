@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<JoinUserToGroupCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/groups");
-        Permissions("user_join_group");
+        Permissions("kundera_users_join_group");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RolesQuery, List<RolesResponse>>
     public override void Configure()
     {
         Get("roles");
-        Permissions("roles_list");
+        Permissions("kundera_roles_list");
         Version(1);
     }
 

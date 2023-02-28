@@ -16,7 +16,7 @@ internal sealed class Endpoint : EndpointWithoutRequest<List<GroupsResponse>>
     public override void Configure()
     {
         Get("groups");
-        Permissions("groups_list");
+        Permissions("kundera_groups_list");
         Version(1);
     }
 

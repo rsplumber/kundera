@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeleteScopeCommand>
     public override void Configure()
     {
         Delete("scopes/{scopeId:guid}");
-        Permissions("scopes_delete");
+        Permissions("kundera_scopes_delete");
         Version(1);
     }
 

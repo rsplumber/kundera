@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<ExistUserUsernameQuery, Guid>
     public override void Configure()
     {
         Get("users/{username}/exists");
-        Permissions("user_exist_username");
+        Permissions("kundera_users_exist_username");
         Version(1);
     }
 

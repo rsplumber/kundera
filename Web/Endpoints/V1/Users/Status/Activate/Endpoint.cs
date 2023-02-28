@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ActiveUserCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/activate");
-        Permissions("user_activate");
+        Permissions("kundera_users_activate");
         Version(1);
     }
 

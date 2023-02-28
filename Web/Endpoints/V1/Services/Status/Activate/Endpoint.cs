@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ActivateServiceCommand>
     public override void Configure()
     {
         Post("services/{serviceId:guid}/activate");
-        Permissions("services_activate");
+        Permissions("kundera_services_activate");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class RoleEndpoint : Endpoint<AssignUserRoleCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/roles");
-        Permissions("user_assign_role");
+        Permissions("kundera_users_assign_role");
         Version(1);
     }
 

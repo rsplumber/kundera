@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<EnableGroupCommand>
     public override void Configure()
     {
         Post("groups/{groupId:guid}/enable");
-        Permissions("groups_enable");
+        Permissions("kundera_groups_enable");
         Version(1);
     }
 

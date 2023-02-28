@@ -21,7 +21,7 @@ public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery
 
         return sessions.Select(model => new ScopeSessionResponse
         {
-            Id = model.Id,
+            Id = model.RefreshToken,
             UserId = model.UserId,
             ScopeId = model.ScopeId,
             ExpirationDateUtc = model.ExpirationDateUtc,

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeleteServiceCommand>
     public override void Configure()
     {
         Delete("services/{serviceId:guid}");
-        Permissions("services_delete");
+        Permissions("kundera_services_delete");
         Version(1);
     }
 

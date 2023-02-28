@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<BlockUserCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/block");
-        Permissions("user_block");
+        Permissions("kundera_users_block");
         Version(1);
     }
 

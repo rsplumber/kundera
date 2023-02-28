@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ChangeRoleMetaCommand>
     public override void Configure()
     {
         Post("roles/{roleId:guid}/meta");
-        Permissions("roles_change_meta");
+        Permissions("kundera_roles_change_meta");
         Version(1);
     }
 

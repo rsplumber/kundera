@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ActivateScopeCommand>
     public override void Configure()
     {
         Post("scopes/{scopeId:guid}/active");
-        Permissions("scopes_activate");
+        Permissions("kundera_scopes_activate");
         Version(1);
     }
 

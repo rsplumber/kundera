@@ -32,17 +32,16 @@ internal sealed class SessionRepository : ISessionRepository
         return _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<Session?> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
+    public async Task<Session?> FindByRefreshTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        var dataModel = await _sessions.Where(model => model.CredentialId == credentialId).FirstOrDefaultAsync();
+        var dataModel = await _sessions.Where(model => model.RefreshToken == token).FirstOrDefaultAsync();
         return _mapper.Map<Session>(dataModel);
     }
 
-    public async Task UpdateAsync(Session session, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
     {
-        var dataModel = _mapper.Map<SessionDataModel>(session);
-        await _sessions.InsertAsync(dataModel);
-        await _eventBus.DispatchDomainEventsAsync(session);
+        var dataModels = await _sessions.Where(model => model.CredentialId == credentialId).ToListAsync();
+        return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 
     public async Task DeleteAsync(string token, CancellationToken cancellationToken = default)
@@ -50,18 +49,6 @@ internal sealed class SessionRepository : ISessionRepository
         var dataModel = await _sessions.FindByIdAsync(token);
         if (dataModel is null) return;
         await _sessions.DeleteAsync(dataModel);
-    }
-
-    public async Task<IEnumerable<Session>> FindAsync(CancellationToken cancellationToken = default)
-    {
-        var dataModels = await _sessions.ToListAsync();
-        return dataModels.Select(model => _mapper.Map<Session>(model));
-    }
-
-    public async Task<IEnumerable<Session>> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        var dataModels = await _sessions.Where(model => model.UserId == userId).ToListAsync();
-        return dataModels.Select(model => _mapper.Map<Session>(model));
     }
 
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)

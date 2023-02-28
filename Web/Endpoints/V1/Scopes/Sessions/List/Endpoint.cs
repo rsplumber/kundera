@@ -16,8 +16,8 @@ internal sealed class Endpoint : Endpoint<ScopeSessionsQuery, List<ScopeSessionR
 
     public override void Configure()
     {
-        Delete("scopes/{scopeId:guid}/sessions");
-        AllowAnonymous();
+        Get("scopes/{scopeId:guid}/sessions");
+        Permissions("kundera_scopes_sessions_list");
         Version(1);
     }
 

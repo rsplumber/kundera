@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<Request>
     public override void Configure()
     {
         Post("users/{userId:guid}/credentials/one-time");
-        Permissions("credentials_create_onetime");
+        Permissions("kundera_credentials_create_onetime");
         Version(1);
     }
 

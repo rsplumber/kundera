@@ -16,8 +16,8 @@ internal sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionRes
 
     public override void Configure()
     {
-        Delete("users/{userId:guid}/sessions");
-        AllowAnonymous();
+        Get("users/{userId:guid}/sessions");
+        Permissions("kundera_users_sessions_list");
         Version(1);
     }
 

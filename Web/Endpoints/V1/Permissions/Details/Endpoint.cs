@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<PermissionQuery, PermissionResponse>
     public override void Configure()
     {
         Get("permissions/{permissionId:guid}");
-        Permissions("permissions_get");
+        Permissions("kundera_permissions_get");
         Version(1);
     }
 

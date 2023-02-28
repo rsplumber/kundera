@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveUserUsernameCommand>
     public override void Configure()
     {
         Delete("users/{userId:guid}/usernames");
-        Permissions("user_remove_username");
+        Permissions("kundera_users_remove_username");
         Version(1);
     }
 

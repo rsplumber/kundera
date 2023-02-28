@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveGroupParentCommand>
     public override void Configure()
     {
         Delete("groups/{groupId:guid}/parent");
-        Permissions("groups_remove_parent");
+        Permissions("kundera_groups_remove_parent");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<AddScopeServiceCommand>
     public override void Configure()
     {
         Post("scopes/{scopeId:guid}/services");
-        Permissions("scopes_add_service");
+        Permissions("kundera_scopes_add_service");
         Version(1);
     }
 
