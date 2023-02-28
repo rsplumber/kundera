@@ -21,12 +21,12 @@ internal sealed class AuthorizeService : IAuthorizeService
         _dbProvider = dbProvider;
     }
 
-    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizePermissionAsync(string token,
+        IEnumerable<string> actions,
+        string serviceSecret,
+        string userAgent,
+        CancellationToken cancellationToken = default)
     {
- 
- 
-
-
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
         if (session is null)
         {
@@ -89,10 +89,14 @@ internal sealed class AuthorizeService : IAuthorizeService
         bool InvalidPermission() => permissions.All(permission => actions.All(action => permission!.Name != action.ToLower()));
     }
 
-    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> requestRoles, string serviceSecret, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizeRoleAsync(string token,
+        IEnumerable<string> requestRoles,
+        string serviceSecret,
+        string userAgent,
+        CancellationToken cancellationToken = default)
     {
         var session = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(token);
-        if (session is null)
+        if (session is null || session.UserAgent != userAgent)
         {
             throw new ForbiddenException();
         }

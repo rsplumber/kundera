@@ -27,7 +27,8 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
         var command = new RefreshCertificateCommand
         {
             Token = req.Authorization,
-            RefreshToken = req.RefreshToken
+            RefreshToken = req.RefreshToken,
+            UserAgent = HttpContext.Request.UserAgent()
         };
         var response = await _mediator.Send(command, ct);
 

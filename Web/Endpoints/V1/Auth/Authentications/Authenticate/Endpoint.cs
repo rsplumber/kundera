@@ -28,7 +28,8 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
         {
             Username = req.Username,
             Password = req.Password,
-            ScopeSecret = req.ScopeSecret
+            ScopeSecret = req.ScopeSecret,
+            UserAgent = HttpContext.Request.UserAgent()
         };
         var response = await _mediator.Send(command, ct);
 

@@ -25,7 +25,7 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task<Certificate> SaveAsync(Credential credential, Scope scope, CancellationToken cancellationToken = default)
+    public async Task<Certificate> SaveAsync(Credential credential, Scope scope, string userAgent, CancellationToken cancellationToken = default)
     {
         var certificate = await _mediator.Send(new GenerateCertificateCommand
         {
@@ -33,11 +33,7 @@ internal sealed class SessionManagement : ISessionManagement
             ScopeId = scope.Id
         }, cancellationToken);
 
-        var expiresAt = DateTime.UtcNow.AddMinutes(_sessionOptions.ExpireInMinutes);
-        if (credential.SessionExpireTimeInMinutes is not null)
-        {
-            expiresAt = DateTime.UtcNow.AddMinutes(credential.SessionExpireTimeInMinutes.Value);
-        }
+        var expiresAt = DateTime.UtcNow.AddMinutes(credential.SessionExpireTimeInMinutes ?? _sessionOptions.ExpireInMinutes);
 
         await _sessionFactory.CreateAsync(
             certificate.Token,
@@ -45,7 +41,8 @@ internal sealed class SessionManagement : ISessionManagement
             credential.Id,
             scope.Id,
             credential.UserId,
-            expiresAt);
+            expiresAt,
+            userAgent);
 
         return certificate;
     }

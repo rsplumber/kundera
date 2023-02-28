@@ -14,6 +14,8 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
     public string Password { get; set; } = default!;
 
     public string ScopeSecret { get; init; } = default!;
+
+    public string UserAgent { get; init; } = default!;
 }
 
 internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateCommand, Certificate>
@@ -70,7 +72,7 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
             }
         }
 
-        return await _sessionManagement.SaveAsync(credential, scope, cancellationToken);
+        return await _sessionManagement.SaveAsync(credential, scope, command.UserAgent, cancellationToken);
 
         bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }

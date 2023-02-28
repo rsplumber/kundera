@@ -7,7 +7,8 @@ public interface ISessionFactory
         Guid credentialId,
         Guid scopeId,
         Guid userId,
-        DateTime expireDate);
+        DateTime expireDate,
+        string agent);
 }
 
 public sealed class SessionFactory : ISessionFactory
@@ -24,9 +25,13 @@ public sealed class SessionFactory : ISessionFactory
         Guid credentialId,
         Guid scopeId,
         Guid userId,
-        DateTime expireDate)
+        DateTime expireDate,
+        string agent)
     {
-        var session = new Session(token, refreshToken, credentialId, scopeId, userId, expireDate);
+        var session = new Session(token, refreshToken, credentialId, scopeId, userId, expireDate)
+        {
+            UserAgent = agent
+        };
         await _sessionRepository.AddAsync(session);
         return session;
     }

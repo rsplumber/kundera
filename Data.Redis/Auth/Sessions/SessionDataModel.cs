@@ -14,6 +14,8 @@ internal sealed class SessionDataModel
     [Indexed] public Guid UserId { get; set; } = default!;
 
     [Indexed] public Guid CredentialId { get; set; } = default!;
+    
+    [Indexed] public string UserAgent { get; set; } = default!;
 
     [Indexed(Sortable = true)] public DateTime ExpirationDateUtc { get; set; } = default!;
 

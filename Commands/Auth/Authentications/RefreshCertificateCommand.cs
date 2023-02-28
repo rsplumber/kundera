@@ -11,6 +11,8 @@ public sealed record RefreshCertificateCommand : ICommand<Certificate>
     public string Token { get; init; } = default!;
 
     public string RefreshToken { get; init; } = default!;
+
+    public string UserAgent { get; init; } = default!;
 }
 
 internal sealed class RefreshCertificateCommandHandler : ICommandHandler<RefreshCertificateCommand, Certificate>
@@ -36,6 +38,11 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
+        if (session.UserAgent != command.UserAgent)
+        {
+            throw new UnAuthorizedException();
+        }
+
         var credential = await _credentialRepository.FindAsync(session.CredentialId, cancellationToken);
         if (credential is null)
         {
@@ -48,7 +55,8 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
-        var certificate = await _sessionManagement.SaveAsync(credential, scope, cancellationToken);
+
+        var certificate = await _sessionManagement.SaveAsync(credential, scope, command.UserAgent, cancellationToken);
         await _sessionManagement.DeleteAsync(command.Token, cancellationToken);
 
         return certificate;

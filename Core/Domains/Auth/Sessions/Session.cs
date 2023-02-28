@@ -43,6 +43,8 @@ public class Session : BaseEntity
 
     public string? LastIpAddress { get; internal set; }
 
+    public string UserAgent { get; internal set; }
+
     public DateTime CreatedDateUtc { get; internal set; }
 
 

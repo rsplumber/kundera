@@ -6,7 +6,7 @@ namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionManagement
 {
-    Task<Certificate> SaveAsync(Credential credential, Scope scope, CancellationToken cancellationToken = default);
+    Task<Certificate> SaveAsync(Credential credential, Scope scope, string userAgent, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(string token, CancellationToken cancellationToken = default);
 

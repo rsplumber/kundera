@@ -25,6 +25,7 @@ internal sealed class Endpoint : Endpoint<Request, Guid>
         var userId = await _authorizeService.AuthorizePermissionAsync(req.Authorization,
             req.Actions,
             req.ServiceSecret,
+            HttpContext.Request.UserAgent(),
             ct);
 
         await SendOkAsync(userId, ct);

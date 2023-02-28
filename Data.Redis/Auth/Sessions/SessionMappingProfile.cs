@@ -20,6 +20,7 @@ internal sealed class SessionMappingProfile : Profile
             .ForMember(credential => credential.LastUsageDateUtc, expression => expression.MapFrom(model => model.LastUsageDateUtc.ToUniversalTime()))
             .ForMember(credential => credential.LastIpAddress, expression => expression.MapFrom(model => model.LastIpAddress))
             .ForMember(credential => credential.CredentialId, expression => expression.MapFrom(model => model.CredentialId))
+            .ForMember(credential => credential.UserAgent, expression => expression.MapFrom(model => model.UserAgent))
             .ReverseMap();
     }
 }
