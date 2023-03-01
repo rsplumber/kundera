@@ -10,4 +10,6 @@ public sealed class UserStatus : Enumeration
     private UserStatus(int id, string name) : base(id, name)
     {
     }
+    
+    
 }

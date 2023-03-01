@@ -1,4 +1,5 @@
-﻿using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Authorizations;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
@@ -26,5 +27,7 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IGroupFactory, GroupFactory>();
         services.TryAddScoped<ISessionFactory, SessionFactory>();
         services.TryAddScoped<ICredentialFactory, CredentialFactory>();
+        
+        services.TryAddScoped<IAuthorizeService,AuthorizeService>();
     }
 }
