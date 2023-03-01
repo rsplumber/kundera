@@ -10,7 +10,7 @@ public interface IScopeFactory
     Task<Scope> CreateIdentityScopeAsync(string scopeSecret);
 }
 
-public sealed class ScopeFactory : IScopeFactory
+internal sealed class ScopeFactory : IScopeFactory
 {
     private readonly IScopeRepository _scopeRepository;
     private readonly IHashService _hashService;

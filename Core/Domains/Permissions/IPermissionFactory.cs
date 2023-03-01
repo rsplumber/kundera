@@ -7,7 +7,7 @@ public interface IPermissionFactory
     Task<Permission> CreateAsync(string name, IDictionary<string, string>? meta = null);
 }
 
-public sealed class PermissionFactory : IPermissionFactory
+internal sealed class PermissionFactory : IPermissionFactory
 {
     private readonly IPermissionRepository _permissionRepository;
 

@@ -1,16 +1,16 @@
-using Managements.Data.Auth.Credentials;
-using Managements.Data.Auth.Sessions;
-using Managements.Data.Groups;
-using Managements.Data.Permissions;
-using Managements.Data.Roles;
-using Managements.Data.Scopes;
-using Managements.Data.Services;
-using Managements.Data.Users;
+using Data.Auth.Credentials;
+using Data.Auth.Sessions;
+using Data.Groups;
+using Data.Permissions;
+using Data.Roles;
+using Data.Scopes;
+using Data.Services;
+using Data.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.OM;
 
-namespace Managements.Data;
+namespace Data;
 
 public static class ApplicationBuilderExtension
 {

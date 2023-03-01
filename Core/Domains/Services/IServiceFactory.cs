@@ -10,7 +10,7 @@ public interface IServiceFactory
     Task<Service> CreateKunderaServiceAsync(string serviceSecret);
 }
 
-public sealed class ServiceFactory : IServiceFactory
+internal sealed class ServiceFactory : IServiceFactory
 {
     private readonly IServiceRepository _serviceRepository;
     private readonly IHashService _hashService;

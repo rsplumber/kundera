@@ -4,7 +4,7 @@ using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Auth.Credentials;
+namespace Data.Auth.Credentials;
 
 internal class CredentialRepository : ICredentialRepository
 {

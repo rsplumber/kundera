@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
 
 namespace Web.Endpoints.V1.Groups.Details;
 

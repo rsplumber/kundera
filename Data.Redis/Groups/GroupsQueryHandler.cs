@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Groups;
+﻿using Application.Groups;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Groups;
+namespace Data.Groups;
 
 public sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, List<GroupsResponse>>
 {

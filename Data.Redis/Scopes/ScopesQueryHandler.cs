@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Scopes;
+﻿using Application.Scopes;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesResponse>>
 {

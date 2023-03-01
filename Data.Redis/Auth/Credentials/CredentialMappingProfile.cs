@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Domains.Auth.Credentials;
 
-namespace Managements.Data.Auth.Credentials;
+namespace Data.Auth.Credentials;
 
 internal sealed class CredentialMappingProfile : Profile
 {

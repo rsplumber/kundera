@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Domains.Permissions;
 
-namespace Managements.Data.Permissions;
+namespace Data.Permissions;
 
 public class PermissionMappingProfile : Profile
 {

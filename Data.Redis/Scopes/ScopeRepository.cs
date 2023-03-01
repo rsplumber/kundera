@@ -4,7 +4,7 @@ using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Scopes;
+namespace Data.Scopes;
 
 internal class ScopeRepository : IScopeRepository
 {

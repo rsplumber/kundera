@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Permissions;
+namespace Data.Permissions;
 
 [Document(IndexName = "permissions", StorageType = StorageType.Json, Prefixes = new[] { "permission" })]
 internal sealed class PermissionDataModel

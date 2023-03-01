@@ -1,8 +1,7 @@
-using Commands.Groups;
+using Application.Groups;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
 
 namespace Web.Endpoints.V1.Groups.Create;
 

@@ -1,11 +1,11 @@
-﻿using Core.Domains.Groups.Exception;
-using Managements.Data.Roles;
+﻿using Application.Groups;
+using Core.Domains.Groups.Exception;
+using Data.Roles;
 using Mediator;
-using Queries.Groups;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Groups;
+namespace Data.Groups;
 
 public sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
 {

@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Users;
+﻿using Application.Users;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Users;
+namespace Data.Users;
 
 public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
 {

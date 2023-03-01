@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Domains.Roles;
 
-namespace Managements.Data.Roles;
+namespace Data.Roles;
 
 public class RoleMappingProfile : Profile
 {

@@ -1,8 +1,7 @@
-using Commands.Roles;
+using Application.Roles;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Roles;
 
 namespace Web.Endpoints.V1.Roles.Create;
 

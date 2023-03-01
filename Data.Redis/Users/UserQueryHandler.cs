@@ -1,10 +1,10 @@
-﻿using Core.Domains.Users.Exception;
+﻿using Application.Users;
+using Core.Domains.Users.Exception;
 using Mediator;
-using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Users;
+namespace Data.Users;
 
 public sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 {

@@ -11,7 +11,7 @@ public interface ISessionFactory
         string agent);
 }
 
-public sealed class SessionFactory : ISessionFactory
+internal sealed class SessionFactory : ISessionFactory
 {
     private readonly ISessionRepository _sessionRepository;
 

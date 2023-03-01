@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Roles;
+﻿using Application.Roles;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Roles;
+namespace Data.Roles;
 
 public sealed class RolesQueryHandler : IQueryHandler<RolesQuery, List<RolesResponse>>
 {

@@ -1,10 +1,10 @@
-﻿using Managements.Data.Auth.Sessions;
+﻿using Application.Scopes;
+using Data.Auth.Sessions;
 using Mediator;
-using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery, List<ScopeSessionResponse>>
 {

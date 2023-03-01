@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Users;
+namespace Data.Users;
 
 [Document(IndexName = "users", StorageType = StorageType.Json, Prefixes = new[] { "user" })]
 internal sealed class UserDataModel

@@ -11,7 +11,7 @@ public interface IGroupFactory
     Task<Group> CreateAdministratorAsync();
 }
 
-public sealed class GroupFactory : IGroupFactory
+internal sealed class GroupFactory : IGroupFactory
 {
     private readonly IGroupRepository _groupRepository;
     private readonly IRoleRepository _roleRepository;

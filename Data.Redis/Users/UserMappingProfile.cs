@@ -2,7 +2,7 @@
 using Core.Domains;
 using Core.Domains.Users;
 
-namespace Managements.Data.Users;
+namespace Data.Users;
 
 public sealed class UserMappingProfile : Profile
 {

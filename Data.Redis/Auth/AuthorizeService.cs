@@ -1,16 +1,16 @@
 ﻿using Core.Domains;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Users;
-using Managements.Data.Auth.Sessions;
-using Managements.Data.Groups;
-using Managements.Data.Permissions;
-using Managements.Data.Roles;
-using Managements.Data.Scopes;
-using Managements.Data.Services;
-using Managements.Data.Users;
+using Data.Auth.Sessions;
+using Data.Groups;
+using Data.Permissions;
+using Data.Roles;
+using Data.Scopes;
+using Data.Services;
+using Data.Users;
 using Redis.OM;
 
-namespace Managements.Data.Auth;
+namespace Data.Auth;
 
 internal sealed class AuthorizeService : IAuthorizeService
 {

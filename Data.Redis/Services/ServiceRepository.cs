@@ -4,7 +4,7 @@ using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Services;
+namespace Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {

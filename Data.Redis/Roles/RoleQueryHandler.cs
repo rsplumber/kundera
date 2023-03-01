@@ -1,10 +1,10 @@
-﻿using Core.Domains.Roles.Exceptions;
+﻿using Application.Roles;
+using Core.Domains.Roles.Exceptions;
 using Mediator;
-using Queries.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Roles;
+namespace Data.Roles;
 
 public sealed class RoleQueryHandler : IQueryHandler<RoleQuery, RoleResponse>
 {

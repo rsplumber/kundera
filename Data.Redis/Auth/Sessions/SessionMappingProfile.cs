@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Domains.Auth.Sessions;
 
-namespace Managements.Data.Auth.Sessions;
+namespace Data.Auth.Sessions;
 
 internal sealed class SessionMappingProfile : Profile
 {

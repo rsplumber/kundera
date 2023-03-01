@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using Application.Users;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
-using Queries.Users;
 
 namespace Web.Endpoints.V1.Users.Usernames.Exists;
 

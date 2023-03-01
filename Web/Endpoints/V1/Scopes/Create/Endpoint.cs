@@ -1,8 +1,7 @@
-using Commands.Scopes;
+using Application.Scopes;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Scopes;
 
 namespace Web.Endpoints.V1.Scopes.Create;
 

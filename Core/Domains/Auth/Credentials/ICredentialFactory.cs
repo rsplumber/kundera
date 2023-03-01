@@ -23,7 +23,7 @@ public interface ICredentialFactory
         bool? singleSession = false);
 }
 
-public sealed class CredentialFactory : ICredentialFactory
+internal sealed class CredentialFactory : ICredentialFactory
 {
     private readonly ICredentialRepository _credentialRepository;
     private readonly IUserRepository _userRepository;

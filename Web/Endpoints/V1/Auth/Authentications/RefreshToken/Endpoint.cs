@@ -1,4 +1,4 @@
-﻿using Commands.Auth.Authentications;
+﻿using Application.Auth.Authentications;
 using Core.Domains.Auth.Authorizations;
 using FastEndpoints;
 using FluentValidation;

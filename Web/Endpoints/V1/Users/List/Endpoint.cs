@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using Application.Users;
+using FastEndpoints;
 using Mediator;
-using Queries.Groups;
-using Queries.Users;
 
 namespace Web.Endpoints.V1.Users.List;
 

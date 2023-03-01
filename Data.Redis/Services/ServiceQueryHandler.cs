@@ -1,10 +1,10 @@
-﻿using Core.Domains.Services.Exceptions;
+﻿using Application.Services;
+using Core.Domains.Services.Exceptions;
 using Mediator;
-using Queries.Services;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Services;
+namespace Data.Services;
 
 public sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceResponse>
 {

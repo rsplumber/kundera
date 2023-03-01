@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Services;
+﻿using Application.Services;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Services;
+namespace Data.Services;
 
 public sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, List<ServicesResponse>>
 {

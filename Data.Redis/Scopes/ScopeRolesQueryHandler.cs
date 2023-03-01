@@ -1,11 +1,11 @@
-﻿using Core.Domains.Scopes.Exceptions;
-using Managements.Data.Roles;
+﻿using Application.Scopes;
+using Core.Domains.Scopes.Exceptions;
+using Data.Roles;
 using Mediator;
-using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, List<ScopeRolesResponse>>
 {

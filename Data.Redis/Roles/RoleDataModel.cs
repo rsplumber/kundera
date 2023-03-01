@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Roles;
+namespace Data.Roles;
 
 [Document(IndexName = "roles", StorageType = StorageType.Json, Prefixes = new[] { "role" })]
 internal sealed class RoleDataModel

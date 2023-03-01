@@ -1,4 +1,4 @@
-using Commands.Services;
+using Application.Services;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;

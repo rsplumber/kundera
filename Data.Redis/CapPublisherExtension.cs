@@ -1,8 +1,7 @@
 ﻿using Core.Domains;
 using DotNetCore.CAP;
-using Redis.OM.Searching;
 
-namespace Managements.Data;
+namespace Data;
 
 internal static class CapPublisherExtension
 {

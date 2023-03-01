@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Web;
 
-public class ExceptionHandlerMiddleware : IMiddleware
+public sealed class ExceptionHandlerMiddleware : IMiddleware
 {
     private const string InternalServerErrorMessage = "Whoops :( , somthing impossibly went wrong!";
 

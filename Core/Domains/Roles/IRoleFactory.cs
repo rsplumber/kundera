@@ -7,7 +7,7 @@ public interface IRoleFactory
     Task<Role> CreateAsync(string name, IDictionary<string, string>? meta = null);
 }
 
-public sealed class RoleFactory : IRoleFactory
+internal sealed class RoleFactory : IRoleFactory
 {
     private readonly IRoleRepository _roleRepository;
 

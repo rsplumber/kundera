@@ -1,6 +1,6 @@
 ﻿using Redis.OM.Modeling;
 
-namespace Managements.Data.Services;
+namespace Data.Services;
 
 [Document(IndexName = "services", StorageType = StorageType.Json, Prefixes = new[] { "service" })]
 internal sealed class ServiceDataModel

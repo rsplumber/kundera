@@ -1,4 +1,4 @@
-﻿using Commands.Auth.Credentials;
+﻿using Application.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;

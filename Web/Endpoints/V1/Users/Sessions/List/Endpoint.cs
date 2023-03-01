@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Application.Users;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Users;
 
 namespace Web.Endpoints.V1.Users.Sessions.List;
 

@@ -1,9 +1,9 @@
-﻿using Mediator;
-using Queries.Permissions;
+﻿using Application.Permissions;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Permissions;
+namespace Data.Permissions;
 
 public sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, List<PermissionsResponse>>
 {

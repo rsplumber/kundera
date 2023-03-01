@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using Application.Scopes;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
-using Queries.Scopes;
 
 namespace Web.Endpoints.V1.Scopes.Roles.List;
 

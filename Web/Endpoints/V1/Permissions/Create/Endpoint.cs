@@ -1,8 +1,7 @@
-using Commands.Permissions;
+using Application.Permissions;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Permissions;
 
 namespace Web.Endpoints.V1.Permissions.Create;
 

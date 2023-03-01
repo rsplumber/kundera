@@ -2,7 +2,7 @@
 using Core.Domains;
 using Core.Domains.Services;
 
-namespace Managements.Data.Services;
+namespace Data.Services;
 
 public class ServiceMappingProfile : Profile
 {

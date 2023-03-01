@@ -2,7 +2,7 @@
 using Core.Domains;
 using Core.Domains.Groups;
 
-namespace Managements.Data.Groups;
+namespace Data.Groups;
 
 internal sealed class GroupMappingProfile : Profile
 {

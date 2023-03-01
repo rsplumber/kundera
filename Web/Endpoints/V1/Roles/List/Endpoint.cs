@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using Application.Roles;
+using FastEndpoints;
 using Mediator;
-using Queries.Groups;
-using Queries.Roles;
 
 namespace Web.Endpoints.V1.Roles.List;
 

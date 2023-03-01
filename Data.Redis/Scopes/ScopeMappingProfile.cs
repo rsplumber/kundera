@@ -2,7 +2,7 @@
 using Core.Domains;
 using Core.Domains.Scopes;
 
-namespace Managements.Data.Scopes;
+namespace Data.Scopes;
 
 public class ScopeMappingProfile : Profile
 {

@@ -1,10 +1,10 @@
-﻿using Managements.Data.Auth.Sessions;
+﻿using Application.Users;
+using Data.Auth.Sessions;
 using Mediator;
-using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Users;
+namespace Data.Users;
 
 public sealed class UserSessionsQueryHandler : IQueryHandler<UserSessionsQuery, List<UserSessionResponse>>
 {

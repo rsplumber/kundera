@@ -1,10 +1,10 @@
-﻿using Core.Domains.Permissions.Exceptions;
+﻿using Application.Permissions;
+using Core.Domains.Permissions.Exceptions;
 using Mediator;
-using Queries.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 
-namespace Managements.Data.Permissions;
+namespace Data.Permissions;
 
 public sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, PermissionResponse>
 {

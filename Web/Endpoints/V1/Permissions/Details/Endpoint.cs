@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Application.Groups;
+using Application.Permissions;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
-using Queries.Permissions;
 
 namespace Web.Endpoints.V1.Permissions.Details;
 

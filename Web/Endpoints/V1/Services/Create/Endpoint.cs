@@ -1,8 +1,7 @@
-using Commands.Services;
+using Application.Services;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Services;
 
 namespace Web.Endpoints.V1.Services.Create;
 

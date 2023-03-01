@@ -4,16 +4,17 @@ using Core.Extensions;
 
 namespace Core.Hashing;
 
-public sealed class HmacHashingService : IHashService
+internal sealed class HmacHashingService : IHashService
 {
     private readonly HashingType _hashingType;
     private readonly int _randomKeyLength;
-    private static readonly Random Random = new();
+    private readonly Random _random;
 
     public HmacHashingService(HashingType hashingType = HashingType.HMACSHA384, int randomKeyLength = 8)
     {
         _hashingType = hashingType;
         _randomKeyLength = randomKeyLength;
+        _random = new();
     }
 
     public string Hash(params string[] values)
@@ -30,7 +31,7 @@ public sealed class HmacHashingService : IHashService
 
     private HMAC GetHasher(HashingType type)
     {
-        var random = Random.RandomCharsNums(_randomKeyLength);
+        var random = _random.RandomCharsAndNumbers(_randomKeyLength);
         var randomBytes = Encoding.UTF8.GetBytes(random);
 
         return type switch

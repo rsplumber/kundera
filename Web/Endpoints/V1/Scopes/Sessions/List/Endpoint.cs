@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Application.Scopes;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Scopes;
 
 namespace Web.Endpoints.V1.Scopes.Sessions.List;
 

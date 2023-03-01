@@ -9,7 +9,7 @@ public interface IUserFactory
     Task<User> CreateAsync(string username, Guid groupId);
 }
 
-public sealed class UserFactory : IUserFactory
+internal sealed class UserFactory : IUserFactory
 {
     private readonly IUserRepository _userRepository;
     private readonly IGroupRepository _groupRepository;
