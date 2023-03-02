@@ -46,7 +46,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<ICredentialRepository, CredentialRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
 
-        services.AddScoped<IAuthorizeService, AuthorizeService>();
+        services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
