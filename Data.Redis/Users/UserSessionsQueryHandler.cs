@@ -24,8 +24,6 @@ public sealed class UserSessionsQueryHandler : IQueryHandler<UserSessionsQuery, 
             Id = model.RefreshToken,
             ScopeId = model.ScopeId,
             ExpirationDateUtc = model.ExpirationDateUtc,
-            LastIpAddress = model.LastIpAddress,
-            LastUsageDateUtc = model.LastUsageDateUtc
         }).ToList();
     }
 }

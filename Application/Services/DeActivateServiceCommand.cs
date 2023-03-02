@@ -26,7 +26,7 @@ internal sealed class DeActivateServiceCommandHandler : ICommandHandler<DeActiva
             throw new ServiceNotFoundException();
         }
 
-        service.DiActivate();
+        service.DeActivate();
         await _serviceRepository.UpdateAsync(service, cancellationToken);
 
         return Unit.Value;

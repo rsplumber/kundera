@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5B2EB057-D709-4895-B881-5C2461CC9882}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.PostgreSQL", "Data.PostgreSQL\Data.PostgreSQL.csproj", "{6349C290-EBCF-4D84-8B04-8B3E26871D20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6D63F88D-3955-4BA6-BAC4-8EFF00B73B62} = {5B2EB057-D709-4895-B881-5C2461CC9882}
+		{6349C290-EBCF-4D84-8B04-8B3E26871D20} = {5B2EB057-D709-4895-B881-5C2461CC9882}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7CDEA9E7-1063-41B8-A6DB-6CE334109E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +45,9 @@ Global
 		{ED35CF17-5531-4685-9950-664D3F7B5034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED35CF17-5531-4685-9950-664D3F7B5034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED35CF17-5531-4685-9950-664D3F7B5034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6349C290-EBCF-4D84-8B04-8B3E26871D20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6349C290-EBCF-4D84-8B04-8B3E26871D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6349C290-EBCF-4D84-8B04-8B3E26871D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6349C290-EBCF-4D84-8B04-8B3E26871D20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

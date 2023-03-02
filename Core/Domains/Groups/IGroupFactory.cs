@@ -53,10 +53,10 @@ internal sealed class GroupFactory : IGroupFactory
         }
 
 
-        var group = new Group(name, role.Id, selectedParent.Id);
+        var group = new Group(name, role, selectedParent);
         await _groupRepository.AddAsync(group);
 
-        selectedParent.AddChild(group.Id);
+        selectedParent.Add(group);
         await _groupRepository.UpdateAsync(selectedParent);
 
         return group;
@@ -76,7 +76,7 @@ internal sealed class GroupFactory : IGroupFactory
             throw new RoleNotFoundException();
         }
 
-        var group = new Group(EntityBaseValues.AdministratorGroup, role.Id);
+        var group = new Group(EntityBaseValues.AdministratorGroup, role);
         await _groupRepository.AddAsync(group);
 
         return group;

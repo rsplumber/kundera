@@ -1,4 +1,5 @@
-﻿using Core.Domains.Auth.Authorizations;
+﻿using System.Net;
+using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Auth.Sessions;
@@ -16,6 +17,8 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
     public string ScopeSecret { get; init; } = default!;
 
     public string UserAgent { get; init; } = default!;
+    
+    public IPAddress IpAddress { get; init; } = default!;
 }
 
 internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateCommand, Certificate>
@@ -72,7 +75,7 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
             }
         }
 
-        return await _sessionManagement.SaveAsync(credential, scope, command.UserAgent, cancellationToken);
+        return await _sessionManagement.SaveAsync(credential, scope,command.IpAddress, command.UserAgent, cancellationToken);
 
         bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }

@@ -25,8 +25,6 @@ public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery
             UserId = model.UserId,
             ScopeId = model.ScopeId,
             ExpirationDateUtc = model.ExpirationDateUtc,
-            LastIpAddress = model.LastIpAddress,
-            LastUsageDateUtc = model.LastUsageDateUtc
         }).ToList();
     }
 }

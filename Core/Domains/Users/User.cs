@@ -1,4 +1,6 @@
-﻿using Core.Domains.Users.Events;
+﻿using Core.Domains.Groups;
+using Core.Domains.Roles;
+using Core.Domains.Users.Events;
 using Core.Domains.Users.Exception;
 
 namespace Core.Domains.Users;
@@ -9,11 +11,11 @@ public class User : BaseEntity
     {
     }
 
-    internal User(string username, Guid groupId)
+    internal User(string username, Group group)
     {
         AddUsername(username);
 
-        JoinGroup(groupId);
+        Join(group);
 
         ChangeStatus(UserStatus.Active);
 
@@ -24,9 +26,9 @@ public class User : BaseEntity
 
     public HashSet<string> Usernames { get; internal set; } = new();
 
-    public HashSet<Guid> Groups { get; internal set; } = new();
+    public HashSet<Group> Groups { get; internal set; } = new();
 
-    public HashSet<Guid> Roles { get; internal set; } = new();
+    public HashSet<Role> Roles { get; internal set; } = new();
 
     public UserStatus Status { get; internal set; } = default!;
 
@@ -65,48 +67,42 @@ public class User : BaseEntity
         return Usernames.Any(u => u == username);
     }
 
-    public void JoinGroup(Guid group)
+    public void Join(Group group)
     {
-        if (HasGroup(group)) return;
+        if (Has(group)) return;
         Groups.Add(group);
-        AddDomainEvent(new UserJoinedGroupEvent(Id, group));
+        AddDomainEvent(new UserJoinedGroupEvent(Id, group.Id));
     }
 
-    public void RemoveFromGroup(Guid group)
+    public void Leave(Group group)
     {
-        if (!HasGroup(group)) return;
+        if (!Has(group)) return;
         if (Groups.Count == 1)
         {
             throw new UsernameGroupCouldNotBeEmptyException();
         }
 
         Groups.Remove(group);
-        AddDomainEvent(new UserRemovedGroupEvent(Id, group));
+        AddDomainEvent(new UserRemovedGroupEvent(Id, group.Id));
     }
 
-    public bool HasGroup(Guid group)
-    {
-        return Groups.Any(id => id == group);
-    }
+    public bool Has(Group group) => Groups.Any(g => g == group);
 
-    public void AssignRole(Guid role)
+    public void Assign(Role role)
     {
-        if (HasRole(role)) return;
+        if (Has(role)) return;
         Roles.Add(role);
-        AddDomainEvent(new UserRoleAddedEvent(Id, role));
+        AddDomainEvent(new UserRoleAddedEvent(Id, role.Id));
     }
 
-    public void RevokeRole(Guid role)
+    public void Revoke(Role role)
     {
-        if (!HasRole(role)) return;
+        if (!Has(role)) return;
         Roles.Remove(role);
-        AddDomainEvent(new UserRoleRemovedEvent(Id, role));
+        AddDomainEvent(new UserRoleRemovedEvent(Id, role.Id));
     }
 
-    public bool HasRole(Guid role)
-    {
-        return Roles.Any(id => id == role);
-    }
+    public bool Has(Role role) =>Roles.Any(r => r == role);
 
     public void Activate() => ChangeStatus(UserStatus.Active);
 

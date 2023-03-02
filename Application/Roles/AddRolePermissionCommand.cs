@@ -40,7 +40,7 @@ internal sealed class AddRolePermissionCommandHandler : ICommandHandler<AddRoleP
                 throw new PermissionNotFoundException();
             }
 
-            role.AddPermission(permission.Id);
+            role.Add(permission);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

@@ -3,16 +3,13 @@ using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Permissions;
 using Core.Domains.Roles;
-using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Users;
 using Data.Auth.Sessions;
 using Data.Groups;
 using Data.Permissions;
 using Data.Roles;
-using Data.Scopes;
 using Data.Services;
-using Data.Users;
 using Redis.OM;
 
 namespace Data.Auth;
@@ -34,17 +31,11 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return dataModel is null ? null : _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<User?> SessionUserAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        var dataModel = await _dbProvider.RedisCollection<UserDataModel>(false).FindByIdAsync(userId.ToString());
-        return dataModel is null ? null : _mapper.Map<User>(dataModel);
-    }
-
     public async Task<IReadOnlySet<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var userGroupRoleIds = await UserGroupsRolesAsync();
         var allRoleIds = new List<Guid>(userGroupRoleIds);
-        allRoleIds.AddRange(user.Roles);
+        allRoleIds.AddRange(user.Roles.Select(r => r.Id));
 
         var roleDataModels = await _dbProvider.RedisCollection<RoleDataModel>(false)
             .FindByIdsAsync(allRoleIds.Select(guid => guid.ToString()));
@@ -56,9 +47,9 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             var groups = new List<GroupDataModel>();
             var currentUserGroups = (await groupsDbCollection.FindByIdsAsync(user.Groups.Select(guid => guid.ToString()))).Values;
             groups.AddRange(currentUserGroups!);
-            foreach (var groupId in user.Groups)
+            foreach (var group in user.Groups)
             {
-                var children = await FindChildrenAsync(groupId);
+                var children = await FindChildrenAsync(group.Id);
                 groups.AddRange(children);
             }
 
@@ -88,13 +79,6 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         }
     }
 
-    public async Task<Scope?> SessionScopeAsync(Guid scopeId, CancellationToken cancellationToken = default)
-    {
-        var dataModel = await _dbProvider.RedisCollection<ScopeDataModel>(false)
-            .FindByIdAsync(scopeId.ToString());
-        return dataModel is null ? null : _mapper.Map<Scope>(dataModel);
-    }
-
     public async Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         var dataModel = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
@@ -109,7 +93,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             .SelectMany(role => role.Permissions)
             .Distinct();
         var dataModels = (await _dbProvider.RedisCollection<PermissionDataModel>(false)
-            .FindByIdsAsync(permissionIds.Select(guid => guid.ToString()))).Values;
+            .FindByIdsAsync(permissionIds.Select(guid => guid.ToString())!)).Values;
 
         return dataModels.Select(model => _mapper.Map<Permission>(model)).ToHashSet();
     }

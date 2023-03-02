@@ -95,8 +95,8 @@ internal sealed class DataSeeder
         if (scope is null)
         {
             scope = await _scopeFactory.CreateIdentityScopeAsync(_identityScopeSecret);
-            scope.AddService(service.Id);
-            scope.AddRole(role.Id);
+            scope.Add(service);
+            scope.Add(role);
             await _scopeRepository.UpdateAsync(scope);
         }
 
@@ -137,7 +137,7 @@ internal sealed class DataSeeder
             var permissions = await _permissionRepository.FindAsync();
             foreach (var permission in permissions)
             {
-                role.AddPermission(permission.Id);
+                role.Add(permission);
             }
 
             await _roleRepository.UpdateAsync(role);
@@ -276,7 +276,7 @@ internal sealed class DataSeeder
 
         foreach (var permission in permissions)
         {
-            serviceAdminRole.AddPermission(permission!.Id);
+            serviceAdminRole.Add(permission!);
         }
 
         await _roleRepository.UpdateAsync(serviceAdminRole);

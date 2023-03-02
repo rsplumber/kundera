@@ -1,4 +1,5 @@
-﻿using Core.Domains.Auth.Authorizations;
+﻿using System.Net;
+using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Scopes;
@@ -13,6 +14,8 @@ public sealed record RefreshCertificateCommand : ICommand<Certificate>
     public string RefreshToken { get; init; } = default!;
 
     public string UserAgent { get; init; } = default!;
+    
+    public IPAddress IpAddress { get; init; } = default!;
 }
 
 internal sealed class RefreshCertificateCommandHandler : ICommandHandler<RefreshCertificateCommand, Certificate>
@@ -38,25 +41,13 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
-        if (session.UserAgent != command.UserAgent)
-        {
-            throw new UnAuthorizedException();
-        }
-
-        var credential = await _credentialRepository.FindAsync(session.CredentialId, cancellationToken);
-        if (credential is null)
-        {
-            throw new UnAuthorizedException();
-        }
-
-        var scope = await _scopeRepository.FindAsync(session.ScopeId, cancellationToken);
-        if (scope is null)
+        if (session.Activity.Agent != command.UserAgent)
         {
             throw new UnAuthorizedException();
         }
 
 
-        var certificate = await _sessionManagement.SaveAsync(credential, scope, command.UserAgent, cancellationToken);
+        var certificate = await _sessionManagement.SaveAsync(session.Credential,session.Scope,command.IpAddress, command.UserAgent, cancellationToken);
         await _sessionManagement.DeleteAsync(command.Token, cancellationToken);
 
         return certificate;

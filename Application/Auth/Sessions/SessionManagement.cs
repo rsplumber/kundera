@@ -1,4 +1,5 @@
-﻿using Core.Domains.Auth.Authorizations;
+﻿using System.Net;
+using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Scopes;
@@ -25,11 +26,11 @@ internal sealed class SessionManagement : ISessionManagement
         _sessionOptions = sessionOptions.Value;
     }
 
-    public async Task<Certificate> SaveAsync(Credential credential, Scope scope, string userAgent, CancellationToken cancellationToken = default)
+    public async Task<Certificate> SaveAsync(Credential credential, Scope scope,IPAddress ipAddress, string userAgent, CancellationToken cancellationToken = default)
     {
         var certificate = await _mediator.Send(new GenerateCertificateCommand
         {
-            UserId = credential.UserId,
+            UserId = credential.User.Id,
             ScopeId = scope.Id
         }, cancellationToken);
 
@@ -40,8 +41,8 @@ internal sealed class SessionManagement : ISessionManagement
             certificate.RefreshToken,
             credential.Id,
             scope.Id,
-            credential.UserId,
             expiresAt,
+            ipAddress,
             userAgent);
 
         return certificate;

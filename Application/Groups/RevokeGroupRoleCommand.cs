@@ -1,5 +1,7 @@
 ﻿using Core.Domains.Groups;
 using Core.Domains.Groups.Exception;
+using Core.Domains.Roles;
+using Core.Domains.Roles.Exceptions;
 using Mediator;
 
 namespace Application.Groups;
@@ -14,10 +16,13 @@ public sealed record RevokeGroupRoleCommand : ICommand
 internal sealed class RevokeGroupRoleCommandHandler : ICommandHandler<RevokeGroupRoleCommand>
 {
     private readonly IGroupRepository _groupRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public RevokeGroupRoleCommandHandler(IGroupRepository groupRepository)
+
+    public RevokeGroupRoleCommandHandler(IGroupRepository groupRepository, IRoleRepository roleRepository)
     {
         _groupRepository = groupRepository;
+        _roleRepository = roleRepository;
     }
 
     public async ValueTask<Unit> Handle(RevokeGroupRoleCommand command, CancellationToken cancellationToken)
@@ -30,7 +35,12 @@ internal sealed class RevokeGroupRoleCommandHandler : ICommandHandler<RevokeGrou
 
         foreach (var roleId in command.RolesIds)
         {
-            group.RevokeRole(roleId);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+            group.Revoke(role);
         }
 
         await _groupRepository.UpdateAsync(group, cancellationToken);

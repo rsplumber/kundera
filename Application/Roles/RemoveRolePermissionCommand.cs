@@ -1,4 +1,6 @@
-﻿using Core.Domains.Roles;
+﻿using Core.Domains.Permissions;
+using Core.Domains.Permissions.Exceptions;
+using Core.Domains.Roles;
 using Core.Domains.Roles.Exceptions;
 using Mediator;
 
@@ -14,10 +16,12 @@ public sealed record RemoveRolePermissionCommand : ICommand
 internal sealed class RemoveRolePermissionCommandHandler : ICommandHandler<RemoveRolePermissionCommand>
 {
     private readonly IRoleRepository _roleRepository;
+    private readonly IPermissionRepository _permissionRepository;
 
-    public RemoveRolePermissionCommandHandler(IRoleRepository roleRepository)
+    public RemoveRolePermissionCommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository)
     {
         _roleRepository = roleRepository;
+        _permissionRepository = permissionRepository;
     }
 
     public async ValueTask<Unit> Handle(RemoveRolePermissionCommand command, CancellationToken cancellationToken)
@@ -28,9 +32,14 @@ internal sealed class RemoveRolePermissionCommandHandler : ICommandHandler<Remov
             throw new RoleNotFoundException();
         }
 
-        foreach (var permission in command.PermissionsIds)
+        foreach (var permissionId in command.PermissionsIds)
         {
-            role.RemovePermission(permission);
+            var permission = await _permissionRepository.FindAsync(permissionId, cancellationToken);
+            if (permission is null)
+            {
+                throw new PermissionNotFoundException();
+            }
+            role.Remove(permission);
         }
 
         await _roleRepository.UpdateAsync(role, cancellationToken);

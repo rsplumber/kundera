@@ -38,7 +38,7 @@ internal sealed class RemoveUserFromGroupCommandHandler : ICommandHandler<Remove
             throw new GroupNotFoundException();
         }
 
-        user.RemoveFromGroup(group.Id);
+        user.Leave(group);
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;

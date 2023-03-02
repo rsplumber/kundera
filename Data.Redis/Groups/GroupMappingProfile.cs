@@ -21,7 +21,7 @@ internal sealed class GroupMappingProfile : Profile
             .ForMember(group => group.Id, expression => expression.MapFrom(model => model.Id))
             .ForMember(group => group.Name, expression => expression.MapFrom(model => model.Name))
             .ForMember(group => group.Description, expression => expression.MapFrom(model => model.Description))
-            .ForMember(group => group.ParentId, expression => expression.MapFrom(model => model.Parent))
+            .ForMember(group => group.Parent, expression => expression.MapFrom(model => model.Parent))
             .ForMember(group => group.Status, expression => expression.MapFrom(model => model.Status))
             .ForMember(group => group.StatusChangeDateUtc, expression => expression.MapFrom(model => model.StatusChangeDateUtc))
             .ForMember(group => group.Roles, expression => expression.MapFrom(model => model.Roles))

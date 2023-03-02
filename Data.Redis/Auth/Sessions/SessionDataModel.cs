@@ -15,13 +15,21 @@ internal sealed class SessionDataModel
 
     [Indexed] public Guid CredentialId { get; set; } = default!;
     
-    [Indexed] public string UserAgent { get; set; } = default!;
-
     [Indexed(Sortable = true)] public DateTime ExpirationDateUtc { get; set; } = default!;
 
-    [Indexed(Sortable = true)] public DateTime CreatedDateUtc { get; set; } = default!;
+    public SessionActivityDataModel Activity { get; internal set; } = default!;
+}
 
-    [Indexed(Sortable = true)] public DateTime LastUsageDateUtc { get; set; } = default!;
 
-    [Indexed] public string? LastIpAddress { get; set; }
+internal sealed class SessionActivityDataModel
+{
+    public Guid Id { get;  set; }
+
+    public Guid CredentialId { get;  set; } = default!;
+
+    public string? IpAddress { get; internal set; }
+
+    public string? Agent { get; internal set; }
+    
+    public DateTime CreatedDateUtc { get; internal set; }
 }

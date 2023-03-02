@@ -30,8 +30,7 @@ internal sealed class ChangeGroupInfoCommandHandler : ICommandHandler<ChangeGrou
             throw new GroupNotFoundException();
         }
 
-        group.ChangeName(command.Name);
-        group.ChangeDescription(command.Description);
+        group.ChangeInfo(command.Name,command.Description);
         await _groupRepository.UpdateAsync(group, cancellationToken);
         return Unit.Value;
     }

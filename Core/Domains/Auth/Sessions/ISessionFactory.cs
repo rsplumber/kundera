@@ -1,4 +1,10 @@
-﻿namespace Core.Domains.Auth.Sessions;
+﻿using System.Net;
+using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Credentials.Exceptions;
+using Core.Domains.Scopes;
+using Core.Domains.Scopes.Exceptions;
+
+namespace Core.Domains.Auth.Sessions;
 
 public interface ISessionFactory
 {
@@ -6,32 +12,54 @@ public interface ISessionFactory
         string refreshToken,
         Guid credentialId,
         Guid scopeId,
-        Guid userId,
         DateTime expireDate,
+        IPAddress ipAddress,
         string agent);
 }
 
 internal sealed class SessionFactory : ISessionFactory
 {
     private readonly ISessionRepository _sessionRepository;
+    private readonly ICredentialRepository _credentialRepository;
+    private readonly IScopeRepository _scopeRepository;
 
-    public SessionFactory(ISessionRepository sessionRepository)
+    public SessionFactory(ISessionRepository sessionRepository, 
+        ICredentialRepository credentialRepository,
+        IScopeRepository scopeRepository)
     {
         _sessionRepository = sessionRepository;
+        _credentialRepository = credentialRepository;
+        _scopeRepository = scopeRepository;
     }
 
     public async Task<Session> CreateAsync(string token,
         string refreshToken,
         Guid credentialId,
         Guid scopeId,
-        Guid userId,
         DateTime expireDate,
+        IPAddress ipAddress,
         string agent)
     {
-        var session = new Session(token, refreshToken, credentialId, scopeId, userId, expireDate)
+        var credential = await _credentialRepository.FindAsync(credentialId);
+        if (credential is null)
         {
-            UserAgent = agent
-        };
+            throw new CredentialNotFoundException();
+        }
+
+        var scope = await _scopeRepository.FindAsync(scopeId);
+        if (scope is null)
+        {
+            throw new ScopeNotFoundException();
+        }
+
+        var session = new Session(token,
+            refreshToken,
+            credential,
+            scope,
+            credential.User,
+            expireDate,
+            ipAddress,
+            agent);
         await _sessionRepository.AddAsync(session);
         return session;
     }

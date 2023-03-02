@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<CreateGroupCommand>
             {
                 Id = group.Id,
                 Description = group.Description,
-                Parent = group.ParentId!.Value,
+                Parent = group.Parent?.Id,
                 Name = group.Name,
                 Status = group.Status.Name,
                 StatusChangedDate = group.StatusChangeDateUtc,

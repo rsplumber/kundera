@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Credentials.Events;
+using Core.Domains.Users;
 
 namespace Core.Domains.Auth.Credentials;
 
@@ -9,17 +10,17 @@ public class Credential : BaseEntity
     {
     }
 
-    internal Credential(string username, string password, Guid userId)
+    internal Credential(string username, string password, User user)
     {
         Username = username;
         Password = Password.Create(password);
-        UserId = userId;
+        User = user;
         CreatedDateUtc = DateTime.UtcNow;
-        AddDomainEvent(new CredentialCreatedEvent(Id, userId));
+        AddDomainEvent(new CredentialCreatedEvent(Id, user.Id));
     }
 
-    internal Credential(string username, string password, Guid userId, int expireInMinutes) :
-        this(username, password, userId)
+    internal Credential(string username, string password, User user, int expireInMinutes) :
+        this(username, password, user)
     {
         if (expireInMinutes > 0)
         {
@@ -27,8 +28,8 @@ public class Credential : BaseEntity
         }
     }
 
-    internal Credential(string username, string password, Guid userId, bool oneTime, int expireInMinutes = 0) :
-        this(username, password, userId, expireInMinutes)
+    internal Credential(string username, string password, User user, bool oneTime, int expireInMinutes = 0) :
+        this(username, password, user, expireInMinutes)
     {
         OneTime = oneTime;
     }
@@ -38,14 +39,14 @@ public class Credential : BaseEntity
 
     public string Username { get; internal set; } = default!;
 
-    public Guid UserId { get; internal set; }
+    public User User { get; internal set; }
 
     public Password Password { get; internal set; } = default!;
 
-    public string? LastIpAddress { get; internal set; }
-
-    public DateTime? LastLoggedInUtc { get; internal set; }
-
+    public CredentialActivity? FirstActivity { get; internal set; }
+    
+    public CredentialActivity? LastActivity { get; internal set; }
+    
     public DateTime? ExpiresAtUtc { get; internal set; }
 
     public int? SessionExpireTimeInMinutes { get; internal set; }
@@ -56,10 +57,17 @@ public class Credential : BaseEntity
 
     public DateTime CreatedDateUtc { get; internal set; }
 
-    public void UpdateActivityInfo(IPAddress ipAddress)
+    public void UpdateFirstActivityInfo(IPAddress ipAddress,string agent)
     {
-        LastIpAddress = ipAddress.ToString();
-        LastLoggedInUtc = DateTime.UtcNow;
+        if(!IsFirstTimeLoggedIn()) return;
+        FirstActivity = new CredentialActivity(Id,ipAddress,agent);
+    }
+
+    private bool IsFirstTimeLoggedIn() => FirstActivity is null;
+    
+    public void UpdateActivityInfo(IPAddress ipAddress,string agent)
+    {
+        LastActivity = new CredentialActivity(Id,ipAddress,agent);
     }
 
     public void ChangePassword(string password, string newPassword)

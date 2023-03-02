@@ -30,8 +30,8 @@ internal sealed class Endpoint : Endpoint<CreateUserCommand>
                 Id = user.Id,
                 Usernames = user.Usernames.Select(username => username).ToList(),
                 Status = user.Status.ToString(),
-                Groups = user.Groups.Select(id => id).ToList(),
-                Roles = user.Roles.Select(id => id).ToList()
+                Groups = user.Groups.Select(g => g.Id).ToList(),
+                Roles = user.Roles.Select(r => r.Id).ToList()
             },
             generateAbsoluteUrl: true,
             cancellation: ct);

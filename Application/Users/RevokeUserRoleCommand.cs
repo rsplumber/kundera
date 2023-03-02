@@ -1,4 +1,6 @@
-﻿using Core.Domains.Users;
+﻿using Core.Domains.Roles;
+using Core.Domains.Roles.Exceptions;
+using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Mediator;
 
@@ -14,10 +16,12 @@ public sealed record RevokeUserRoleCommand : ICommand
 internal sealed class RevokeUserRoleCommandHandler : ICommandHandler<RevokeUserRoleCommand>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public RevokeUserRoleCommandHandler(IUserRepository userRepository)
+    public RevokeUserRoleCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
     }
 
     public async ValueTask<Unit> Handle(RevokeUserRoleCommand command, CancellationToken cancellationToken)
@@ -30,7 +34,12 @@ internal sealed class RevokeUserRoleCommandHandler : ICommandHandler<RevokeUserR
 
         foreach (var roleId in command.RolesIds)
         {
-            user.RevokeRole(roleId);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+            user.Revoke(role);
         }
 
         await _userRepository.UpdateAsync(user, cancellationToken);

@@ -1,5 +1,8 @@
 ﻿using System.Net;
+using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions.Events;
+using Core.Domains.Scopes;
+using Core.Domains.Users;
 
 namespace Core.Domains.Auth.Sessions;
 
@@ -11,19 +14,20 @@ public class Session : BaseEntity
 
     internal Session(string token,
         string refreshToken,
-        Guid credentialId,
-        Guid scopeId,
-        Guid userId,
-        DateTime expireDate)
+        Credential credential,
+        Scope scope,
+        User user,
+        DateTime expireDate,
+        IPAddress ipAddress,
+        string agent)
     {
         Id = token;
         RefreshToken = refreshToken;
-        CredentialId = credentialId;
-        ScopeId = scopeId;
-        UserId = userId;
+        Credential = credential;
+        Scope = scope;
+        User = user;
         ExpirationDateUtc = expireDate;
-        LastUsageDateUtc = DateTime.UtcNow;
-        CreatedDateUtc = DateTime.UtcNow;
+        UpdateActivity(ipAddress,agent);
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
@@ -31,26 +35,19 @@ public class Session : BaseEntity
 
     public string RefreshToken { get; internal set; } = default!;
 
-    public Guid CredentialId { get; internal set; }
+    public Credential Credential { get; internal set; }
 
-    public Guid ScopeId { get; internal set; }
+    public Scope Scope { get; internal set; }
 
-    public Guid UserId { get; internal set; }
+    public User User { get; internal set; }
 
     public DateTime ExpirationDateUtc { get; internal set; }
+    
+    public SessionActivity Activity { get; internal set; }
 
-    public DateTime LastUsageDateUtc { get; internal set; }
-
-    public string? LastIpAddress { get; internal set; }
-
-    public string UserAgent { get; internal set; }
-
-    public DateTime CreatedDateUtc { get; internal set; }
-
-
-    public void UpdateUsage(DateTime lastUsageDate, IPAddress? ipAddress)
+    public void UpdateActivity(IPAddress ipAddress,string agent)
     {
-        LastIpAddress = ipAddress?.ToString();
-        LastUsageDateUtc = lastUsageDate;
+        Activity = new SessionActivity(this, ipAddress, agent);
     }
+
 }

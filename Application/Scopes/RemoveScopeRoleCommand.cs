@@ -1,4 +1,6 @@
-﻿using Core.Domains.Scopes;
+﻿using Core.Domains.Roles;
+using Core.Domains.Roles.Exceptions;
+using Core.Domains.Scopes;
 using Core.Domains.Scopes.Exceptions;
 using Mediator;
 
@@ -14,10 +16,12 @@ public sealed record RemoveScopeRoleCommand : ICommand
 internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScopeRoleCommand>
 {
     private readonly IScopeRepository _scopeRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public RemoveScopeRoleCommandHandler(IScopeRepository scopeRepository)
+    public RemoveScopeRoleCommandHandler(IScopeRepository scopeRepository, IRoleRepository roleRepository)
     {
         _scopeRepository = scopeRepository;
+        _roleRepository = roleRepository;
     }
 
     public async ValueTask<Unit> Handle(RemoveScopeRoleCommand command, CancellationToken cancellationToken)
@@ -28,9 +32,14 @@ internal sealed class RemoveScopeRoleCommandHandler : ICommandHandler<RemoveScop
             throw new ScopeNotFoundException();
         }
 
-        foreach (var roleIds in command.RolesIds)
+        foreach (var roleId in command.RolesIds)
         {
-            scope.RemoveRole(roleIds);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+            scope.Remove(role);
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);

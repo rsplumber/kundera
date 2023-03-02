@@ -34,9 +34,9 @@ internal sealed class CredentialFactory : ICredentialFactory
         _userRepository = userRepository;
     }
 
-    public async Task<Credential> CreateAsync(string username, string password, Guid user, bool? singleSession = false)
+    public async Task<Credential> CreateAsync(string username, string password, Guid userId, bool? singleSession = false)
     {
-        await ValidateAsync(username, password, user);
+       var user = await ValidateUserAsync(username, password, userId);
         var credential = new Credential(username, password, user)
         {
             SingleSession = singleSession ?? false
@@ -45,9 +45,9 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    public async Task<Credential> CreateOneTimeAsync(string username, string password, Guid user, int expireInMinutes = 0)
+    public async Task<Credential> CreateOneTimeAsync(string username, string password, Guid userId, int expireInMinutes = 0)
     {
-        await ValidateAsync(username, password, user);
+        var user = await ValidateUserAsync(username, password, userId);
         var credential = new Credential(username, password, user, true, expireInMinutes)
         {
             SingleSession = true
@@ -56,9 +56,9 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    public async Task<Credential> CreateTimePeriodicAsync(string username, string password, Guid user, int expireInMinutes, bool? singleSession = false)
+    public async Task<Credential> CreateTimePeriodicAsync(string username, string password, Guid userId, int expireInMinutes, bool? singleSession = false)
     {
-        await ValidateAsync(username, password, user);
+        var user = await ValidateUserAsync(username, password, userId);
         var credential = new Credential(username, password, user, expireInMinutes)
         {
             SingleSession = singleSession ?? false
@@ -67,7 +67,7 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    private async Task ValidateAsync(string username, string password, Guid userId)
+    private async Task<User> ValidateUserAsync(string username, string password, Guid userId)
     {
         var user = await _userRepository.FindAsync(userId);
         if (user is null)
@@ -85,5 +85,7 @@ internal sealed class CredentialFactory : ICredentialFactory
         {
             throw new DuplicateUniqueIdentifierException(username);
         }
+
+        return user;
     }
 }

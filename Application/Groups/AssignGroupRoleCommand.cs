@@ -40,7 +40,7 @@ internal sealed class AssignGroupRoleCommandHandler : ICommandHandler<AssignGrou
                 throw new RoleNotFoundException();
             }
 
-            group.AssignRole(role.Id);
+            group.Assign(role);
         }
 
         await _groupRepository.UpdateAsync(group, cancellationToken);

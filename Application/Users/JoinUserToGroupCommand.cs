@@ -38,7 +38,7 @@ internal sealed class JoinUserToGroupCommandHandler : ICommandHandler<JoinUserTo
             throw new GroupNotFoundException();
         }
 
-        user.JoinGroup(group.Id);
+        user.Join(group);
         await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;

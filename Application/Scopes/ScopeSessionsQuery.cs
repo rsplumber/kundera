@@ -15,9 +15,6 @@ public sealed record ScopeSessionResponse
 
     public Guid UserId { get; set; }
 
-    public string? LastIpAddress { get; set; }
-
     public DateTime ExpirationDateUtc { get; set; }
 
-    public DateTime LastUsageDateUtc { get; set; }
 }

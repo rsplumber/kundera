@@ -1,4 +1,6 @@
-﻿using Core.Domains.Scopes.Events;
+﻿using Core.Domains.Roles;
+using Core.Domains.Scopes.Events;
+using Core.Domains.Services;
 using Core.Hashing;
 
 namespace Core.Domains.Scopes;
@@ -33,9 +35,9 @@ public class Scope : BaseEntity
 
     public ScopeStatus Status { get; internal set; } = default!;
 
-    public HashSet<Guid> Services { get; internal set; } = new();
+    public HashSet<Service> Services { get; internal set; } = new();
 
-    public HashSet<Guid> Roles { get; internal set; } = new();
+    public HashSet<Role> Roles { get; internal set; } = new();
 
     public void ChangeName(string name) => Name = name;
 
@@ -49,42 +51,36 @@ public class Scope : BaseEntity
         AddDomainEvent(new ScopeStatusChangedEvent(Id));
     }
 
-    public void AddService(Guid service)
+    public void Add(Service service)
     {
-        if (HasService(service)) return;
+        if (Has(service)) return;
         Services.Add(service);
-        AddDomainEvent(new ScopeServiceAddedEvent(Id, service));
+        AddDomainEvent(new ScopeServiceAddedEvent(Id, service.Id));
     }
 
-    public void RemoveService(Guid service)
+    public void Remove(Service service)
     {
-        if (!HasService(service)) return;
+        if (!Has(service)) return;
         Services.Remove(service);
-        AddDomainEvent(new ScopeServiceRemovedEvent(Id, service));
+        AddDomainEvent(new ScopeServiceRemovedEvent(Id, service.Id));
     }
 
-    public bool HasService(Guid service)
-    {
-        return Services.Any(id => id == service);
-    }
+    public bool Has(Service service)=> Services.Any(s => s == service);
 
 
-    public void AddRole(Guid role)
+    public void Add(Role role)
     {
-        if (HasRole(role)) return;
+        if (Has(role)) return;
         Roles.Add(role);
-        AddDomainEvent(new ScopeRoleAddedEvent(Id, role));
+        AddDomainEvent(new ScopeRoleAddedEvent(Id, role.Id));
     }
 
-    public void RemoveRole(Guid role)
+    public void Remove(Role role)
     {
-        if (!HasRole(role)) return;
+        if (!Has(role)) return;
         Roles.Remove(role);
-        AddDomainEvent(new ScopeRoleRemovedEvent(Id, role));
+        AddDomainEvent(new ScopeRoleRemovedEvent(Id, role.Id));
     }
 
-    public bool HasRole(Guid role)
-    {
-        return Roles.Any(id => id == role);
-    }
+    public bool Has(Role role) =>       Roles.Any(r => r == role);
 }

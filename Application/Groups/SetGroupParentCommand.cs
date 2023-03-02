@@ -34,7 +34,7 @@ internal sealed class SetGroupParentCommandHandler : ICommandHandler<SetGroupPar
             throw new GroupNotFoundException();
         }
 
-        group.SetParent(parent.Id);
+        group.SetParent(parent);
         await _groupRepository.UpdateAsync(group, cancellationToken);
 
         return Unit.Value;

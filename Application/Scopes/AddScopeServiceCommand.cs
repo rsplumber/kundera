@@ -40,7 +40,7 @@ internal sealed class AddScopeServiceCommandHandler : ICommandHandler<AddScopeSe
                 throw new ServiceNotFoundException();
             }
 
-            scope.AddService(service.Id);
+            scope.Add(service);
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);

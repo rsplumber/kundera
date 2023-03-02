@@ -11,11 +11,7 @@ public interface IAuthorizeDataProvider
 {
     Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default);
     
-    Task<User?> SessionUserAsync(Guid userId, CancellationToken cancellationToken = default);
-    
     Task<IReadOnlySet<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default);
-    
-    Task<Scope?> SessionScopeAsync(Guid scopeId, CancellationToken cancellationToken = default);
     
     Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
     

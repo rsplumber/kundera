@@ -11,14 +11,7 @@ public class Permission : BaseEntity
     internal Permission(string name, IDictionary<string, string>? meta = null)
     {
         Name = name;
-        if (meta is not null)
-        {
-            foreach (var (key, value) in meta)
-            {
-                Meta.Add(key, value);
-            }
-        }
-
+        FillMeta(meta);
         AddDomainEvent(new PermissionCreatedEvent(Id));
     }
 
@@ -29,4 +22,13 @@ public class Permission : BaseEntity
     public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();
 
     public void ChangeName(string name) => Name = name;
+
+    private void FillMeta(IDictionary<string, string>? meta)
+    {
+        if (meta is null) return;
+        foreach (var (key, value) in meta)
+        {
+            Meta.TryAdd(key, value);
+        }
+    }
 }

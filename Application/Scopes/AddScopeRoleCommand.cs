@@ -40,7 +40,7 @@ internal sealed class AddScopeRoleCommandHandler : ICommandHandler<AddScopeRoleC
                 throw new RoleNotFoundException();
             }
 
-            scope.AddRole(role.Id);
+            scope.Add(role);
         }
 
         await _scopeRepository.UpdateAsync(scope, cancellationToken);

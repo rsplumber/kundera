@@ -37,7 +37,7 @@ public class Service : BaseEntity
 
     public void Activate() => ChangeStatus(ServiceStatus.Active);
 
-    public void DiActivate() => ChangeStatus(ServiceStatus.DeActive);
+    public void DeActivate() => ChangeStatus(ServiceStatus.DeActive);
 
     private void ChangeStatus(ServiceStatus status)
     {

@@ -1,4 +1,6 @@
-﻿using Core.Domains.Users;
+﻿using Core.Domains.Roles;
+using Core.Domains.Roles.Exceptions;
+using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Mediator;
 
@@ -14,10 +16,12 @@ public sealed record AssignUserRoleCommand : ICommand
 internal sealed class AssignUserRoleCommandHandler : ICommandHandler<AssignUserRoleCommand>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public AssignUserRoleCommandHandler(IUserRepository userRepository)
+    public AssignUserRoleCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
     }
 
     public async ValueTask<Unit> Handle(AssignUserRoleCommand command, CancellationToken cancellationToken)
@@ -28,9 +32,14 @@ internal sealed class AssignUserRoleCommandHandler : ICommandHandler<AssignUserR
             throw new UserNotFoundException();
         }
 
-        foreach (var role in command.RolesIds)
+        foreach (var roleId in command.RolesIds)
         {
-            user.AssignRole(role);
+            var role = await _roleRepository.FindAsync(roleId, cancellationToken);
+            if (role is null)
+            {
+                throw new RoleNotFoundException();
+            }
+            user.Assign(role);
         }
 
         await _userRepository.UpdateAsync(user, cancellationToken);
