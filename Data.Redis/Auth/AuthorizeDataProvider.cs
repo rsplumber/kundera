@@ -31,7 +31,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return dataModel is null ? null : _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<IReadOnlySet<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var userGroupRoleIds = await UserGroupsRolesAsync();
         var allRoleIds = new List<Guid>(userGroupRoleIds);
@@ -39,7 +39,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 
         var roleDataModels = await _dbProvider.RedisCollection<RoleDataModel>(false)
             .FindByIdsAsync(allRoleIds.Select(guid => guid.ToString()));
-        return roleDataModels.Values.Select(model => _mapper.Map<Role>(model)).ToHashSet();
+        return roleDataModels.Values.Select(model => _mapper.Map<Role>(model)).ToList();
 
         async Task<IEnumerable<Guid>> UserGroupsRolesAsync()
         {
@@ -87,7 +87,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return dataModel is null ? null : _mapper.Map<Service>(dataModel);
     }
 
-    public async Task<IReadOnlySet<Permission>> RolePermissionsAsync(IReadOnlySet<Role> roles, CancellationToken cancellationToken = default)
+    public async Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
     {
         var permissionIds = roles
             .SelectMany(role => role.Permissions)
@@ -95,7 +95,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         var dataModels = (await _dbProvider.RedisCollection<PermissionDataModel>(false)
             .FindByIdsAsync(permissionIds.Select(guid => guid.ToString())!)).Values;
 
-        return dataModels.Select(model => _mapper.Map<Permission>(model)).ToHashSet();
+        return dataModels.Select(model => _mapper.Map<Permission>(model)).ToList();
     }
     
 }

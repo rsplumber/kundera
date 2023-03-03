@@ -10,7 +10,7 @@ public interface IPermissionRepository
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default);
+    Task<List<Permission>> FindAsync(CancellationToken cancellationToken = default);
 
     Task<Permission?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
 }

@@ -15,7 +15,7 @@ public sealed record UserResponse
 
     public List<string> Usernames { get; init; } = Array.Empty<string>().ToList();
 
-    public List<Guid> Groups { get; init; } = Array.Empty<Guid>().ToList();
+    public IEnumerable<Guid> Groups { get; init; } = Array.Empty<Guid>().ToList();
 
-    public List<Guid>? Roles { get; init; } = Array.Empty<Guid>().ToList();
+    public IEnumerable<Guid>? Roles { get; init; } = Array.Empty<Guid>().ToList();
 }

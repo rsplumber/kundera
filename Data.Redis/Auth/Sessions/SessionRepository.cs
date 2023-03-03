@@ -38,10 +38,10 @@ internal sealed class SessionRepository : ISessionRepository
         return _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<IEnumerable<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
+    public async Task<List<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.Where(model => model.CredentialId == credentialId).ToListAsync();
-        return dataModels.Select(model => _mapper.Map<Session>(model));
+        return dataModels.Select(model => _mapper.Map<Session>(model)).ToList();
     }
 
     public async Task DeleteAsync(string token, CancellationToken cancellationToken = default)

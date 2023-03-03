@@ -22,7 +22,7 @@ public class Role : BaseEntity
 
     public HashSet<Permission> Permissions { get; internal set; } = new();
 
-    public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> Meta { get; internal set; } = new();
 
     public void ChangeName(string name) => Name = name;
 

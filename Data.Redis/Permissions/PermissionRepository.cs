@@ -32,7 +32,7 @@ internal class PermissionRepository : IPermissionRepository
         return _mapper.Map<Permission>(dataModel);
     }
 
-    public async Task<IEnumerable<Permission>> FindAsync(CancellationToken cancellationToken = default)
+    public async Task<List<Permission>> FindAsync(CancellationToken cancellationToken = default)
     {
         var dataModels = await _permissions.ToListAsync();
         return _mapper.Map<List<Permission>>(dataModels);

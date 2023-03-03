@@ -19,7 +19,7 @@ public class Permission : BaseEntity
 
     public string Name { get; internal set; } = default!;
 
-    public IDictionary<string, string> Meta { get; internal set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> Meta { get; internal set; } = new();
 
     public void ChangeName(string name) => Name = name;
 
