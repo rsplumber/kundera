@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Core.Domains.Auth.Credentials.Events;
 
 namespace Core.Domains.Auth.Credentials;
 
@@ -9,9 +8,9 @@ public class CredentialActivity : BaseEntity
     {
     }
 
-    internal CredentialActivity(Guid credentialId,IPAddress ipAddress,string agent)
+    internal CredentialActivity(Credential credential,IPAddress ipAddress,string agent)
     {
-        CredentialId = credentialId;
+        Credential = credential;
         IpAddress = ipAddress.ToString();
         Agent = agent;
         CreatedDateUtc = DateTime.UtcNow;
@@ -20,7 +19,7 @@ public class CredentialActivity : BaseEntity
 
     public Guid Id { get;  init; } = Guid.NewGuid();
 
-    public Guid CredentialId { get; init; }
+    public Credential Credential { get; init; }
 
     public string? IpAddress { get; init; }
 

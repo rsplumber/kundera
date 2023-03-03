@@ -1,10 +1,8 @@
-﻿using Application.Roles;
-using Application.Scopes;
-using Core.Domains.Scopes.Exceptions;
+﻿using Application.Scopes;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopeRolesQueryHandler : IQueryHandler<ScopeRolesQuery, List<ScopeRolesResponse>>
 {

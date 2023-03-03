@@ -2,7 +2,7 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery, List<ScopeSessionResponse>>
 {

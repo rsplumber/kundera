@@ -2,7 +2,7 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Users;
+namespace Data.Users;
 
 public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
 {

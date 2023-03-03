@@ -6,7 +6,7 @@ using Core.Domains.Services;
 using Core.Domains.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Auth;
+namespace Data.Auth;
 
 internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 {

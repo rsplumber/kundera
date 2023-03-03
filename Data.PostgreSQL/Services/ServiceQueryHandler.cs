@@ -3,7 +3,7 @@ using Core.Domains.Services.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Services;
+namespace Data.Services;
 
 public sealed class ServiceQueryHandler : IQueryHandler<ServiceQuery, ServiceResponse>
 {

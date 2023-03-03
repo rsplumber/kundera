@@ -1,7 +1,7 @@
 ﻿using Core.Domains.Auth.Credentials;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Auth.Credentials;
+namespace Data.Auth.Credentials;
 
 internal class CredentialRepository : ICredentialRepository
 {

@@ -1,8 +1,7 @@
 ﻿using Core.Domains.Scopes;
-using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Scopes;
+namespace Data.Scopes;
 
 internal class ScopeRepository : IScopeRepository
 {

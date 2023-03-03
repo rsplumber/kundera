@@ -24,7 +24,7 @@ public class User : BaseEntity
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    public HashSet<string> Usernames { get; internal set; } = new();
+    public List<string> Usernames { get; internal set; } = new();
 
     public HashSet<Group> Groups { get; internal set; } = new();
 

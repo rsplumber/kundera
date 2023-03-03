@@ -1,7 +1,7 @@
 ﻿using Core.Domains.Permissions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Permissions;
+namespace Data.Permissions;
 
 internal class PermissionRepository : IPermissionRepository
 {

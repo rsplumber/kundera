@@ -6,11 +6,11 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Mediator.Abstractions" Version="2.1.0-preview.11" />
+        <PackageReference Include="Mediator.Abstractions" Version="2.1.1" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
         <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.0-preview.5">
+        <PackageReference Include="Mediator.SourceGenerator" Version="2.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>

@@ -1,7 +1,7 @@
 ﻿using Core.Domains;
 using DotNetCore.CAP;
 
-namespace Data.PostgreSQL;
+namespace Data;
 
 internal static class DbContextExtension
 {

@@ -1,8 +1,7 @@
 ﻿using Core.Domains.Services;
-using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Services;
+namespace Data.Services;
 
 internal class ServiceRepository : IServiceRepository
 {

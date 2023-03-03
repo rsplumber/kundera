@@ -19,7 +19,7 @@ internal sealed class CredentialMappingProfile : Profile
             Id = credentialActivity.Id,
             CreatedDateUtc = credentialActivity.CreatedDateUtc,
             Agent = credentialActivity.Agent,
-            CredentialId = credentialActivity.CredentialId,
+            CredentialId = credentialActivity.Credential.Id,
             IpAddress = credentialActivity.IpAddress
         });
         
@@ -29,7 +29,6 @@ internal sealed class CredentialMappingProfile : Profile
             IpAddress = credentialActivityDataModel.IpAddress,
             Agent = credentialActivityDataModel.Agent,
             CreatedDateUtc = credentialActivityDataModel.CreatedDateUtc,
-            CredentialId =   credentialActivityDataModel.CredentialId
         });
         DisableConstructorMapping();
         CreateMap<CredentialDataModel, Credential>()

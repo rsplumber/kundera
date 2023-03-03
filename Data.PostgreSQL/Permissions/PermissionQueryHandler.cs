@@ -3,7 +3,7 @@ using Core.Domains.Permissions.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Permissions;
+namespace Data.Permissions;
 
 public sealed class PermissionQueryHandler : IQueryHandler<PermissionQuery, PermissionResponse>
 {

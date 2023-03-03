@@ -11,7 +11,7 @@ public class SessionActivity : BaseEntity
 
     internal SessionActivity(Session session,IPAddress ipAddress,string agent)
     {
-        Credential = session;
+        Session = session;
         IpAddress = ipAddress.ToString();
         Agent = agent;
         CreatedDateUtc = DateTime.UtcNow;
@@ -20,7 +20,7 @@ public class SessionActivity : BaseEntity
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Session Credential { get; init; } = default!;
+    public Session Session { get; init; } = default!;
 
     public string? IpAddress { get; init; }
 

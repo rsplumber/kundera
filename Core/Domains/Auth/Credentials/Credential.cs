@@ -60,14 +60,14 @@ public class Credential : BaseEntity
     public void UpdateFirstActivityInfo(IPAddress ipAddress,string agent)
     {
         if(!IsFirstTimeLoggedIn()) return;
-        FirstActivity = new CredentialActivity(Id,ipAddress,agent);
+        FirstActivity = new CredentialActivity(this,ipAddress,agent);
     }
 
     private bool IsFirstTimeLoggedIn() => FirstActivity is null;
     
     public void UpdateActivityInfo(IPAddress ipAddress,string agent)
     {
-        LastActivity = new CredentialActivity(Id,ipAddress,agent);
+        LastActivity = new CredentialActivity(this,ipAddress,agent);
     }
 
     public void ChangePassword(string password, string newPassword)

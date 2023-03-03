@@ -3,7 +3,7 @@ using Core.Domains.Groups.Exception;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Groups;
+namespace Data.Groups;
 
 public sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
 {

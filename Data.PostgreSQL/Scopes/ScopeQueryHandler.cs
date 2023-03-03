@@ -3,7 +3,7 @@ using Core.Domains.Permissions.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Scopes;
+namespace Data.Scopes;
 
 public sealed class ScopeQueryHandler : IQueryHandler<ScopeQuery, ScopeResponse>
 {

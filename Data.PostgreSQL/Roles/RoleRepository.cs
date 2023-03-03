@@ -1,8 +1,7 @@
 ﻿using Core.Domains.Roles;
-using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Roles;
+namespace Data.Roles;
 
 internal class RoleRepository : IRoleRepository
 {

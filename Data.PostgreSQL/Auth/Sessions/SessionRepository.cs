@@ -1,8 +1,7 @@
 ﻿using Core.Domains.Auth.Sessions;
-using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Auth.Sessions;
+namespace Data.Auth.Sessions;
 
 internal sealed class SessionRepository : ISessionRepository
 {

@@ -1,8 +1,7 @@
 ﻿using Core.Domains.Groups;
-using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Groups;
+namespace Data.Groups;
 
 internal class GroupRepository : IGroupRepository
 {

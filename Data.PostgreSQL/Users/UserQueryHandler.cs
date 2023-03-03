@@ -1,10 +1,9 @@
 ﻿using Application.Users;
-using Core.Domains.Users;
 using Core.Domains.Users.Exception;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Users;
+namespace Data.Users;
 
 public sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
 {

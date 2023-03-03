@@ -1,7 +1,7 @@
 ﻿using Core.Domains.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Users;
+namespace Data.Users;
 
 internal class UserRepository : IUserRepository
 {

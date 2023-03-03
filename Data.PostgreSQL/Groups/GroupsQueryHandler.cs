@@ -2,7 +2,7 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Groups;
+namespace Data.Groups;
 
 public sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, List<GroupsResponse>>
 {

@@ -2,7 +2,7 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.PostgreSQL.Services;
+namespace Data.Services;
 
 public sealed class ServicesQueryHandler : IQueryHandler<ServicesQuery, List<ServicesResponse>>
 {
