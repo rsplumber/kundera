@@ -1,13 +1,11 @@
 using AutoMapper;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
-using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Services;
 using Core.Domains.Users;
 using Data.Auth.Sessions;
 using Data.Groups;
-using Data.Permissions;
 using Data.Roles;
 using Data.Services;
 using Redis.OM;
@@ -83,19 +81,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
     {
         var dataModel = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
             .FirstOrDefaultAsync();
-        
+
         return dataModel is null ? null : _mapper.Map<Service>(dataModel);
     }
-
-    public async Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
-    {
-        var permissionIds = roles
-            .SelectMany(role => role.Permissions)
-            .Distinct();
-        var dataModels = (await _dbProvider.RedisCollection<PermissionDataModel>(false)
-            .FindByIdsAsync(permissionIds.Select(guid => guid.ToString())!)).Values;
-
-        return dataModels.Select(model => _mapper.Map<Permission>(model)).ToList();
-    }
-    
 }

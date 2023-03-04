@@ -43,11 +43,11 @@ public class Session : BaseEntity
 
     public DateTime ExpirationDateUtc { get; internal set; }
     
-    public SessionActivity Activity { get; internal set; }
+    public AuthActivity Activity { get; internal set; }
 
     public void UpdateActivity(IPAddress ipAddress,string agent)
     {
-        Activity = new SessionActivity(this, ipAddress, agent);
+        Activity = new AuthActivity(ipAddress, agent);
     }
 
 }

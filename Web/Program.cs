@@ -13,10 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
-    options.ListenAnyIP(5178, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1;
-    });
+    options.ListenAnyIP(5178, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
     options.ListenAnyIP(5179, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
@@ -43,6 +40,8 @@ builder.Services.TryAddSingleton<ExceptionHandlerMiddleware>();
 builder.Services.AddCore(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddData(builder.Configuration);
+builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
+
 
 var app = builder.Build();
 app.UseData();

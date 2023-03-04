@@ -35,9 +35,9 @@ public class Scope : BaseEntity
 
     public ScopeStatus Status { get; internal set; } = default!;
 
-    public HashSet<Service> Services { get; internal set; } = new();
+    public List<Service> Services { get; internal set; } = new();
 
-    public HashSet<Role> Roles { get; internal set; } = new();
+    public List<Role> Roles { get; internal set; } = new();
 
     public void ChangeName(string name) => Name = name;
 

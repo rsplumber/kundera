@@ -24,30 +24,23 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             .Include(session => session.User)
             .Include(session => session.Activity)
             .Include(session => session.Scope)
+            .ThenInclude(scope => scope.Roles)
             .FirstOrDefaultAsync(session => session.Id == sessionToken, cancellationToken);
     }
 
     public Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return _dbContext.Groups.Include(u => u.Roles)
+            .ThenInclude(role => role.Permissions)
+            .SelectMany(group => group.Roles)
+            .ToListAsync(cancellationToken);
     }
 
-    public  Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+    public Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         return _dbContext.Services
             .AsNoTracking()
             .FirstOrDefaultAsync(service => service.Secret == serviceSecret, cancellationToken: cancellationToken);
     }
 
-    public Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Roles
-            .AsNoTracking()
-            .Where(role => roles.Any(r => r.Id == role.Id))
-            .Include(role => role.Permissions)
-            .SelectMany(role => role.Permissions)
-            .DistinctBy(permission => permission.Id)
-            .ToListAsync(cancellationToken);
-    }
-    
 }

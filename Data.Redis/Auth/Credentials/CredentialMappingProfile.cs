@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains.Auth;
 using Core.Domains.Auth.Credentials;
 
 namespace Data.Auth.Credentials;
@@ -13,17 +14,16 @@ internal sealed class CredentialMappingProfile : Profile
             Value = password.Value
         });
         CreateMap<PasswordType, Password>().ConvertUsing(passwordType => Password.From(passwordType.Value, passwordType.Salt));
-        
-        CreateMap<CredentialActivity, CredentialActivityDataModel>().ConvertUsing(credentialActivity => new CredentialActivityDataModel
+
+        CreateMap<AuthActivity, CredentialActivityDataModel>().ConvertUsing(credentialActivity => new CredentialActivityDataModel
         {
             Id = credentialActivity.Id,
             CreatedDateUtc = credentialActivity.CreatedDateUtc,
             Agent = credentialActivity.Agent,
-            CredentialId = credentialActivity.Credential.Id,
             IpAddress = credentialActivity.IpAddress
         });
-        
-        CreateMap<CredentialActivityDataModel, CredentialActivity>().ConvertUsing(credentialActivityDataModel => new CredentialActivity()
+
+        CreateMap<CredentialActivityDataModel, AuthActivity>().ConvertUsing(credentialActivityDataModel => new AuthActivity()
         {
             Id = credentialActivityDataModel.Id,
             IpAddress = credentialActivityDataModel.IpAddress,

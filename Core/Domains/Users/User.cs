@@ -26,9 +26,9 @@ public class User : BaseEntity
 
     public List<string> Usernames { get; internal set; } = new();
 
-    public HashSet<Group> Groups { get; internal set; } = new();
+    public List<Group> Groups { get; internal set; } = new();
 
-    public HashSet<Role> Roles { get; internal set; } = new();
+    public List<Role> Roles { get; internal set; } = new();
 
     public UserStatus Status { get; internal set; } = default!;
 

@@ -21,16 +21,10 @@ public sealed record RefreshCertificateCommand : ICommand<Certificate>
 internal sealed class RefreshCertificateCommandHandler : ICommandHandler<RefreshCertificateCommand, Certificate>
 {
     private readonly ISessionManagement _sessionManagement;
-    private readonly ICredentialRepository _credentialRepository;
-    private readonly IScopeRepository _scopeRepository;
 
-    public RefreshCertificateCommandHandler(ISessionManagement sessionManagement,
-        ICredentialRepository credentialRepository,
-        IScopeRepository scopeRepository)
+    public RefreshCertificateCommandHandler(ISessionManagement sessionManagement)
     {
         _sessionManagement = sessionManagement;
-        _credentialRepository = credentialRepository;
-        _scopeRepository = scopeRepository;
     }
 
     public async ValueTask<Certificate> Handle(RefreshCertificateCommand command, CancellationToken cancellationToken)

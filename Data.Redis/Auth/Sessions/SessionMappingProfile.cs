@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Domains.Auth;
 using Core.Domains.Auth.Sessions;
 
 namespace Data.Auth.Sessions;
@@ -7,7 +8,7 @@ internal sealed class SessionMappingProfile : Profile
 {
     public SessionMappingProfile()
     {
-        CreateMap<SessionActivity, SessionActivityDataModel>().ConvertUsing(credentialActivity => new SessionActivityDataModel
+        CreateMap<AuthActivity, SessionActivityDataModel>().ConvertUsing(credentialActivity => new SessionActivityDataModel
         {
             Id = credentialActivity.Id,
             CreatedDateUtc = credentialActivity.CreatedDateUtc,
@@ -15,7 +16,7 @@ internal sealed class SessionMappingProfile : Profile
             IpAddress = credentialActivity.IpAddress
         });
         
-        CreateMap<SessionActivityDataModel, SessionActivity>().ConvertUsing(credentialActivityDataModel => new SessionActivity()
+        CreateMap<SessionActivityDataModel, AuthActivity>().ConvertUsing(credentialActivityDataModel => new AuthActivity()
         {
             Id = credentialActivityDataModel.Id,
             IpAddress = credentialActivityDataModel.IpAddress,

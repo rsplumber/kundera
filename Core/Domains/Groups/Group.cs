@@ -1,6 +1,7 @@
 ﻿using Core.Domains.Groups.Events;
 using Core.Domains.Groups.Exception;
 using Core.Domains.Roles;
+using Core.Domains.Users;
 
 namespace Core.Domains.Groups;
 
@@ -33,10 +34,10 @@ public class Group : BaseEntity
 
     public Group? Parent { get; internal set; }
 
-    public HashSet<Group> Children { get; internal set; } = new();
+    public List<Group> Children { get; internal set; } = new();
 
-    public HashSet<Role> Roles { get; internal set; } = new();
-
+    public List<Role> Roles { get; internal set; } = new();
+    
     public GroupStatus Status { get; internal set; } = default!;
 
     public DateTime StatusChangeDateUtc { get; internal set; }

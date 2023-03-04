@@ -43,10 +43,15 @@ public class Credential : BaseEntity
 
     public Password Password { get; internal set; } = default!;
 
-    public CredentialActivity? FirstActivity { get; internal set; }
-    
-    public CredentialActivity? LastActivity { get; internal set; }
-    
+
+    public Guid? FirstActivityId { get; internal set; }
+
+    public AuthActivity? FirstActivity { get; internal set; }
+
+    public Guid? LastActivityId { get; internal set; }
+
+    public AuthActivity? LastActivity { get; internal set; }
+
     public DateTime? ExpiresAtUtc { get; internal set; }
 
     public int? SessionExpireTimeInMinutes { get; internal set; }
@@ -57,17 +62,17 @@ public class Credential : BaseEntity
 
     public DateTime CreatedDateUtc { get; internal set; }
 
-    public void UpdateFirstActivityInfo(IPAddress ipAddress,string agent)
+    public void UpdateFirstActivityInfo(IPAddress ipAddress, string agent)
     {
-        if(!IsFirstTimeLoggedIn()) return;
-        FirstActivity = new CredentialActivity(this,ipAddress,agent);
+        if (!IsFirstTimeLoggedIn()) return;
+        FirstActivity = new AuthActivity(ipAddress, agent);
     }
 
     private bool IsFirstTimeLoggedIn() => FirstActivity is null;
-    
-    public void UpdateActivityInfo(IPAddress ipAddress,string agent)
+
+    public void UpdateActivityInfo(IPAddress ipAddress, string agent)
     {
-        LastActivity = new CredentialActivity(this,ipAddress,agent);
+        LastActivity = new AuthActivity(ipAddress, agent);
     }
 
     public void ChangePassword(string password, string newPassword)

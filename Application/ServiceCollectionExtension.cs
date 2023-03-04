@@ -14,7 +14,6 @@ public static class ServiceCollectionExtension
 {
     public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
         services.AddCap(x =>
         {
             x.UseInMemoryStorage();

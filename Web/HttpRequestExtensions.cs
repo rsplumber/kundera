@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Web;
 
 public static class HttpRequestExtensions
@@ -6,5 +8,10 @@ public static class HttpRequestExtensions
     {
         var agentHeader = request.Headers["User-Agent"];
         return agentHeader.Count > 0 ? agentHeader[0] ?? string.Empty : string.Empty;
+    }
+
+    public static IPAddress IpAddress(this HttpRequest request)
+    {
+        return request.HttpContext.Connection.RemoteIpAddress ?? IPAddress.None;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Domains.Services.Events;
+﻿using Core.Domains.Scopes;
+using Core.Domains.Services.Events;
 using Core.Hashing;
 
 namespace Core.Domains.Services;

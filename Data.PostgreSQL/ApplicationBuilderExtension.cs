@@ -8,7 +8,16 @@ public static class ApplicationBuilderExtension
 {
     public static void UseData(this IApplicationBuilder app)
     {
-            var dbProvider = app.ApplicationServices.GetRequiredService<AppDbContext>();
-            dbProvider.Database.Migrate();
+        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
+        if (serviceScope == null) return;
+        try
+        {
+            var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }

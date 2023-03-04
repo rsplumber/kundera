@@ -20,7 +20,7 @@ public class Role : BaseEntity
 
     public string Name { get; internal set; } = default!;
 
-    public HashSet<Permission> Permissions { get; internal set; } = new();
+    public List<Permission> Permissions { get; internal set; } = new();
 
     public Dictionary<string, string> Meta { get; internal set; } = new();
 
@@ -41,7 +41,7 @@ public class Role : BaseEntity
     }
 
     public bool Has(Permission permission) => Permissions.Any(p => p == permission);
-    
+
     private void FillMeta(IDictionary<string, string>? meta)
     {
         if (meta is null) return;

@@ -1,17 +1,15 @@
 ﻿using System.Net;
-using Core.Domains.Auth.Credentials;
 
-namespace Core.Domains.Auth.Sessions;
+namespace Core.Domains.Auth;
 
-public class SessionActivity : BaseEntity
+public class AuthActivity : BaseEntity
 {
-    public SessionActivity()
+    public AuthActivity()
     {
     }
 
-    internal SessionActivity(Session session,IPAddress ipAddress,string agent)
+    internal AuthActivity(IPAddress ipAddress, string agent)
     {
-        Session = session;
         IpAddress = ipAddress.ToString();
         Agent = agent;
         CreatedDateUtc = DateTime.UtcNow;
@@ -20,12 +18,9 @@ public class SessionActivity : BaseEntity
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Session Session { get; init; } = default!;
-
     public string? IpAddress { get; init; }
 
     public string? Agent { get; init; }
-    
+
     public DateTime CreatedDateUtc { get; init; }
-    
 }

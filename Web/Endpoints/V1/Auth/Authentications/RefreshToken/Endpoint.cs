@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
     public override void Configure()
     {
         Post("authenticate/refresh");
-        AllowAnonymous();
+        Permissions("kundera_refresh_token");
         Version(1);
     }
 
@@ -26,9 +26,10 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
     {
         var command = new RefreshCertificateCommand
         {
-            Token = req.Authorization,
+            Token = HttpContext.Request.Headers["Authorization"][0] ?? string.Empty,
             RefreshToken = req.RefreshToken,
-            UserAgent = HttpContext.Request.UserAgent()
+            UserAgent = HttpContext.Request.UserAgent(),
+            IpAddress = HttpContext.Request.IpAddress()
         };
         var response = await _mediator.Send(command, ct);
 
@@ -48,8 +49,6 @@ internal sealed class EndpointSummary : Summary<Endpoint>
 
 internal sealed record Request
 {
-    [FromHeader] public string Authorization { get; set; } = default!;
-
     public string RefreshToken { get; set; } = default!;
 }
 
@@ -57,10 +56,6 @@ internal sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {
-        RuleFor(request => request.Authorization)
-            .NotEmpty().WithMessage("Enter valid Token")
-            .NotNull().WithMessage("Enter valid Token");
-
         RuleFor(request => request.RefreshToken)
             .NotEmpty().WithMessage("Enter valid RefreshToken")
             .NotNull().WithMessage("Enter valid RefreshToken");
