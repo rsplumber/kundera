@@ -169,9 +169,8 @@ namespace Data.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<DateTime>("StatusChangeDateUtc")
@@ -255,9 +254,8 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("secret");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.HasKey("Id");
@@ -288,9 +286,8 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("secret");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.HasKey("Id");
@@ -311,9 +308,8 @@ namespace Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<DateTime>("StatusChangeDateUtc")

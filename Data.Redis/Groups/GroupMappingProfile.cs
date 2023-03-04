@@ -8,12 +8,7 @@ internal sealed class GroupMappingProfile : Profile
 {
     public GroupMappingProfile()
     {
-        CreateMap<string, GroupStatus>()
-            .ConvertUsing(u => Enumeration.GetAll<GroupStatus>().First(status => status.Name == u));
-
-        CreateMap<GroupStatus, string>()
-            .ConvertUsing(u => u.Name);
-
+        
         DisableConstructorMapping();
         CreateMap<GroupDataModel, Group>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

@@ -26,9 +26,8 @@ public static class ServiceCollectionExtension
 {
     public static void AddData(this IServiceCollection services, IConfiguration configuration)
     {
-
-        var connectionString = configuration.GetConnectionString("Default") ?? 
-                               throw new ArgumentNullException("connectionString", "Enter connection string in app settings");;
+        var connectionString = configuration.GetConnectionString("Default") ??
+                               throw new ArgumentNullException("connectionString", "Enter connection string in app settings");
 
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IUserRepository, UserRepository>();
@@ -42,7 +41,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<ICredentialRepository, CredentialRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
 
+        // services.AddScoped<AuthorizeDataProvider>();
         services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
-
+        services.AddDistributedMemoryCache();
     }
 }

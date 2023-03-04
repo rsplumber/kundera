@@ -7,7 +7,7 @@ namespace Core.Domains.Scopes;
 
 public class Scope : BaseEntity
 {
-    protected Scope()
+    public Scope()
     {
     }
 
@@ -27,17 +27,17 @@ public class Scope : BaseEntity
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }
 
-    public Guid Id { get; internal set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public string Name { get; internal set; } = default!;
+    public string Name { get; set; } = default!;
 
-    public string Secret { get; internal set; } = default!;
+    public string Secret { get; set; } = default!;
 
-    public ScopeStatus Status { get; internal set; } = default!;
+    public ScopeStatus Status { get; set; } = default!;
 
-    public List<Service> Services { get; internal set; } = new();
+    public List<Service> Services { get; set; } = new();
 
-    public List<Role> Roles { get; internal set; } = new();
+    public List<Role> Roles { get; set; } = new();
 
     public void ChangeName(string name) => Name = name;
 

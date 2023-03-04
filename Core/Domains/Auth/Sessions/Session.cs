@@ -8,7 +8,7 @@ namespace Core.Domains.Auth.Sessions;
 
 public class Session : BaseEntity
 {
-    protected Session()
+    public Session()
     {
     }
 
@@ -31,19 +31,19 @@ public class Session : BaseEntity
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
-    public string Id { get; internal set; } = default!;
+    public string Id { get; set; } = default!;
 
-    public string RefreshToken { get; internal set; } = default!;
+    public string RefreshToken { get; set; } = default!;
 
-    public Credential Credential { get; internal set; }
+    public Credential Credential { get; set; }
 
-    public Scope Scope { get; internal set; }
+    public Scope Scope { get; set; }
 
-    public User User { get; internal set; }
+    public User User { get; set; }
 
-    public DateTime ExpirationDateUtc { get; internal set; }
+    public DateTime ExpirationDateUtc { get; set; }
     
-    public AuthActivity Activity { get; internal set; }
+    public AuthActivity Activity { get; set; }
 
     public void UpdateActivity(IPAddress ipAddress,string agent)
     {

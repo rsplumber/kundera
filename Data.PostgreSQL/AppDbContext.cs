@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Core.Domains;
 using Core.Domains.Auth;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
@@ -85,7 +84,7 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(b => b.Password)
                 .HasConversion(
-                    v => new PasswordType()
+                    v => new PasswordType
                     {
                         Salt = v.Salt,
                         Value = v.Value
@@ -197,9 +196,7 @@ public sealed class AppDbContext : DbContext
 
             builder
                 .Property(e => e.Status)
-                .HasConversion(
-                    v => v.Name,
-                    v => Enumeration.GetAll<GroupStatus>().First(status => status.Name == v));
+                .HasConversion<int>();
 
             builder.Property(model => model.Status)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -237,9 +234,7 @@ public sealed class AppDbContext : DbContext
 
             builder
                 .Property(e => e.Status)
-                .HasConversion(
-                    v => v.Name,
-                    v => Enumeration.GetAll<UserStatus>().First(status => status.Name == v));
+                .HasConversion<int>();
 
             builder.Property(model => model.Status)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -351,9 +346,7 @@ public sealed class AppDbContext : DbContext
 
             builder
                 .Property(e => e.Status)
-                .HasConversion(
-                    v => v.Name,
-                    v => Enumeration.GetAll<ScopeStatus>().First(status => status.Name == v));
+                .HasConversion<int>();
 
             builder.Property(model => model.Status)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -389,9 +382,7 @@ public sealed class AppDbContext : DbContext
 
             builder
                 .Property(e => e.Status)
-                .HasConversion(
-                    v => v.Name,
-                    v => Enumeration.GetAll<ServiceStatus>().First(status => status.Name == v));
+                .HasConversion<int>();
 
             builder.Property(model => model.Status)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)

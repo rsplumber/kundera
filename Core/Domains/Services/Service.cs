@@ -6,7 +6,7 @@ namespace Core.Domains.Services;
 
 public class Service : BaseEntity
 {
-    protected Service()
+    public Service()
     {
     }
 
@@ -28,11 +28,11 @@ public class Service : BaseEntity
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    public string Name { get; internal set; } = default!;
+    public string Name { get; set; } = default!;
 
-    public string Secret { get; internal set; } = default!;
+    public string Secret { get; set; } = default!;
 
-    public ServiceStatus Status { get; internal set; } = default!;
+    public ServiceStatus Status { get; set; } = default!;
 
     public void ChangeName(string name) => Name = name;
 

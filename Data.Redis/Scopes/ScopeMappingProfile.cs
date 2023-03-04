@@ -8,11 +8,6 @@ public class ScopeMappingProfile : Profile
 {
     public ScopeMappingProfile()
     {
-        CreateMap<string, ScopeStatus>()
-            .ConvertUsing(s => Enumeration.GetAll<ScopeStatus>().First(status => status.Name == s));
-
-        CreateMap<ScopeStatus, string>()
-            .ConvertUsing(s => s.Name);
         DisableConstructorMapping();
         CreateMap<ScopeDataModel, Scope>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

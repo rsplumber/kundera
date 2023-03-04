@@ -5,7 +5,7 @@ namespace Core.Domains.Roles;
 
 public class Role : BaseEntity
 {
-    protected Role()
+    public Role()
     {
     }
 
@@ -18,11 +18,11 @@ public class Role : BaseEntity
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    public string Name { get; internal set; } = default!;
+    public string Name { get; set; } = default!;
 
-    public List<Permission> Permissions { get; internal set; } = new();
+    public List<Permission> Permissions { get; set; } = new();
 
-    public Dictionary<string, string> Meta { get; internal set; } = new();
+    public Dictionary<string, string> Meta { get; set; } = new();
 
     public void ChangeName(string name) => Name = name;
 

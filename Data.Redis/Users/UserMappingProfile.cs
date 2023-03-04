@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.Domains;
 using Core.Domains.Users;
 
 namespace Data.Users;
@@ -8,11 +7,6 @@ public sealed class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        CreateMap<string, UserStatus>()
-            .ConvertUsing(u => Enumeration.GetAll<UserStatus>().First(status => status.Name == u));
-
-        CreateMap<UserStatus, string>()
-            .ConvertUsing(u => u.Name);
         DisableConstructorMapping();
         CreateMap<UserDataModel, User>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

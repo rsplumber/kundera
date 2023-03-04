@@ -1,11 +1,7 @@
 namespace Core.Domains.Services;
 
-public sealed class ServiceStatus : Enumeration
+public enum ServiceStatus
 {
-    public static readonly ServiceStatus Active = new(1, nameof(Active));
-    public static readonly ServiceStatus DeActive = new(2, nameof(DeActive));
-
-    private ServiceStatus(int id, string name) : base(id, name)
-    {
-    }
+    Active = 1,
+    DeActive = 2
 }

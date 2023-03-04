@@ -2,7 +2,7 @@
 
 public abstract class BaseEntity
 {
-    protected BaseEntity()
+    public BaseEntity()
     {
     }
 

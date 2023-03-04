@@ -8,11 +8,6 @@ public class ServiceMappingProfile : Profile
 {
     public ServiceMappingProfile()
     {
-        CreateMap<string, ServiceStatus>()
-            .ConvertUsing(s => Enumeration.GetAll<ServiceStatus>().First(status => status.Name == s));
-
-        CreateMap<ServiceStatus, string>()
-            .ConvertUsing(s => s.Name);
         DisableConstructorMapping();
         CreateMap<ServiceDataModel, Service>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()

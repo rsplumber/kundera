@@ -6,7 +6,7 @@ namespace Core.Domains.Auth.Credentials;
 
 public class Credential : BaseEntity
 {
-    protected Credential()
+    public Credential()
     {
     }
 
@@ -35,32 +35,32 @@ public class Credential : BaseEntity
     }
 
 
-    public Guid Id { get; internal set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public string Username { get; internal set; } = default!;
+    public string Username { get; set; } = default!;
 
-    public User User { get; internal set; }
+    public User User { get; set; }
 
-    public Password Password { get; internal set; } = default!;
+    public Password Password { get; set; } = default!;
 
 
-    public Guid? FirstActivityId { get; internal set; }
+    public Guid? FirstActivityId { get; set; }
 
-    public AuthActivity? FirstActivity { get; internal set; }
+    public AuthActivity? FirstActivity { get; set; }
 
-    public Guid? LastActivityId { get; internal set; }
+    public Guid? LastActivityId { get; set; }
 
-    public AuthActivity? LastActivity { get; internal set; }
+    public AuthActivity? LastActivity { get; set; }
 
-    public DateTime? ExpiresAtUtc { get; internal set; }
+    public DateTime? ExpiresAtUtc { get; set; }
 
-    public int? SessionExpireTimeInMinutes { get; internal set; }
+    public int? SessionExpireTimeInMinutes { get; set; }
 
-    public bool OneTime { get; internal set; }
+    public bool OneTime { get; set; }
 
     public bool SingleSession { get; init; }
 
-    public DateTime CreatedDateUtc { get; internal set; }
+    public DateTime CreatedDateUtc { get; set; }
 
     public void UpdateFirstActivityInfo(IPAddress ipAddress, string agent)
     {

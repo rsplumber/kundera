@@ -31,7 +31,7 @@ internal sealed class Endpoint : Endpoint<CreateGroupCommand>
                 Description = group.Description,
                 Parent = group.Parent?.Id,
                 Name = group.Name,
-                Status = group.Status.Name,
+                Status = group.Status.ToString(),
                 StatusChangedDate = group.StatusChangeDateUtc,
             },
             generateAbsoluteUrl: true,

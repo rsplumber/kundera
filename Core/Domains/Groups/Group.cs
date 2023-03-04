@@ -7,7 +7,7 @@ namespace Core.Domains.Groups;
 
 public class Group : BaseEntity
 {
-    protected Group()
+    public Group()
     {
     }
 
@@ -26,21 +26,21 @@ public class Group : BaseEntity
         Parent = parent;
     }
 
-    public Guid Id { get; internal set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-    public string Name { get; internal set; } = default!;
+    public string Name { get; set; } = default!;
 
-    public string? Description { get; internal set; }
+    public string? Description { get; set; }
 
-    public Group? Parent { get; internal set; }
+    public Group? Parent { get; set; }
 
-    public List<Group> Children { get; internal set; } = new();
+    public List<Group> Children { get; set; } = new();
 
-    public List<Role> Roles { get; internal set; } = new();
+    public List<Role> Roles { get; set; } = new();
     
-    public GroupStatus Status { get; internal set; } = default!;
+    public GroupStatus Status { get; set; } = default!;
 
-    public DateTime StatusChangeDateUtc { get; internal set; }
+    public DateTime StatusChangeDateUtc { get; set; }
 
     public void ChangeInfo(string name, string? description)
     {

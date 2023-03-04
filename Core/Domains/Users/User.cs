@@ -7,7 +7,7 @@ namespace Core.Domains.Users;
 
 public class User : BaseEntity
 {
-    protected User()
+    public User()
     {
     }
 
@@ -24,17 +24,17 @@ public class User : BaseEntity
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    public List<string> Usernames { get; internal set; } = new();
+    public List<string> Usernames { get; set; } = new();
 
-    public List<Group> Groups { get; internal set; } = new();
+    public List<Group> Groups { get; set; } = new();
 
-    public List<Role> Roles { get; internal set; } = new();
+    public List<Role> Roles { get; set; } = new();
 
-    public UserStatus Status { get; internal set; } = default!;
+    public UserStatus Status { get; set; } = default!;
 
-    public string? StatusChangeReason { get; internal set; }
+    public string? StatusChangeReason { get; set; }
 
-    public DateTime StatusChangeDateUtc { get; internal set; }
+    public DateTime StatusChangeDateUtc { get; set; }
 
     private void ChangeReason(string? reason) => StatusChangeReason = reason;
 

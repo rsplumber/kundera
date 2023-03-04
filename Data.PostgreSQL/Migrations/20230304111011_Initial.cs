@@ -35,7 +35,7 @@ namespace Data.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: true),
-                    status = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     status_change_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -82,7 +82,7 @@ namespace Data.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     secret = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false)
+                    status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace Data.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     secret = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false)
+                    status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,7 +109,7 @@ namespace Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     Usernames = table.Column<List<string>>(type: "text[]", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     status_change_reason = table.Column<string>(type: "text", nullable: true),
                     status_change_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

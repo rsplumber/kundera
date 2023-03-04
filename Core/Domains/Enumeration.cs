@@ -6,9 +6,9 @@ public abstract class Enumeration : IComparable
 {
     public int Id { get; }
 
-    public string Name { get; private set; }
+    public string Name { get; set;}
 
-    protected Enumeration(int id, string name) => (Id, Name) = (id, name);
+    public Enumeration(int id, string name) => (Id, Name) = (id, name);
 
     public override string ToString() => Name;
 
@@ -19,7 +19,7 @@ public abstract class Enumeration : IComparable
             .Select(f => f.GetValue(null))
             .Cast<T>();
 
-    protected bool Equals(Enumeration other)
+    public bool Equals(Enumeration other)
     {
         return Id == other.Id;
     }
