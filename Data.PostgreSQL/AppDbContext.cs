@@ -18,8 +18,6 @@ namespace Data;
 public sealed class AppDbContext : DbContext
 {
     private readonly ICapPublisher _eventBus;
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new();
-
     public AppDbContext(DbContextOptions<AppDbContext> options, ICapPublisher eventBus) : base(options)
     {
         _eventBus = eventBus;

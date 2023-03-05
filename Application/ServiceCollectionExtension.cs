@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
-using Savorboard.CAP.InMemoryMessageQueue;
 
 namespace Application;
 
@@ -16,11 +15,11 @@ public static class ServiceCollectionExtension
     {
         services.AddCap(x =>
         {
-            x.UseInMemoryStorage();
-            x.UseInMemoryMessageQueue();
-            x.UseDashboard();
+            x.UsePostgreSql(configuration.GetConnectionString("default")
+                            ?? throw new ArgumentNullException("connectionString", "Enter connection string in app settings"));
+            x.UseKafka("localhost:9092");
         });
-        
+
         services.AddScoped<ISessionManagement, SessionManagement>();
         services.Configure<SessionDefaultOptions>(configuration.GetSection("Sessions"));
 
