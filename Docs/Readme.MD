@@ -117,6 +117,21 @@ The microservices are containerized using Docker technology
 - - -
 - - -
 
+# Technical
+
+##Todo flow and Architucture must be implemented
+
+### Modules
+![](architucture.png)
+
+![](project_diagram.png)
+
+### Database schema
+
+![](db_schema.png)
+
+- - - 
+- - -
 ## Events
 
 ### Credentials

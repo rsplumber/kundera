@@ -21,7 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.PostgreSQL", "Data.Pos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E7262ED0-2D29-45F7-BA00-27C679B83E70}"
 	ProjectSection(SolutionItems) = preProject
-		Readme.MD = Readme.MD
+		Docs\Readme.MD = Docs\Readme.MD
+		Docs\db_schema.png = Docs\db_schema.png
+		Docs\project_diagram.png = Docs\project_diagram.png
+		Docs\architucture.png = Docs\architucture.png
 	EndProjectSection
 EndProject
 Global
