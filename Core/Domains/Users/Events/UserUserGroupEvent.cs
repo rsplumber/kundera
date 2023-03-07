@@ -2,10 +2,10 @@
 
 public sealed record UserJoinedGroupEvent(Guid Id, Guid Group) : DomainEvent
 {
-    public override string Name => "kundera_user_joined_group";
+    public override string Name => "kundera_users.group.joined";
 }
 
 public sealed record UserRemovedGroupEvent(Guid Id, Guid Group) : DomainEvent
 {
-    public override string Name => "kundera_user_removed_group";
+    public override string Name => "kundera_users.group.removed";
 }

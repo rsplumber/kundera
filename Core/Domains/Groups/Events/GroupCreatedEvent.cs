@@ -2,5 +2,5 @@
 
 public sealed record GroupCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_group_created";
+    public override string Name => "kundera_groups.created";
 }

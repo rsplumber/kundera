@@ -2,5 +2,5 @@
 
 public sealed record UserStatusChangedEvent(Guid UserId, UserStatus UserStatus) : DomainEvent
 {
-    public override string Name => "kundera_user_status";
+    public override string Name => "kundera_users.status_changed";
 }

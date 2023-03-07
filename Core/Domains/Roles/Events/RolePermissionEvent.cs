@@ -2,10 +2,10 @@
 
 public sealed record RolePermissionAddedEvent(Guid Id, Guid Permission) : DomainEvent
 {
-    public override string Name => "kundera_role_permission_added";
+    public override string Name => "kundera_roles.permission.added";
 }
 
 public sealed record RolePermissionRemovedEvent(Guid Id, Guid Permission) : DomainEvent
 {
-    public override string Name => "kundera_role_permission_removed";
+    public override string Name => "kundera_roles.permission.removed";
 }

@@ -99,7 +99,6 @@ that decorate your endpoints
 with required scopes
 and roles for accessing them.
 
-
 ## Architecture
 
 Kundera Identity service is built on DotNet 7 framework using C# language.
@@ -114,3 +113,78 @@ The microservices are containerized using Docker technology
 : https://en.wikipedia.org/wiki/Identity_(novel)
 : https://www.goodreads.com/book/show/28635.Identity
 ``
+
+- - -
+- - -
+
+## Events
+
+### Credentials
+
+- `kundera_credential.created`
+- `kundera_credential.password.changed`
+
+- - -
+
+### Sessions
+
+- `kundera_sessions.created`
+- `kundera_sessions.expired`
+- `kundera_sessions.terminated`
+
+- - -
+
+### Users
+
+- `kundera_users.created`
+- `kundera_users.role.added`
+- `kundera_users.role.removed`
+- `kundera_users.status_changed`
+- `kundera_users.group.joined`
+- `kundera_users.group.removed`
+- `kundera_users.username.added`
+- `kundera_users.username.removed`
+
+- - -
+
+### Groups
+
+- `kundera_groups.created`
+- `kundera_groups.child.added`
+- `kundera_groups.child.removed`
+- `kundera_groups.parent.changed`
+- `kundera_groups.role.added`
+- `kundera_groups.role.removed`
+- `kundera_groups.status_changed`
+
+- - -
+
+### Roles
+
+- `kundera_roles.created`
+- `kundera_roles.permission.added`
+- `kundera_roles.permission.removed`
+
+- - -
+
+### Permissions
+
+- `kundera_permissions.created`
+
+- - -
+
+### Scopes
+
+- `kundera_scopes.created`
+- `kundera_scopes.role.added`
+- `kundera_scopes.role.removed`
+- `kundera_scopes.service.added`
+- `kundera_scopes.service.removed`
+- `kundera_scopes.status_changed`
+
+- - -
+
+### Services
+
+- `kundera_services.created`
+- `kundera_services.status_changed`

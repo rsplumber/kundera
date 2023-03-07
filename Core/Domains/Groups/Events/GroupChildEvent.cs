@@ -2,10 +2,10 @@
 
 public sealed record GroupChildAddedEvent(Guid GroupId, Guid Child) : DomainEvent
 {
-    public override string Name => "kundera_group_child_added";
+    public override string Name => "kundera_groups.child.added";
 }
 
 public sealed record GroupChildRemovedEvent(Guid GroupId, Guid Child) : DomainEvent
 {
-    public override string Name => "kundera_group_child_added";
+    public override string Name => "kundera_groups.child.removed";
 }

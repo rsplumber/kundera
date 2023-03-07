@@ -2,10 +2,10 @@
 
 public sealed record UserRoleAddedEvent(Guid Id, Guid Role) : DomainEvent
 {
-    public override string Name => "kundera_user_role_added";
+    public override string Name => "kundera_users.role.added";
 }
 
 public sealed record UserRoleRemovedEvent(Guid Id, Guid Role) : DomainEvent
 {
-    public override string Name => "kundera_user_role_removed";
+    public override string Name => "kundera_users.role.removed";
 }

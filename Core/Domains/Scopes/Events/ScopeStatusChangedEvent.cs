@@ -2,5 +2,5 @@
 
 public sealed record ScopeStatusChangedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_scope_status_changed";
+    public override string Name => "kundera_scopes.status_changed";
 }

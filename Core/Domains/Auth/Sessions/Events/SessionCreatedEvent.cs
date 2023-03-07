@@ -2,5 +2,5 @@
 
 public sealed record SessionCreatedEvent(string Token) : DomainEvent
 {
-    public override string Name => "kundera_session_created";
+    public override string Name => "kundera_sessions.created";
 }
