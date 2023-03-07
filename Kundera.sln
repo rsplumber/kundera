@@ -19,6 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5B2EB057-D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.PostgreSQL", "Data.PostgreSQL\Data.PostgreSQL.csproj", "{6349C290-EBCF-4D84-8B04-8B3E26871D20}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E7262ED0-2D29-45F7-BA00-27C679B83E70}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.MD = Readme.MD
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
