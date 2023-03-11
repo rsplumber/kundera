@@ -118,8 +118,50 @@ The microservices are containerized using Docker technology
 - - -
 
 # Technical
+### Authentication flow:
 
-##Todo flow and Architucture must be implemented
+```mermaid
+
+flowchart TD
+    1[Authentication] -->|Username/password/ScopeToken| 2{Is username exists}
+    2 --> 3[NO]
+    3 --> UnAuthentication[Wrong Username/Password]
+    2 --> 4[YES]
+    4 --> 5{Check Password}
+    5 --> 3
+    5 --> 6[YES]
+    6 --> 7[Create session by user and scope]
+    7 --> 8[Return Certificate]
+```
+
+### Authorization flow:
+
+```mermaid
+
+flowchart TD
+    1[Authorization] -->|ServiceSecret/AuthorizationToken| 2{Check sessions}
+    2 --> 3[NO]
+    3 --> UnAuthorized[UnAuthorized]
+    2 --> 4[YES]
+    4 --> 5{Check expiration}
+    5 --> 6[Expired]
+    6 --> 7[Session expired]
+    5 --> 8[Valid]
+    8 --> 9{Check user status is active}
+    9 --> 10[Invalid]
+    10 --> Forbidden[Forbidden]
+    9 --> 11[Valid]
+    11 --> 12{Validate session scope: scope has user role}
+    12 --> 10
+    12 --> 13[Valid]
+    13 --> 14{Check service is in scope}
+    14 --> 10
+    14 --> 15[Valid]
+    15 --> 16{Check Permission}
+    16 --> 10
+    16 --> 17[Valid]
+    17 --> 18[Return User id]
+```
 
 ### Modules
 ![](architucture.png)
