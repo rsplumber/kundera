@@ -1,7 +1,9 @@
+using Core.Domains.Auth;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
-using Core.Domains.Permissions;
+using Core.Domains.Groups;
 using Core.Domains.Roles;
+using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Users;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,15 @@ namespace Data.Auth;
 internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 {
     private readonly AppDbContext _dbContext;
+    private const string GroupsChildrenRawQuery =
+        @"WITH RECURSIVE group_tree(id, parent_id, name, description, created_at, updated_at) AS (
+            SELECT g.id, g.parent_id, g.name, g.description, g.created_at, g.updated_at 
+            FROM groups g WHERE g.id = {0}
+            UNION ALL
+            SELECT g.id, g.parent_id, g.name, g.description, g.created_at, g.updated_at 
+            FROM groups g JOIN group_tree gt ON g.parent_id = gt.id
+        )
+        SELECT * FROM group_tree;";
 
     public AuthorizeDataProvider(AppDbContext dbContext)
     {
@@ -21,18 +32,74 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
     {
         return _dbContext.Sessions
             .AsNoTracking()
-            .Include(session => session.User)
-            .Include(session => session.Activity)
-            .Include(session => session.Scope)
-            .ThenInclude(scope => scope.Roles)
-            .FirstOrDefaultAsync(session => session.Id == sessionToken, cancellationToken);
+            .Where(session => session.Id == sessionToken)
+            .Select(session => new Session
+            {
+                Id = session.Id,
+                User = new User
+                {
+                    Id = session.User.Id,
+                    Status = session.User.Status,
+                    Roles = session.User.Roles,
+                    Groups = session.User.Groups.Select(ug => new Group
+                    {
+                        Id = ug.Id,
+                        Status = ug.Status,
+                        Roles = ug.Roles.ToList()
+                    }).ToList()
+                },
+                Activity = new AuthActivity
+                {
+                    Id = session.Activity.Id,
+                    Agent = session.Activity.Agent,
+                    CreatedDateUtc = session.Activity.CreatedDateUtc
+                },
+                Scope = new Scope
+                {
+                    Id = session.Scope.Id,
+                    Status = session.Scope.Status,
+                    Roles = session.Scope.Roles.ToList(),
+                    Services = session.Scope.Services.ToList()
+                },
+                ExpirationDateUtc = session.ExpirationDateUtc
+            })
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Groups.Include(u => u.Roles)
-            .ThenInclude(role => role.Permissions)
-            .SelectMany(group => group.Roles)
+        var allRoles = new List<Role>();
+        allRoles.AddRange(user.Roles);
+
+        foreach (var group in user.Groups)
+        {
+            await _dbContext.Entry(group)
+                .Collection(g => g.Roles)
+                .LoadAsync(cancellationToken);
+
+            allRoles.AddRange(group.Roles);
+        }
+
+        foreach (var group in user.Groups)
+        {
+            var childGroups = await GetAllChildrenAsync(group, cancellationToken);
+            foreach (var childGroup in childGroups)
+            {
+                await _dbContext.Entry(childGroup)
+                    .Collection(g => g.Roles)
+                    .LoadAsync(cancellationToken);
+                allRoles.AddRange(childGroup.Roles);
+            }
+        }
+
+        return allRoles;
+    }
+    
+    private Task<List<Group>> GetAllChildrenAsync(Group group, CancellationToken cancellationToken = default)
+    {
+        return  _dbContext.Groups
+            .FromSqlRaw(GroupsChildrenRawQuery, group.Id)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
 
@@ -40,7 +107,75 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
     {
         return _dbContext.Services
             .AsNoTracking()
-            .FirstOrDefaultAsync(service => service.Secret == serviceSecret, cancellationToken: cancellationToken);
+            .Where(service => service.Secret == serviceSecret)
+            .Select(service => new Service
+            {
+                Id = service.Id,
+                Name = service.Name,
+                Status = service.Status
+            })
+            .FirstOrDefaultAsync(cancellationToken);
     }
-
 }
+
+//
+// internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
+// {
+//     private readonly AppDbContext _dbContext;
+//
+//     public AuthorizeDataProvider(AppDbContext dbContext)
+//     {
+//         _dbContext = dbContext;
+//     }
+//
+//     public Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+//     {
+//         return _dbContext.Sessions
+//             .AsNoTracking()
+//             .Include(session => session.User)
+//             .ThenInclude(user => user.Groups)
+//             .ThenInclude(group => group.Roles)
+//             .Include(session => session.User)
+//             .ThenInclude(user => user.Roles)
+//             .Include(session => session.Activity)
+//             .Include(session => session.Scope)
+//             .ThenInclude(scope => scope.Roles)
+//             .FirstOrDefaultAsync(session => session.Id == sessionToken, cancellationToken);
+//     }
+//
+//     
+//     public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+//     {
+//         var allRoles = new List<Role>();
+//         allRoles.AddRange(user.Roles);
+//         allRoles.AddRange(user.Groups.SelectMany(group => group.Roles).ToList());
+//         foreach (var userGroup in user.Groups)
+//         {
+//             var childGroups = await GetAllChildrenAsync(userGroup, cancellationToken);
+//             allRoles.AddRange(childGroups.SelectMany(group => group.Roles).ToList());
+//         }
+//
+//         return allRoles;
+//     }
+//     
+//     public Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+//     {
+//         return _dbContext.Services
+//             .AsNoTracking()
+//             .FirstOrDefaultAsync(service => service.Secret == serviceSecret, cancellationToken: cancellationToken);
+//     }
+//
+//     private async Task<List<Group>> GetAllChildrenAsync(Group group, CancellationToken cancellationToken = default)
+//     {
+//         var children = new List<Group>();
+//
+//         children.AddRange(await _dbContext.Groups.Where(g => g.Parent.Id == group.Id)
+//             .ToListAsync(cancellationToken));
+//         foreach (var child in children)
+//         {
+//             children.AddRange(await GetAllChildrenAsync(child, cancellationToken));
+//         }
+//         return children;
+//     }
+//     
+// }
