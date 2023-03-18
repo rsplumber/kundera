@@ -13,15 +13,23 @@ namespace Data.Auth;
 internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 {
     private readonly AppDbContext _dbContext;
+
     private const string GroupsChildrenRawQuery =
-        @"WITH RECURSIVE group_tree(id, parent_id, name, description, created_at, updated_at) AS (
-            SELECT g.id, g.parent_id, g.name, g.description, g.created_at, g.updated_at 
-            FROM groups g WHERE g.id = {0}
-            UNION ALL
-            SELECT g.id, g.parent_id, g.name, g.description, g.created_at, g.updated_at 
-            FROM groups g JOIN group_tree gt ON g.parent_id = gt.id
-        )
-        SELECT * FROM group_tree;";
+        @"
+WITH RECURSIVE group_tree(id, parent_id, name, status) AS (
+    SELECT g.id, g.parent_id, g.name, g.status
+    FROM groups g WHERE g.id = {0}
+    UNION ALL
+    SELECT g.id, g.parent_id, g.name, g.status
+    FROM groups g JOIN group_tree gt ON g.parent_id = gt.id
+)
+SELECT DISTINCT roles.*
+FROM group_tree
+JOIN groups_roles ON groups_roles.group_id = group_tree.id
+JOIN roles ON roles.id = groups_roles.role_id
+JOIN roles_permission ON roles_permission.role_id = roles.id
+JOIN permissions ON permission.id = roles_permission.permission_id;
+";
 
     public AuthorizeDataProvider(AppDbContext dbContext)
     {
@@ -45,7 +53,13 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
                     {
                         Id = ug.Id,
                         Status = ug.Status,
-                        Roles = ug.Roles.ToList()
+                        Roles = ug.Roles.Select(role => new Role
+                        {
+                            Id = role.Id,
+                            Name = role.Name,
+                            Meta = role.Meta,
+                            Permissions = role.Permissions
+                        }).ToList()
                     }).ToList()
                 },
                 Activity = new AuthActivity
@@ -70,35 +84,20 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
     {
         var allRoles = new List<Role>();
         allRoles.AddRange(user.Roles);
+        allRoles.AddRange(user.Groups.SelectMany(g => g.Roles));
 
         foreach (var group in user.Groups)
         {
-            await _dbContext.Entry(group)
-                .Collection(g => g.Roles)
-                .LoadAsync(cancellationToken);
-
-            allRoles.AddRange(group.Roles);
-        }
-
-        foreach (var group in user.Groups)
-        {
-            var childGroups = await GetAllChildrenAsync(group, cancellationToken);
-            foreach (var childGroup in childGroups)
-            {
-                await _dbContext.Entry(childGroup)
-                    .Collection(g => g.Roles)
-                    .LoadAsync(cancellationToken);
-                allRoles.AddRange(childGroup.Roles);
-            }
+            var childGroups = await GetAllChildrenRolesAsync(group, cancellationToken);
+            allRoles.AddRange(childGroups);
         }
 
         return allRoles;
     }
-    
-    private Task<List<Group>> GetAllChildrenAsync(Group group, CancellationToken cancellationToken = default)
+
+    private Task<List<Role>> GetAllChildrenRolesAsync(Group group, CancellationToken cancellationToken = default)
     {
-        return  _dbContext.Groups
-            .FromSqlRaw(GroupsChildrenRawQuery, group.Id)
+        return _dbContext.Roles.FromSqlRaw(GroupsChildrenRawQuery, group.Id)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

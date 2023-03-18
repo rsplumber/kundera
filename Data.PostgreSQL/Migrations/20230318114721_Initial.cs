@@ -34,7 +34,7 @@ namespace Data.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
-                    ParentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     status = table.Column<int>(type: "integer", nullable: false),
                     status_change_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -42,8 +42,8 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_groups", x => x.id);
                     table.ForeignKey(
-                        name: "FK_groups_groups_ParentId",
-                        column: x => x.ParentId,
+                        name: "FK_groups_groups_parent_id",
+                        column: x => x.parent_id,
                         principalTable: "groups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -55,7 +55,7 @@ namespace Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    meta = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: false)
+                    meta = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    meta = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: false)
+                    meta = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -122,21 +122,21 @@ namespace Data.Migrations
                 name: "groups_children",
                 columns: table => new
                 {
-                    ChildrenId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: false)
+                    child_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    group_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_groups_children", x => new { x.ChildrenId, x.GroupId });
+                    table.PrimaryKey("PK_groups_children", x => new { x.child_id, x.group_id });
                     table.ForeignKey(
-                        name: "FK_groups_children_groups_ChildrenId",
-                        column: x => x.ChildrenId,
+                        name: "FK_groups_children_groups_child_id",
+                        column: x => x.child_id,
                         principalTable: "groups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_groups_children_groups_GroupId",
-                        column: x => x.GroupId,
+                        name: "FK_groups_children_groups_group_id",
+                        column: x => x.group_id,
                         principalTable: "groups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -146,21 +146,21 @@ namespace Data.Migrations
                 name: "groups_roles",
                 columns: table => new
                 {
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RolesId = table.Column<Guid>(type: "uuid", nullable: false)
+                    group_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_groups_roles", x => new { x.GroupId, x.RolesId });
+                    table.PrimaryKey("PK_groups_roles", x => new { x.group_id, x.role_id });
                     table.ForeignKey(
-                        name: "FK_groups_roles_groups_GroupId",
-                        column: x => x.GroupId,
+                        name: "FK_groups_roles_groups_group_id",
+                        column: x => x.group_id,
                         principalTable: "groups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_groups_roles_roles_RolesId",
-                        column: x => x.RolesId,
+                        name: "FK_groups_roles_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -170,21 +170,21 @@ namespace Data.Migrations
                 name: "roles_permission",
                 columns: table => new
                 {
-                    PermissionsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                    permission_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_roles_permission", x => new { x.PermissionsId, x.RoleId });
+                    table.PrimaryKey("PK_roles_permission", x => new { x.permission_id, x.role_id });
                     table.ForeignKey(
-                        name: "FK_roles_permission_permissions_PermissionsId",
-                        column: x => x.PermissionsId,
+                        name: "FK_roles_permission_permissions_permission_id",
+                        column: x => x.permission_id,
                         principalTable: "permissions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_roles_permission_roles_RoleId",
-                        column: x => x.RoleId,
+                        name: "FK_roles_permission_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -194,21 +194,21 @@ namespace Data.Migrations
                 name: "scopes_roles",
                 columns: table => new
                 {
-                    RolesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false)
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    scope_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_scopes_roles", x => new { x.RolesId, x.ScopeId });
+                    table.PrimaryKey("PK_scopes_roles", x => new { x.role_id, x.scope_id });
                     table.ForeignKey(
-                        name: "FK_scopes_roles_roles_RolesId",
-                        column: x => x.RolesId,
+                        name: "FK_scopes_roles_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_scopes_roles_scopes_ScopeId",
-                        column: x => x.ScopeId,
+                        name: "FK_scopes_roles_scopes_scope_id",
+                        column: x => x.scope_id,
                         principalTable: "scopes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -218,21 +218,21 @@ namespace Data.Migrations
                 name: "scopes_services",
                 columns: table => new
                 {
-                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ServicesId = table.Column<Guid>(type: "uuid", nullable: false)
+                    scope_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    service_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_scopes_services", x => new { x.ScopeId, x.ServicesId });
+                    table.PrimaryKey("PK_scopes_services", x => new { x.scope_id, x.service_id });
                     table.ForeignKey(
-                        name: "FK_scopes_services_scopes_ScopeId",
-                        column: x => x.ScopeId,
+                        name: "FK_scopes_services_scopes_scope_id",
+                        column: x => x.scope_id,
                         principalTable: "scopes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_scopes_services_services_ServicesId",
-                        column: x => x.ServicesId,
+                        name: "FK_scopes_services_services_service_id",
+                        column: x => x.service_id,
                         principalTable: "services",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -244,10 +244,12 @@ namespace Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     username = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     Password = table.Column<PasswordType>(type: "jsonb", nullable: false),
                     FirstActivityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    first_activity_id = table.Column<Guid>(type: "uuid", nullable: true),
                     LastActivityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    last_activity_id = table.Column<Guid>(type: "uuid", nullable: true),
                     expires_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     session_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: true),
                     one_time = table.Column<bool>(type: "boolean", nullable: false),
@@ -258,20 +260,20 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_credentials", x => x.id);
                     table.ForeignKey(
-                        name: "FK_credentials_auth_activities_FirstActivityId",
-                        column: x => x.FirstActivityId,
+                        name: "FK_credentials_auth_activities_first_activity_id",
+                        column: x => x.first_activity_id,
                         principalTable: "auth_activities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_credentials_auth_activities_LastActivityId",
-                        column: x => x.LastActivityId,
+                        name: "FK_credentials_auth_activities_last_activity_id",
+                        column: x => x.last_activity_id,
                         principalTable: "auth_activities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_credentials_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_credentials_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id");
                 });
@@ -280,21 +282,21 @@ namespace Data.Migrations
                 name: "users_groups",
                 columns: table => new
                 {
-                    GroupsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    group_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users_groups", x => new { x.GroupsId, x.UserId });
+                    table.PrimaryKey("PK_users_groups", x => new { x.group_id, x.user_id });
                     table.ForeignKey(
-                        name: "FK_users_groups_groups_GroupsId",
-                        column: x => x.GroupsId,
+                        name: "FK_users_groups_groups_group_id",
+                        column: x => x.group_id,
                         principalTable: "groups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_users_groups_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_users_groups_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -304,21 +306,21 @@ namespace Data.Migrations
                 name: "users_roles",
                 columns: table => new
                 {
-                    RolesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users_roles", x => new { x.RolesId, x.UserId });
+                    table.PrimaryKey("PK_users_roles", x => new { x.role_id, x.user_id });
                     table.ForeignKey(
-                        name: "FK_users_roles_roles_RolesId",
-                        column: x => x.RolesId,
+                        name: "FK_users_roles_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_users_roles_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_users_roles_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -330,34 +332,34 @@ namespace Data.Migrations
                 {
                     id = table.Column<string>(type: "text", nullable: false),
                     refresh_token = table.Column<string>(type: "text", nullable: false),
-                    CredentialId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    credential_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    scope_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ActivityId = table.Column<Guid>(type: "uuid", nullable: false)
+                    activity_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_sessions", x => x.id);
                     table.ForeignKey(
-                        name: "FK_sessions_auth_activities_ActivityId",
-                        column: x => x.ActivityId,
+                        name: "FK_sessions_auth_activities_activity_id",
+                        column: x => x.activity_id,
                         principalTable: "auth_activities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_sessions_credentials_CredentialId",
-                        column: x => x.CredentialId,
+                        name: "FK_sessions_credentials_credential_id",
+                        column: x => x.credential_id,
                         principalTable: "credentials",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_sessions_scopes_ScopeId",
-                        column: x => x.ScopeId,
+                        name: "FK_sessions_scopes_scope_id",
+                        column: x => x.scope_id,
                         principalTable: "scopes",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_sessions_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_sessions_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id");
                 });
@@ -368,19 +370,19 @@ namespace Data.Migrations
                 column: "agent");
 
             migrationBuilder.CreateIndex(
-                name: "IX_credentials_FirstActivityId",
+                name: "IX_credentials_first_activity_id",
                 table: "credentials",
-                column: "FirstActivityId");
+                column: "first_activity_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_credentials_LastActivityId",
+                name: "IX_credentials_last_activity_id",
                 table: "credentials",
-                column: "LastActivityId");
+                column: "last_activity_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_credentials_UserId",
+                name: "IX_credentials_user_id",
                 table: "credentials",
-                column: "UserId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_credentials_username",
@@ -390,12 +392,13 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_groups_name",
                 table: "groups",
-                column: "name");
+                column: "name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_groups_ParentId",
+                name: "IX_groups_parent_id",
                 table: "groups",
-                column: "ParentId",
+                column: "parent_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -404,29 +407,31 @@ namespace Data.Migrations
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_groups_children_GroupId",
+                name: "IX_groups_children_group_id",
                 table: "groups_children",
-                column: "GroupId");
+                column: "group_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_groups_roles_RolesId",
+                name: "IX_groups_roles_role_id",
                 table: "groups_roles",
-                column: "RolesId");
+                column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_permissions_name",
                 table: "permissions",
-                column: "name");
+                column: "name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_roles_name",
                 table: "roles",
-                column: "name");
+                column: "name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_roles_permission_RoleId",
+                name: "IX_roles_permission_role_id",
                 table: "roles_permission",
-                column: "RoleId");
+                column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_scopes_name",
@@ -436,7 +441,8 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_scopes_secret",
                 table: "scopes",
-                column: "secret");
+                column: "secret",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_scopes_status",
@@ -444,14 +450,14 @@ namespace Data.Migrations
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_scopes_roles_ScopeId",
+                name: "IX_scopes_roles_scope_id",
                 table: "scopes_roles",
-                column: "ScopeId");
+                column: "scope_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_scopes_services_ServicesId",
+                name: "IX_scopes_services_service_id",
                 table: "scopes_services",
-                column: "ServicesId");
+                column: "service_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_services_name",
@@ -461,7 +467,8 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_services_secret",
                 table: "services",
-                column: "secret");
+                column: "secret",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_services_status",
@@ -469,14 +476,14 @@ namespace Data.Migrations
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_ActivityId",
+                name: "IX_sessions_activity_id",
                 table: "sessions",
-                column: "ActivityId");
+                column: "activity_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_CredentialId",
+                name: "IX_sessions_credential_id",
                 table: "sessions",
-                column: "CredentialId");
+                column: "credential_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_refresh_token",
@@ -484,14 +491,14 @@ namespace Data.Migrations
                 column: "refresh_token");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_ScopeId",
+                name: "IX_sessions_scope_id",
                 table: "sessions",
-                column: "ScopeId");
+                column: "scope_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_UserId",
+                name: "IX_sessions_user_id",
                 table: "sessions",
-                column: "UserId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_status",
@@ -504,14 +511,14 @@ namespace Data.Migrations
                 column: "Usernames");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_groups_UserId",
+                name: "IX_users_groups_user_id",
                 table: "users_groups",
-                column: "UserId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_roles_UserId",
+                name: "IX_users_roles_user_id",
                 table: "users_roles",
-                column: "UserId");
+                column: "user_id");
         }
 
         /// <inheritdoc />

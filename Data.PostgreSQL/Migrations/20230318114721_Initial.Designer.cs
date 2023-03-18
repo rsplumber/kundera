@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230304111011_Initial")]
+    [Migration("20230318114721_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -90,23 +90,29 @@ namespace Data.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("single_session");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("username");
 
+                    b.Property<Guid?>("first_activity_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("last_activity_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("FirstActivityId");
-
-                    b.HasIndex("LastActivityId");
-
-                    b.HasIndex("UserId");
-
                     b.HasIndex("Username");
+
+                    b.HasIndex("first_activity_id");
+
+                    b.HasIndex("last_activity_id");
+
+                    b.HasIndex("user_id");
 
                     b.ToTable("credentials", (string)null);
                 });
@@ -117,12 +123,6 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("ActivityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CredentialId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("ExpirationDateUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expiration_date_utc");
@@ -132,23 +132,29 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("refresh_token");
 
-                    b.Property<Guid>("ScopeId")
+                    b.Property<Guid>("activity_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("credential_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("scope_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("CredentialId");
-
                     b.HasIndex("RefreshToken");
 
-                    b.HasIndex("ScopeId");
+                    b.HasIndex("activity_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("credential_id");
+
+                    b.HasIndex("scope_id");
+
+                    b.HasIndex("user_id");
 
                     b.ToTable("sessions", (string)null);
                 });
@@ -169,9 +175,6 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasColumnName("status");
@@ -180,14 +183,18 @@ namespace Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("status_change_date_utc");
 
+                    b.Property<Guid?>("parent_id")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ParentId")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.HasIndex("Status");
+
+                    b.HasIndex("parent_id")
+                        .IsUnique();
 
                     b.ToTable("groups", (string)null);
                 });
@@ -200,7 +207,6 @@ namespace Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<Dictionary<string, string>>("Meta")
-                        .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("meta");
 
@@ -211,7 +217,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("permissions", (string)null);
                 });
@@ -224,7 +231,6 @@ namespace Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<Dictionary<string, string>>("Meta")
-                        .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("meta");
 
@@ -235,7 +241,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("roles", (string)null);
                 });
@@ -265,7 +272,8 @@ namespace Data.Migrations
 
                     b.HasIndex("Name");
 
-                    b.HasIndex("Secret");
+                    b.HasIndex("Secret")
+                        .IsUnique();
 
                     b.HasIndex("Status");
 
@@ -297,7 +305,8 @@ namespace Data.Migrations
 
                     b.HasIndex("Name");
 
-                    b.HasIndex("Secret");
+                    b.HasIndex("Secret")
+                        .IsUnique();
 
                     b.HasIndex("Status");
 
@@ -336,126 +345,126 @@ namespace Data.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("GroupGroup", b =>
+            modelBuilder.Entity("groups_children", b =>
                 {
-                    b.Property<Guid>("ChildrenId")
+                    b.Property<Guid>("child_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid>("group_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ChildrenId", "GroupId");
+                    b.HasKey("child_id", "group_id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("group_id");
 
-                    b.ToTable("groups_children", (string)null);
+                    b.ToTable("groups_children");
                 });
 
-            modelBuilder.Entity("GroupRole", b =>
+            modelBuilder.Entity("groups_roles", b =>
                 {
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid>("group_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("role_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("GroupId", "RolesId");
+                    b.HasKey("group_id", "role_id");
 
-                    b.HasIndex("RolesId");
+                    b.HasIndex("role_id");
 
-                    b.ToTable("groups_roles", (string)null);
+                    b.ToTable("groups_roles");
                 });
 
-            modelBuilder.Entity("GroupUser", b =>
+            modelBuilder.Entity("roles_permission", b =>
                 {
-                    b.Property<Guid>("GroupsId")
+                    b.Property<Guid>("permission_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("role_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("GroupsId", "UserId");
+                    b.HasKey("permission_id", "role_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("role_id");
 
-                    b.ToTable("users_groups", (string)null);
+                    b.ToTable("roles_permission");
                 });
 
-            modelBuilder.Entity("PermissionRole", b =>
+            modelBuilder.Entity("scopes_roles", b =>
                 {
-                    b.Property<Guid>("PermissionsId")
+                    b.Property<Guid>("role_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid>("scope_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("PermissionsId", "RoleId");
+                    b.HasKey("role_id", "scope_id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("scope_id");
 
-                    b.ToTable("roles_permission", (string)null);
+                    b.ToTable("scopes_roles");
                 });
 
-            modelBuilder.Entity("RoleScope", b =>
+            modelBuilder.Entity("scopes_services", b =>
                 {
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("scope_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ScopeId")
+                    b.Property<Guid>("service_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("RolesId", "ScopeId");
+                    b.HasKey("scope_id", "service_id");
 
-                    b.HasIndex("ScopeId");
+                    b.HasIndex("service_id");
 
-                    b.ToTable("scopes_roles", (string)null);
+                    b.ToTable("scopes_services");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("users_groups", b =>
                 {
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("group_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("RolesId", "UserId");
+                    b.HasKey("group_id", "user_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("user_id");
 
-                    b.ToTable("users_roles", (string)null);
+                    b.ToTable("users_groups");
                 });
 
-            modelBuilder.Entity("ScopeService", b =>
+            modelBuilder.Entity("users_roles", b =>
                 {
-                    b.Property<Guid>("ScopeId")
+                    b.Property<Guid>("role_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ServicesId")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ScopeId", "ServicesId");
+                    b.HasKey("role_id", "user_id");
 
-                    b.HasIndex("ServicesId");
+                    b.HasIndex("user_id");
 
-                    b.ToTable("scopes_services", (string)null);
+                    b.ToTable("users_roles");
                 });
 
             modelBuilder.Entity("Core.Domains.Auth.Credentials.Credential", b =>
                 {
                     b.HasOne("Core.Domains.Auth.AuthActivity", "FirstActivity")
                         .WithMany()
-                        .HasForeignKey("FirstActivityId")
+                        .HasForeignKey("first_activity_id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Core.Domains.Auth.AuthActivity", "LastActivity")
                         .WithMany()
-                        .HasForeignKey("LastActivityId")
+                        .HasForeignKey("last_activity_id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Core.Domains.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -470,25 +479,25 @@ namespace Data.Migrations
                 {
                     b.HasOne("Core.Domains.Auth.AuthActivity", "Activity")
                         .WithMany()
-                        .HasForeignKey("ActivityId")
+                        .HasForeignKey("activity_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Auth.Credentials.Credential", "Credential")
                         .WithMany()
-                        .HasForeignKey("CredentialId")
+                        .HasForeignKey("credential_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Scopes.Scope", "Scope")
                         .WithMany()
-                        .HasForeignKey("ScopeId")
+                        .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -505,113 +514,113 @@ namespace Data.Migrations
                 {
                     b.HasOne("Core.Domains.Groups.Group", "Parent")
                         .WithOne()
-                        .HasForeignKey("Core.Domains.Groups.Group", "ParentId")
+                        .HasForeignKey("Core.Domains.Groups.Group", "parent_id")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("GroupGroup", b =>
+            modelBuilder.Entity("groups_children", b =>
                 {
                     b.HasOne("Core.Domains.Groups.Group", null)
                         .WithMany()
-                        .HasForeignKey("ChildrenId")
+                        .HasForeignKey("child_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Groups.Group", null)
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("group_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GroupRole", b =>
+            modelBuilder.Entity("groups_roles", b =>
                 {
                     b.HasOne("Core.Domains.Groups.Group", null)
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("group_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GroupUser", b =>
-                {
-                    b.HasOne("Core.Domains.Groups.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Domains.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PermissionRole", b =>
+            modelBuilder.Entity("roles_permission", b =>
                 {
                     b.HasOne("Core.Domains.Permissions.Permission", null)
                         .WithMany()
-                        .HasForeignKey("PermissionsId")
+                        .HasForeignKey("permission_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleScope", b =>
+            modelBuilder.Entity("scopes_roles", b =>
                 {
                     b.HasOne("Core.Domains.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Scopes.Scope", null)
                         .WithMany()
-                        .HasForeignKey("ScopeId")
+                        .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("Core.Domains.Roles.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Domains.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScopeService", b =>
+            modelBuilder.Entity("scopes_services", b =>
                 {
                     b.HasOne("Core.Domains.Scopes.Scope", null)
                         .WithMany()
-                        .HasForeignKey("ScopeId")
+                        .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Domains.Services.Service", null)
                         .WithMany()
-                        .HasForeignKey("ServicesId")
+                        .HasForeignKey("service_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("users_groups", b =>
+                {
+                    b.HasOne("Core.Domains.Groups.Group", null)
+                        .WithMany()
+                        .HasForeignKey("group_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domains.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("users_roles", b =>
+                {
+                    b.HasOne("Core.Domains.Roles.Role", null)
+                        .WithMany()
+                        .HasForeignKey("role_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domains.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

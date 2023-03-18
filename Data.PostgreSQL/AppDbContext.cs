@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Core.Domains.Auth;
+﻿using Core.Domains.Auth;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
@@ -18,6 +17,7 @@ namespace Data;
 public sealed class AppDbContext : DbContext
 {
     private readonly ICapPublisher _eventBus;
+
     public AppDbContext(DbContextOptions<AppDbContext> options, ICapPublisher eventBus) : base(options)
     {
         _eventBus = eventBus;
@@ -78,6 +78,7 @@ public sealed class AppDbContext : DbContext
 
             builder.HasOne(model => model.User)
                 .WithMany()
+                .HasForeignKey("user_id")
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(b => b.Password)
@@ -96,7 +97,8 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(model => model.SessionExpireTimeInMinutes)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("session_expire_time_in_minutes");
+                .HasColumnName("session_expire_time_in_minutes")
+                .IsRequired(false);
 
             builder.Property(model => model.OneTime)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -104,7 +106,8 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(model => model.ExpiresAtUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("expires_at_utc");
+                .HasColumnName("expires_at_utc")
+                .IsRequired(false);
 
             builder.Property(model => model.CreatedDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -112,10 +115,12 @@ public sealed class AppDbContext : DbContext
 
             builder.HasOne(model => model.FirstActivity)
                 .WithMany()
+                .HasForeignKey("first_activity_id")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(model => model.LastActivity)
                 .WithMany()
+                .HasForeignKey("last_activity_id")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
@@ -139,18 +144,22 @@ public sealed class AppDbContext : DbContext
 
             builder.HasOne(model => model.Credential)
                 .WithMany()
+                .HasForeignKey("credential_id")
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(model => model.Scope)
                 .WithMany()
+                .HasForeignKey("scope_id")
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(model => model.User)
                 .WithMany()
+                .HasForeignKey("user_id")
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(model => model.Activity)
                 .WithMany()
+                .HasForeignKey("activity_id")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(model => model.ExpirationDateUtc)
@@ -174,29 +183,34 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name);
+            builder.HasIndex(model => model.Name).IsUnique();
 
             builder.Property(model => model.Description)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("description");
+                .HasColumnName("description")
+                .IsRequired(false);
 
             builder.HasOne(model => model.Parent)
                 .WithOne()
+                .HasForeignKey<Group>("parent_id")
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(model => model.Children)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("groups_children"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "groups_children",
+                    x => x.HasOne<Group>().WithMany().HasForeignKey("group_id"),
+                    x => x.HasOne<Group>().WithMany().HasForeignKey("child_id"));
 
             builder.HasMany(model => model.Roles)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("groups_roles"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "groups_roles",
+                    x => x.HasOne<Role>().WithMany().HasForeignKey("role_id"),
+                    x => x.HasOne<Group>().WithMany().HasForeignKey("group_id"));
 
-            builder
-                .Property(e => e.Status)
-                .HasConversion<int>();
-
-            builder.Property(model => model.Status)
+            builder.Property(e => e.Status)
+                .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
 
@@ -224,17 +238,20 @@ public sealed class AppDbContext : DbContext
 
             builder.HasMany(model => model.Groups)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("users_groups"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "users_groups",
+                    x => x.HasOne<Group>().WithMany().HasForeignKey("group_id"),
+                    x => x.HasOne<User>().WithMany().HasForeignKey("user_id"));
 
             builder.HasMany(model => model.Roles)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("users_roles"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "users_roles",
+                    x => x.HasOne<Role>().WithMany().HasForeignKey("role_id"),
+                    x => x.HasOne<User>().WithMany().HasForeignKey("user_id"));
 
-            builder
-                .Property(e => e.Status)
-                .HasConversion<int>();
-
-            builder.Property(model => model.Status)
+            builder.Property(e => e.Status)
+                .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
 
@@ -242,7 +259,8 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(model => model.StatusChangeReason)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("status_change_reason");
+                .HasColumnName("status_change_reason")
+                .IsRequired(false);
 
             builder.Property(model => model.StatusChangeDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -266,19 +284,20 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name);
+            builder.HasIndex(model => model.Name).IsUnique();
 
             builder.HasMany(model => model.Permissions)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("roles_permission"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "roles_permission",
+                    x => x.HasOne<Permission>().WithMany().HasForeignKey("permission_id"),
+                    x => x.HasOne<Role>().WithMany().HasForeignKey("role_id"));
 
-            builder
-                .Property(e => e.Meta)
-                .HasColumnType("jsonb");
-
-            builder.Property(model => model.Meta)
+            builder.Property(e => e.Meta)
+                .HasColumnType("jsonb")
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("meta");
+                .HasColumnName("meta")
+                .IsRequired(false);
         }
     }
 
@@ -298,15 +317,13 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name);
+            builder.HasIndex(model => model.Name).IsUnique();
 
-            builder
-                .Property(e => e.Meta)
-                .HasColumnType("jsonb");
-
-            builder.Property(model => model.Meta)
+            builder.Property(e => e.Meta)
+                .HasColumnType("jsonb")
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("meta");
+                .HasColumnName("meta")
+                .IsRequired(false);
         }
     }
 
@@ -332,21 +349,24 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("secret");
 
-            builder.HasIndex(model => model.Secret);
+            builder.HasIndex(model => model.Secret).IsUnique();
 
             builder.HasMany(model => model.Services)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("scopes_services"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "scopes_services",
+                    x => x.HasOne<Service>().WithMany().HasForeignKey("service_id"),
+                    x => x.HasOne<Scope>().WithMany().HasForeignKey("scope_id"));
 
             builder.HasMany(model => model.Roles)
                 .WithMany()
-                .UsingEntity(typeBuilder => { typeBuilder.ToTable("scopes_roles"); });
+                .UsingEntity<Dictionary<string, object>>(
+                    "scopes_roles",
+                    x => x.HasOne<Role>().WithMany().HasForeignKey("role_id"),
+                    x => x.HasOne<Scope>().WithMany().HasForeignKey("scope_id"));
 
-            builder
-                .Property(e => e.Status)
-                .HasConversion<int>();
-
-            builder.Property(model => model.Status)
+            builder.Property(e => e.Status)
+                .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
 
@@ -375,14 +395,11 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("secret");
 
-            builder.HasIndex(model => model.Secret);
+            builder.HasIndex(model => model.Secret).IsUnique();
 
 
-            builder
-                .Property(e => e.Status)
-                .HasConversion<int>();
-
-            builder.Property(model => model.Status)
+            builder.Property(e => e.Status)
+                .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
 
@@ -403,11 +420,13 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(model => model.IpAddress)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("ip_address");
+                .HasColumnName("ip_address")
+                .IsRequired(false);
 
             builder.Property(model => model.Agent)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("agent");
+                .HasColumnName("agent")
+                .IsRequired(false);
 
             builder.HasIndex(activity => activity.Agent);
 
