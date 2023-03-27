@@ -231,7 +231,6 @@ internal sealed class DataSeeder
         await _permissionFactory.CreateAsync("kundera_credentials_create_onetime");
         await _permissionFactory.CreateAsync("kundera_credentials_create_time-periodic");
         await _permissionFactory.CreateAsync("kundera_credentials_delete");
-        await _permissionFactory.CreateAsync("kundera_refresh_token");
     }
 
     private async Task SeedSessionsPermissions()

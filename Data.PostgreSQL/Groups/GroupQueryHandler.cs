@@ -16,12 +16,11 @@ public sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
 
     public async ValueTask<GroupResponse> Handle(GroupQuery query, CancellationToken cancellationToken)
     {
-        
-        var group =await _dbContext.Groups
+        var group = await _dbContext.Groups
             .AsNoTracking()
             .Include(g => g.Parent)
             .Include(g => g.Roles)
-            .FirstOrDefaultAsync(g => g.Id == query.GroupId ,cancellationToken);
+            .FirstOrDefaultAsync(g => g.Id == query.GroupId, cancellationToken);
         if (group is null)
         {
             throw new GroupNotFoundException();
@@ -33,7 +32,7 @@ public sealed class GroupQueryHandler : IQueryHandler<GroupQuery, GroupResponse>
             Name = group.Name,
             Status = group.Status.ToString(),
             Description = group.Description,
-            Parent = group.Parent?.Id ,
+            Parent = group.Parent?.Id,
             StatusChangedDate = group.StatusChangeDateUtc,
             Roles = group.Roles.Select(model => new GroupRoleResponse
             {

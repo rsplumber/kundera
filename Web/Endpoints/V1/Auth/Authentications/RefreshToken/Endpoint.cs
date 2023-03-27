@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
     public override void Configure()
     {
         Post("authenticate/refresh");
-        Permissions("kundera_refresh_token");
+        AllowAnonymous();
         Version(1);
     }
 
