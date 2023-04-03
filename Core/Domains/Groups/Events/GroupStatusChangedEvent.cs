@@ -2,5 +2,5 @@
 
 public sealed record GroupStatusChangedEvent(Guid GroupId, GroupStatus Status) : DomainEvent
 {
-    public override string Name => "kundera_groups.status_changed";
+    public override string Name => "kundera.groups.status.changed";
 }

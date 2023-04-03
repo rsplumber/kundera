@@ -2,5 +2,5 @@
 
 public sealed record ServiceStatusChangedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_services.status_changed";
+    public override string Name => "kundera.services.status.changed";
 }

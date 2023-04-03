@@ -2,10 +2,10 @@
 
 public sealed record UserUsernameAddedEvent(Guid Id, string Username) : DomainEvent
 {
-    public override string Name => "kundera_users.username.added";
+    public override string Name => "kundera.users.username.added";
 }
 
 public sealed record UserUsernameRemovedEvent(Guid Id, string Username) : DomainEvent
 {
-    public override string Name => "kundera_users.username.removed";
+    public override string Name => "kundera.users.username.removed";
 }

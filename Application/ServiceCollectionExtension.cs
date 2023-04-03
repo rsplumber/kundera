@@ -13,11 +13,20 @@ public static class ServiceCollectionExtension
 {
     public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddCap(x =>
+        services.AddCap(options =>
         {
-            x.UsePostgreSql(configuration.GetConnectionString("default")
-                            ?? throw new ArgumentNullException("connectionString", "Enter connection string in app settings"));
-            x.UseKafka("localhost:9092");
+            options.UseRabbitMQ(op =>
+            {
+                op.HostName = configuration.GetValue<string>("RabbitMQ:HostName") ?? throw new ArgumentNullException("RabbitMQ:HostName", "Enter RabbitMQ:HostName in app settings");
+                op.UserName = configuration.GetValue<string>("RabbitMQ:UserName") ?? throw new ArgumentNullException("RabbitMQ:UserName", "Enter RabbitMQ:UserName in app settings");
+                op.Password = configuration.GetValue<string>("RabbitMQ:Password") ?? throw new ArgumentNullException("RabbitMQ:Password", "Enter RabbitMQ:UserName in app settings");
+                op.ExchangeName = configuration.GetValue<string>("RabbitMQ:ExchangeName") ?? throw new ArgumentNullException("RabbitMQ:ExchangeName", "Enter RabbitMQ:ExchangeName in app settings");
+            });
+            options.UsePostgreSql(sqlOptions =>
+            {
+                sqlOptions.ConnectionString = configuration.GetConnectionString("default") ?? throw new ArgumentNullException("connectionString", "Enter connection string in app settings");
+                sqlOptions.Schema = "events";
+            });
         });
 
         services.AddScoped<ISessionManagement, SessionManagement>();

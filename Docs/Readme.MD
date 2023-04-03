@@ -178,70 +178,70 @@ flowchart TD
 
 ### Credentials
 
-- `kundera_credential.created`
-- `kundera_credential.password.changed`
+- `kundera.credential.created`
+- `kundera.credential.password.changed`
 
 - - -
 
 ### Sessions
 
-- `kundera_sessions.created`
-- `kundera_sessions.expired`
-- `kundera_sessions.terminated`
+- `kundera.sessions.created`
+- `kundera.sessions.expired`
+- `kundera.sessions.terminated`
 
 - - -
 
 ### Users
 
-- `kundera_users.created`
-- `kundera_users.role.added`
-- `kundera_users.role.removed`
-- `kundera_users.status_changed`
-- `kundera_users.group.joined`
-- `kundera_users.group.removed`
-- `kundera_users.username.added`
-- `kundera_users.username.removed`
+- `kundera.users.created`
+- `kundera.users.role.added`
+- `kundera.users.role.removed`
+- `kundera.users.status.changed`
+- `kundera.users.group.joined`
+- `kundera.users.group.removed`
+- `kundera.users.username.added`
+- `kundera.users.username.removed`
 
 - - -
 
 ### Groups
 
-- `kundera_groups.created`
-- `kundera_groups.child.added`
-- `kundera_groups.child.removed`
-- `kundera_groups.parent.changed`
-- `kundera_groups.role.added`
-- `kundera_groups.role.removed`
-- `kundera_groups.status_changed`
+- `kundera.groups.created`
+- `kundera.groups.child.added`
+- `kundera.groups.child.removed`
+- `kundera.groups.parent.changed`
+- `kundera.groups.role.added`
+- `kundera.groups.role.removed`
+- `kundera.groups.status.changed`
 
 - - -
 
 ### Roles
 
-- `kundera_roles.created`
-- `kundera_roles.permission.added`
-- `kundera_roles.permission.removed`
+- `kundera.roles.created`
+- `kundera.roles.permission.added`
+- `kundera.roles.permission.removed`
 
 - - -
 
 ### Permissions
 
-- `kundera_permissions.created`
+- `kundera.permissions.created`
 
 - - -
 
 ### Scopes
 
-- `kundera_scopes.created`
-- `kundera_scopes.role.added`
-- `kundera_scopes.role.removed`
-- `kundera_scopes.service.added`
-- `kundera_scopes.service.removed`
-- `kundera_scopes.status_changed`
+- `kundera.scopes.created`
+- `kundera.scopes.role.added`
+- `kundera.scopes.role.removed`
+- `kundera.scopes.service.added`
+- `kundera.scopes.service.removed`
+- `kundera_scopes.status.changed`
 
 - - -
 
 ### Services
 
-- `kundera_services.created`
-- `kundera_services.status_changed`
+- `kundera.services.created`
+- `kundera.services.status.changed`

@@ -2,5 +2,5 @@
 
 public sealed record CredentialPasswordChangedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_credentials.password.changed";
+    public override string Name => "kundera.credentials.password.changed";
 }

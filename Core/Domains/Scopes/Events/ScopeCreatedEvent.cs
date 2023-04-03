@@ -2,5 +2,5 @@
 
 public sealed record ScopeCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_scopes.created";
+    public override string Name => "kundera.scopes.created";
 }

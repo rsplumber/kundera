@@ -2,5 +2,5 @@
 
 public sealed record ServiceCreatedEvent(Guid Id) : DomainEvent
 {
-    public override string Name => "kundera_services.created";
+    public override string Name => "kundera.services.created";
 }
