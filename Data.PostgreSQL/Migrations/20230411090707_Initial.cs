@@ -387,7 +387,8 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_credentials_username",
                 table: "credentials",
-                column: "username");
+                column: "username",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_groups_name",
@@ -488,7 +489,8 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_refresh_token",
                 table: "sessions",
-                column: "refresh_token");
+                column: "refresh_token",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_scope_id",

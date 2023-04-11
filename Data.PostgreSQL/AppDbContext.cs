@@ -74,7 +74,7 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("username");
 
-            builder.HasIndex(model => model.Username);
+            builder.HasIndex(model => model.Username).IsUnique();
 
             builder.HasOne(model => model.User)
                 .WithMany()
@@ -140,7 +140,7 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("refresh_token");
 
-            builder.HasIndex(model => model.RefreshToken);
+            builder.HasIndex(model => model.RefreshToken).IsUnique();
 
             builder.HasOne(model => model.Credential)
                 .WithMany()

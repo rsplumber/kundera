@@ -2,6 +2,7 @@ using Core.Domains.Auth;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
+using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
@@ -14,22 +15,12 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 {
     private readonly AppDbContext _dbContext;
 
-    private const string GroupsChildrenRawQuery =
+    private const string GroupsChildrenAllRolesRawQuery =
         @"
-WITH RECURSIVE group_tree(id, parent_id, name, status) AS (
-    SELECT g.id, g.parent_id, g.name, g.status
-    FROM groups g WHERE g.id = {0}
-    UNION ALL
-    SELECT g.id, g.parent_id, g.name, g.status
-    FROM groups g JOIN group_tree gt ON g.parent_id = gt.id
-)
-SELECT DISTINCT roles.*
-FROM group_tree
-JOIN groups_roles ON groups_roles.group_id = group_tree.id
-JOIN roles ON roles.id = groups_roles.role_id
-JOIN roles_permission ON roles_permission.role_id = roles.id
-JOIN permissions ON permission.id = roles_permission.permission_id;
+WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM groups g WHERE g.id = {0} UNION ALL SELECT g.id, g.parent_id FROM groups g JOIN group_tree gt ON g.parent_id = gt.id) SELECT DISTINCT r.* FROM group_tree as g JOIN groups_roles AS gr ON g.id = gr.group_id JOIN roles AS r ON gr.role_id = r.id GROUP BY r.id
 ";
+
+    private const string RolePermissionRawQuery = @"SELECT DISTINCT p.* FROM permissions p LEFT JOIN roles_permission rp ON p.Id = rp.permission_id WHERE rp.role_id = ANY ({0})";
 
     public AuthorizeDataProvider(AppDbContext dbContext)
     {
@@ -39,7 +30,6 @@ JOIN permissions ON permission.id = roles_permission.permission_id;
     public Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
     {
         return _dbContext.Sessions
-            .AsNoTracking()
             .Where(session => session.Id == sessionToken)
             .Select(session => new Session
             {
@@ -52,28 +42,22 @@ JOIN permissions ON permission.id = roles_permission.permission_id;
                     Groups = session.User.Groups.Select(ug => new Group
                     {
                         Id = ug.Id,
-                        Status = ug.Status,
-                        Roles = ug.Roles.Select(role => new Role
-                        {
-                            Id = role.Id,
-                            Name = role.Name,
-                            Meta = role.Meta,
-                            Permissions = role.Permissions
-                        }).ToList()
+                        Status = ug.Status
                     }).ToList()
                 },
                 Activity = new AuthActivity
                 {
                     Id = session.Activity.Id,
                     Agent = session.Activity.Agent,
+                    IpAddress = session.Activity.IpAddress,
                     CreatedDateUtc = session.Activity.CreatedDateUtc
                 },
                 Scope = new Scope
                 {
                     Id = session.Scope.Id,
                     Status = session.Scope.Status,
-                    Roles = session.Scope.Roles.ToList(),
-                    Services = session.Scope.Services.ToList()
+                    Roles = session.Scope.Roles,
+                    Services = session.Scope.Services
                 },
                 ExpirationDateUtc = session.ExpirationDateUtc
             })
@@ -84,28 +68,25 @@ JOIN permissions ON permission.id = roles_permission.permission_id;
     {
         var allRoles = new List<Role>();
         allRoles.AddRange(user.Roles);
-        allRoles.AddRange(user.Groups.SelectMany(g => g.Roles));
-
         foreach (var group in user.Groups)
         {
-            var childGroups = await GetAllChildrenRolesAsync(group, cancellationToken);
-            allRoles.AddRange(childGroups);
+            var childGroupsRoles = await GetAllChildrenRolesAsync(group, cancellationToken);
+            allRoles.AddRange(childGroupsRoles);
         }
 
         return allRoles;
     }
 
-    private Task<List<Role>> GetAllChildrenRolesAsync(Group group, CancellationToken cancellationToken = default)
+    public Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Roles.FromSqlRaw(GroupsChildrenRawQuery, group.Id)
-            .AsNoTracking()
+        var roleIds = roles.Select(role => role.Id).ToArray();
+        return _dbContext.Permissions.FromSqlRaw(RolePermissionRawQuery, roleIds)
             .ToListAsync(cancellationToken);
     }
 
     public Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         return _dbContext.Services
-            .AsNoTracking()
             .Where(service => service.Secret == serviceSecret)
             .Select(service => new Service
             {
@@ -114,5 +95,11 @@ JOIN permissions ON permission.id = roles_permission.permission_id;
                 Status = service.Status
             })
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    private Task<List<Role>> GetAllChildrenRolesAsync(Group group, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Roles.FromSqlRaw(GroupsChildrenAllRolesRawQuery, group.Id)
+            .ToListAsync(cancellationToken);
     }
 }

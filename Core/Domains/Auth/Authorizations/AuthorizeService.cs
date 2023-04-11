@@ -22,6 +22,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         ValidateSessionScope(session, userRoles);
         var _ = await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
+        var permissions = await _authorizeDataProvider.RolePermissionsAsync(userRoles, cancellationToken);
         if (InvalidPermission())
         {
             throw new ForbiddenException();
@@ -29,8 +30,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return session.User.Id;
 
-        bool InvalidPermission() => userRoles.SelectMany(role => role.Permissions)
-            .All(permission => actions.All(action => permission.Name != action.ToLower()));
+        bool InvalidPermission() => permissions.All(permission => actions.All(action => permission.Name != action.ToLower()));
     }
 
     public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string userAgent,

@@ -1,6 +1,7 @@
 using AutoMapper;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
+using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Services;
 using Core.Domains.Users;
@@ -75,6 +76,11 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
                 }
             }
         }
+    }
+
+    public Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)

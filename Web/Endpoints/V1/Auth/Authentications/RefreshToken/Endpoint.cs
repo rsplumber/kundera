@@ -26,7 +26,7 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
     {
         var command = new RefreshCertificateCommand
         {
-            Token = HttpContext.Request.Headers["Authorization"][0] ?? string.Empty,
+            Token = req.Token,
             RefreshToken = req.RefreshToken,
             UserAgent = HttpContext.Request.UserAgent(),
             IpAddress = HttpContext.Request.IpAddress()
@@ -49,6 +49,8 @@ internal sealed class EndpointSummary : Summary<Endpoint>
 
 internal sealed record Request
 {
+    public string Token { get; set; } = default!;
+
     public string RefreshToken { get; set; } = default!;
 }
 
@@ -56,6 +58,10 @@ internal sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {
+        RuleFor(request => request.Token)
+            .NotEmpty().WithMessage("Enter valid Token")
+            .NotNull().WithMessage("Enter valid Token");
+
         RuleFor(request => request.RefreshToken)
             .NotEmpty().WithMessage("Enter valid RefreshToken")
             .NotNull().WithMessage("Enter valid RefreshToken");
