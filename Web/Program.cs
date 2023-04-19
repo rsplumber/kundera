@@ -14,11 +14,11 @@ builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
     options.ListenAnyIP(5178, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
-    options.ListenAnyIP(5179, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-        listenOptions.UseHttps();
-    });
+    // options.ListenAnyIP(5179, listenOptions =>
+    // {
+    //     listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+    //     listenOptions.UseHttps();
+    // });
 });
 
 builder.Services.AddCors();

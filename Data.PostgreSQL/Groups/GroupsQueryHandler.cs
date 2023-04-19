@@ -15,13 +15,12 @@ public sealed class GroupsQueryHandler : IQueryHandler<GroupsQuery, List<GroupsR
 
     public async ValueTask<List<GroupsResponse>> Handle(GroupsQuery query, CancellationToken cancellationToken)
     {
-        //ToDo fix nullable
         return await _dbContext.Groups
             .AsNoTracking()
             .Select(model => new GroupsResponse(model.Id, model.Name, model.Status.ToString())
             {
                 Description = model.Description,
-                Parent = model.Parent.Id
+                Parent = model.Parent != null ? model.Parent.Id : null
             })
             .ToListAsync(cancellationToken);
     }

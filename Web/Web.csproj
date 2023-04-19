@@ -14,7 +14,7 @@
         <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.21.0" />
         <PackageReference Include="FastEndpoints" Version="5.8.1" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.8.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -22,8 +22,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

@@ -13,5 +13,5 @@ public sealed record PermissionResponse
 
     public string Name { get; init; } = default!;
 
-    public Dictionary<string, string> Meta { get; init; }
+    public Dictionary<string, string>? Meta { get; init; } = new();
 }

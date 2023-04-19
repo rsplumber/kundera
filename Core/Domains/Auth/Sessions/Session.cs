@@ -35,15 +35,15 @@ public class Session : BaseEntity
 
     public string RefreshToken { get; set; } = default!;
 
-    public Credential Credential { get; set; }
+    public Credential Credential { get; set; } = default!;
 
-    public Scope Scope { get; set; }
+    public Scope Scope { get; set; }= default!;
 
-    public User User { get; set; }
+    public User User { get; set; }= default!;
 
     public DateTime ExpirationDateUtc { get; set; }
     
-    public AuthActivity Activity { get; set; }
+    public AuthActivity Activity { get; set; } = default!;
 
     public void UpdateActivity(IPAddress ipAddress,string agent)
     {
