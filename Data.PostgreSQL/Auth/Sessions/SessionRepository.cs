@@ -25,12 +25,12 @@ internal sealed class SessionRepository : ISessionRepository
             .Include(session => session.Credential)
             .Include(session => session.Scope)
             .Include(session => session.Activity)
-            .FirstOrDefaultAsync(credential => credential.Id == token, cancellationToken);
+            .FirstOrDefaultAsync(session => session.Id == token, cancellationToken);
     }
 
     public Task<Session?> FindByRefreshTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Sessions.FirstOrDefaultAsync(credential => credential.RefreshToken == token, cancellationToken);
+        return _dbContext.Sessions.FirstOrDefaultAsync(sessions => sessions.RefreshToken == token, cancellationToken);
     }
 
     public Task<List<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
@@ -43,14 +43,14 @@ internal sealed class SessionRepository : ISessionRepository
     public async Task DeleteAsync(string token, CancellationToken cancellationToken = default)
     {
         var currentSession = await FindAsync(token, cancellationToken);
-        if(currentSession is null) return;
+        if (currentSession is null) return;
         _dbContext.Sessions.Remove(currentSession);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
     {
-        var sessions = await _dbContext.Sessions 
+        var sessions = await _dbContext.Sessions
             .Where(model => DateTime.UtcNow >= model.ExpirationDateUtc.ToUniversalTime())
             .ToListAsync(cancellationToken);
         _dbContext.Sessions.RemoveRange(sessions);

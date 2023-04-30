@@ -52,7 +52,7 @@ internal class ScopeRepository : IScopeRepository
     {
         var currentScope = await _dbContext.Scopes
             .FirstOrDefaultAsync(scope => scope.Id == id, cancellationToken);
-        if(currentScope is null) return;
+        if (currentScope is null) return;
         _dbContext.Scopes.Remove(currentScope);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

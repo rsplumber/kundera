@@ -74,7 +74,7 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("username");
 
-            builder.HasIndex(model => model.Username).IsUnique();
+            builder.HasIndex(model => model.Username);
 
             builder.HasOne(model => model.User)
                 .WithMany()
