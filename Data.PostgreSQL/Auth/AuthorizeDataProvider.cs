@@ -24,6 +24,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
 
     private static readonly Func<AppDbContext, string, Task<Session?>>? CurrentSessionCompileAsyncQuery = EF.CompileAsyncQuery((AppDbContext dbContext, string st) =>
         dbContext.Sessions
+            .AsNoTracking()
             .Include(session => session.User)
             .ThenInclude(user => user.Groups)
             .Include(session => session.Activity)
@@ -64,6 +65,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
 
     private static readonly Func<AppDbContext, string, Task<Service?>>? ServiceCompiledQuery = EF.CompileAsyncQuery((AppDbContext dbContext, string secret) =>
         dbContext.Services
+            .AsNoTracking()
             .Where(service => service.Secret == secret)
             .Select(service => new Service
             {
@@ -100,6 +102,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
     {
         var roleIds = roles.Select(role => role.Id).ToArray();
         return _dbContext.Permissions.FromSqlRaw(RolePermissionRawQuery, roleIds)
+            .AsNoTracking()
             .ToArrayAsync(cancellationToken);
     }
 
@@ -110,7 +113,9 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
 
     private Task<List<Role>> GetAllChildrenRolesAsync(Group group, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Roles.FromSqlRaw(GroupsChildrenAllRolesRawQuery, group.Id)
+        return _dbContext.Roles
+            .FromSqlRaw(GroupsChildrenAllRolesRawQuery, group.Id)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
 }

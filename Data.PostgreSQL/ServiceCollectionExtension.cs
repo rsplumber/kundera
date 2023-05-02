@@ -30,6 +30,7 @@ public static class ServiceCollectionExtension
                                throw new ArgumentNullException("connectionString", "Enter connection string in app settings");
 
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
 
