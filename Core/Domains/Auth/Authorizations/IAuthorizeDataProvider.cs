@@ -12,7 +12,7 @@ public interface IAuthorizeDataProvider
 
     Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default);
 
-    Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default);
+    Task<Permission[]> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default);
 
     Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
 }

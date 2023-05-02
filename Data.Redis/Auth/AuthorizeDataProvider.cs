@@ -78,7 +78,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         }
     }
 
-    public Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
+    public Task<Permission[]> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

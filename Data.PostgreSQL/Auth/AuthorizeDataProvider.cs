@@ -22,15 +22,14 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
 
     private const string RolePermissionRawQuery = @"SELECT DISTINCT p.* FROM permissions p LEFT JOIN roles_permission rp ON p.Id = rp.permission_id WHERE rp.role_id = ANY ({0})";
 
-    public AuthorizeDataProvider(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Sessions
-            .Where(session => session.Id == sessionToken)
+    private static readonly Func<AppDbContext, string, Task<Session?>>? CurrentSessionCompileAsyncQuery = EF.CompileAsyncQuery((AppDbContext dbContext, string st) =>
+        dbContext.Sessions
+            .Include(session => session.User)
+            .ThenInclude(user => user.Groups)
+            .Include(session => session.Activity)
+            .Include(session => session.Scope)
+            .ThenInclude(scope => scope.Roles)
+            .Where(session => session.Id == st)
             .Select(session => new Session
             {
                 Id = session.Id,
@@ -61,7 +60,27 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
                 },
                 ExpirationDateUtc = session.ExpirationDateUtc
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefault());
+
+    private static readonly Func<AppDbContext, string, Task<Service?>>? ServiceCompiledQuery = EF.CompileAsyncQuery((AppDbContext dbContext, string secret) =>
+        dbContext.Services
+            .Where(service => service.Secret == secret)
+            .Select(service => new Service
+            {
+                Id = service.Id,
+                Name = service.Name,
+                Status = service.Status
+            })
+            .FirstOrDefault());
+
+    public AuthorizeDataProvider(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+    {
+        return CurrentSessionCompileAsyncQuery!(_dbContext, sessionToken);
     }
 
     public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
@@ -77,24 +96,16 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
         return allRoles;
     }
 
-    public Task<List<Permission>> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
+    public Task<Permission[]> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
     {
         var roleIds = roles.Select(role => role.Id).ToArray();
         return _dbContext.Permissions.FromSqlRaw(RolePermissionRawQuery, roleIds)
-            .ToListAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
     }
 
     public Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Services
-            .Where(service => service.Secret == serviceSecret)
-            .Select(service => new Service
-            {
-                Id = service.Id,
-                Name = service.Name,
-                Status = service.Status
-            })
-            .FirstOrDefaultAsync(cancellationToken);
+        return ServiceCompiledQuery!(_dbContext, serviceSecret);
     }
 
     private Task<List<Role>> GetAllChildrenRolesAsync(Group group, CancellationToken cancellationToken = default)
