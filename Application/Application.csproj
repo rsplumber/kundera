@@ -12,7 +12,6 @@
         <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
         <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="DotNetCore.CAP.Kafka" Version="7.1.2" />
         <PackageReference Include="DotNetCore.CAP.PostgreSql" Version="7.1.2" />
     </ItemGroup>
     

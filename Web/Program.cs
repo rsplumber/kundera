@@ -22,7 +22,7 @@ builder.WebHost.ConfigureKestrel((_, options) =>
 });
 
 builder.Services.AddCors();
-
+builder.Services.AddHealthChecks();
 builder.Services.AddAuthentication(KunderaDefaults.Scheme)
     .AddKundera(builder.Configuration);
 builder.Services.AddAuthorization();
@@ -45,7 +45,7 @@ builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
 
 var app = builder.Build();
 app.UseData();
-
+app.UseHealthChecks("/health");
 app.UseCors(b => b.AllowAnyHeader()
     .AllowAnyMethod()
     .SetIsOriginAllowed(_ => true)

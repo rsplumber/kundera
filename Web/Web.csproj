@@ -11,9 +11,9 @@
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.21.0" />
-        <PackageReference Include="FastEndpoints" Version="5.9.0" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="5.9.0" />
+        <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.22.0" />
+        <PackageReference Include="FastEndpoints" Version="5.10.0" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="5.10.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
