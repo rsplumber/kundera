@@ -28,13 +28,20 @@ builder.Services.AddAuthentication(KunderaDefaults.Scheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddFastEndpoints();
-builder.Services.AddSwaggerDoc(settings =>
+
+builder.Services.SwaggerDocument(settings =>
 {
-    settings.Title = "Kundera - WebApi";
-    settings.DocumentName = "v1";
-    settings.Version = "v1";
-    settings.AddKunderaAuth();
-}, addJWTBearerAuth: false, maxEndpointVersion: 1);
+    settings.DocumentSettings = generatorSettings =>
+    {
+        generatorSettings.Title = "Kundera - WebApi";
+        generatorSettings.DocumentName = "v1";
+        generatorSettings.Version = "v1";
+        generatorSettings.AddKunderaAuth();
+    };
+    settings.EnableJWTBearerAuth = false;
+    settings.MaxEndpointVersion = 1;
+});
+
 
 builder.Services.TryAddSingleton<ExceptionHandlerMiddleware>();
 builder.Services.AddCore(builder.Configuration);

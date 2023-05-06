@@ -1,4 +1,5 @@
-﻿using Application.Auth;
+﻿using System.Text.Json;
+using Application.Auth;
 using Application.Auth.Sessions;
 using Application.Seeders;
 using Core.Domains.Auth.Sessions;
@@ -15,6 +16,9 @@ public static class ServiceCollectionExtension
     {
         services.AddCap(options =>
         {
+            options.FailedRetryCount = 2;
+            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
             options.UseRabbitMQ(op =>
             {
                 op.HostName = configuration.GetValue<string>("RabbitMQ:HostName") ?? throw new ArgumentNullException("RabbitMQ:HostName", "Enter RabbitMQ:HostName in app settings");
