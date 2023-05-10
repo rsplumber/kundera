@@ -3,8 +3,7 @@ using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Scopes;
-using Mediator;
-using Microsoft.Extensions.Options;
+using Core.Hashing;
 
 namespace Application.Auth.Sessions;
 
@@ -12,36 +11,24 @@ internal sealed class SessionManagement : ISessionManagement
 {
     private readonly ISessionFactory _sessionFactory;
     private readonly ISessionRepository _sessionRepository;
-    private readonly SessionDefaultOptions _sessionOptions;
-    private readonly IMediator _mediator;
+    private readonly IHashService _hashService;
 
-    public SessionManagement(ISessionRepository sessionRepository,
-        IOptions<SessionDefaultOptions> sessionOptions,
-        ISessionFactory sessionFactory,
-        IMediator mediator)
+    public SessionManagement(ISessionRepository sessionRepository, ISessionFactory sessionFactory, IHashService hashService)
     {
         _sessionRepository = sessionRepository;
         _sessionFactory = sessionFactory;
-        _mediator = mediator;
-        _sessionOptions = sessionOptions.Value;
+        _hashService = hashService;
     }
 
-    public async Task<Certificate> SaveAsync(Credential credential, Scope scope,IPAddress ipAddress, string userAgent, CancellationToken cancellationToken = default)
+    public async Task<Certificate> SaveAsync(Credential credential, Scope scope, IPAddress ipAddress, string userAgent, CancellationToken cancellationToken = default)
     {
-        var certificate = await _mediator.Send(new GenerateCertificateCommand
-        {
-            UserId = credential.User.Id,
-            ScopeId = scope.Id
-        }, cancellationToken);
-
-        var expiresAt = DateTime.UtcNow.AddMinutes(credential.SessionExpireTimeInMinutes ?? _sessionOptions.ExpireInMinutes);
-
+        var certificate = Certificate.Create(_hashService, credential, scope.Id);
         await _sessionFactory.CreateAsync(
             certificate.Token,
             certificate.RefreshToken,
             credential.Id,
             scope.Id,
-            expiresAt,
+            certificate.ExpireAtUtc,
             ipAddress,
             userAgent);
 

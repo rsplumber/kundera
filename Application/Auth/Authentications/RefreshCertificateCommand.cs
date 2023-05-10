@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using Core.Domains.Auth.Authorizations;
-using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
-using Core.Domains.Scopes;
 using Mediator;
 
 namespace Application.Auth.Authentications;
@@ -14,7 +12,7 @@ public sealed record RefreshCertificateCommand : ICommand<Certificate>
     public string RefreshToken { get; init; } = default!;
 
     public string UserAgent { get; init; } = default!;
-    
+
     public IPAddress IpAddress { get; init; } = default!;
 }
 
@@ -35,13 +33,7 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
-        // if (session.Activity.Agent != command.UserAgent)
-        // {
-        //     throw new UnAuthorizedException();
-        // }
-
-
-        var certificate = await _sessionManagement.SaveAsync(session.Credential,session.Scope,command.IpAddress, command.UserAgent, cancellationToken);
+        var certificate = await _sessionManagement.SaveAsync(session.Credential, session.Scope, command.IpAddress, command.UserAgent, cancellationToken);
         await _sessionManagement.DeleteAsync(command.Token, cancellationToken);
 
         return certificate;

@@ -66,13 +66,12 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
             throw new WrongUsernamePasswordException();
         }
 
-        if (credential.SingleSession)
+        if (!credential.SingleSession) return await _sessionManagement.SaveAsync(credential, scope, command.IpAddress, command.UserAgent, cancellationToken);
+        
+        var currentCredentialSessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
+        foreach (var currentCredentialSession in currentCredentialSessions)
         {
-            var currentCredentialSessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
-            foreach (var currentCredentialSession in currentCredentialSessions)
-            {
-                await _sessionRepository.DeleteAsync(currentCredentialSession.Id, cancellationToken);
-            }
+            await _sessionRepository.DeleteAsync(currentCredentialSession.Id, cancellationToken);
         }
 
         return await _sessionManagement.SaveAsync(credential, scope,command.IpAddress, command.UserAgent, cancellationToken);
