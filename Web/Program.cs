@@ -2,6 +2,7 @@ using System.Text.Json;
 using Application;
 using Core;
 using Data;
+using Elastic.Apm.NetCoreAll;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using KunderaNet.FastEndpoints.Authorization;
@@ -61,7 +62,7 @@ app.UseCors(b => b.AllowAnyHeader()
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-// app.UseAllElasticApm(builder.Configuration);
+app.UseAllElasticApm(builder.Configuration);
 
 app.UseFastEndpoints(config =>
 {

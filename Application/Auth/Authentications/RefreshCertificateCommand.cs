@@ -35,10 +35,10 @@ internal sealed class RefreshCertificateCommandHandler : ICommandHandler<Refresh
             throw new UnAuthorizedException();
         }
 
-        if (session.Activity.Agent != command.UserAgent)
-        {
-            throw new UnAuthorizedException();
-        }
+        // if (session.Activity.Agent != command.UserAgent)
+        // {
+        //     throw new UnAuthorizedException();
+        // }
 
 
         var certificate = await _sessionManagement.SaveAsync(session.Credential,session.Scope,command.IpAddress, command.UserAgent, cancellationToken);
