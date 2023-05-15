@@ -28,7 +28,8 @@ internal sealed class Endpoint : Endpoint<Request>
             Username = req.Username,
             Password = req.Password,
             UserId = req.UserId,
-            SingleSession = req.SingleSession
+            SingleSession = req.SingleSession,
+            SessionExpireTimeInMinutes = req.SessionExpireTimeInMinutes
         };
 
         await _mediator.Send(command, ct);
@@ -55,6 +56,8 @@ internal sealed record Request
     public string Password { get; set; } = default!;
 
     public bool? SingleSession { get; set; }
+
+    public int SessionExpireTimeInMinutes { get; set; }
 }
 
 internal sealed class RequestValidator : Validator<Request>
@@ -72,5 +75,10 @@ internal sealed class RequestValidator : Validator<Request>
         RuleFor(request => request.Password)
             .NotEmpty().WithMessage("Enter valid Password")
             .NotNull().WithMessage("Enter valid Password");
+
+        RuleFor(request => request.SessionExpireTimeInMinutes)
+            .NotEmpty().WithMessage("Enter valid SessionExpireTimeInMinutes")
+            .NotNull().WithMessage("Enter valid SessionExpireTimeInMinutes")
+            .GreaterThan(1).WithMessage("SessionExpireTimeInMinutes must be greater than 1");
     }
 }

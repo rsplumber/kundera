@@ -34,7 +34,6 @@ public static class ServiceCollectionExtension
         });
 
         services.AddScoped<ISessionManagement, SessionManagement>();
-        services.Configure<SessionDefaultOptions>(configuration.GetSection("Sessions"));
 
         services.TryAddTransient<DataSeeder>();
         services.AddScoped<RemoveExpiredCredentialsJob>();

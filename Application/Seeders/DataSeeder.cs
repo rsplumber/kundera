@@ -109,7 +109,7 @@ internal sealed class DataSeeder
         var credentials = await _credentialRepository.FindByUsernameAsync(_adminUsername);
         if (!credentials.Any(credential => credential.Password.Check(_adminPassword)))
         {
-            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword, user.Id);
+            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword, user.Id, 1000);
         }
 
         await SeedPermissions();

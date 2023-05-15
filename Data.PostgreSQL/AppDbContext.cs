@@ -115,13 +115,15 @@ public sealed class AppDbContext : DbContext
 
             builder.HasOne(model => model.FirstActivity)
                 .WithMany()
-                .HasForeignKey("first_activity_id")
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasPrincipalKey(model => model.Id)
+                .HasForeignKey("first_activity_id");
 
             builder.HasOne(model => model.LastActivity)
                 .WithMany()
-                .HasForeignKey("last_activity_id")
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasPrincipalKey(model => model.Id)
+                .HasForeignKey("last_activity_id");
         }
     }
 

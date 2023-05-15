@@ -5,13 +5,15 @@ namespace Application.Auth.Credentials;
 
 public sealed record CreateBasicCredentialCommand : ICommand
 {
-    public Guid UserId { get; set; } = default!;
+    public Guid UserId { get; set; }
 
     public string Username { get; set; } = default!;
 
     public string Password { get; set; } = default!;
 
     public bool? SingleSession { get; set; }
+
+    public int SessionExpireTimeInMinutes { get; set; }
 }
 
 internal sealed class CreateBasicCredentialCommandHandler : ICommandHandler<CreateBasicCredentialCommand>
@@ -28,6 +30,7 @@ internal sealed class CreateBasicCredentialCommandHandler : ICommandHandler<Crea
         await _credentialFactory.CreateAsync(command.Username,
             command.Password,
             command.UserId,
+            command.SessionExpireTimeInMinutes,
             command.SingleSession);
 
         return Unit.Value;

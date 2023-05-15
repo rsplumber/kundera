@@ -5,13 +5,15 @@ namespace Application.Auth.Credentials;
 
 public sealed record CreateOneTimeCredentialCommand : ICommand
 {
-    public Guid UserId { get; init; } = default!;
+    public Guid UserId { get; init; }
 
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
 
-    public int ExpireInMinutes { get; init; } = 0;
+    public int ExpireInMinutes { get; init; }
+    
+    public int SessionExpireTimeInMinutes { get; set; }
 }
 
 internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<CreateOneTimeCredentialCommand>
@@ -28,6 +30,7 @@ internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<Cr
         await _credentialFactory.CreateOneTimeAsync(command.Username,
             command.Password,
             command.UserId,
+            command.SessionExpireTimeInMinutes,
             command.ExpireInMinutes);
 
         return Unit.Value;
