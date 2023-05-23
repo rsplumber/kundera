@@ -48,10 +48,10 @@ internal sealed class SessionRepository : ISessionRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
+    public async Task DeleteExpiredAsync(int afterExpireInMinutes = 1, CancellationToken cancellationToken = default)
     {
         var sessions = await _dbContext.Sessions
-            .Where(model => DateTime.UtcNow >= model.ExpirationDateUtc.ToUniversalTime())
+            .Where(model => DateTime.UtcNow >= model.ExpirationDateUtc.ToUniversalTime().AddMinutes(afterExpireInMinutes))
             .ToListAsync(cancellationToken);
         _dbContext.Sessions.RemoveRange(sessions);
         await _dbContext.SaveChangesAsync(cancellationToken);

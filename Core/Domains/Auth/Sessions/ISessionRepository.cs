@@ -12,5 +12,5 @@ public interface ISessionRepository
 
     Task DeleteAsync(string token, CancellationToken cancellationToken = default);
 
-    Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
+    Task DeleteExpiredAsync(int afterExpireInMinutes = 1, CancellationToken cancellationToken = default);
 }

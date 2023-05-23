@@ -19,6 +19,7 @@ public static class ServiceCollectionExtension
             options.FailedRetryCount = 2;
             options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
+            options.SucceedMessageExpiredAfter = 2;
             options.UseRabbitMQ(op =>
             {
                 op.HostName = configuration.GetValue<string>("RabbitMQ:HostName") ?? throw new ArgumentNullException("RabbitMQ:HostName", "Enter RabbitMQ:HostName in app settings");
@@ -55,12 +56,12 @@ public static class ServiceCollectionExtension
                 .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
                 .WithDescription("RemoveExpiredCredentials")
             );
-            // q.ScheduleJob<RemoveExpiredSessionsJob>(trigger => trigger
-            //     .WithIdentity("RemoveExpiredSessionsJob")
-            //     .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-            //     .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
-            //     .WithDescription("RemoveExpiredSessionsJob")
-            // );
+            q.ScheduleJob<RemoveExpiredSessionsJob>(trigger => trigger
+                .WithIdentity("RemoveExpiredSessionsJob")
+                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(20)))
+                .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
+                .WithDescription("RemoveExpiredSessionsJob")
+            );
         });
         services.AddQuartzServer(options =>
         {
