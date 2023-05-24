@@ -14,8 +14,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230430051301_credentials_username_unique_value_removed")]
-    partial class credentials_username_unique_value_removed
+    [Migration("20230524095619_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Domains.Auth.AuthActivity", b =>
+            modelBuilder.Entity("Core.Domains.Auth.Credentials.AuthenticationActivity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,15 +42,36 @@ namespace Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_date_utc");
 
+                    b.Property<Guid>("Credential")
+                        .HasColumnType("uuid")
+                        .HasColumnName("credential_id");
+
                     b.Property<string>("IpAddress")
                         .HasColumnType("text")
                         .HasColumnName("ip_address");
 
+                    b.Property<Guid>("ScopeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("scope_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("username");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Agent");
+                    b.HasIndex("CreatedDateUtc");
 
-                    b.ToTable("auth_activities", (string)null);
+                    b.HasIndex("Credential");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("authentication_activities", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domains.Auth.Credentials.Credential", b =>
@@ -67,12 +88,6 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ExpiresAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at_utc");
-
-                    b.Property<Guid?>("FirstActivityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("LastActivityId")
-                        .HasColumnType("uuid");
 
                     b.Property<bool>("OneTime")
                         .HasColumnType("boolean")
@@ -95,12 +110,6 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("username");
 
-                    b.Property<Guid?>("first_activity_id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("last_activity_id")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
@@ -108,13 +117,46 @@ namespace Data.Migrations
 
                     b.HasIndex("Username");
 
-                    b.HasIndex("first_activity_id");
-
-                    b.HasIndex("last_activity_id");
-
                     b.HasIndex("user_id");
 
                     b.ToTable("credentials", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Domains.Auth.Sessions.AuthorizationActivity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Agent")
+                        .HasColumnType("text")
+                        .HasColumnName("agent");
+
+                    b.Property<DateTime>("CreatedDateUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date_utc");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("ip_address");
+
+                    b.Property<string>("Session")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedDateUtc");
+
+                    b.HasIndex("Session");
+
+                    b.ToTable("authorization_activities", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domains.Auth.Sessions.Session", b =>
@@ -132,9 +174,6 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("refresh_token");
 
-                    b.Property<Guid>("activity_id")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("credential_id")
                         .HasColumnType("uuid");
 
@@ -148,8 +187,6 @@ namespace Data.Migrations
 
                     b.HasIndex("RefreshToken")
                         .IsUnique();
-
-                    b.HasIndex("activity_id");
 
                     b.HasIndex("credential_id");
 
@@ -453,37 +490,17 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Core.Domains.Auth.Credentials.Credential", b =>
                 {
-                    b.HasOne("Core.Domains.Auth.AuthActivity", "FirstActivity")
-                        .WithMany()
-                        .HasForeignKey("first_activity_id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Core.Domains.Auth.AuthActivity", "LastActivity")
-                        .WithMany()
-                        .HasForeignKey("last_activity_id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Core.Domains.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("FirstActivity");
-
-                    b.Navigation("LastActivity");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Domains.Auth.Sessions.Session", b =>
                 {
-                    b.HasOne("Core.Domains.Auth.AuthActivity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("activity_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Domains.Auth.Credentials.Credential", "Credential")
                         .WithMany()
                         .HasForeignKey("credential_id")
@@ -501,8 +518,6 @@ namespace Data.Migrations
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Activity");
 
                     b.Navigation("Credential");
 

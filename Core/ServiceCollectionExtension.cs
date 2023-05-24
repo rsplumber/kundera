@@ -27,7 +27,10 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IGroupFactory, GroupFactory>();
         services.TryAddScoped<ISessionFactory, SessionFactory>();
         services.TryAddScoped<ICredentialFactory, CredentialFactory>();
-        
-        services.TryAddScoped<IAuthorizeService,AuthorizeService>();
+
+        services.TryAddScoped<IAuthorizeService, AuthorizeService>();
+
+        services.AddTransient<AuthenticatedEventHandler>();
+        services.AddTransient<AuthorizedEventHandler>();
     }
 }

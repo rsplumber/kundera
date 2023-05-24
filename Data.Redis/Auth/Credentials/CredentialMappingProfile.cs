@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Domains.Auth;
 using Core.Domains.Auth.Credentials;
+using Core.Domains.Auth.Sessions;
 
 namespace Data.Auth.Credentials;
 
@@ -15,7 +15,7 @@ internal sealed class CredentialMappingProfile : Profile
         });
         CreateMap<PasswordType, Password>().ConvertUsing(passwordType => Password.From(passwordType.Value, passwordType.Salt));
 
-        CreateMap<AuthActivity, CredentialActivityDataModel>().ConvertUsing(credentialActivity => new CredentialActivityDataModel
+        CreateMap<AuthorizationActivity, AuthenticationActivityDataModel>().ConvertUsing(credentialActivity => new AuthenticationActivityDataModel
         {
             Id = credentialActivity.Id,
             CreatedDateUtc = credentialActivity.CreatedDateUtc,
@@ -23,12 +23,13 @@ internal sealed class CredentialMappingProfile : Profile
             IpAddress = credentialActivity.IpAddress
         });
 
-        CreateMap<CredentialActivityDataModel, AuthActivity>().ConvertUsing(credentialActivityDataModel => new AuthActivity()
+        CreateMap<AuthenticationActivityDataModel, AuthenticationActivity>().ConvertUsing(credentialActivityDataModel => new AuthenticationActivity()
         {
             Id = credentialActivityDataModel.Id,
+            Credential = credentialActivityDataModel.CredentialId,
             IpAddress = credentialActivityDataModel.IpAddress,
             Agent = credentialActivityDataModel.Agent,
-            CreatedDateUtc = credentialActivityDataModel.CreatedDateUtc,
+            CreatedDateUtc = credentialActivityDataModel.CreatedDateUtc
         });
         DisableConstructorMapping();
         CreateMap<CredentialDataModel, Credential>()
@@ -38,8 +39,6 @@ internal sealed class CredentialMappingProfile : Profile
             .ForMember(credential => credential.Username, expression => expression.MapFrom(model => model.Username))
             .ForMember(credential => credential.User, expression => expression.MapFrom(model => model.UserId))
             .ForMember(credential => credential.Password, expression => expression.MapFrom(model => model.Password))
-            .ForMember(credential => credential.FirstActivity, expression => expression.MapFrom(model => model.FirstActivity))
-            .ForMember(credential => credential.LastActivity, expression => expression.MapFrom(model => model.LastActivity))
             .ForMember(credential => credential.ExpiresAtUtc, expression => expression.MapFrom(model => model.ExpiresAtUtc == null ? model.ExpiresAtUtc : model.ExpiresAtUtc.Value.ToUniversalTime()))
             .ForMember(credential => credential.CreatedDateUtc, expression => expression.MapFrom(model => model.CreatedDateUtc.ToUniversalTime()))
             .ForMember(credential => credential.OneTime, expression => expression.MapFrom(model => model.OneTime))

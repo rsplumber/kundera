@@ -40,9 +40,10 @@ public static class ServiceCollectionExtension
         services.AddScoped<IPermissionRepository, PermissionRepository>();
 
         services.AddScoped<ICredentialRepository, CredentialRepository>();
+        services.AddScoped<IAuthenticationActivityRepository, AuthenticationActivityRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<IAuthorizationActivityRepository, AuthorizationActivityRepository>();
 
-        // services.AddScoped<AuthorizeDataProvider>();
         services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
         services.AddDistributedMemoryCache();
     }

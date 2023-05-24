@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials.Events;
+﻿using Core.Domains.Auth.Credentials.Events;
 using Core.Domains.Users;
 
 namespace Core.Domains.Auth.Credentials;
@@ -43,15 +42,6 @@ public class Credential : BaseEntity
 
     public Password Password { get; set; } = default!;
 
-
-    public Guid? FirstActivityId { get; set; }
-
-    public AuthActivity? FirstActivity { get; set; }
-
-    public Guid? LastActivityId { get; set; }
-
-    public AuthActivity? LastActivity { get; set; }
-
     public DateTime? ExpiresAtUtc { get; set; }
 
     public int? SessionExpireTimeInMinutes { get; set; }
@@ -61,19 +51,6 @@ public class Credential : BaseEntity
     public bool SingleSession { get; init; }
 
     public DateTime CreatedDateUtc { get; set; }
-
-    public void UpdateFirstActivityInfo(IPAddress ipAddress, string agent)
-    {
-        if (!IsFirstTimeLoggedIn()) return;
-        FirstActivity = new AuthActivity(ipAddress, agent);
-    }
-
-    private bool IsFirstTimeLoggedIn() => FirstActivity is null;
-
-    public void UpdateActivityInfo(IPAddress ipAddress, string agent)
-    {
-        LastActivity = new AuthActivity(ipAddress, agent);
-    }
 
     public void ChangePassword(string password, string newPassword)
     {

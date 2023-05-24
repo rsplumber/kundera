@@ -15,9 +15,9 @@ internal sealed class CredentialDataModel
 
     public PasswordType Password { get; set; } = default!;
     
-    public CredentialActivityDataModel? FirstActivity { get; internal set; }
+    public AuthenticationActivityDataModel? FirstActivity { get; internal set; }
     
-    public CredentialActivityDataModel? LastActivity { get; internal set; }
+    public AuthenticationActivityDataModel? LastActivity { get; internal set; }
     
     [Indexed(Sortable = true)] public DateTime? ExpiresAtUtc { get; set; }
 
@@ -37,11 +37,11 @@ internal sealed class PasswordType
     public string Salt { get; set; } = default!;
 }
 
-internal sealed class CredentialActivityDataModel
+internal sealed class AuthenticationActivityDataModel
 {
     public Guid Id { get;  set; }
 
-    public Guid CredentialId { get;  set; } = default!;
+    public Guid CredentialId { get;  set; }
 
     public string? IpAddress { get; internal set; }
 

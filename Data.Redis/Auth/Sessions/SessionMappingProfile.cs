@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.Domains.Auth;
 using Core.Domains.Auth.Sessions;
 
 namespace Data.Auth.Sessions;
@@ -8,22 +7,23 @@ internal sealed class SessionMappingProfile : Profile
 {
     public SessionMappingProfile()
     {
-        CreateMap<AuthActivity, SessionActivityDataModel>().ConvertUsing(credentialActivity => new SessionActivityDataModel
+        CreateMap<AuthorizationActivity, AuthorizationActivityDataModel>().ConvertUsing(credentialActivity => new AuthorizationActivityDataModel
         {
             Id = credentialActivity.Id,
             CreatedDateUtc = credentialActivity.CreatedDateUtc,
             Agent = credentialActivity.Agent,
             IpAddress = credentialActivity.IpAddress
         });
-        
-        CreateMap<SessionActivityDataModel, AuthActivity>().ConvertUsing(credentialActivityDataModel => new AuthActivity()
+
+        CreateMap<AuthorizationActivityDataModel, AuthorizationActivity>().ConvertUsing(authorizationActivityDataModel => new AuthorizationActivity()
         {
-            Id = credentialActivityDataModel.Id,
-            IpAddress = credentialActivityDataModel.IpAddress,
-            Agent = credentialActivityDataModel.Agent,
-            CreatedDateUtc = credentialActivityDataModel.CreatedDateUtc,
+            Id = authorizationActivityDataModel.Id,
+            IpAddress = authorizationActivityDataModel.IpAddress,
+            Agent = authorizationActivityDataModel.Agent,
+            Session = authorizationActivityDataModel.Session,
+            CreatedDateUtc = authorizationActivityDataModel.CreatedDateUtc,
         });
-        
+
         DisableConstructorMapping();
         CreateMap<SessionDataModel, Session>()
             .IgnoreAllPropertiesWithAnInaccessibleSetter()
@@ -31,7 +31,6 @@ internal sealed class SessionMappingProfile : Profile
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
             .ForMember(credential => credential.RefreshToken, expression => expression.MapFrom(model => model.RefreshToken))
             .ForMember(credential => credential.Scope, expression => expression.MapFrom(model => model.ScopeId))
-            .ForMember(credential => credential.Activity, expression => expression.MapFrom(model => model.Activity))
             .ForMember(credential => credential.ExpirationDateUtc, expression => expression.MapFrom(model => model.ExpirationDateUtc.ToUniversalTime()))
             .ForMember(credential => credential.Credential, expression => expression.MapFrom(model => model.CredentialId))
             .ReverseMap();

@@ -31,7 +31,7 @@ public sealed record Certificate
 
     private sealed class ExpireAtUtcRefreshTokenTokenEqualityComparer : IEqualityComparer<Certificate>
     {
-        public bool Equals(Certificate x, Certificate y)
+        public bool Equals(Certificate? x, Certificate? y)
         {
             if (ReferenceEquals(x, y)) return true;
             if (ReferenceEquals(x, null)) return false;

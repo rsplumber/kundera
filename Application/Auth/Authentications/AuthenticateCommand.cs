@@ -4,6 +4,7 @@ using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Scopes;
+using DotNetCore.CAP;
 using Mediator;
 
 namespace Application.Auth.Authentications;
@@ -16,8 +17,8 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
 
     public string ScopeSecret { get; init; } = default!;
 
-    public string UserAgent { get; init; } = default!;
-    
+    public string? UserAgent { get; init; } = default!;
+
     public IPAddress IpAddress { get; init; } = default!;
 }
 
@@ -27,17 +28,20 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
     private readonly IScopeRepository _scopeRepository;
     private readonly ICredentialRepository _credentialRepository;
     private readonly ISessionRepository _sessionRepository;
+    private readonly ICapPublisher _eventBus;
 
 
     public AuthenticateCommandHandler(ISessionManagement sessionManagement,
         IScopeRepository scopeRepository,
         ICredentialRepository credentialRepository,
-        ISessionRepository sessionRepository)
+        ISessionRepository sessionRepository,
+        ICapPublisher eventBus)
     {
         _sessionManagement = sessionManagement;
         _scopeRepository = scopeRepository;
         _credentialRepository = credentialRepository;
         _sessionRepository = sessionRepository;
+        _eventBus = eventBus;
     }
 
     public async ValueTask<Certificate> Handle(AuthenticateCommand command, CancellationToken cancellationToken)
@@ -66,15 +70,30 @@ internal sealed class AuthenticateCommandHandler : ICommandHandler<AuthenticateC
             throw new WrongUsernamePasswordException();
         }
 
-        if (!credential.SingleSession) return await _sessionManagement.SaveAsync(credential, scope, command.IpAddress, command.UserAgent, cancellationToken);
-        
-        var currentCredentialSessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
-        foreach (var currentCredentialSession in currentCredentialSessions)
+        var certificate = await _sessionManagement.SaveAsync(credential, scope, cancellationToken);
+        if (credential.SingleSession)
         {
-            await _sessionRepository.DeleteAsync(currentCredentialSession.Id, cancellationToken);
+            var currentCredentialSessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
+            foreach (var currentCredentialSession in currentCredentialSessions)
+            {
+                await _sessionRepository.DeleteAsync(currentCredentialSession.Id, cancellationToken);
+            }
         }
 
-        return await _sessionManagement.SaveAsync(credential, scope,command.IpAddress, command.UserAgent, cancellationToken);
+        Task.Run(() =>
+        {
+            _eventBus.PublishAsync(AuthenticatedEvent.EventName, new AuthenticatedEvent
+            {
+                Agent = command.UserAgent,
+                IpAddress = command.IpAddress.ToString(),
+                Username = credential.Username,
+                CredentialId = credential.Id,
+                UserId = credential.User.Id,
+                ScopeId = scope.Id
+            }, cancellationToken: cancellationToken);
+        }, cancellationToken);
+
+        return certificate;
 
         bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }

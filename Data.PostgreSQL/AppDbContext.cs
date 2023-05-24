@@ -1,5 +1,4 @@
-﻿using Core.Domains.Auth;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
 using Core.Domains.Permissions;
@@ -39,9 +38,14 @@ public sealed class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
 
+    public DbSet<AuthenticationActivity> AuthenticationActivities { get; set; }
+
+    public DbSet<AuthorizationActivity> AuthorizationActivities { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new AuthActivityEntityTypeConfiguration());
+        builder.ApplyConfiguration(new AuthenticationActivityEntityTypeConfiguration());
+        builder.ApplyConfiguration(new AuthorizationActivityEntityTypeConfiguration());
         builder.ApplyConfiguration(new CredentialEntityTypeConfiguration());
         builder.ApplyConfiguration(new SessionEntityTypeConfiguration());
         builder.ApplyConfiguration(new UserEntityTypeConfiguration());
@@ -112,18 +116,6 @@ public sealed class AppDbContext : DbContext
             builder.Property(model => model.CreatedDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("created_date_utc");
-
-            builder.HasOne(model => model.FirstActivity)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasPrincipalKey(model => model.Id)
-                .HasForeignKey("first_activity_id");
-
-            builder.HasOne(model => model.LastActivity)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasPrincipalKey(model => model.Id)
-                .HasForeignKey("last_activity_id");
         }
     }
 
@@ -158,11 +150,6 @@ public sealed class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey("user_id")
                 .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(model => model.Activity)
-                .WithMany()
-                .HasForeignKey("activity_id")
-                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(model => model.ExpirationDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -409,16 +396,36 @@ public sealed class AppDbContext : DbContext
         }
     }
 
-    private class AuthActivityEntityTypeConfiguration : IEntityTypeConfiguration<AuthActivity>
+    private class AuthenticationActivityEntityTypeConfiguration : IEntityTypeConfiguration<AuthenticationActivity>
     {
-        public void Configure(EntityTypeBuilder<AuthActivity> builder)
+        public void Configure(EntityTypeBuilder<AuthenticationActivity> builder)
         {
-            builder.ToTable("auth_activities")
+            builder.ToTable("authentication_activities")
                 .HasKey(model => model.Id);
 
             builder.Property(model => model.Id)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("id");
+
+            builder.Property(model => model.Credential)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("credential_id");
+
+            builder.HasIndex(activity => activity.Credential);
+
+            builder.Property(model => model.UserId)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("user_id");
+            
+            builder.HasIndex(activity => activity.UserId);
+
+            builder.Property(model => model.ScopeId)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("scope_id");
+
+            builder.Property(model => model.Username)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("username");
 
             builder.Property(model => model.IpAddress)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -430,11 +437,52 @@ public sealed class AppDbContext : DbContext
                 .HasColumnName("agent")
                 .IsRequired(false);
 
-            builder.HasIndex(activity => activity.Agent);
+            builder.Property(model => model.CreatedDateUtc)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("created_date_utc");
+
+            builder.HasIndex(activity => activity.CreatedDateUtc);
+        }
+    }
+
+    private class AuthorizationActivityEntityTypeConfiguration : IEntityTypeConfiguration<AuthorizationActivity>
+    {
+        public void Configure(EntityTypeBuilder<AuthorizationActivity> builder)
+        {
+            builder.ToTable("authorization_activities")
+                .HasKey(model => model.Id);
+
+            builder.Property(model => model.Id)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("id");
+
+            builder.Property(model => model.Session)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("session_id");
+
+            builder.HasIndex(activity => activity.Session);
+
+            builder.Property(model => model.UserId)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("user_id");
+
+            builder.HasIndex(activity => activity.Session);
+
+            builder.Property(model => model.IpAddress)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("ip_address")
+                .IsRequired(false);
+
+            builder.Property(model => model.Agent)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("agent")
+                .IsRequired(false);
 
             builder.Property(model => model.CreatedDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("created_date_utc");
+
+            builder.HasIndex(activity => activity.CreatedDateUtc);
         }
     }
 }

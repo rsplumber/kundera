@@ -24,7 +24,6 @@ internal sealed class SessionRepository : ISessionRepository
             .Include(session => session.User)
             .Include(session => session.Credential)
             .Include(session => session.Scope)
-            .Include(session => session.Activity)
             .FirstOrDefaultAsync(session => session.Id == token, cancellationToken);
     }
 

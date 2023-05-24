@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions.Events;
 using Core.Domains.Scopes;
 using Core.Domains.Users;
@@ -17,9 +16,7 @@ public class Session : BaseEntity
         Credential credential,
         Scope scope,
         User user,
-        DateTime expireDate,
-        IPAddress ipAddress,
-        string agent)
+        DateTime expireDate)
     {
         Id = token;
         RefreshToken = refreshToken;
@@ -27,7 +24,6 @@ public class Session : BaseEntity
         Scope = scope;
         User = user;
         ExpirationDateUtc = expireDate;
-        UpdateActivity(ipAddress,agent);
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
@@ -37,17 +33,9 @@ public class Session : BaseEntity
 
     public Credential Credential { get; set; } = default!;
 
-    public Scope Scope { get; set; }= default!;
+    public Scope Scope { get; set; } = default!;
 
-    public User User { get; set; }= default!;
+    public User User { get; set; } = default!;
 
     public DateTime ExpirationDateUtc { get; set; }
-    
-    public AuthActivity Activity { get; set; } = default!;
-
-    public void UpdateActivity(IPAddress ipAddress,string agent)
-    {
-        Activity = new AuthActivity(ipAddress, agent);
-    }
-
 }

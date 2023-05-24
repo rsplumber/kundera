@@ -26,6 +26,7 @@ internal sealed class Endpoint : Endpoint<Request, Guid>
             req.Roles,
             req.ServiceSecret,
             HttpContext.Request.UserAgent(),
+            HttpContext.Request.IpAddress().ToString(),
             ct);
 
         await SendOkAsync(userId, ct);

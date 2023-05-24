@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Credentials;
+﻿using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Credentials.Exceptions;
 using Core.Domains.Scopes;
 using Core.Domains.Scopes.Exceptions;
@@ -12,9 +11,7 @@ public interface ISessionFactory
         string refreshToken,
         Guid credentialId,
         Guid scopeId,
-        DateTime expireDate,
-        IPAddress ipAddress,
-        string agent);
+        DateTime expireDate);
 }
 
 internal sealed class SessionFactory : ISessionFactory
@@ -23,7 +20,7 @@ internal sealed class SessionFactory : ISessionFactory
     private readonly ICredentialRepository _credentialRepository;
     private readonly IScopeRepository _scopeRepository;
 
-    public SessionFactory(ISessionRepository sessionRepository, 
+    public SessionFactory(ISessionRepository sessionRepository,
         ICredentialRepository credentialRepository,
         IScopeRepository scopeRepository)
     {
@@ -36,9 +33,7 @@ internal sealed class SessionFactory : ISessionFactory
         string refreshToken,
         Guid credentialId,
         Guid scopeId,
-        DateTime expireDate,
-        IPAddress ipAddress,
-        string agent)
+        DateTime expireDate)
     {
         var credential = await _credentialRepository.FindAsync(credentialId);
         if (credential is null)
@@ -57,9 +52,7 @@ internal sealed class SessionFactory : ISessionFactory
             credential,
             scope,
             credential.User,
-            expireDate,
-            ipAddress,
-            agent);
+            expireDate);
         await _sessionRepository.AddAsync(session);
         return session;
     }

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Domains.Auth.Authorizations;
+﻿using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Scopes;
@@ -20,7 +19,7 @@ internal sealed class SessionManagement : ISessionManagement
         _hashService = hashService;
     }
 
-    public async Task<Certificate> SaveAsync(Credential credential, Scope scope, IPAddress ipAddress, string userAgent, CancellationToken cancellationToken = default)
+    public async Task<Certificate> SaveAsync(Credential credential, Scope scope,CancellationToken cancellationToken = default)
     {
         var certificate = Certificate.Create(_hashService, credential, scope.Id);
         await _sessionFactory.CreateAsync(
@@ -28,10 +27,7 @@ internal sealed class SessionManagement : ISessionManagement
             certificate.RefreshToken,
             credential.Id,
             scope.Id,
-            certificate.ExpireAtUtc,
-            ipAddress,
-            userAgent);
-
+            certificate.ExpireAtUtc);
         return certificate;
     }
 

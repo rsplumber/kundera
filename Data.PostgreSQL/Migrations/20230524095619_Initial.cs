@@ -14,17 +14,37 @@ namespace Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "auth_activities",
+                name: "authentication_activities",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    credential_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    scope_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    username = table.Column<string>(type: "text", nullable: false),
                     ip_address = table.Column<string>(type: "text", nullable: true),
                     agent = table.Column<string>(type: "text", nullable: true),
                     created_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_auth_activities", x => x.id);
+                    table.PrimaryKey("PK_authentication_activities", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "authorization_activities",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    session_id = table.Column<string>(type: "text", nullable: false),
+                    ip_address = table.Column<string>(type: "text", nullable: true),
+                    agent = table.Column<string>(type: "text", nullable: true),
+                    created_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_authorization_activities", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -246,10 +266,6 @@ namespace Data.Migrations
                     username = table.Column<string>(type: "text", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     Password = table.Column<PasswordType>(type: "jsonb", nullable: false),
-                    FirstActivityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    first_activity_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastActivityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    last_activity_id = table.Column<Guid>(type: "uuid", nullable: true),
                     expires_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     session_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: true),
                     one_time = table.Column<bool>(type: "boolean", nullable: false),
@@ -259,18 +275,6 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_credentials", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_credentials_auth_activities_first_activity_id",
-                        column: x => x.first_activity_id,
-                        principalTable: "auth_activities",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_credentials_auth_activities_last_activity_id",
-                        column: x => x.last_activity_id,
-                        principalTable: "auth_activities",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_credentials_users_user_id",
                         column: x => x.user_id,
@@ -335,18 +339,11 @@ namespace Data.Migrations
                     credential_id = table.Column<Guid>(type: "uuid", nullable: false),
                     scope_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    activity_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_sessions", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_sessions_auth_activities_activity_id",
-                        column: x => x.activity_id,
-                        principalTable: "auth_activities",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sessions_credentials_credential_id",
                         column: x => x.credential_id,
@@ -365,19 +362,29 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_auth_activities_agent",
-                table: "auth_activities",
-                column: "agent");
+                name: "IX_authentication_activities_created_date_utc",
+                table: "authentication_activities",
+                column: "created_date_utc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_credentials_first_activity_id",
-                table: "credentials",
-                column: "first_activity_id");
+                name: "IX_authentication_activities_credential_id",
+                table: "authentication_activities",
+                column: "credential_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_credentials_last_activity_id",
-                table: "credentials",
-                column: "last_activity_id");
+                name: "IX_authentication_activities_user_id",
+                table: "authentication_activities",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_authorization_activities_created_date_utc",
+                table: "authorization_activities",
+                column: "created_date_utc");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_authorization_activities_session_id",
+                table: "authorization_activities",
+                column: "session_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_credentials_user_id",
@@ -387,8 +394,7 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_credentials_username",
                 table: "credentials",
-                column: "username",
-                unique: true);
+                column: "username");
 
             migrationBuilder.CreateIndex(
                 name: "IX_groups_name",
@@ -477,11 +483,6 @@ namespace Data.Migrations
                 column: "status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sessions_activity_id",
-                table: "sessions",
-                column: "activity_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_sessions_credential_id",
                 table: "sessions",
                 column: "credential_id");
@@ -527,6 +528,12 @@ namespace Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "authentication_activities");
+
+            migrationBuilder.DropTable(
+                name: "authorization_activities");
+
+            migrationBuilder.DropTable(
                 name: "groups_children");
 
             migrationBuilder.DropTable(
@@ -567,9 +574,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "roles");
-
-            migrationBuilder.DropTable(
-                name: "auth_activities");
 
             migrationBuilder.DropTable(
                 name: "users");

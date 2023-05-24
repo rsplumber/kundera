@@ -1,4 +1,3 @@
-using Core.Domains.Auth;
 using Core.Domains.Auth.Authorizations;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
@@ -27,7 +26,6 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
             .AsNoTracking()
             .Include(session => session.User)
             .ThenInclude(user => user.Groups)
-            .Include(session => session.Activity)
             .Include(session => session.Scope)
             .ThenInclude(scope => scope.Roles)
             .Where(session => session.Id == st)
@@ -44,13 +42,6 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
                         Id = ug.Id,
                         Status = ug.Status
                     }).ToList()
-                },
-                Activity = new AuthActivity
-                {
-                    Id = session.Activity.Id,
-                    Agent = session.Activity.Agent,
-                    IpAddress = session.Activity.IpAddress,
-                    CreatedDateUtc = session.Activity.CreatedDateUtc
                 },
                 Scope = new Scope
                 {

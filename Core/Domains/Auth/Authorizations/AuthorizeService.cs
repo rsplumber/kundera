@@ -3,21 +3,24 @@ using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
 using Core.Domains.Users;
+using DotNetCore.CAP;
 
 namespace Core.Domains.Auth.Authorizations;
 
 internal sealed class AuthorizeService : IAuthorizeService
 {
     private readonly IAuthorizeDataProvider _authorizeDataProvider;
+    private readonly ICapPublisher _eventBus;
 
-    public AuthorizeService(IAuthorizeDataProvider authorizeDataProvider)
+    public AuthorizeService(IAuthorizeDataProvider authorizeDataProvider, ICapPublisher eventBus)
     {
         _authorizeDataProvider = authorizeDataProvider;
+        _eventBus = eventBus;
     }
 
-    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, string userAgent, CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
     {
-        var session = await ValidateSession(token, userAgent, cancellationToken);
+        var session = await ValidateSession(token, cancellationToken);
         ValidateUser(session);
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         ValidateSessionScope(session, userRoles);
@@ -28,15 +31,25 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new ForbiddenException();
         }
 
+        Task.Run(() =>
+        {
+            _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
+            {
+                Agent = userAgent,
+                IpAddress = ipAddress,
+                SessionId = session.Id,
+                UserId = session.User.Id
+            }, cancellationToken: cancellationToken);
+        }, cancellationToken);
+
         return session.User.Id;
 
         bool InvalidPermission() => permissions.All(permission => actions.All(action => permission.Name != action.ToLower()));
     }
 
-    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string userAgent,
-        CancellationToken cancellationToken = default)
+    public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
     {
-        var session = await ValidateSession(token, userAgent, cancellationToken);
+        var session = await ValidateSession(token, cancellationToken);
         ValidateUser(session);
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         ValidateSessionScope(session, userRoles);
@@ -46,11 +59,22 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new ForbiddenException();
         }
 
+        Task.Run(() =>
+        {
+            _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
+            {
+                Agent = userAgent,
+                IpAddress = ipAddress,
+                SessionId = session.Id,
+                UserId = session.User.Id
+            }, cancellationToken: cancellationToken);
+        }, cancellationToken);
+
         return session.User.Id;
         bool InvalidRole() => userRoles.All(role => roles.All(r => role.Name != r.ToLower()));
     }
 
-    private async Task<Session> ValidateSession(string token, string agent, CancellationToken cancellationToken)
+    private async Task<Session> ValidateSession(string token, CancellationToken cancellationToken)
     {
         var session = await _authorizeDataProvider.CurrentSessionAsync(token, cancellationToken);
         if (session is null)
@@ -63,17 +87,9 @@ internal sealed class AuthorizeService : IAuthorizeService
             throw new SessionExpiredException();
         }
 
-        if (SessionInvalidAgent())
-        {
-            throw new UnAuthorizedException();
-        }
-
         return session;
 
         bool SessionExpired() => DateTime.UtcNow >= session.ExpirationDateUtc;
-
-        // bool SessionInvalidAgent() =>  session.Activity.Agent != agent;
-        bool SessionInvalidAgent() => false;
     }
 
     private void ValidateUser(Session session)
