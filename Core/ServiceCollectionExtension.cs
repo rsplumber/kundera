@@ -30,7 +30,7 @@ public static class ServiceCollectionExtension
 
         services.TryAddScoped<IAuthorizeService, AuthorizeService>();
 
-        services.AddTransient<AuthenticatedEventHandler>();
-        services.AddTransient<AuthorizedEventHandler>();
+        services.TryAddTransient<AuthenticatedEventHandler>();
+        services.TryAddTransient<AuthorizedEventHandler>();
     }
 }

@@ -19,6 +19,7 @@ using Data.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Data;
 
@@ -31,20 +32,20 @@ public static class ServiceCollectionExtension
 
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.TryAddScoped<IUserRepository, UserRepository>();
+        services.TryAddScoped<IGroupRepository, GroupRepository>();
 
-        services.AddScoped<IServiceRepository, ServiceRepository>();
-        services.AddScoped<IScopeRepository, ScopeRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.TryAddScoped<IServiceRepository, ServiceRepository>();
+        services.TryAddScoped<IScopeRepository, ScopeRepository>();
+        services.TryAddScoped<IRoleRepository, RoleRepository>();
+        services.TryAddScoped<IPermissionRepository, PermissionRepository>();
 
-        services.AddScoped<ICredentialRepository, CredentialRepository>();
-        services.AddScoped<IAuthenticationActivityRepository, AuthenticationActivityRepository>();
-        services.AddScoped<ISessionRepository, SessionRepository>();
-        services.AddScoped<IAuthorizationActivityRepository, AuthorizationActivityRepository>();
+        services.TryAddScoped<ICredentialRepository, CredentialRepository>();
+        services.TryAddScoped<IAuthenticationActivityRepository, AuthenticationActivityRepository>();
+        services.TryAddScoped<ISessionRepository, SessionRepository>();
+        services.TryAddScoped<IAuthorizationActivityRepository, AuthorizationActivityRepository>();
 
-        services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
+        services.TryAddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
         services.AddDistributedMemoryCache();
     }
 }

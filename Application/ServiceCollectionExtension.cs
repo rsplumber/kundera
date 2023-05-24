@@ -34,11 +34,12 @@ public static class ServiceCollectionExtension
             });
         });
 
-        services.AddScoped<ISessionManagement, SessionManagement>();
+        services.TryAddScoped<ISessionManagement, SessionManagement>();
 
         services.TryAddTransient<DataSeeder>();
-        services.AddScoped<RemoveExpiredCredentialsJob>();
-        services.AddScoped<RemoveExpiredSessionsJob>();
+        services.TryAddScoped<RemoveExpiredCredentialsJob>();
+        services.TryAddScoped<RemoveExpiredSessionsJob>();
+        services.TryAddScoped<RemoveExpiredActivitiesJob>();
         services.AddQuartz(q =>
         {
             q.SchedulerId = "Kundera";
@@ -61,6 +62,13 @@ public static class ServiceCollectionExtension
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(20)))
                 .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
                 .WithDescription("RemoveExpiredSessionsJob")
+            );
+
+            q.ScheduleJob<RemoveExpiredActivitiesJob>(trigger => trigger
+                .WithIdentity("RemoveExpiredActivitiesJob")
+                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(1)))
+                .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Hour))
+                .WithDescription("RemoveExpiredActivitiesJob")
             );
         });
         services.AddQuartzServer(options =>

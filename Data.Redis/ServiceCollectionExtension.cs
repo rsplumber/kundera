@@ -35,18 +35,18 @@ public static class ServiceCollectionExtension
 
         services.TryAddSingleton(_ => new RedisConnectionProvider(connectionUrl));
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.TryAddScoped<IUserRepository, UserRepository>();
+        services.TryAddScoped<IGroupRepository, GroupRepository>();
 
-        services.AddScoped<IServiceRepository, ServiceRepository>();
-        services.AddScoped<IScopeRepository, ScopeRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.TryAddScoped<IServiceRepository, ServiceRepository>();
+        services.TryAddScoped<IScopeRepository, ScopeRepository>();
+        services.TryAddScoped<IRoleRepository, RoleRepository>();
+        services.TryAddScoped<IPermissionRepository, PermissionRepository>();
 
-        services.AddScoped<ICredentialRepository, CredentialRepository>();
-        services.AddScoped<ISessionRepository, SessionRepository>();
+        services.TryAddScoped<ICredentialRepository, CredentialRepository>();
+        services.TryAddScoped<ISessionRepository, SessionRepository>();
 
-        services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
+        services.TryAddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }

@@ -29,4 +29,15 @@ internal sealed class AuthenticationActivityRepository : IAuthenticationActivity
             .Where(activity => activity.Credential == credentialId)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task RemoveExpiredActivitiesAsync(CancellationToken cancellationToken = default)
+    {
+        var query = from a in _dbContext.AuthenticationActivities
+            where a.CreatedDateUtc.AddDays(10) >= DateTime.UtcNow.ToUniversalTime()
+            group a by a.Credential
+            into g
+            select g.OrderByDescending(x => x.CreatedDateUtc).Skip(5);
+        _dbContext.AuthenticationActivities.RemoveRange(query.SelectMany(x => x));
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }
