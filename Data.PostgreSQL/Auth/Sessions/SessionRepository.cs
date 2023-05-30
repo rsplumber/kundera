@@ -47,12 +47,14 @@ internal sealed class SessionRepository : ISessionRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteExpiredAsync(int afterExpireInMinutes = 1, CancellationToken cancellationToken = default)
+    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
     {
-        var sessions = await _dbContext.Sessions
-            .Where(model => DateTime.UtcNow >= model.ExpirationDateUtc.ToUniversalTime().AddMinutes(afterExpireInMinutes))
-            .ToListAsync(cancellationToken);
-        _dbContext.Sessions.RemoveRange(sessions);
+        var query = from a in _dbContext.Sessions
+            where a.ExpirationDateUtc.AddDays(5) >= DateTime.UtcNow.ToUniversalTime()
+            group a by a.Credential.Id
+            into g
+            select g.OrderByDescending(x => x.ExpirationDateUtc).Skip(2);
+        _dbContext.Sessions.RemoveRange(query.SelectMany(x => x));
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

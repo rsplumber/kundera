@@ -26,7 +26,7 @@ public sealed class AuthorizedEventHandler : ICapSubscribe
     }
 
 
-    [CapSubscribe(AuthorizedEvent.EventName, Group = "kundera.core.queue")]
+    [CapSubscribe(AuthorizedEvent.EventName, Group = "kundera.auth_activities.queue")]
     public async Task HandleAsync(AuthorizedEvent message)
     {
         await _authorizationActivityRepository.AddAsync(new AuthorizationActivity(message.SessionId, message.UserId, message.IpAddress, message.Agent));

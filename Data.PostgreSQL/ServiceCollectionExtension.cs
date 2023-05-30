@@ -45,7 +45,8 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<ISessionRepository, SessionRepository>();
         services.TryAddScoped<IAuthorizationActivityRepository, AuthorizationActivityRepository>();
 
-        services.TryAddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
+        services.TryAddScoped<AuthorizeDataProvider>();
+        services.TryAddScoped<IAuthorizeDataProvider, CachedAuthorizeDataProvider>();
         services.AddDistributedMemoryCache();
     }
 }
