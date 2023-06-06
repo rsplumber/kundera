@@ -22,18 +22,21 @@ internal class ServiceRepository : IServiceRepository
     public Task<Service?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return _dbContext.Services
+            .Include(service => service.Permissions)
             .FirstOrDefaultAsync(service => service.Id == id, cancellationToken);
     }
 
     public Task<Service?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return _dbContext.Services
+            .Include(service => service.Permissions)
             .FirstOrDefaultAsync(service => service.Name == name, cancellationToken);
     }
 
     public Task<Service?> FindBySecretAsync(string secret, CancellationToken cancellationToken = default)
     {
         return _dbContext.Services
+            .Include(service => service.Permissions)
             .FirstOrDefaultAsync(service => service.Secret == secret, cancellationToken);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<AddScopeRoleCommand>
     public override void Configure()
     {
         Post("scopes/{scopeId:guid}/roles");
-        Permissions("kundera_scopes_add_role");
+        Permissions("scopes_add_role");
         Version(1);
     }
 

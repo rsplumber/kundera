@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveUserFromGroupCommand>
     public override void Configure()
     {
         Delete("users/{userId:guid}/groups");
-        Permissions("kundera_users_remove_group");
+        Permissions("users_remove_group");
         Version(1);
     }
 

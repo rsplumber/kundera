@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<CreateServiceCommand>
     public override void Configure()
     {
         Post("services");
-        Permissions("kundera_services_create");
+        Permissions("services_create");
         Version(1);
     }
 

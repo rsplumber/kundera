@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ScopeSessionsQuery, List<ScopeSessionR
     public override void Configure()
     {
         Get("scopes/{scopeId:guid}/sessions");
-        Permissions("kundera_scopes_sessions_list");
+        Permissions("scopes_sessions_list");
         Version(1);
     }
 

@@ -1,5 +1,5 @@
 ﻿using Core.Domains.Permissions.Events;
-using Core.Domains.Roles;
+using Core.Domains.Services;
 
 namespace Core.Domains.Permissions;
 

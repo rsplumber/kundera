@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionRes
     public override void Configure()
     {
         Get("users/{userId:guid}/sessions");
-        Permissions("kundera_users_sessions_list");
+        Permissions("users_sessions_list");
         Version(1);
     }
 

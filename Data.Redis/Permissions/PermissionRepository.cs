@@ -19,28 +19,9 @@ internal class PermissionRepository : IPermissionRepository
         _eventBus = eventBus;
     }
 
-    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
-    {
-        var dataModel = _mapper.Map<PermissionDataModel>(entity);
-        await _permissions.InsertAsync(dataModel);
-        await _eventBus.DispatchDomainEventsAsync(entity);
-    }
-
     public async Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dataModel = await _permissions.FindByIdAsync(id.ToString());
-        return _mapper.Map<Permission>(dataModel);
-    }
-
-    public async Task<List<Permission>> FindAsync(CancellationToken cancellationToken = default)
-    {
-        var dataModels = await _permissions.ToListAsync();
-        return _mapper.Map<List<Permission>>(dataModels);
-    }
-
-    public async Task<Permission?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
-    {
-        var dataModel = await _permissions.FirstOrDefaultAsync(model => model.Name == name);
         return _mapper.Map<Permission>(dataModel);
     }
 

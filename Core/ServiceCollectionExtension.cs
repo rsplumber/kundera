@@ -2,7 +2,6 @@
 using Core.Domains.Auth.Credentials;
 using Core.Domains.Auth.Sessions;
 using Core.Domains.Groups;
-using Core.Domains.Permissions;
 using Core.Domains.Roles;
 using Core.Domains.Scopes;
 using Core.Domains.Services;
@@ -23,7 +22,6 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IServiceFactory, ServiceFactory>();
         services.TryAddScoped<IScopeFactory, ScopeFactory>();
         services.TryAddScoped<IRoleFactory, RoleFactory>();
-        services.TryAddScoped<IPermissionFactory, PermissionFactory>();
         services.TryAddScoped<IGroupFactory, GroupFactory>();
         services.TryAddScoped<ISessionFactory, SessionFactory>();
         services.TryAddScoped<ICredentialFactory, CredentialFactory>();

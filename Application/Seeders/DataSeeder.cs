@@ -21,7 +21,6 @@ internal sealed class DataSeeder
     private readonly IServiceFactory _serviceFactory;
     private readonly IScopeFactory _scopeFactory;
     private readonly IRoleFactory _roleFactory;
-    private readonly IPermissionFactory _permissionFactory;
     private readonly IGroupFactory _groupFactory;
 
     private readonly IRoleRepository _roleRepository;
@@ -44,7 +43,6 @@ internal sealed class DataSeeder
         IServiceFactory serviceFactory,
         IScopeFactory scopeFactory,
         IRoleFactory roleFactory,
-        IPermissionFactory permissionFactory,
         IGroupFactory groupFactory,
         ICredentialFactory credentialFactory,
         ICredentialRepository credentialRepository)
@@ -59,7 +57,6 @@ internal sealed class DataSeeder
         _serviceFactory = serviceFactory;
         _scopeFactory = scopeFactory;
         _roleFactory = roleFactory;
-        _permissionFactory = permissionFactory;
         _groupFactory = groupFactory;
         _credentialFactory = credentialFactory;
         _credentialRepository = credentialRepository;
@@ -112,180 +109,126 @@ internal sealed class DataSeeder
             await _credentialFactory.CreateAsync(_adminUsername, _adminPassword, user.Id, 1000);
         }
 
-        await SeedPermissions();
-
-        await SeedServiceManAsync();
+        await SeedPermissions(service);
     }
 
-    private async Task SeedPermissions()
+    private async Task SeedPermissions(Service service)
     {
-        var firstPermission = await _permissionRepository.FindByNameAsync("kundera_permissions_create");
-        if (firstPermission is not null) return;
-
-        await SeedPermissionPermissions();
-        await SeedRolePermissions();
-        await SeedServicePermissions();
-        await SeedScopePermissions();
-        await SeedGroupPermissions();
-        await SeedUserPermissions();
-        await SeedCredentialsPermissions();
-        await SeedSessionsPermissions();
+        if (service.Permissions.Any()) return;
+        SeedPermissionPermissions();
+        SeedRolePermissions();
+        SeedServicePermissions();
+        SeedScopePermissions();
+        SeedGroupPermissions();
+        SeedUserPermissions();
+        SeedCredentialsPermissions();
+        SeedSessionsPermissions();
 
         var role = await _roleRepository.FindByNameAsync(EntityBaseValues.SuperAdminRole);
         if (role is not null)
         {
-            var permissions = await _permissionRepository.FindAsync();
-            foreach (var permission in permissions)
+            foreach (var permission in service.Permissions)
             {
                 role.Add(permission);
             }
 
             await _roleRepository.UpdateAsync(role);
         }
-    }
 
-    private async Task SeedPermissionPermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_permissions_create");
-        await _permissionFactory.CreateAsync("kundera_permissions_list");
-        await _permissionFactory.CreateAsync("kundera_permissions_get");
-        await _permissionFactory.CreateAsync("kundera_permissions_delete");
-        await _permissionFactory.CreateAsync("kundera_permissions_change_meta");
-    }
+        await _serviceRepository.UpdateAsync(service);
 
-    private async Task SeedRolePermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_roles_create");
-        await _permissionFactory.CreateAsync("kundera_roles_list");
-        await _permissionFactory.CreateAsync("kundera_roles_get");
-        await _permissionFactory.CreateAsync("kundera_roles_delete");
-        await _permissionFactory.CreateAsync("kundera_roles_add_permission");
-        await _permissionFactory.CreateAsync("kundera_roles_remove_permission");
-        await _permissionFactory.CreateAsync("kundera_roles_change_meta");
-        await _permissionFactory.CreateAsync("kundera_roles_permissions_list");
-    }
-
-    private async Task SeedServicePermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_services_create");
-        await _permissionFactory.CreateAsync("kundera_services_list");
-        await _permissionFactory.CreateAsync("kundera_services_get");
-        await _permissionFactory.CreateAsync("kundera_services_delete");
-        await _permissionFactory.CreateAsync("kundera_services_activate");
-        await _permissionFactory.CreateAsync("kundera_services_de-activate");
-    }
-
-    private async Task SeedScopePermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_scopes_create");
-        await _permissionFactory.CreateAsync("kundera_scopes_list");
-        await _permissionFactory.CreateAsync("kundera_scopes_get");
-        await _permissionFactory.CreateAsync("kundera_scopes_delete");
-        await _permissionFactory.CreateAsync("kundera_scopes_activate");
-        await _permissionFactory.CreateAsync("kundera_scopes_de-activate");
-        await _permissionFactory.CreateAsync("kundera_scopes_add_service");
-        await _permissionFactory.CreateAsync("kundera_scopes_remove_service");
-        await _permissionFactory.CreateAsync("kundera_scopes_add_role");
-        await _permissionFactory.CreateAsync("kundera_scopes_remove_role");
-        await _permissionFactory.CreateAsync("kundera_scopes_roles_list");
-        await _permissionFactory.CreateAsync("kundera_scopes_sessions_list");
-    }
-
-    private async Task SeedGroupPermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_groups_create");
-        await _permissionFactory.CreateAsync("kundera_groups_list");
-        await _permissionFactory.CreateAsync("kundera_groups_get");
-        await _permissionFactory.CreateAsync("kundera_groups_delete");
-        await _permissionFactory.CreateAsync("kundera_groups_assign_role");
-        await _permissionFactory.CreateAsync("kundera_groups_revoke_role");
-        await _permissionFactory.CreateAsync("kundera_groups_set_parent");
-        await _permissionFactory.CreateAsync("kundera_groups_move_parent");
-        await _permissionFactory.CreateAsync("kundera_groups_remove_parent");
-        await _permissionFactory.CreateAsync("kundera_groups_enable");
-        await _permissionFactory.CreateAsync("kundera_groups_disable");
-    }
-
-    private async Task SeedUserPermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_users_create");
-        await _permissionFactory.CreateAsync("kundera_users_list");
-        await _permissionFactory.CreateAsync("kundera_users_get");
-        await _permissionFactory.CreateAsync("kundera_users_delete");
-        await _permissionFactory.CreateAsync("kundera_users_add_username");
-        await _permissionFactory.CreateAsync("kundera_users_remove_username");
-        await _permissionFactory.CreateAsync("kundera_users_exist_username");
-        await _permissionFactory.CreateAsync("kundera_users_assign_role");
-        await _permissionFactory.CreateAsync("kundera_users_revoke_role");
-        await _permissionFactory.CreateAsync("kundera_users_join_group");
-        await _permissionFactory.CreateAsync("kundera_users_remove_group");
-        await _permissionFactory.CreateAsync("kundera_users_activate");
-        await _permissionFactory.CreateAsync("kundera_users_suspend");
-        await _permissionFactory.CreateAsync("kundera_users_block");
-        await _permissionFactory.CreateAsync("kundera_users_sessions_list");
-    }
-
-    private async Task SeedCredentialsPermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_credentials_create");
-        await _permissionFactory.CreateAsync("kundera_credentials_create_onetime");
-        await _permissionFactory.CreateAsync("kundera_credentials_create_time-periodic");
-        await _permissionFactory.CreateAsync("kundera_credentials_delete");
-    }
-
-    private async Task SeedSessionsPermissions()
-    {
-        await _permissionFactory.CreateAsync("kundera_sessions_terminate");
-    }
-
-
-    private async Task SeedServiceManAsync()
-    {
-        var serviceAdminRole = await _roleRepository.FindByNameAsync(EntityBaseValues.ServiceAdminRole);
-        if (serviceAdminRole is null)
+        void SeedPermissionPermissions()
         {
-            serviceAdminRole = await _roleFactory.CreateAsync(EntityBaseValues.ServiceAdminRole);
+            service.AddPermission("permissions_create");
+            service.AddPermission("permissions_list");
+            service.AddPermission("permissions_get");
+            service.AddPermission("permissions_delete");
+            service.AddPermission("permissions_change_meta");
         }
 
-        var permissions = new List<Permission?>
+        void SeedRolePermissions()
         {
-            await _permissionRepository.FindByNameAsync("kundera_scopes_list"),
-            await _permissionRepository.FindByNameAsync("kundera_scopes_get"),
-            await _permissionRepository.FindByNameAsync("kundera_scopes_roles_list"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_create"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_get"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_delete"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_add_permission"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_remove_permission"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_change_meta"),
-            await _permissionRepository.FindByNameAsync("kundera_roles_permissions_list"),
-            await _permissionRepository.FindByNameAsync("kundera_permissions_create"),
-            await _permissionRepository.FindByNameAsync("kundera_permissions_list"),
-            await _permissionRepository.FindByNameAsync("kundera_permissions_get"),
-            await _permissionRepository.FindByNameAsync("kundera_permissions_delete"),
-            await _permissionRepository.FindByNameAsync("kundera_permissions_change_meta"),
-            await _permissionRepository.FindByNameAsync("kundera_services_get"),
-            await _permissionRepository.FindByNameAsync("kundera_services_activate"),
-            await _permissionRepository.FindByNameAsync("kundera_services_de-activate")
-        };
-
-        if (permissions.Any(permission => permission is null))
-        {
-            throw new ApplicationException("Cannot create service admin role");
+            service.AddPermission("roles_create");
+            service.AddPermission("roles_list");
+            service.AddPermission("roles_get");
+            service.AddPermission("roles_delete");
+            service.AddPermission("roles_add_permission");
+            service.AddPermission("roles_remove_permission");
+            service.AddPermission("roles_change_meta");
+            service.AddPermission("roles_permissions_list");
         }
 
-
-        foreach (var permission in permissions)
+        void SeedServicePermissions()
         {
-            serviceAdminRole.Add(permission!);
+            service.AddPermission("services_create");
+            service.AddPermission("services_list");
+            service.AddPermission("services_get");
+            service.AddPermission("services_delete");
+            service.AddPermission("services_activate");
+            service.AddPermission("services_de-activate");
         }
 
-        await _roleRepository.UpdateAsync(serviceAdminRole);
-
-        var group = await _groupRepository.FindByNameAsync(EntityBaseValues.ServiceManGroup);
-        if (group is null)
+        void SeedScopePermissions()
         {
-            await _groupFactory.CreateAsync(EntityBaseValues.ServiceManGroup, serviceAdminRole.Id);
+            service.AddPermission("scopes_create");
+            service.AddPermission("scopes_list");
+            service.AddPermission("scopes_get");
+            service.AddPermission("scopes_delete");
+            service.AddPermission("scopes_activate");
+            service.AddPermission("scopes_de-activate");
+            service.AddPermission("scopes_add_service");
+            service.AddPermission("scopes_remove_service");
+            service.AddPermission("scopes_add_role");
+            service.AddPermission("scopes_remove_role");
+            service.AddPermission("scopes_roles_list");
+            service.AddPermission("scopes_sessions_list");
+        }
+
+        void SeedGroupPermissions()
+        {
+            service.AddPermission("groups_create");
+            service.AddPermission("groups_list");
+            service.AddPermission("groups_get");
+            service.AddPermission("groups_delete");
+            service.AddPermission("groups_assign_role");
+            service.AddPermission("groups_revoke_role");
+            service.AddPermission("groups_set_parent");
+            service.AddPermission("groups_move_parent");
+            service.AddPermission("groups_remove_parent");
+            service.AddPermission("groups_enable");
+            service.AddPermission("groups_disable");
+        }
+
+        void SeedUserPermissions()
+        {
+            service.AddPermission("users_create");
+            service.AddPermission("users_list");
+            service.AddPermission("users_get");
+            service.AddPermission("users_delete");
+            service.AddPermission("users_add_username");
+            service.AddPermission("users_remove_username");
+            service.AddPermission("users_exist_username");
+            service.AddPermission("users_assign_role");
+            service.AddPermission("users_revoke_role");
+            service.AddPermission("users_join_group");
+            service.AddPermission("users_remove_group");
+            service.AddPermission("users_activate");
+            service.AddPermission("users_suspend");
+            service.AddPermission("users_block");
+            service.AddPermission("users_sessions_list");
+        }
+
+        void SeedCredentialsPermissions()
+        {
+            service.AddPermission("credentials_create");
+            service.AddPermission("credentials_create_onetime");
+            service.AddPermission("credentials_create_time-periodic");
+            service.AddPermission("credentials_delete");
+        }
+
+        void SeedSessionsPermissions()
+        {
+            service.AddPermission("sessions_terminate");
         }
     }
 }

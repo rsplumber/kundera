@@ -393,6 +393,11 @@ public sealed class AppDbContext : DbContext
                 .HasColumnName("status");
 
             builder.HasIndex(model => model.Status);
+
+            builder.HasMany(model => model.Permissions)
+                .WithOne()
+                .HasForeignKey("service_id")
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 
@@ -416,7 +421,7 @@ public sealed class AppDbContext : DbContext
             builder.Property(model => model.UserId)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("user_id");
-            
+
             builder.HasIndex(activity => activity.UserId);
 
             builder.Property(model => model.ScopeId)

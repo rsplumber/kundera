@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<SuspendUserCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/suspend");
-        Permissions("kundera_users_suspend");
+        Permissions("users_suspend");
         Version(1);
     }
 

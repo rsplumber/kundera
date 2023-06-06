@@ -3,7 +3,7 @@ using FastEndpoints;
 using FluentValidation;
 using Mediator;
 
-namespace Web.Endpoints.V1.Permissions.Create;
+namespace Web.Endpoints.V1.Services.Permissions.Create;
 
 internal sealed class Endpoint : Endpoint<CreatePermissionCommand>
 {
@@ -16,20 +16,19 @@ internal sealed class Endpoint : Endpoint<CreatePermissionCommand>
 
     public override void Configure()
     {
-        Post("permissions");
-        Permissions("kundera_permissions_create");
+        Post("services/{serviceId}/permissions");
+        Permissions("permissions_create");
         Version(1);
     }
 
     public override async Task HandleAsync(CreatePermissionCommand req, CancellationToken ct)
     {
-        var service = await _mediator.Send(req, ct);
-
-        await SendCreatedAtAsync<Details.Endpoint>(new { service.Id }, new PermissionResponse
+        var permission = await _mediator.Send(req, ct);
+        await SendCreatedAtAsync<V1.Permissions.Details.Endpoint>(new { permission.Id }, new PermissionResponse
             {
-                Id = service.Id,
-                Name = service.Name,
-                Meta = (Dictionary<string, string>)service.Meta
+                Id = permission.Id,
+                Name = permission.Name,
+                Meta = permission.Meta
             },
             generateAbsoluteUrl: true,
             cancellation: ct);
@@ -50,6 +49,10 @@ internal sealed class RequestValidator : Validator<CreatePermissionCommand>
 {
     public RequestValidator()
     {
+        RuleFor(request => request.ServiceId)
+            .NotEmpty().WithMessage("Enter a ServiceId")
+            .NotNull().WithMessage("Enter a ServiceId");
+
         RuleFor(request => request.Name)
             .NotEmpty().WithMessage("Enter a Name")
             .NotNull().WithMessage("Enter a Name");

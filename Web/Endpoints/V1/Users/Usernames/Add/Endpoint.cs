@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<AddUserUsernameCommand>
     public override void Configure()
     {
         Post("users/{userId:guid}/usernames");
-        Permissions("kundera_users_add_username");
+        Permissions("users_add_username");
         Version(1);
     }
 

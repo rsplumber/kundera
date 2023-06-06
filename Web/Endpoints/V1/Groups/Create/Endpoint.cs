@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<CreateGroupCommand>
     public override void Configure()
     {
         Post("groups");
-        Permissions("kundera_groups_create");
+        Permissions("groups_create");
         Version(1);
     }
 

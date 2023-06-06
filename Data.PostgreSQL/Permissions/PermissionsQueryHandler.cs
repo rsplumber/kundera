@@ -1,4 +1,5 @@
 ﻿using Application.Permissions;
+using Core.Domains.Services.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,15 +16,24 @@ public sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, Li
 
     public async ValueTask<List<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)
     {
-        var dbQuery = _dbContext.Permissions.AsQueryable();
-        if (query.Name is not null)
+        var selectedService = await _dbContext.Services
+            .AsNoTracking()
+            .Include(service => service.Permissions)
+            .FirstOrDefaultAsync(s => s.Id == query.ServiceId, cancellationToken);
+
+        if (selectedService is null)
         {
-            dbQuery = dbQuery.Where(model => model.Name.Contains(query.Name));
+            throw new ServiceNotFoundException();
         }
 
-        return await dbQuery
-            .AsNoTracking()
+        var permissions = selectedService.Permissions;
+        if (query.Name is not null)
+        {
+            permissions = permissions.Where(model => model.Name.Contains(query.Name)).ToList();
+        }
+
+        return permissions
             .Select(model => new PermissionsResponse(model.Id, model.Name))
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToList();
     }
 }

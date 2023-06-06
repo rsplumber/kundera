@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<SetGroupParentCommand>
     public override void Configure()
     {
         Post("groups/{groupId:guid}/parent");
-        Permissions("kundera_groups_set_parent");
+        Permissions("groups_set_parent");
         Version(1);
     }
 

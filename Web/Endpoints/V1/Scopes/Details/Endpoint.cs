@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<ScopeQuery, ScopeResponse>
     public override void Configure()
     {
         Get("scopes/{scopeId:guid}");
-        Permissions("kundera_scopes_get");
+        Permissions("scopes_get");
         Version(1);
     }
 

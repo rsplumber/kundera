@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<ScopesQuery, List<ScopesResponse>>
     public override void Configure()
     {
         Get("scopes");
-        Permissions("kundera_scopes_list");
+        Permissions("scopes_list");
         Version(1);
     }
 

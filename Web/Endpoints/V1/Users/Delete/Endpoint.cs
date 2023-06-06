@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeleteUserCommand>
     public override void Configure()
     {
         Delete("users/{userId:guid}");
-        Permissions("kundera_users_delete");
+        Permissions("users_delete");
         Version(1);
     }
 

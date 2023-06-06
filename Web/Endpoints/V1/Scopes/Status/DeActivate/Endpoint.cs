@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeActivateScopeCommand>
     public override void Configure()
     {
         Post("scopes/{scopeId:guid}/de-active");
-        Permissions("kundera_scopes_de-activate");
+        Permissions("scopes_de-activate");
         Version(1);
     }
 

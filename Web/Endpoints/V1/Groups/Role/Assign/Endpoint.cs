@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<AssignGroupRoleCommand>
     public override void Configure()
     {
         Post("groups/{groupId:guid}/roles");
-        Permissions("kundera_groups_assign_role");
+        Permissions("groups_assign_role");
         Version(1);
     }
 

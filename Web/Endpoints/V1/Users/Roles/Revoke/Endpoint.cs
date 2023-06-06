@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RevokeUserRoleCommand>
     public override void Configure()
     {
         Delete("users/{userId:guid}/roles");
-        Permissions("kundera_users_revoke_role");
+        Permissions("users_revoke_role");
         Version(1);
     }
 

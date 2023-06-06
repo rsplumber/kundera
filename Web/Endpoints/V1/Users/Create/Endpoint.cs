@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<CreateUserCommand>
     public override void Configure()
     {
         Post("users");
-        Permissions("kundera_users_create");
+        Permissions("users_create");
         Version(1);
     }
 

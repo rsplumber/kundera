@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<ScopeRolesQuery, List<ScopeRolesRespon
     public override void Configure()
     {
         Get("scopes/{scopeId:guid}/roles");
-        Permissions("kundera_scopes_roles_list");
+        Permissions("scopes_roles_list");
         Version(1);
     }
 

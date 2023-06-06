@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<TerminateSessionCommand>
     public override void Configure()
     {
         Delete("sessions/terminate");
-        Permissions("kundera_sessions_terminate");
+        Permissions("sessions_terminate");
         Version(1);
     }
 

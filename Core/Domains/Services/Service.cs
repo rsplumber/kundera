@@ -1,4 +1,4 @@
-﻿using Core.Domains.Scopes;
+﻿using Core.Domains.Permissions;
 using Core.Domains.Services.Events;
 using Core.Hashing;
 
@@ -32,7 +32,31 @@ public class Service : BaseEntity
 
     public string Secret { get; set; } = default!;
 
-    public ServiceStatus Status { get; set; } = default!;
+    public ServiceStatus Status { get; set; }
+
+    public List<Permission> Permissions { get; set; } = new();
+
+    public void AddPermission(string name, IDictionary<string, string>? meta = null)
+    {
+        var finalName = $"{Name}_{name}";
+        if (Permissions.Any(p => p.Name == finalName)) return;
+        Permissions.Add(new Permission(finalName, meta));
+    }
+
+    public void RemovePermission(string name)
+    {
+        var finalName = $"{Name}_{name}";
+        var selectedPermission = Permissions.FirstOrDefault(p => p.Name == finalName);
+        if (selectedPermission is null) return;
+        Permissions.Remove(selectedPermission);
+    }
+
+    public void RemovePermission(Guid permissionId)
+    {
+        var selectedPermission = Permissions.FirstOrDefault(p => p.Id == permissionId);
+        if (selectedPermission is null) return;
+        Permissions.Remove(selectedPermission);
+    }
 
     public void ChangeName(string name) => Name = name;
 

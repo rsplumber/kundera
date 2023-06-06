@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<UsersQuery, List<UsersResponse>>
     public override void Configure()
     {
         Get("users");
-        Permissions("kundera_users_list");
+        Permissions("users_list");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<MoveGroupParentCommand>
     public override void Configure()
     {
         Post("groups/{groupId:guid}/parent/move");
-        Permissions("kundera_groups_move_parent");
+        Permissions("groups_move_parent");
         Version(1);
     }
 

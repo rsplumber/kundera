@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeActivateServiceCommand>
     public override void Configure()
     {
         Post("services/{serviceId:guid}/de-activate");
-        Permissions("kundera_services_de-activate");
+        Permissions("services_de-activate");
         Version(1);
     }
 

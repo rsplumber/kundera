@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<ChangePermissionMetaCommand>
     {
         Post("permissions/{permissionId:guid}/meta");
         AllowAnonymous();
-        Permissions("kundera_permissions_change_meta");
+        Permissions("permissions_change_meta");
         Version(1);
     }
 

@@ -18,7 +18,7 @@ internal sealed class Endpoint : Endpoint<ServiceQuery, ServiceResponse>
     public override void Configure()
     {
         Get("services/{serviceId:guid}");
-        Permissions("kundera_services_get");
+        Permissions("services_get");
         Version(1);
     }
 

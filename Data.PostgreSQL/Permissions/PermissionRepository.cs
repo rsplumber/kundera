@@ -12,27 +12,11 @@ internal class PermissionRepository : IPermissionRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
-    {
-        await _dbContext.Permissions.AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
 
-    public  Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-     return _dbContext.Permissions
-         .FirstOrDefaultAsync(permission => permission.Id == id, cancellationToken);
-    }
-
-    public Task<List<Permission>> FindAsync(CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Permissions.ToListAsync(cancellationToken);
-    }
-
-    public Task<Permission?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return _dbContext.Permissions
-            .FirstOrDefaultAsync(permission => permission.Name == name, cancellationToken);
+            .FirstOrDefaultAsync(permission => permission.Id == id, cancellationToken);
     }
 
     public async Task UpdateAsync(Permission entity, CancellationToken cancellationToken = default)
@@ -45,7 +29,7 @@ internal class PermissionRepository : IPermissionRepository
     {
         var currentPermission = await _dbContext.Permissions
             .FirstOrDefaultAsync(permission => permission.Id == id, cancellationToken);
-        if(currentPermission is null) return;
+        if (currentPermission is null) return;
         _dbContext.Permissions.Remove(currentPermission);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

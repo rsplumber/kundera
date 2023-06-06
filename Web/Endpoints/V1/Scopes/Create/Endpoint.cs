@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<CreateScopeCommand>
     public override void Configure()
     {
         Post("scopes");
-        Permissions("kundera_scopes_create");
+        Permissions("scopes_create");
         Version(1);
     }
 

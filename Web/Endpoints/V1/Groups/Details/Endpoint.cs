@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<GroupQuery, GroupResponse>
     public override void Configure()
     {
         Get("groups/{GroupId:guid}");
-        Permissions("kundera_groups_get");
+        Permissions("groups_get");
         Version(1);
     }
 

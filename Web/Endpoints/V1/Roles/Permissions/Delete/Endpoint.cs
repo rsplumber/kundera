@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveRolePermissionCommand>
     public override void Configure()
     {
         Delete("roles/{roleId:guid}/permission");
-        Permissions("kundera_roles_remove_permission");
+        Permissions("roles_remove_permission");
         Version(1);
     }
 

@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<DeletePermissionCommand>
     public override void Configure()
     {
         Delete("permissions/{permissionId:guid}");
-        Permissions("kundera_permissions_delete");
+        Permissions("permissions_delete");
         Version(1);
     }
 

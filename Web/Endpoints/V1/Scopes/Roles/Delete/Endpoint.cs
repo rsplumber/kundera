@@ -17,7 +17,7 @@ internal sealed class Endpoint : Endpoint<RemoveScopeRoleCommand>
     public override void Configure()
     {
         Delete("scopes/{scopeId:guid}/roles");
-        Permissions("kundera_scopes_remove_role");
+        Permissions("scopes_remove_role");
         Version(1);
     }
 
