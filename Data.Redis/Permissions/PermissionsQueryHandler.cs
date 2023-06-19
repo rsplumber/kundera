@@ -1,11 +1,11 @@
-﻿using Application.Permissions;
-using Mediator;
+﻿using Mediator;
+using Queries.Services;
 using Redis.OM;
 using Redis.OM.Searching;
 
 namespace Data.Permissions;
 
-public sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, List<PermissionsResponse>>
+public sealed class PermissionsQueryHandler : IQueryHandler<ServicePermissionsQuery, List<PermissionsResponse>>
 {
     private IRedisCollection<PermissionDataModel> _permissions;
 
@@ -14,7 +14,7 @@ public sealed class PermissionsQueryHandler : IQueryHandler<PermissionsQuery, Li
         _permissions = (RedisCollection<PermissionDataModel>)provider.RedisCollection<PermissionDataModel>(false);
     }
 
-    public async ValueTask<List<PermissionsResponse>> Handle(PermissionsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<List<PermissionsResponse>> Handle(ServicePermissionsQuery query, CancellationToken cancellationToken)
     {
         if (query.Name is not null)
         {

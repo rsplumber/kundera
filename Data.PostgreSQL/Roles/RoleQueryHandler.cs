@@ -1,7 +1,7 @@
-﻿using Application.Roles;
-using Core.Domains.Roles.Exceptions;
+﻿using Core.Roles.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Roles;
 
 namespace Data.Roles;
 

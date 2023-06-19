@@ -1,12 +1,13 @@
-﻿using Core.Domains.Auth.Authorizations;
-using Core.Domains.Auth.Credentials;
-using Core.Domains.Auth.Sessions;
-using Core.Domains.Groups;
-using Core.Domains.Roles;
-using Core.Domains.Scopes;
-using Core.Domains.Services;
-using Core.Domains.Users;
+﻿using Core.Auth.Authorizations;
+using Core.Auth.Credentials;
+using Core.Auth.Sessions;
+using Core.Groups;
 using Core.Hashing;
+using Core.Permissions;
+using Core.Roles;
+using Core.Scopes;
+using Core.Services;
+using Core.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -25,7 +26,9 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IGroupFactory, GroupFactory>();
         services.TryAddScoped<ISessionFactory, SessionFactory>();
         services.TryAddScoped<ICredentialFactory, CredentialFactory>();
+        services.TryAddScoped<IPermissionService, PermissionService>();
 
+        services.TryAddScoped<ISessionManagement, SessionManagement>();
         services.TryAddScoped<IAuthorizeService, AuthorizeService>();
 
         services.TryAddTransient<AuthenticatedEventHandler>();

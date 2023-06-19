@@ -1,6 +1,6 @@
-﻿using Application.Roles;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Roles;
 
 namespace Data.Roles;
 

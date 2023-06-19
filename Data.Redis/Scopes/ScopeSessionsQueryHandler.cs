@@ -1,6 +1,6 @@
-﻿using Application.Scopes;
-using Data.Auth.Sessions;
+﻿using Data.Auth.Sessions;
 using Mediator;
+using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 

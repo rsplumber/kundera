@@ -1,7 +1,7 @@
-﻿using Application.Permissions;
-using Core.Domains.Permissions.Exceptions;
+﻿using Core.Permissions.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Permissions;
 
 namespace Data.Permissions;
 

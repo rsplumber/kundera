@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Permissions;
+using Core.Permissions;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;
@@ -17,6 +17,13 @@ internal class PermissionRepository : IPermissionRepository
         _permissions = (RedisCollection<PermissionDataModel>)provider.RedisCollection<PermissionDataModel>();
         _mapper = mapper;
         _eventBus = eventBus;
+    }
+
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
+    {
+        var permission = _mapper.Map<PermissionDataModel>(entity);
+        await _permissions.InsertAsync(permission);
+        await _eventBus.DispatchDomainEventsAsync(entity);
     }
 
     public async Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)

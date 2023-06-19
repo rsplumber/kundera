@@ -1,11 +1,11 @@
-﻿using Core.Domains.Auth.Credentials;
-using Core.Domains.Auth.Sessions;
-using Core.Domains.Groups;
-using Core.Domains.Permissions;
-using Core.Domains.Roles;
-using Core.Domains.Scopes;
-using Core.Domains.Services;
-using Core.Domains.Users;
+﻿using Core.Auth.Credentials;
+using Core.Auth.Sessions;
+using Core.Groups;
+using Core.Permissions;
+using Core.Roles;
+using Core.Scopes;
+using Core.Services;
+using Core.Users;
 using Data.Auth.Credentials;
 using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
@@ -395,7 +395,7 @@ public sealed class AppDbContext : DbContext
             builder.HasIndex(model => model.Status);
 
             builder.HasMany(model => model.Permissions)
-                .WithOne()
+                .WithOne(permission => permission.Service)
                 .HasForeignKey("service_id")
                 .OnDelete(DeleteBehavior.Restrict);
         }

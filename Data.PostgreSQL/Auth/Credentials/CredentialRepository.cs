@@ -1,4 +1,4 @@
-﻿using Core.Domains.Auth.Credentials;
+﻿using Core.Auth.Credentials;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Auth.Credentials;
@@ -35,21 +35,18 @@ internal class CredentialRepository : ICredentialRepository
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        
         var currentCredential = await _dbContext.Credentials
             .FirstOrDefaultAsync(credential => credential.Id == id, cancellationToken);
-        if(currentCredential is null) return;
+        if (currentCredential is null) return;
         _dbContext.Credentials.Remove(currentCredential);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
     {
-        var credentials = await _dbContext.Credentials 
-            .Where(model => model.ExpiresAtUtc != null)
-            .Where(model => DateTime.UtcNow >= model.ExpiresAtUtc!.Value.ToUniversalTime())
+        var credentials = await _dbContext.Credentials
+            .Where(model => model.ExpiresAtUtc != null && DateTime.UtcNow >= model.ExpiresAtUtc)
             .ToListAsync(cancellationToken);
-
         _dbContext.Credentials.RemoveRange(credentials);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

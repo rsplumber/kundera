@@ -1,4 +1,4 @@
-﻿using Core.Domains.Services;
+﻿using Core.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Services;
@@ -50,7 +50,7 @@ internal class ServiceRepository : IServiceRepository
     {
         var currentService = await _dbContext.Services
             .FirstOrDefaultAsync(service => service.Id == id, cancellationToken);
-        if(currentService is null) return;
+        if (currentService is null) return;
         _dbContext.Services.Remove(currentService);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

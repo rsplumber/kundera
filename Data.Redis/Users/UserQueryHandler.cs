@@ -1,6 +1,6 @@
-﻿using Application.Users;
-using Core.Domains.Users.Exception;
+﻿using Core.Users.Exception;
 using Mediator;
+using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 

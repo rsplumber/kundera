@@ -1,4 +1,4 @@
-﻿using Core.Domains.Scopes;
+﻿using Core.Scopes;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Scopes;

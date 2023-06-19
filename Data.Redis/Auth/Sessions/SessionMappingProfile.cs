@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Auth.Sessions;
+using Core.Auth.Sessions;
 
 namespace Data.Auth.Sessions;
 

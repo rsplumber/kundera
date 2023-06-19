@@ -1,4 +1,4 @@
-﻿using Core.Domains.Groups;
+﻿using Core.Groups;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Groups;

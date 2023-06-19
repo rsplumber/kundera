@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Users;
+using Core.Users;
 using DotNetCore.CAP;
 using Redis.OM;
 using Redis.OM.Searching;

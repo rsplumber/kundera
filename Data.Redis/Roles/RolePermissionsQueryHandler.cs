@@ -1,7 +1,7 @@
-﻿using Application.Roles;
-using Core.Domains.Roles.Exceptions;
+﻿using Core.Roles.Exceptions;
 using Data.Permissions;
 using Mediator;
+using Queries.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
 

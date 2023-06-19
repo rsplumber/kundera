@@ -1,7 +1,7 @@
-﻿using Application.Groups;
-using Core.Domains.Groups.Exception;
+﻿using Core.Groups.Exception;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Groups;
 
 namespace Data.Groups;
 

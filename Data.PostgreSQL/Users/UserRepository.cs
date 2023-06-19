@@ -1,4 +1,4 @@
-﻿using Core.Domains.Users;
+﻿using Core.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Users;

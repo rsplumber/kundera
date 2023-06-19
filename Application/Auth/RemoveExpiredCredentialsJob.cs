@@ -1,4 +1,4 @@
-using Core.Domains.Auth.Credentials;
+using Core.Auth.Credentials;
 using Quartz;
 
 namespace Application.Auth;

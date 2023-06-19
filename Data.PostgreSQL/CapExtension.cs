@@ -1,4 +1,4 @@
-﻿using Core.Domains;
+﻿using Core;
 using DotNetCore.CAP;
 
 namespace Data;

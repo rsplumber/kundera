@@ -1,4 +1,4 @@
-﻿using Core.Domains.Permissions;
+﻿using Core.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Permissions;
@@ -12,6 +12,12 @@ internal class PermissionRepository : IPermissionRepository
         _dbContext = dbContext;
     }
 
+
+    public async Task AddAsync(Permission entity, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Permissions.AddAsync(entity, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 
     public Task<Permission?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {

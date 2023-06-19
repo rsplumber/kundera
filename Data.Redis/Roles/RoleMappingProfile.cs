@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Roles;
+using Core.Roles;
 
 namespace Data.Roles;
 

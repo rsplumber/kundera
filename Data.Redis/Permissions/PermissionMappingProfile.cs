@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Permissions;
+using Core.Permissions;
 
 namespace Data.Permissions;
 

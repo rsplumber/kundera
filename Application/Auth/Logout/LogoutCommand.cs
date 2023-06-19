@@ -1,4 +1,4 @@
-using Core.Domains.Auth.Sessions;
+using Core.Auth.Sessions;
 using Mediator;
 
 namespace Application.Auth.Logout;

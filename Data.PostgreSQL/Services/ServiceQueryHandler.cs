@@ -1,7 +1,7 @@
-﻿using Application.Services;
-using Core.Domains.Services.Exceptions;
+﻿using Core.Services.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Services;
 
 namespace Data.Services;
 

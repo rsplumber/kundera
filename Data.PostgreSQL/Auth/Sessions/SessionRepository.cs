@@ -1,4 +1,4 @@
-﻿using Core.Domains.Auth.Sessions;
+﻿using Core.Auth.Sessions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Auth.Sessions;
@@ -54,7 +54,8 @@ internal sealed class SessionRepository : ISessionRepository
             group a by a.Credential.Id
             into g
             select g.OrderByDescending(x => x.ExpirationDateUtc).Skip(2);
-        _dbContext.Sessions.RemoveRange(query.SelectMany(x => x));
+        var sessions = await query.SelectMany(x => x).ToListAsync(cancellationToken);
+        _dbContext.Sessions.RemoveRange(sessions);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

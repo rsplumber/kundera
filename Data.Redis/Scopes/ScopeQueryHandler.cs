@@ -1,6 +1,6 @@
-﻿using Application.Scopes;
-using Core.Domains.Roles.Exceptions;
+﻿using Core.Roles.Exceptions;
 using Mediator;
+using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 

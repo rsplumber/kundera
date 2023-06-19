@@ -1,11 +1,11 @@
-using Core.Domains.Auth.Authorizations;
-using Core.Domains.Auth.Sessions;
-using Core.Domains.Groups;
-using Core.Domains.Permissions;
-using Core.Domains.Roles;
-using Core.Domains.Scopes;
-using Core.Domains.Services;
-using Core.Domains.Users;
+using Core.Auth.Authorizations;
+using Core.Auth.Sessions;
+using Core.Groups;
+using Core.Permissions;
+using Core.Roles;
+using Core.Scopes;
+using Core.Services;
+using Core.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Auth;

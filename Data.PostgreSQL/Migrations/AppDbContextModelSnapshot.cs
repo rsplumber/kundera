@@ -19,12 +19,12 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Domains.Auth.Credentials.AuthenticationActivity", b =>
+            modelBuilder.Entity("Core.Auth.Credentials.AuthenticationActivity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace Data.Migrations
                     b.ToTable("authentication_activities", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Auth.Credentials.Credential", b =>
+            modelBuilder.Entity("Core.Auth.Credentials.Credential", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace Data.Migrations
                     b.ToTable("credentials", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Auth.Sessions.AuthorizationActivity", b =>
+            modelBuilder.Entity("Core.Auth.Sessions.AuthorizationActivity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,7 +156,7 @@ namespace Data.Migrations
                     b.ToTable("authorization_activities", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Auth.Sessions.Session", b =>
+            modelBuilder.Entity("Core.Auth.Sessions.Session", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text")
@@ -194,7 +194,7 @@ namespace Data.Migrations
                     b.ToTable("sessions", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Groups.Group", b =>
+            modelBuilder.Entity("Core.Groups.Group", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,7 +234,7 @@ namespace Data.Migrations
                     b.ToTable("groups", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Permissions.Permission", b =>
+            modelBuilder.Entity("Core.Permissions.Permission", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,15 +250,20 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<Guid>("service_id")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("service_id");
+
                     b.ToTable("permissions", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Roles.Role", b =>
+            modelBuilder.Entity("Core.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -282,7 +287,7 @@ namespace Data.Migrations
                     b.ToTable("roles", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Scopes.Scope", b =>
+            modelBuilder.Entity("Core.Scopes.Scope", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,7 +320,7 @@ namespace Data.Migrations
                     b.ToTable("scopes", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Services.Service", b =>
+            modelBuilder.Entity("Core.Services.Service", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,7 +353,7 @@ namespace Data.Migrations
                     b.ToTable("services", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domains.Users.User", b =>
+            modelBuilder.Entity("Core.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -485,9 +490,9 @@ namespace Data.Migrations
                     b.ToTable("users_roles");
                 });
 
-            modelBuilder.Entity("Core.Domains.Auth.Credentials.Credential", b =>
+            modelBuilder.Entity("Core.Auth.Credentials.Credential", b =>
                 {
-                    b.HasOne("Core.Domains.Users.User", "User")
+                    b.HasOne("Core.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -496,21 +501,21 @@ namespace Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Domains.Auth.Sessions.Session", b =>
+            modelBuilder.Entity("Core.Auth.Sessions.Session", b =>
                 {
-                    b.HasOne("Core.Domains.Auth.Credentials.Credential", "Credential")
+                    b.HasOne("Core.Auth.Credentials.Credential", "Credential")
                         .WithMany()
                         .HasForeignKey("credential_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Scopes.Scope", "Scope")
+                    b.HasOne("Core.Scopes.Scope", "Scope")
                         .WithMany()
                         .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Users.User", "User")
+                    b.HasOne("Core.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -523,25 +528,36 @@ namespace Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Domains.Groups.Group", b =>
+            modelBuilder.Entity("Core.Groups.Group", b =>
                 {
-                    b.HasOne("Core.Domains.Groups.Group", "Parent")
+                    b.HasOne("Core.Groups.Group", "Parent")
                         .WithOne()
-                        .HasForeignKey("Core.Domains.Groups.Group", "parent_id")
+                        .HasForeignKey("Core.Groups.Group", "parent_id")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("Core.Permissions.Permission", b =>
+                {
+                    b.HasOne("Core.Services.Service", "Service")
+                        .WithMany("Permissions")
+                        .HasForeignKey("service_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("groups_children", b =>
                 {
-                    b.HasOne("Core.Domains.Groups.Group", null)
+                    b.HasOne("Core.Groups.Group", null)
                         .WithMany()
                         .HasForeignKey("child_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Groups.Group", null)
+                    b.HasOne("Core.Groups.Group", null)
                         .WithMany()
                         .HasForeignKey("group_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,13 +566,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("groups_roles", b =>
                 {
-                    b.HasOne("Core.Domains.Groups.Group", null)
+                    b.HasOne("Core.Groups.Group", null)
                         .WithMany()
                         .HasForeignKey("group_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Roles.Role", null)
+                    b.HasOne("Core.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -565,13 +581,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("roles_permission", b =>
                 {
-                    b.HasOne("Core.Domains.Permissions.Permission", null)
+                    b.HasOne("Core.Permissions.Permission", null)
                         .WithMany()
                         .HasForeignKey("permission_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Roles.Role", null)
+                    b.HasOne("Core.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -580,13 +596,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("scopes_roles", b =>
                 {
-                    b.HasOne("Core.Domains.Roles.Role", null)
+                    b.HasOne("Core.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Scopes.Scope", null)
+                    b.HasOne("Core.Scopes.Scope", null)
                         .WithMany()
                         .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -595,13 +611,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("scopes_services", b =>
                 {
-                    b.HasOne("Core.Domains.Scopes.Scope", null)
+                    b.HasOne("Core.Scopes.Scope", null)
                         .WithMany()
                         .HasForeignKey("scope_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Services.Service", null)
+                    b.HasOne("Core.Services.Service", null)
                         .WithMany()
                         .HasForeignKey("service_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -610,13 +626,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("users_groups", b =>
                 {
-                    b.HasOne("Core.Domains.Groups.Group", null)
+                    b.HasOne("Core.Groups.Group", null)
                         .WithMany()
                         .HasForeignKey("group_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Users.User", null)
+                    b.HasOne("Core.Users.User", null)
                         .WithMany()
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -625,17 +641,22 @@ namespace Data.Migrations
 
             modelBuilder.Entity("users_roles", b =>
                 {
-                    b.HasOne("Core.Domains.Roles.Role", null)
+                    b.HasOne("Core.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domains.Users.User", null)
+                    b.HasOne("Core.Users.User", null)
                         .WithMany()
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Services.Service", b =>
+                {
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }

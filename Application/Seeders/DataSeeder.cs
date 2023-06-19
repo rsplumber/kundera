@@ -1,12 +1,11 @@
-﻿using Core.Domains;
-using Core.Domains.Auth.Credentials;
-using Core.Domains.Groups;
-using Core.Domains.Permissions;
-using Core.Domains.Roles;
-using Core.Domains.Scopes;
-using Core.Domains.Services;
-using Core.Domains.Users;
-using Microsoft.Extensions.Configuration;
+﻿using Core;
+using Core.Auth.Credentials;
+using Core.Groups;
+using Core.Permissions;
+using Core.Roles;
+using Core.Scopes;
+using Core.Services;
+using Core.Users;
 
 namespace Application.Seeders;
 
@@ -26,7 +25,7 @@ internal sealed class DataSeeder
     private readonly IRoleRepository _roleRepository;
     private readonly IGroupRepository _groupRepository;
     private readonly IUserRepository _userRepository;
-    private readonly IPermissionRepository _permissionRepository;
+    private readonly IPermissionService _permissionService;
     private readonly IScopeRepository _scopeRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ICredentialFactory _credentialFactory;
@@ -36,7 +35,6 @@ internal sealed class DataSeeder
         IRoleRepository roleRepository,
         IGroupRepository groupRepository,
         IUserRepository userRepository,
-        IPermissionRepository permissionRepository,
         IScopeRepository scopeRepository,
         IServiceRepository serviceRepository,
         IUserFactory userFactory,
@@ -45,12 +43,12 @@ internal sealed class DataSeeder
         IRoleFactory roleFactory,
         IGroupFactory groupFactory,
         ICredentialFactory credentialFactory,
-        ICredentialRepository credentialRepository)
+        ICredentialRepository credentialRepository,
+        IPermissionService permissionService)
     {
         _roleRepository = roleRepository;
         _groupRepository = groupRepository;
         _userRepository = userRepository;
-        _permissionRepository = permissionRepository;
         _scopeRepository = scopeRepository;
         _serviceRepository = serviceRepository;
         _userFactory = userFactory;
@@ -60,6 +58,7 @@ internal sealed class DataSeeder
         _groupFactory = groupFactory;
         _credentialFactory = credentialFactory;
         _credentialRepository = credentialRepository;
+        _permissionService = permissionService;
         _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value ?? throw new ArgumentNullException(nameof(_adminUsername));
         _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value ?? throw new ArgumentNullException(nameof(_adminPassword));
         _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value ?? throw new ArgumentNullException(nameof(_identityScopeSecret));
@@ -115,19 +114,21 @@ internal sealed class DataSeeder
     private async Task SeedPermissions(Service service)
     {
         if (service.Permissions.Any()) return;
-        SeedPermissionPermissions();
-        SeedRolePermissions();
-        SeedServicePermissions();
-        SeedScopePermissions();
-        SeedGroupPermissions();
-        SeedUserPermissions();
-        SeedCredentialsPermissions();
-        SeedSessionsPermissions();
+        await SeedPermissionPermissionsAsync();
+        await SeedRolePermissionsAsync();
+        await SeedServicePermissionsAsync();
+        await SeedScopePermissionsAsync();
+        await SeedGroupPermissionsAsync();
+        await SeedUserPermissionsAsync();
+        await SeedCredentialsPermissionsAsync();
+        await SeedSessionsPermissionsAsync();
 
+        var updatedService = await _serviceRepository.FindAsync(service.Id);
+        if (updatedService is null) return;
         var role = await _roleRepository.FindByNameAsync(EntityBaseValues.SuperAdminRole);
         if (role is not null)
         {
-            foreach (var permission in service.Permissions)
+            foreach (var permission in updatedService.Permissions)
             {
                 role.Add(permission);
             }
@@ -135,100 +136,98 @@ internal sealed class DataSeeder
             await _roleRepository.UpdateAsync(role);
         }
 
-        await _serviceRepository.UpdateAsync(service);
-
-        void SeedPermissionPermissions()
+        async Task SeedPermissionPermissionsAsync()
         {
-            service.AddPermission("permissions_create");
-            service.AddPermission("permissions_list");
-            service.AddPermission("permissions_get");
-            service.AddPermission("permissions_delete");
-            service.AddPermission("permissions_change_meta");
+            await _permissionService.CreateAsync(service, "permissions_create");
+            await _permissionService.CreateAsync(service, "permissions_list");
+            await _permissionService.CreateAsync(service, "permissions_get");
+            await _permissionService.CreateAsync(service, "permissions_delete");
+            await _permissionService.CreateAsync(service, "permissions_change_meta");
         }
 
-        void SeedRolePermissions()
+        async Task SeedRolePermissionsAsync()
         {
-            service.AddPermission("roles_create");
-            service.AddPermission("roles_list");
-            service.AddPermission("roles_get");
-            service.AddPermission("roles_delete");
-            service.AddPermission("roles_add_permission");
-            service.AddPermission("roles_remove_permission");
-            service.AddPermission("roles_change_meta");
-            service.AddPermission("roles_permissions_list");
+            await _permissionService.CreateAsync(service, "roles_create");
+            await _permissionService.CreateAsync(service, "roles_list");
+            await _permissionService.CreateAsync(service, "roles_get");
+            await _permissionService.CreateAsync(service, "roles_delete");
+            await _permissionService.CreateAsync(service, "roles_add_permission");
+            await _permissionService.CreateAsync(service, "roles_remove_permission");
+            await _permissionService.CreateAsync(service, "roles_change_meta");
+            await _permissionService.CreateAsync(service, "roles_permissions_list");
         }
 
-        void SeedServicePermissions()
+        async Task SeedServicePermissionsAsync()
         {
-            service.AddPermission("services_create");
-            service.AddPermission("services_list");
-            service.AddPermission("services_get");
-            service.AddPermission("services_delete");
-            service.AddPermission("services_activate");
-            service.AddPermission("services_de-activate");
+            await _permissionService.CreateAsync(service, "services_create");
+            await _permissionService.CreateAsync(service, "services_list");
+            await _permissionService.CreateAsync(service, "services_get");
+            await _permissionService.CreateAsync(service, "services_delete");
+            await _permissionService.CreateAsync(service, "services_activate");
+            await _permissionService.CreateAsync(service, "services_de-activate");
         }
 
-        void SeedScopePermissions()
+        async Task SeedScopePermissionsAsync()
         {
-            service.AddPermission("scopes_create");
-            service.AddPermission("scopes_list");
-            service.AddPermission("scopes_get");
-            service.AddPermission("scopes_delete");
-            service.AddPermission("scopes_activate");
-            service.AddPermission("scopes_de-activate");
-            service.AddPermission("scopes_add_service");
-            service.AddPermission("scopes_remove_service");
-            service.AddPermission("scopes_add_role");
-            service.AddPermission("scopes_remove_role");
-            service.AddPermission("scopes_roles_list");
-            service.AddPermission("scopes_sessions_list");
+            await _permissionService.CreateAsync(service, "scopes_create");
+            await _permissionService.CreateAsync(service, "scopes_list");
+            await _permissionService.CreateAsync(service, "scopes_get");
+            await _permissionService.CreateAsync(service, "scopes_delete");
+            await _permissionService.CreateAsync(service, "scopes_activate");
+            await _permissionService.CreateAsync(service, "scopes_de-activate");
+            await _permissionService.CreateAsync(service, "scopes_add_service");
+            await _permissionService.CreateAsync(service, "scopes_remove_service");
+            await _permissionService.CreateAsync(service, "scopes_add_role");
+            await _permissionService.CreateAsync(service, "scopes_remove_role");
+            await _permissionService.CreateAsync(service, "scopes_roles_list");
+            await _permissionService.CreateAsync(service, "scopes_sessions_list");
         }
 
-        void SeedGroupPermissions()
+        async Task SeedGroupPermissionsAsync()
         {
-            service.AddPermission("groups_create");
-            service.AddPermission("groups_list");
-            service.AddPermission("groups_get");
-            service.AddPermission("groups_delete");
-            service.AddPermission("groups_assign_role");
-            service.AddPermission("groups_revoke_role");
-            service.AddPermission("groups_set_parent");
-            service.AddPermission("groups_move_parent");
-            service.AddPermission("groups_remove_parent");
-            service.AddPermission("groups_enable");
-            service.AddPermission("groups_disable");
+            await _permissionService.CreateAsync(service, "groups_create");
+            await _permissionService.CreateAsync(service, "groups_list");
+            await _permissionService.CreateAsync(service, "groups_get");
+            await _permissionService.CreateAsync(service, "groups_delete");
+            await _permissionService.CreateAsync(service, "groups_assign_role");
+            await _permissionService.CreateAsync(service, "groups_revoke_role");
+            await _permissionService.CreateAsync(service, "groups_set_parent");
+            await _permissionService.CreateAsync(service, "groups_move_parent");
+            await _permissionService.CreateAsync(service, "groups_remove_parent");
+            await _permissionService.CreateAsync(service, "groups_enable");
+            await _permissionService.CreateAsync(service, "groups_disable");
         }
 
-        void SeedUserPermissions()
+        async Task SeedUserPermissionsAsync()
         {
-            service.AddPermission("users_create");
-            service.AddPermission("users_list");
-            service.AddPermission("users_get");
-            service.AddPermission("users_delete");
-            service.AddPermission("users_add_username");
-            service.AddPermission("users_remove_username");
-            service.AddPermission("users_exist_username");
-            service.AddPermission("users_assign_role");
-            service.AddPermission("users_revoke_role");
-            service.AddPermission("users_join_group");
-            service.AddPermission("users_remove_group");
-            service.AddPermission("users_activate");
-            service.AddPermission("users_suspend");
-            service.AddPermission("users_block");
-            service.AddPermission("users_sessions_list");
+            await _permissionService.CreateAsync(service, "users_create");
+            await _permissionService.CreateAsync(service, "users_list");
+            await _permissionService.CreateAsync(service, "users_get");
+            await _permissionService.CreateAsync(service, "users_delete");
+            await _permissionService.CreateAsync(service, "users_add_username");
+            await _permissionService.CreateAsync(service, "users_remove_username");
+            await _permissionService.CreateAsync(service, "users_exist_username");
+            await _permissionService.CreateAsync(service, "users_assign_role");
+            await _permissionService.CreateAsync(service, "users_revoke_role");
+            await _permissionService.CreateAsync(service, "users_join_group");
+            await _permissionService.CreateAsync(service, "users_remove_group");
+            await _permissionService.CreateAsync(service, "users_activate");
+            await _permissionService.CreateAsync(service, "users_suspend");
+            await _permissionService.CreateAsync(service, "users_block");
+            await _permissionService.CreateAsync(service, "users_sessions_list");
         }
 
-        void SeedCredentialsPermissions()
+        async Task SeedCredentialsPermissionsAsync()
         {
-            service.AddPermission("credentials_create");
-            service.AddPermission("credentials_create_onetime");
-            service.AddPermission("credentials_create_time-periodic");
-            service.AddPermission("credentials_delete");
+            await _permissionService.CreateAsync(service, "credentials_create");
+            await _permissionService.CreateAsync(service, "credentials_create_onetime");
+            await _permissionService.CreateAsync(service, "credentials_create_time-periodic");
+            await _permissionService.CreateAsync(service, "credentials_delete");
         }
 
-        void SeedSessionsPermissions()
+        async Task SeedSessionsPermissionsAsync()
         {
-            service.AddPermission("sessions_terminate");
+            await _permissionService.CreateAsync(service, "sessions_terminate");
         }
     }
 }

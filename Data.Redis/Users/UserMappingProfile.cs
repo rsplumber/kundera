@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains.Users;
+using Core.Users;
 
 namespace Data.Users;
 

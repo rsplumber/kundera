@@ -1,6 +1,6 @@
-﻿using Application.Users;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Users;
 
 namespace Data.Users;
 

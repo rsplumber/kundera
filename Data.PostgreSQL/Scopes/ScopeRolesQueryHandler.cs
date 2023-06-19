@@ -1,6 +1,6 @@
-﻿using Application.Scopes;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Scopes;
 
 namespace Data.Scopes;
 

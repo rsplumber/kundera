@@ -1,7 +1,7 @@
-﻿using Application.Scopes;
-using Core.Domains.Permissions.Exceptions;
+﻿using Core.Permissions.Exceptions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries.Scopes;
 
 namespace Data.Scopes;
 

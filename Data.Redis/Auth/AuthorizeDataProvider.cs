@@ -1,10 +1,10 @@
 using AutoMapper;
-using Core.Domains.Auth.Authorizations;
-using Core.Domains.Auth.Sessions;
-using Core.Domains.Permissions;
-using Core.Domains.Roles;
-using Core.Domains.Services;
-using Core.Domains.Users;
+using Core.Auth.Authorizations;
+using Core.Auth.Sessions;
+using Core.Permissions;
+using Core.Roles;
+using Core.Services;
+using Core.Users;
 using Data.Auth.Sessions;
 using Data.Groups;
 using Data.Roles;
@@ -44,7 +44,8 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         {
             var groupsDbCollection = _dbProvider.RedisCollection<GroupDataModel>(false);
             var groups = new List<GroupDataModel>();
-            var currentUserGroups = (await groupsDbCollection.FindByIdsAsync(user.Groups.Select(guid => guid.ToString()))).Values;
+            var currentUserGroups = (await groupsDbCollection
+                .FindByIdsAsync(user.Groups.Select(guid => guid.ToString())!)).Values;
             groups.AddRange(currentUserGroups!);
             foreach (var group in user.Groups)
             {

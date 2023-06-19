@@ -1,4 +1,4 @@
-﻿using Core.Domains.Roles;
+﻿using Core.Roles;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Roles;

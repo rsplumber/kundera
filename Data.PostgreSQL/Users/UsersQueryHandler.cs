@@ -1,10 +1,11 @@
-﻿using Application.Users;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries;
+using Queries.Users;
 
 namespace Data.Users;
 
-public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResponse>>
+public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, PageableResponse<UsersResponse>>
 {
     private readonly AppDbContext _dbContext;
 
@@ -13,10 +14,20 @@ public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, List<UsersResp
         _dbContext = dbContext;
     }
 
-    public async ValueTask<List<UsersResponse>> Handle(UsersQuery query, CancellationToken cancellationToken)
+    public async ValueTask<PageableResponse<UsersResponse>> Handle(UsersQuery query, CancellationToken cancellationToken)
     {
-        return  await _dbContext.Users
+        var users = await _dbContext.Users
+            .Page(query)
             .Select(model => new UsersResponse(model.Id, model.Usernames))
             .ToListAsync(cancellationToken: cancellationToken);
+
+        var counts = await _dbContext.Users.CountAsync(cancellationToken);
+
+        return new PageableResponse<UsersResponse>
+        {
+            Data = users,
+            TotalItems = counts,
+            TotalPages = counts / query.Size
+        };
     }
 }

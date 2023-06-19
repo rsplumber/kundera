@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
-using Core.Domains.Services;
+using Core.Services;
 
 namespace Data.Services;
 

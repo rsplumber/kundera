@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Domains.Auth.Credentials;
-using Core.Domains.Auth.Sessions;
+using Core.Auth.Credentials;
+using Core.Auth.Sessions;
 
 namespace Data.Auth.Credentials;
 

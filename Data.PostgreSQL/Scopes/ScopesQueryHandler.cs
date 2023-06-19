@@ -1,10 +1,11 @@
-﻿using Application.Scopes;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Queries;
+using Queries.Scopes;
 
 namespace Data.Scopes;
 
-public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesResponse>>
+public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, PageableResponse<ScopesResponse>>
 {
     private readonly AppDbContext _dbContext;
 
@@ -13,7 +14,7 @@ public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesR
         _dbContext = dbContext;
     }
 
-    public async ValueTask<List<ScopesResponse>> Handle(ScopesQuery query, CancellationToken cancellationToken)
+    public async ValueTask<PageableResponse<ScopesResponse>> Handle(ScopesQuery query, CancellationToken cancellationToken)
     {
         var dbQuery = _dbContext.Scopes.AsQueryable();
         if (query.Name is not null)
@@ -21,9 +22,24 @@ public sealed class ScopesQueryHandler : IQueryHandler<ScopesQuery, List<ScopesR
             dbQuery = dbQuery.Where(model => model.Name.Contains(query.Name));
         }
 
-        return await dbQuery
+        var scopes = await dbQuery
             .AsNoTracking()
+            .Page(query)
             .Select(model => new ScopesResponse(model.Id, model.Name, model.Status.ToString()))
             .ToListAsync(cancellationToken: cancellationToken);
+
+        var countsQuery = _dbContext.Scopes.AsQueryable();
+        if (query.Name is not null)
+        {
+            countsQuery = dbQuery.Where(model => model.Name.Contains(query.Name));
+        }
+
+        var counts = await countsQuery.CountAsync(cancellationToken);
+        return new PageableResponse<ScopesResponse>
+        {
+            Data = scopes,
+            TotalItems = counts,
+            TotalPages = counts / query.Size
+        };
     }
 }

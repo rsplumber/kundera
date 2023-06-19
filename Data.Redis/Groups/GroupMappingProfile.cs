@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
-using Core.Domains.Groups;
+using Core.Groups;
 
 namespace Data.Groups;
 

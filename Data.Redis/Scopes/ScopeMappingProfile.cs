@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domains;
-using Core.Domains.Scopes;
+using Core.Scopes;
 
 namespace Data.Scopes;
 

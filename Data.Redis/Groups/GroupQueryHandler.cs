@@ -1,7 +1,7 @@
-﻿using Application.Groups;
-using Core.Domains.Groups.Exception;
+﻿using Core.Groups.Exception;
 using Data.Roles;
 using Mediator;
+using Queries.Groups;
 using Redis.OM;
 using Redis.OM.Searching;
 

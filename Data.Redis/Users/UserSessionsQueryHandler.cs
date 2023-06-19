@@ -1,6 +1,6 @@
-﻿using Application.Users;
-using Data.Auth.Sessions;
+﻿using Data.Auth.Sessions;
 using Mediator;
+using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 
