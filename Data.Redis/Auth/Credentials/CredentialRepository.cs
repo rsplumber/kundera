@@ -45,18 +45,6 @@ internal class CredentialRepository : ICredentialRepository
         await _credentials.DeleteAsync(dataModel);
     }
 
-    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
-    {
-        var credentials = await _credentials.ToListAsync();
-        var expiredCredentials = credentials
-            .Where(model => model.ExpiresAtUtc is not null)
-            .Where(model => DateTime.UtcNow >= model.ExpiresAtUtc!.Value.ToUniversalTime());
-
-        foreach (var credential in expiredCredentials)
-        {
-            await _credentials.DeleteAsync(credential);
-        }
-    }
 
     public async Task UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
     {

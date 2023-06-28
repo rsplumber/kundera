@@ -46,16 +46,4 @@ internal sealed class SessionRepository : ISessionRepository
         _dbContext.Sessions.Remove(currentSession);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
-    {
-        var query = from a in _dbContext.Sessions
-            where a.ExpirationDateUtc.AddDays(5) >= DateTime.UtcNow.ToUniversalTime()
-            group a by a.Credential.Id
-            into g
-            select g.OrderByDescending(x => x.ExpirationDateUtc).Skip(2);
-        var sessions = await query.SelectMany(x => x).ToListAsync(cancellationToken);
-        _dbContext.Sessions.RemoveRange(sessions);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
 }

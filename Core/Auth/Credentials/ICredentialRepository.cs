@@ -10,7 +10,5 @@ public interface ICredentialRepository
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task DeleteExpiredAsync(CancellationToken cancellationToken = default);
-
     Task UpdateAsync(Credential credential, CancellationToken cancellationToken = default);
 }

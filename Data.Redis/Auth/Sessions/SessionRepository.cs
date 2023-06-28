@@ -50,14 +50,4 @@ internal sealed class SessionRepository : ISessionRepository
         if (dataModel is null) return;
         await _sessions.DeleteAsync(dataModel);
     }
-
-    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
-    {
-        var sessions = await _sessions.ToListAsync();
-        var expiredSessions = sessions.Where(model => DateTime.UtcNow >= model.ExpirationDateUtc.ToUniversalTime());
-        foreach (var credential in expiredSessions)
-        {
-            await _sessions.DeleteAsync(credential);
-        }
-    }
 }

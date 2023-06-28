@@ -31,7 +31,7 @@ internal class PermissionRepository : IPermissionRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var currentPermission = await _dbContext.Permissions
             .FirstOrDefaultAsync(permission => permission.Id == id, cancellationToken);

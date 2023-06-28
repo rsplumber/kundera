@@ -42,15 +42,6 @@ internal class CredentialRepository : ICredentialRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteExpiredAsync(CancellationToken cancellationToken = default)
-    {
-        var credentials = await _dbContext.Credentials
-            .Where(model => model.ExpiresAtUtc != null && DateTime.UtcNow >= model.ExpiresAtUtc)
-            .ToListAsync(cancellationToken);
-        _dbContext.Credentials.RemoveRange(credentials);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task UpdateAsync(Credential entity, CancellationToken cancellationToken = default)
     {
         _dbContext.Credentials.Update(entity);

@@ -24,14 +24,14 @@ internal sealed class AuthorizeService : IAuthorizeService
         ValidateUser(session);
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         ValidateSessionScope(session, userRoles);
-        var _ = await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
+        var service = await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
         var permissions = await _authorizeDataProvider.RolePermissionsAsync(userRoles, cancellationToken);
         if (InvalidPermission())
         {
             throw new ForbiddenException();
         }
 
-        var authorizedTask = Task.Run(() =>
+        var _ = Task.Run(() =>
         {
             _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
             {
@@ -44,7 +44,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return session.User.Id;
 
-        bool InvalidPermission() => permissions.All(permission => actions.All(action => permission.Name != action.ToLower()));
+        bool InvalidPermission() => permissions.All(permission => actions.All(action => permission.Name != $"{service.Name}_{action.ToLower()}"));
     }
 
     public async Task<Guid> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
@@ -53,13 +53,13 @@ internal sealed class AuthorizeService : IAuthorizeService
         ValidateUser(session);
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         ValidateSessionScope(session, userRoles);
-        var _ = await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
+        await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
         if (InvalidRole())
         {
             throw new ForbiddenException();
         }
 
-        var authorizedTask = Task.Run(() =>
+        var _ = Task.Run(() =>
         {
             _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
             {

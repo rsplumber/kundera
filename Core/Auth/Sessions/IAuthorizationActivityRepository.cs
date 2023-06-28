@@ -7,6 +7,4 @@ public interface IAuthorizationActivityRepository
     Task<AuthorizationActivity?> FindLastBySessionAsync(string sessionId, CancellationToken cancellationToken = default);
 
     Task<List<AuthorizationActivity>> FindBySessionAsync(string sessionId, CancellationToken cancellationToken = default);
-
-    Task RemoveExpiredActivitiesAsync(CancellationToken cancellationToken = default);
 }

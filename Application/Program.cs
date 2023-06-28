@@ -11,6 +11,7 @@ using KunderaNet.FastEndpoints.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
+using Quartz.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
