@@ -40,6 +40,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Data.Caching\Data.Caching.csproj" />
       <ProjectReference Include="..\Data.PostgreSQL\Data.PostgreSQL.csproj" />
     </ItemGroup>
 

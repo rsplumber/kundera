@@ -4,6 +4,7 @@ using Application.Auth;
 using Application.Seeders;
 using Core;
 using Data;
+using Data.Caching;
 using Elastic.Apm.NetCoreAll;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -113,6 +114,7 @@ builder.Services.AddQuartzServer(options =>
 });
 
 builder.Services.AddData(builder.Configuration);
+builder.Services.AddCaching(builder.Configuration);
 builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
 
 

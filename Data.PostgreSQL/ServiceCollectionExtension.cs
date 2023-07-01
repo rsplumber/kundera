@@ -45,13 +45,12 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<ISessionRepository, SessionRepository>();
         services.TryAddScoped<IAuthorizationActivityRepository, AuthorizationActivityRepository>();
 
-        services.TryAddScoped<AuthorizeDataProvider>();
-        services.TryAddScoped<IAuthorizeDataProvider, CachedAuthorizeDataProvider>();
-
         services.TryAddScoped<IExpiredAuthenticationActivityService, ExpiredAuthenticationActivityService>();
         services.TryAddScoped<IExpiredCredentialsService, ExpiredCredentialsService>();
         services.TryAddScoped<IExpiredAuthorizationActivityService, ExpiredAuthorizationActivityService>();
         services.TryAddScoped<IExpiredSessionsService, ExpiredSessionsService>();
-        services.AddDistributedMemoryCache();
+
+        services.AddScoped<AbstractAuthorizeDataProvider, AuthorizeDataProvider>();
+        services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Auth;
 
-internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
+internal sealed class AuthorizeDataProvider : AbstractAuthorizeDataProvider, IAuthorizeDataProvider
 {
     private readonly AppDbContext _dbContext;
 
@@ -19,7 +19,6 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
 WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM groups g WHERE g.id = {0} UNION ALL SELECT g.id, g.parent_id FROM groups g JOIN group_tree gt ON g.parent_id = gt.id) SELECT DISTINCT r.* FROM group_tree as g JOIN groups_roles AS gr ON g.id = gr.group_id JOIN roles AS r ON gr.role_id = r.id GROUP BY r.id
 ";
 
-    private const string RolePermissionRawQuery = @"SELECT DISTINCT p.* FROM permissions p LEFT JOIN roles_permission rp ON p.Id = rp.permission_id WHERE rp.role_id = ANY ({0})";
 
     private static readonly Func<AppDbContext, string, Task<Session?>>? CurrentSessionCompileAsyncQuery = EF.CompileAsyncQuery((AppDbContext dbContext, string st) =>
         dbContext.Sessions
@@ -69,12 +68,12 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
         _dbContext = dbContext;
     }
 
-    public Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+    public override Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
     {
         return CurrentSessionCompileAsyncQuery!(_dbContext, sessionToken);
     }
 
-    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public override async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var allRoles = new List<Role>();
         allRoles.AddRange(user.Roles);
@@ -87,14 +86,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
         return allRoles;
     }
 
-    public Task<Permission[]> RolePermissionsAsync(List<Role> roles, CancellationToken cancellationToken = default)
-    {
-        var roleIds = roles.Select(role => role.Id).ToArray();
-        return _dbContext.Permissions.FromSqlRaw(RolePermissionRawQuery, roleIds)
-            .ToArrayAsync(cancellationToken);
-    }
-
-    public Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+    public override Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         return ServiceCompiledQuery!(_dbContext, serviceSecret);
     }
@@ -103,6 +95,17 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
     {
         return _dbContext.Roles
             .FromSqlRaw(GroupsChildrenAllRolesRawQuery, group.Id)
+            .Include(role => role.Permissions)
+            .Select(role => new Role
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Permissions = role.Permissions.Select(permission => new Permission
+                {
+                    Id = permission.Id,
+                    Name = permission.Name
+                }).ToList()
+            })
             .ToListAsync(cancellationToken);
     }
 }
