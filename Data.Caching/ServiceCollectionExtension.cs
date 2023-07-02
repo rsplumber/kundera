@@ -1,4 +1,5 @@
 ﻿using Core.Auth.Authorizations;
+using Data.Caching.CacheManagements;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +14,11 @@ public static class ServiceCollectionExtension
             return;
         }
 
-        services.AddScoped<IAuthorizeDataProvider, CachedAuthorizeDataProvider>();
+        services.AddScoped<IAuthorizeDataProvider, AuthorizeDataProvider>();
+        services.AddSingleton<ServiceCacheManagement>();
+        services.AddSingleton<UserRoleCacheManagement>();
+        services.AddSingleton<SessionCacheManagement>();
+        
         var cacheType = configuration.GetSection("Caching:Type").Value;
         switch (cacheType)
         {
