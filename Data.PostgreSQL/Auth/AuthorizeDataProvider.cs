@@ -68,7 +68,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
         _dbContext = dbContext;
     }
 
-    public override Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+    public override Task<Session?> FindSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
     {
         return CurrentSessionCompileAsyncQuery!(_dbContext, sessionToken);
     }

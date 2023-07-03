@@ -33,7 +33,7 @@ public class Scope : BaseEntity
 
     public string Secret { get; set; } = default!;
 
-    public ScopeStatus Status { get; set; } = default!;
+    public ScopeStatus Status { get; set; }
 
     public List<Service> Services { get; set; } = new();
 
@@ -65,7 +65,7 @@ public class Scope : BaseEntity
         AddDomainEvent(new ScopeServiceRemovedEvent(Id, service.Id));
     }
 
-    public bool Has(Service service)=> Services.Any(s => s == service);
+    public bool Has(Service service) => Services.Any(s => s == service);
 
 
     public void Add(Role role)
@@ -82,5 +82,5 @@ public class Scope : BaseEntity
         AddDomainEvent(new ScopeRoleRemovedEvent(Id, role.Id));
     }
 
-    public bool Has(Role role) =>       Roles.Any(r => r == role);
+    public bool Has(Role role) => Roles.Any(r => r == role);
 }

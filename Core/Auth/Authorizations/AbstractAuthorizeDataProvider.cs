@@ -7,7 +7,7 @@ namespace Core.Auth.Authorizations;
 
 public abstract class AbstractAuthorizeDataProvider : IAuthorizeDataProvider
 {
-    public abstract Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default);
+    public abstract Task<Session?> FindSessionAsync(string sessionToken, CancellationToken cancellationToken = default);
 
     public abstract Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default);
 

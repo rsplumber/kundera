@@ -76,7 +76,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
     private async Task<Session> ValidateSession(string token, CancellationToken cancellationToken)
     {
-        var session = await _authorizeDataProvider.CurrentSessionAsync(token, cancellationToken);
+        var session = await _authorizeDataProvider.FindSessionAsync(token, cancellationToken);
         if (session is null)
         {
             throw new UnAuthorizedException();

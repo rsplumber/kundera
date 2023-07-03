@@ -1,5 +1,6 @@
 ﻿using Core.Auth.Authorizations;
 using Data.Caching.CacheManagements;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +19,7 @@ public static class ServiceCollectionExtension
         services.AddSingleton<ServiceCacheManagement>();
         services.AddSingleton<UserRoleCacheManagement>();
         services.AddSingleton<SessionCacheManagement>();
-        
+        services.AddTransient<EventHandlers>();
         var cacheType = configuration.GetSection("Caching:Type").Value;
         switch (cacheType)
         {
@@ -32,9 +33,11 @@ public static class ServiceCollectionExtension
 
             case "InMemory":
                 services.AddDistributedMemoryCache();
+                services.AddSingleton<IDistributedCache, MemoryCacheWrapper>();
                 break;
             default:
                 services.AddDistributedMemoryCache();
+                services.AddSingleton<IDistributedCache, MemoryCacheWrapper>();
                 break;
         }
     }

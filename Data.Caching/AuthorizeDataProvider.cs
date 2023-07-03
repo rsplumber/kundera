@@ -26,7 +26,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
     }
 
 
-    public async Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+    public async Task<Session?> FindSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
     {
         var cachedSession = await _sessionCacheManagement.GetAsync(sessionToken, cancellationToken);
         if (cachedSession is not null)
@@ -34,7 +34,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             return cachedSession;
         }
 
-        var session = await _authorizeDataProvider.CurrentSessionAsync(sessionToken, cancellationToken);
+        var session = await _authorizeDataProvider.FindSessionAsync(sessionToken, cancellationToken);
         if (session is null) return null;
         await _sessionCacheManagement.SetAsync(session, cancellationToken);
         return session;

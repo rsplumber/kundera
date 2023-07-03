@@ -23,7 +23,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         _mapper = mapper;
     }
 
-    public async Task<Session?> CurrentSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
+    public async Task<Session?> FindSessionAsync(string sessionToken, CancellationToken cancellationToken = default)
     {
         var dataModel = await _dbProvider.RedisCollection<SessionDataModel>(false).FindByIdAsync(sessionToken);
         return dataModel is null ? null : _mapper.Map<Session>(dataModel);
