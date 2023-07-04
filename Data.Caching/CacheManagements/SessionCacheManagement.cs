@@ -9,6 +9,10 @@ internal sealed class SessionCacheManagement
     private const string SessionsTypeKey = "sessions";
     private readonly IDistributedCache _cacheService;
 
+    private static readonly DistributedCacheEntryOptions DistributedCacheEntryOptions = new DistributedCacheEntryOptions()
+        .SetAbsoluteExpiration(TimeSpan.FromDays(6))
+        .SetSlidingExpiration(TimeSpan.FromDays(2));
+
     public SessionCacheManagement(IDistributedCache cacheService)
     {
         _cacheService = cacheService;
@@ -25,9 +29,7 @@ internal sealed class SessionCacheManagement
     {
         var key = CacheKey.From(SessionsTypeKey, session.Id);
         var bytes = JsonSerializer.SerializeToUtf8Bytes(session);
-        return _cacheService.SetAsync(key, bytes, new DistributedCacheEntryOptions()
-                .SetAbsoluteExpiration(DateTime.UtcNow - session.ExpirationDateUtc),
-            cancellationToken);
+        return _cacheService.SetAsync(key, bytes, DistributedCacheEntryOptions, cancellationToken);
     }
 
     public Task DeleteAsync(string token, CancellationToken cancellationToken = default)

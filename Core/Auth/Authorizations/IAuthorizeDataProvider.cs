@@ -11,5 +11,5 @@ public interface IAuthorizeDataProvider
 
     Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default);
 
-    Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
+    Task<Service?> FindServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
 }

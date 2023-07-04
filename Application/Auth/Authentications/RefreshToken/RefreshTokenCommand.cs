@@ -7,7 +7,7 @@ using Mediator;
 
 namespace Application.Auth.Authentications.RefreshToken;
 
-public sealed record RefreshTokenCommand : ICommand<Certificate>
+public sealed record RefreshTokenCommand : ICommand<Certificate?>
 {
     public string Token { get; init; } = default!;
 
@@ -18,7 +18,7 @@ public sealed record RefreshTokenCommand : ICommand<Certificate>
     public IPAddress IpAddress { get; init; } = default!;
 }
 
-internal sealed class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Certificate>
+internal sealed class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Certificate?>
 {
     private readonly ISessionManagement _sessionManagement;
     private readonly ICapPublisher _eventBus;
@@ -31,12 +31,12 @@ internal sealed class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenC
         _eventBus = eventBus;
     }
 
-    public async ValueTask<Certificate> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Certificate?> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
     {
         var session = await _sessionManagement.GetAsync(command.Token, cancellationToken);
         if (session is null || session.RefreshToken != command.RefreshToken)
         {
-            throw new UnAuthorizedException();
+            return null;
         }
 
         var certificate = await _sessionManagement.SaveAsync(session.Credential, session.Scope, cancellationToken);

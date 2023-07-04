@@ -7,6 +7,9 @@ namespace Application.Auth.Authorizations.Role;
 internal sealed class Endpoint : Endpoint<Request, Guid>
 {
     private readonly IAuthorizeService _authorizeService;
+    private const string UnAuthorizedMessage = "Unauthorized";
+    private const string ForbiddenMessage = "Forbidden";
+    private const string SessionExpiredMessage = "SessionExpired";
 
     public Endpoint(IAuthorizeService authorizeService)
     {
@@ -22,14 +25,40 @@ internal sealed class Endpoint : Endpoint<Request, Guid>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var userId = await _authorizeService.AuthorizeRoleAsync(req.Authorization,
+        var (userId, unAuthorized) = await _authorizeService.AuthorizeRoleAsync(req.Authorization,
             req.Roles,
             req.ServiceSecret,
             HttpContext.Request.UserAgent(),
             HttpContext.Request.IpAddress().ToString(),
             ct);
 
-        await SendOkAsync(userId, ct);
+        if (userId is not null)
+        {
+            await SendOkAsync(userId.Value, ct);
+            return;
+        }
+
+        if (userId is null || unAuthorized is null)
+        {
+            await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
+            return;
+        }
+
+        switch (unAuthorized.Code)
+        {
+            case 401:
+                await SendStringAsync(ForbiddenMessage, 401, cancellation: ct);
+                return;
+            case 403:
+                await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
+                return;
+            case 440:
+                await SendStringAsync(SessionExpiredMessage, 440, cancellation: ct);
+                return;
+            default:
+                await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
+                return;
+        }
     }
 }
 

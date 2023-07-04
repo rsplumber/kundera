@@ -78,7 +78,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         }
     }
 
-    public async Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+    public async Task<Service?> FindServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         var dataModel = await _dbProvider.RedisCollection<ServiceDataModel>(false).Where(model => model.Secret == serviceSecret)
             .FirstOrDefaultAsync();

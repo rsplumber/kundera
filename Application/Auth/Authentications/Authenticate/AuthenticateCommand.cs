@@ -17,7 +17,7 @@ public sealed record AuthenticateCommand : ICommand<Certificate>
 
     public string ScopeSecret { get; init; } = default!;
 
-    public string? UserAgent { get; init; } = default!;
+    public string? UserAgent { get; init; }
 
     public IPAddress IpAddress { get; init; } = default!;
 }

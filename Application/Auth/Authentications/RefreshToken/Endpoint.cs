@@ -8,6 +8,8 @@ namespace Application.Auth.Authentications.RefreshToken;
 internal sealed class Endpoint : Endpoint<Request, Certificate>
 {
     private readonly IMediator _mediator;
+    private const string UnAuthorizedMessage = "Unauthorized";
+
 
     public Endpoint(IMediator mediator)
     {
@@ -31,6 +33,11 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
             IpAddress = HttpContext.Request.IpAddress()
         };
         var response = await _mediator.Send(command, ct);
+        if (response is null)
+        {
+            await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
+            return;
+        }
 
         await SendOkAsync(response, ct);
     }

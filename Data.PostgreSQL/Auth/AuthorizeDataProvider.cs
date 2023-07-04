@@ -86,7 +86,7 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
         return allRoles;
     }
 
-    public override Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+    public override Task<Service?> FindServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         return ServiceCompiledQuery!(_dbContext, serviceSecret);
     }

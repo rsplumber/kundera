@@ -11,5 +11,5 @@ public abstract class AbstractAuthorizeDataProvider : IAuthorizeDataProvider
 
     public abstract Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default);
 
-    public abstract Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
+    public abstract Task<Service?> FindServiceAsync(string serviceSecret, CancellationToken cancellationToken = default);
 }

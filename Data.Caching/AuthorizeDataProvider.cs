@@ -53,7 +53,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return roles;
     }
 
-    public async Task<Service?> RequestedServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
+    public async Task<Service?> FindServiceAsync(string serviceSecret, CancellationToken cancellationToken = default)
     {
         var cachedService = await _serviceCacheManagement.GetAsync(serviceSecret, cancellationToken);
         if (cachedService is not null)
@@ -61,7 +61,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             return cachedService;
         }
 
-        var service = await _authorizeDataProvider.RequestedServiceAsync(serviceSecret, cancellationToken);
+        var service = await _authorizeDataProvider.FindServiceAsync(serviceSecret, cancellationToken);
         if (service is null) return null;
         await _serviceCacheManagement.SetAsync(service, cancellationToken);
         return service;
