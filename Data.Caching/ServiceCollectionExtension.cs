@@ -33,11 +33,9 @@ public static class ServiceCollectionExtension
 
             case "InMemory":
                 services.AddDistributedMemoryCache();
-                services.AddSingleton<IDistributedCache, MemoryCacheWrapper>();
                 break;
             default:
                 services.AddDistributedMemoryCache();
-                services.AddSingleton<IDistributedCache, MemoryCacheWrapper>();
                 break;
         }
     }

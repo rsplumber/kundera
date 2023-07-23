@@ -416,11 +416,6 @@ namespace Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_groups_status",
-                table: "groups",
-                column: "status");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_groups_children_group_id",
                 table: "groups_children",
                 column: "group_id");
@@ -453,20 +448,10 @@ namespace Data.Migrations
                 column: "role_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_scopes_name",
-                table: "scopes",
-                column: "name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_scopes_secret",
                 table: "scopes",
                 column: "secret",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_scopes_status",
-                table: "scopes",
-                column: "status");
 
             migrationBuilder.CreateIndex(
                 name: "IX_scopes_roles_scope_id",
@@ -479,20 +464,10 @@ namespace Data.Migrations
                 column: "service_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_services_name",
-                table: "services",
-                column: "name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_services_secret",
                 table: "services",
                 column: "secret",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_services_status",
-                table: "services",
-                column: "status");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_credential_id",
@@ -514,11 +489,6 @@ namespace Data.Migrations
                 name: "IX_sessions_user_id",
                 table: "sessions",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_users_status",
-                table: "users",
-                column: "status");
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_Usernames",

@@ -19,7 +19,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -226,8 +226,6 @@ namespace Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("Status");
-
                     b.HasIndex("parent_id")
                         .IsUnique();
 
@@ -310,12 +308,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
-
                     b.HasIndex("Secret")
                         .IsUnique();
-
-                    b.HasIndex("Status");
 
                     b.ToTable("scopes", (string)null);
                 });
@@ -343,12 +337,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
-
                     b.HasIndex("Secret")
                         .IsUnique();
-
-                    b.HasIndex("Status");
 
                     b.ToTable("services", (string)null);
                 });
@@ -377,8 +367,6 @@ namespace Data.Migrations
                         .HasColumnType("text[]");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Status");
 
                     b.HasIndex("Usernames");
 

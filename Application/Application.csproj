@@ -11,15 +11,18 @@
     </ItemGroup>
     
     <ItemGroup>
+        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.5.0" />
+        <PackageReference Include="KunderaNet.Services.Authorization.Http" Version="1.0.1" />
+        <PackageReference Include="KunderaNet.Services.Authorization.Mock" Version="1.0.1" />
         <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.1.4" />
         <PackageReference Include="Mediator.Abstractions" Version="2.1.5" />
         <PackageReference Include="Quartz.AspNetCore" Version="3.6.3" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="DotNetCore.CAP.PostgreSql" Version="7.1.4" />
         <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.22.0" />
-        <PackageReference Include="FastEndpoints" Version="5.13.0" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="5.13.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
+        <PackageReference Include="FastEndpoints" Version="5.14.0" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="5.14.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.9">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -27,8 +30,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

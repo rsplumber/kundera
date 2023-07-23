@@ -203,8 +203,6 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
 
-            builder.HasIndex(model => model.Status);
-
             builder.Property(model => model.StatusChangeDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status_change_date_utc");
@@ -243,8 +241,6 @@ public sealed class AppDbContext : DbContext
                 .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
-
-            builder.HasIndex(model => model.Status);
 
             builder.Property(model => model.StatusChangeReason)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -331,9 +327,6 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name);
-
-
             builder.Property(model => model.Secret)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("secret");
@@ -358,8 +351,6 @@ public sealed class AppDbContext : DbContext
                 .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
-
-            builder.HasIndex(model => model.Status);
         }
     }
 
@@ -378,21 +369,16 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name);
-
             builder.Property(model => model.Secret)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("secret");
 
             builder.HasIndex(model => model.Secret).IsUnique();
-
-
+            
             builder.Property(e => e.Status)
                 .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("status");
-
-            builder.HasIndex(model => model.Status);
 
             builder.HasMany(model => model.Permissions)
                 .WithOne(permission => permission.Service)

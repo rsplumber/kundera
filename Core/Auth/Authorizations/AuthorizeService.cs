@@ -18,7 +18,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         _eventBus = eventBus;
     }
 
-    public async Task<(Guid?, UnAuthorizeResponse?)> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
+    public async Task<(AuthorizeResponse?, UnAuthorizeResponse?)> AuthorizePermissionAsync(string token, IEnumerable<string> actions, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
     {
         var (session, sessionUnAuthorized) = await ValidateSession(token, cancellationToken);
         if (session is null)
@@ -46,13 +46,17 @@ internal sealed class AuthorizeService : IAuthorizeService
             }, cancellationToken: cancellationToken);
         }, cancellationToken);
 
-        return (session.User.Id, null);
+        return (new AuthorizeResponse(session.User.Id)
+        {
+            ScopeId = session.Scope.Id,
+            ServiceId = service.Id
+        }, null);
 
         bool InvalidPermission() => userRoles.SelectMany(role => role.Permissions)
-            .All(permission => actions.All(action => permission.Name != $"{service.Name}_{action.ToLower()}"));
+            .All(permission => actions.All(action => permission.Name != $"{service.Name}:{action}".ToLower()));
     }
 
-    public async Task<(Guid?, UnAuthorizeResponse?)> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
+    public async Task<(AuthorizeResponse?, UnAuthorizeResponse?)> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
     {
         var (session, sessionUnAuthorized) = await ValidateSession(token, cancellationToken);
         if (session is null)
@@ -65,7 +69,8 @@ internal sealed class AuthorizeService : IAuthorizeService
         var userRoles = await _authorizeDataProvider.UserRolesAsync(session.User, cancellationToken);
         var validateSessionScope = ValidateSessionScope(session, userRoles);
         if (!validateSessionScope) return (null, UnAuthorizeResponse.Forbidden);
-        await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
+        var service = await ValidateRequestedService(serviceSecret, session.Scope, cancellationToken);
+        if (service is null) return (null, UnAuthorizeResponse.Forbidden);
         if (InvalidRole()) return (null, UnAuthorizeResponse.Forbidden);
 
         var _ = Task.Run(() =>
@@ -79,7 +84,11 @@ internal sealed class AuthorizeService : IAuthorizeService
             }, cancellationToken: cancellationToken);
         }, cancellationToken);
 
-        return (session.User.Id, null);
+        return (new AuthorizeResponse(session.User.Id)
+        {
+            ScopeId = session.Scope.Id,
+            ServiceId = service.Id
+        }, null);
         bool InvalidRole() => userRoles.All(role => roles.All(r => role.Name != r.ToLower()));
     }
 

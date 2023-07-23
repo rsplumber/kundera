@@ -9,6 +9,7 @@ using Elastic.Apm.NetCoreAll;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using KunderaNet.FastEndpoints.Authorization;
+using KunderaNet.Services.Authorization.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
@@ -29,7 +30,7 @@ var configuration = builder.Configuration;
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();
 builder.Services.AddAuthentication(KunderaDefaults.Scheme)
-    .AddKundera(builder.Configuration);
+    .AddKundera(builder.Configuration, k => k.UseHttpService(builder.Configuration));
 builder.Services.AddAuthorization();
 
 builder.Services.AddFastEndpoints();

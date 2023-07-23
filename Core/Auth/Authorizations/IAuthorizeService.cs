@@ -2,19 +2,26 @@
 
 public interface IAuthorizeService
 {
-    Task<(Guid?, UnAuthorizeResponse?)> AuthorizePermissionAsync(string token,
+    Task<(AuthorizeResponse?, UnAuthorizeResponse?)> AuthorizePermissionAsync(string token,
         IEnumerable<string> actions,
         string serviceSecret,
         string? userAgent,
         string ipAddress,
         CancellationToken cancellationToken = default);
 
-    Task<(Guid?, UnAuthorizeResponse?)> AuthorizeRoleAsync(string token,
+    Task<(AuthorizeResponse?, UnAuthorizeResponse?)> AuthorizeRoleAsync(string token,
         IEnumerable<string> roles,
         string serviceSecret,
         string? userAgent,
         string ipAddress,
         CancellationToken cancellationToken = default);
+}
+
+public record AuthorizeResponse(Guid UserId)
+{
+    public Guid ScopeId { get; init; }
+
+    public Guid ServiceId { get; init; }
 }
 
 public record UnAuthorizeResponse(int Code)
