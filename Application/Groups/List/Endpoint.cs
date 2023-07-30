@@ -5,7 +5,7 @@ using Queries.Groups;
 
 namespace Application.Groups.List;
 
-internal sealed class Endpoint : EndpointWithoutRequest<PageableResponse<GroupsResponse>>
+file sealed class Endpoint : EndpointWithoutRequest<PageableResponse<GroupsResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -29,7 +29,7 @@ internal sealed class Endpoint : EndpointWithoutRequest<PageableResponse<GroupsR
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {

@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Permissions.Meta;
 
-internal sealed class Endpoint : Endpoint<ChangePermissionMetaCommand>
+file sealed class Endpoint : Endpoint<ChangePermissionMetaCommand>
 {
     private readonly IMediator _mediator;
 
@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<ChangePermissionMetaCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -39,7 +39,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ChangePermissionMetaCommand>
+file sealed class RequestValidator : Validator<ChangePermissionMetaCommand>
 {
     public RequestValidator()
     {

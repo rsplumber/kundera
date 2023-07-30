@@ -94,9 +94,13 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<int?>("SessionExpireTimeInMinutes")
+                    b.Property<int?>("SessionRefreshTokenExpireTimeInMinutes")
                         .HasColumnType("integer")
-                        .HasColumnName("session_expire_time_in_minutes");
+                        .HasColumnName("session_refresh_token_expire_time_in_minutes");
+
+                    b.Property<int?>("SessionTokenExpireTimeInMinutes")
+                        .HasColumnType("integer")
+                        .HasColumnName("session_token_expire_time_in_minutes");
 
                     b.Property<bool>("SingleSession")
                         .HasColumnType("boolean")
@@ -162,16 +166,24 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("ExpirationDateUtc")
+                    b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expiration_date_utc");
+                        .HasColumnName("created_date_utc");
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("refresh_token");
 
-                    b.Property<Guid>("credential_id")
+                    b.Property<DateTime>("RefreshTokenExpirationDateUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("refresh_token_expiration_date_utc");
+
+                    b.Property<DateTime>("TokenExpirationDateUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("token_expiration_date_utc");
+
+                    b.Property<Guid?>("credential_id")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("scope_id")
@@ -297,10 +309,22 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<bool>("Restricted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("restricted");
+
                     b.Property<string>("Secret")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("secret");
+
+                    b.Property<int>("SessionRefreshTokenExpireTimeInMinutes")
+                        .HasColumnType("integer")
+                        .HasColumnName("session_refresh_token_expire_time_in_minutes");
+
+                    b.Property<int>("SessionTokenExpireTimeInMinutes")
+                        .HasColumnType("integer")
+                        .HasColumnName("session_token_expire_time_in_minutes");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -494,8 +518,7 @@ namespace Data.Migrations
                     b.HasOne("Core.Auth.Credentials.Credential", "Credential")
                         .WithMany()
                         .HasForeignKey("credential_id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Core.Scopes.Scope", "Scope")
                         .WithMany()

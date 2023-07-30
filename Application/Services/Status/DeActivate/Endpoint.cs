@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Services.Status.DeActivate;
 
-internal sealed class Endpoint : Endpoint<DeActivateServiceCommand>
+file sealed class Endpoint : Endpoint<DeActivateServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeActivateServiceCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeActivateServiceCommand>
+file sealed class RequestValidator : Validator<DeActivateServiceCommand>
 {
     public RequestValidator()
     {

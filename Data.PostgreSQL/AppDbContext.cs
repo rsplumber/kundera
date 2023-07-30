@@ -99,9 +99,14 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("single_session");
 
-            builder.Property(model => model.SessionExpireTimeInMinutes)
+            builder.Property(model => model.SessionTokenExpireTimeInMinutes)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("session_expire_time_in_minutes")
+                .HasColumnName("session_token_expire_time_in_minutes")
+                .IsRequired(false);
+
+            builder.Property(model => model.SessionRefreshTokenExpireTimeInMinutes)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("session_refresh_token_expire_time_in_minutes")
                 .IsRequired(false);
 
             builder.Property(model => model.OneTime)
@@ -139,7 +144,8 @@ public sealed class AppDbContext : DbContext
             builder.HasOne(model => model.Credential)
                 .WithMany()
                 .HasForeignKey("credential_id")
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired(false);
 
             builder.HasOne(model => model.Scope)
                 .WithMany()
@@ -151,9 +157,17 @@ public sealed class AppDbContext : DbContext
                 .HasForeignKey("user_id")
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Property(model => model.ExpirationDateUtc)
+            builder.Property(model => model.TokenExpirationDateUtc)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .HasColumnName("expiration_date_utc");
+                .HasColumnName("token_expiration_date_utc");
+
+            builder.Property(model => model.RefreshTokenExpirationDateUtc)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("refresh_token_expiration_date_utc");
+
+            builder.Property(model => model.CreatedDateUtc)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("created_date_utc");
         }
     }
 
@@ -333,6 +347,18 @@ public sealed class AppDbContext : DbContext
 
             builder.HasIndex(model => model.Secret).IsUnique();
 
+            builder.Property(model => model.SessionTokenExpireTimeInMinutes)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("session_token_expire_time_in_minutes");
+
+            builder.Property(model => model.SessionRefreshTokenExpireTimeInMinutes)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("session_refresh_token_expire_time_in_minutes");
+
+            builder.Property(model => model.Restricted)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasColumnName("restricted");
+
             builder.HasMany(model => model.Services)
                 .WithMany()
                 .UsingEntity<Dictionary<string, object>>(
@@ -374,7 +400,7 @@ public sealed class AppDbContext : DbContext
                 .HasColumnName("secret");
 
             builder.HasIndex(model => model.Secret).IsUnique();
-            
+
             builder.Property(e => e.Status)
                 .HasConversion<int>()
                 .UsePropertyAccessMode(PropertyAccessMode.Property)

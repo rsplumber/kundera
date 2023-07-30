@@ -38,7 +38,7 @@ internal sealed class EndpointSSummary : Summary<RoleEndpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AssignUserRoleCommand>
+file sealed class RequestValidator : Validator<AssignUserRoleCommand>
 {
     public RequestValidator()
     {

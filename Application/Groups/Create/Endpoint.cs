@@ -1,3 +1,4 @@
+using System.Net;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
@@ -5,7 +6,7 @@ using Queries.Groups;
 
 namespace Application.Groups.Create;
 
-internal sealed class Endpoint : Endpoint<CreateGroupCommand>
+file sealed class Endpoint : Endpoint<CreateGroupCommand>
 {
     private readonly IMediator _mediator;
 
@@ -25,21 +26,19 @@ internal sealed class Endpoint : Endpoint<CreateGroupCommand>
     {
         var group = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new { group.Id }, new GroupResponse
-            {
-                Id = group.Id,
-                Description = group.Description,
-                Parent = group.Parent?.Id,
-                Name = group.Name,
-                Status = group.Status.ToString(),
-                StatusChangedDate = group.StatusChangeDateUtc,
-            },
-            generateAbsoluteUrl: true,
-            cancellation: ct);
+        await SendAsync(new GroupResponse
+        {
+            Id = group.Id,
+            Description = group.Description,
+            Parent = group.Parent?.Id,
+            Name = group.Name,
+            Status = group.Status.ToString(),
+            StatusChangedDate = group.StatusChangeDateUtc,
+        }, (int)HttpStatusCode.Created, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -49,7 +48,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreateGroupCommand>
+file sealed class RequestValidator : Validator<CreateGroupCommand>
 {
     public RequestValidator()
     {

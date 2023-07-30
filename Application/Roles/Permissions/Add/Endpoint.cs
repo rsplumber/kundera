@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Roles.Permissions.Add;
 
-internal sealed class Endpoint : Endpoint<AddRolePermissionCommand>
+file sealed class Endpoint : Endpoint<AddRolePermissionCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<AddRolePermissionCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AddRolePermissionCommand>
+file sealed class RequestValidator : Validator<AddRolePermissionCommand>
 {
     public RequestValidator()
     {

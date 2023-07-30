@@ -6,8 +6,6 @@ public interface ISessionRepository
 
     Task<Session?> FindAsync(string token, CancellationToken cancellationToken = default);
 
-    Task<Session?> FindByRefreshTokenAsync(string token, CancellationToken cancellationToken = default);
-
     Task<List<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(string token, CancellationToken cancellationToken = default);

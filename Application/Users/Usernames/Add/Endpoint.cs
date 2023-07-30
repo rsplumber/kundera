@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Usernames.Add;
 
-internal sealed class Endpoint : Endpoint<AddUserUsernameCommand>
+file sealed class Endpoint : Endpoint<AddUserUsernameCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<AddUserUsernameCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AddUserUsernameCommand>
+file sealed class RequestValidator : Validator<AddUserUsernameCommand>
 {
     public RequestValidator()
     {

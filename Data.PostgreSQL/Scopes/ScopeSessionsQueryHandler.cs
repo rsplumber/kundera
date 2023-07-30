@@ -19,15 +19,14 @@ public sealed class ScopeSessionsQueryHandler : IQueryHandler<ScopeSessionsQuery
             .AsNoTracking()
             .Include(session => session.User)
             .Include(session => session.Scope)
-            .Where(session  => session.Scope.Id == query.ScopeId)
+            .Where(session => session.Scope.Id == query.ScopeId)
             .Select(model => new ScopeSessionResponse
             {
                 Id = model.RefreshToken,
                 UserId = model.User.Id,
                 ScopeId = model.Scope.Id,
-                ExpirationDateUtc = model.ExpirationDateUtc,
+                ExpirationDateUtc = model.TokenExpirationDateUtc
             })
             .ToListAsync(cancellationToken: cancellationToken);
-
     }
 }

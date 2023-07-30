@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Services.Delete;
 
-internal sealed class Endpoint : Endpoint<DeleteServiceCommand>
+file sealed class Endpoint : Endpoint<DeleteServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeleteServiceCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeleteServiceCommand>
+file sealed class RequestValidator : Validator<DeleteServiceCommand>
 {
     public RequestValidator()
     {

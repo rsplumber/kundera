@@ -33,6 +33,12 @@ public class Scope : BaseEntity
 
     public string Secret { get; set; } = default!;
 
+    public int SessionTokenExpireTimeInMinutes { get; init; }
+
+    public int SessionRefreshTokenExpireTimeInMinutes { get; init; }
+
+    public bool Restricted { get; init; }
+
     public ScopeStatus Status { get; set; }
 
     public List<Service> Services { get; set; } = new();

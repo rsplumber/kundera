@@ -13,7 +13,6 @@ internal sealed class DataSeeder
 {
     private readonly string _adminUsername;
     private readonly string _adminPassword;
-    private readonly string _identityScopeSecret;
     private readonly string _kunderaServiceSecret;
 
     private readonly IUserFactory _userFactory;
@@ -61,7 +60,6 @@ internal sealed class DataSeeder
         _permissionService = permissionService;
         _adminUsername = configuration.GetSection("DefaultConfigs:AdminUsername").Value ?? throw new ArgumentNullException(nameof(_adminUsername));
         _adminPassword = configuration.GetSection("DefaultConfigs:AdminPassword").Value ?? throw new ArgumentNullException(nameof(_adminPassword));
-        _identityScopeSecret = configuration.GetSection("DefaultConfigs:IdentityScopeSecret").Value ?? throw new ArgumentNullException(nameof(_identityScopeSecret));
         _kunderaServiceSecret = configuration.GetSection("DefaultConfigs:KunderaServiceSecret").Value ?? throw new ArgumentNullException(nameof(_kunderaServiceSecret));
     }
 
@@ -90,7 +88,7 @@ internal sealed class DataSeeder
         var scope = await _scopeRepository.FindByNameAsync(EntityBaseValues.IdentityScopeName);
         if (scope is null)
         {
-            scope = await _scopeFactory.CreateIdentityScopeAsync(_identityScopeSecret);
+            scope = await _scopeFactory.CreateIdentityScopeAsync();
             scope.Add(service);
             scope.Add(role);
             await _scopeRepository.UpdateAsync(scope);
@@ -105,7 +103,10 @@ internal sealed class DataSeeder
         var credentials = await _credentialRepository.FindByUsernameAsync(_adminUsername);
         if (!credentials.Any(credential => credential.Password.Check(_adminPassword)))
         {
-            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword, user.Id, 1000);
+            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword,
+                1000,
+                1000,
+                true);
         }
 
         await SeedPermissions(service);

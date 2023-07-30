@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Roles.Revoke;
 
-internal sealed class Endpoint : Endpoint<RevokeUserRoleCommand>
+file sealed class Endpoint : Endpoint<RevokeUserRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,9 +28,9 @@ internal sealed class Endpoint : Endpoint<RevokeUserRoleCommand>
     }
 }
 
-internal sealed class EndpointSSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
-    public EndpointSSummary()
+    public EndpointSummary()
     {
         Summary = "Revoke a role from a user in the system";
         Description = "Revoke a role from a user a in the system";
@@ -38,7 +38,7 @@ internal sealed class EndpointSSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<RevokeUserRoleCommand>
+file sealed class RequestValidator : Validator<RevokeUserRoleCommand>
 {
     public RequestValidator()
     {

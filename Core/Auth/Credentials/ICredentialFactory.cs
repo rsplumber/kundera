@@ -8,20 +8,20 @@ public interface ICredentialFactory
 {
     Task<Credential> CreateAsync(string username,
         string password,
-        Guid userId,
-        int sessionExpireTimeInMinutes,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
         bool? singleSession = false);
 
     Task<Credential> CreateOneTimeAsync(string username,
         string password,
-        Guid userId,
-        int sessionExpireTimeInMinutes,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
         int expireInMinutes = 0);
 
     Task<Credential> CreateTimePeriodicAsync(string username,
         string password,
-        Guid userId,
-        int sessionExpireTimeInMinutes,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
         int expireInMinutes,
         bool? singleSession = false);
 }
@@ -30,7 +30,7 @@ internal sealed class CredentialFactory : ICredentialFactory
 {
     private readonly ICredentialRepository _credentialRepository;
     private readonly IUserRepository _userRepository;
-    private const int DefaultSessionExpireTimeInMinutes = 1;
+    private const int DefaultSessionExpireTimeInMinutes = 15;
 
     public CredentialFactory(ICredentialRepository credentialRepository, IUserRepository userRepository)
     {
@@ -38,45 +38,61 @@ internal sealed class CredentialFactory : ICredentialFactory
         _userRepository = userRepository;
     }
 
-    public async Task<Credential> CreateAsync(string username, string password, Guid userId,int sessionExpireTimeInMinutes, bool? singleSession = false)
+    public async Task<Credential> CreateAsync(string username,
+        string password,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
+        bool? singleSession = false)
     {
-       var user = await ValidateUserAsync(username, password, userId);
+        var user = await ValidateCredentialAsync(username, password);
         var credential = new Credential(username, password, user)
         {
             SingleSession = singleSession ?? false,
-            SessionExpireTimeInMinutes = sessionExpireTimeInMinutes > 0 ? sessionExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes
+            SessionTokenExpireTimeInMinutes = sessionTokenExpireTimeInMinutes > 0 ? sessionTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
+            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes > 0 ? sessionRefreshTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
         };
         await _credentialRepository.AddAsync(credential);
         return credential;
     }
 
-    public async Task<Credential> CreateOneTimeAsync(string username, string password, Guid userId,int sessionExpireTimeInMinutes, int expireInMinutes = 0)
+    public async Task<Credential> CreateOneTimeAsync(string username,
+        string password,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
+        int expireInMinutes = 0)
     {
-        var user = await ValidateUserAsync(username, password, userId);
+        var user = await ValidateCredentialAsync(username, password);
         var credential = new Credential(username, password, user, true, expireInMinutes)
         {
             SingleSession = true,
-            SessionExpireTimeInMinutes = sessionExpireTimeInMinutes > 0 ? sessionExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes
+            SessionTokenExpireTimeInMinutes = sessionTokenExpireTimeInMinutes > 0 ? sessionTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
+            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes > 0 ? sessionRefreshTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
         };
         await _credentialRepository.AddAsync(credential);
         return credential;
     }
 
-    public async Task<Credential> CreateTimePeriodicAsync(string username, string password, Guid userId, int sessionExpireTimeInMinutes,int expireInMinutes, bool? singleSession = false)
+    public async Task<Credential> CreateTimePeriodicAsync(string username,
+        string password,
+        int sessionTokenExpireTimeInMinutes,
+        int sessionRefreshTokenExpireTimeInMinutes,
+        int expireInMinutes,
+        bool? singleSession = false)
     {
-        var user = await ValidateUserAsync(username, password, userId);
+        var user = await ValidateCredentialAsync(username, password);
         var credential = new Credential(username, password, user, expireInMinutes)
         {
             SingleSession = singleSession ?? false,
-            SessionExpireTimeInMinutes = sessionExpireTimeInMinutes > 0 ? sessionExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes
+            SessionTokenExpireTimeInMinutes = sessionTokenExpireTimeInMinutes > 0 ? sessionTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
+            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes > 0 ? sessionRefreshTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
         };
         await _credentialRepository.AddAsync(credential);
         return credential;
     }
 
-    private async Task<User> ValidateUserAsync(string username, string password, Guid userId)
+    private async Task<User> ValidateCredentialAsync(string username, string password)
     {
-        var user = await _userRepository.FindAsync(userId);
+        var user = await _userRepository.FindByUsernameAsync(username);
         if (user is null)
         {
             throw new UserNotFoundException();

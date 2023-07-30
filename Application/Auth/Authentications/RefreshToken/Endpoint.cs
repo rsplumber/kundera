@@ -1,19 +1,17 @@
 ﻿using Core.Auth.Authorizations;
+using Core.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
-using Mediator;
 
 namespace Application.Auth.Authentications.RefreshToken;
 
-internal sealed class Endpoint : Endpoint<Request, Certificate>
+file sealed class Endpoint : Endpoint<Request, Certificate>
 {
-    private readonly IMediator _mediator;
-    private const string UnAuthorizedMessage = "Unauthorized";
+    private readonly IAuthenticateHandler _authenticateHandler;
 
-
-    public Endpoint(IMediator mediator)
+    public Endpoint(IAuthenticateHandler authenticateHandler)
     {
-        _mediator = mediator;
+        _authenticateHandler = authenticateHandler;
     }
 
     public override void Configure()
@@ -25,25 +23,19 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var command = new RefreshTokenCommand
-        {
-            Token = req.Token,
-            RefreshToken = req.RefreshToken,
-            UserAgent = HttpContext.Request.UserAgent(),
-            IpAddress = HttpContext.Request.IpAddress()
-        };
-        var response = await _mediator.Send(command, ct);
-        if (response is null)
-        {
-            await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
-            return;
-        }
-
-        await SendOkAsync(response, ct);
+        var certificate = await _authenticateHandler.RefreshAsync(
+            Certificate.From(req.Token, req.RefreshToken),
+            new RequestInfo
+            {
+                UserAgent = HttpContext.Request.UserAgent(),
+                IpAddress = HttpContext.Request.IpAddress(),
+            },
+            ct);
+        await SendOkAsync(certificate, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -53,14 +45,14 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record Request
+file sealed record Request
 {
-    public string Token { get; set; } = default!;
+    [FromHeader("Authorization")] public string Token { get; set; } = default!;
 
     public string RefreshToken { get; set; } = default!;
 }
 
-internal sealed class RequestValidator : Validator<Request>
+file sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {

@@ -6,7 +6,7 @@ using Queries.Services;
 
 namespace Application.Services.List;
 
-internal sealed class Endpoint : Endpoint<ServicesQuery, PageableResponse<ServicesResponse>>
+file sealed class Endpoint : Endpoint<ServicesQuery, PageableResponse<ServicesResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<ServicesQuery, PageableResponse<Servic
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {

@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Permissions.Delete;
 
-internal sealed class Endpoint : Endpoint<DeletePermissionCommand>
+file sealed class Endpoint : Endpoint<DeletePermissionCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeletePermissionCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeletePermissionCommand>
+file sealed class RequestValidator : Validator<DeletePermissionCommand>
 {
     public RequestValidator()
     {

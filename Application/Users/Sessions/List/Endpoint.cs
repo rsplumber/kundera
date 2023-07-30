@@ -5,7 +5,7 @@ using Queries.Users;
 
 namespace Application.Users.Sessions.List;
 
-internal sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionResponse>>
+file sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionRes
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<UserSessionsQuery>
+file sealed class RequestValidator : Validator<UserSessionsQuery>
 {
     public RequestValidator()
     {

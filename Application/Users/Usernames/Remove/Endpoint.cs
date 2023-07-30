@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Usernames.Remove;
 
-internal sealed class Endpoint : Endpoint<RemoveUserUsernameCommand>
+file sealed class Endpoint : Endpoint<RemoveUserUsernameCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,9 +28,9 @@ internal sealed class Endpoint : Endpoint<RemoveUserUsernameCommand>
     }
 }
 
-internal sealed class EndpointSSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
-    public EndpointSSummary()
+    public EndpointSummary()
     {
         Summary = "Remove user username in the system";
         Description = "Remove user username in the system";
@@ -38,7 +38,7 @@ internal sealed class EndpointSSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<RemoveUserUsernameCommand>
+file sealed class RequestValidator : Validator<RemoveUserUsernameCommand>
 {
     public RequestValidator()
     {

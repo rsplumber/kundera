@@ -5,9 +5,9 @@ namespace Core.Scopes;
 
 public interface IScopeFactory
 {
-    Task<Scope> CreateAsync(string name);
+    Task<Scope> CreateAsync(string name, int sessionTokenExpireTimeInMinutes, int sessionRefreshTokenExpireTimeInMinutes, bool restricted = false);
 
-    Task<Scope> CreateIdentityScopeAsync(string scopeSecret);
+    Task<Scope> CreateIdentityScopeAsync();
 }
 
 internal sealed class ScopeFactory : IScopeFactory
@@ -22,7 +22,7 @@ internal sealed class ScopeFactory : IScopeFactory
         _hashService = hashService;
     }
 
-    async Task<Scope> IScopeFactory.CreateAsync(string name)
+    public async Task<Scope> CreateAsync(string name, int sessionTokenExpireTimeInMinutes, int sessionRefreshTokenExpireTimeInMinutes, bool restricted = false)
     {
         var currentScope = await _scopeRepository.FindByNameAsync(name);
         if (currentScope is not null)
@@ -30,23 +30,29 @@ internal sealed class ScopeFactory : IScopeFactory
             throw new ScopeAlreadyExistsException(name);
         }
 
-        var scope = new Scope(name, _hashService);
+        var scope = new Scope(name, _hashService)
+        {
+            SessionTokenExpireTimeInMinutes = sessionTokenExpireTimeInMinutes,
+            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes,
+            Restricted = restricted
+        };
         await _scopeRepository.AddAsync(scope);
 
         return scope;
     }
 
-    public async Task<Scope> CreateIdentityScopeAsync(string scopeSecret)
+    public async Task<Scope> CreateIdentityScopeAsync()
     {
-        var identityScope = await _scopeRepository.FindBySecretAsync(EntityBaseValues.IdentityScopeName);
+        var identityScope = await _scopeRepository.FindByNameAsync(EntityBaseValues.IdentityScopeName);
+
         if (identityScope is not null)
         {
-            throw new ScopeAlreadyExistsException(EntityBaseValues.IdentityScopeName);
+            Console.WriteLine("------------ScopeSecret: " + identityScope.Secret);
+            return identityScope;
         }
 
-        var scope = new Scope(EntityBaseValues.IdentityScopeName, scopeSecret);
-        await _scopeRepository.AddAsync(scope);
-
-        return scope;
+        var createdScope = await CreateAsync(EntityBaseValues.IdentityScopeName, 1000, 1000, true);
+        Console.WriteLine("------------ScopeSecret: " + createdScope.Secret);
+        return createdScope;
     }
 }

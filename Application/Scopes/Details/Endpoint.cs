@@ -6,7 +6,7 @@ using Queries.Scopes;
 
 namespace Application.Scopes.Details;
 
-internal sealed class Endpoint : Endpoint<ScopeQuery, ScopeResponse>
+file sealed class Endpoint : Endpoint<ScopeQuery, ScopeResponse>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<ScopeQuery, ScopeResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -40,7 +40,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ScopeQuery>
+file sealed class RequestValidator : Validator<ScopeQuery>
 {
     public RequestValidator()
     {

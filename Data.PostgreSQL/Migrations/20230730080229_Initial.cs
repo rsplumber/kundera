@@ -89,6 +89,9 @@ namespace Data.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     secret = table.Column<string>(type: "text", nullable: false),
+                    session_token_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: false),
+                    session_refresh_token_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: false),
+                    restricted = table.Column<bool>(type: "boolean", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -250,7 +253,8 @@ namespace Data.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     Password = table.Column<PasswordType>(type: "jsonb", nullable: false),
                     expires_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    session_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: true),
+                    session_token_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: true),
+                    session_refresh_token_expire_time_in_minutes = table.Column<int>(type: "integer", nullable: true),
                     one_time = table.Column<bool>(type: "boolean", nullable: false),
                     single_session = table.Column<bool>(type: "boolean", nullable: false),
                     created_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -343,10 +347,12 @@ namespace Data.Migrations
                 {
                     id = table.Column<string>(type: "text", nullable: false),
                     refresh_token = table.Column<string>(type: "text", nullable: false),
-                    credential_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    credential_id = table.Column<Guid>(type: "uuid", nullable: true),
                     scope_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    token_expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    refresh_token_expiration_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    created_date_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -44,7 +44,9 @@ public class Credential : BaseEntity
 
     public DateTime? ExpiresAtUtc { get; set; }
 
-    public int? SessionExpireTimeInMinutes { get; set; }
+    public int? SessionTokenExpireTimeInMinutes { get; set; }
+
+    public int? SessionRefreshTokenExpireTimeInMinutes { get; set; }
 
     public bool OneTime { get; set; }
 

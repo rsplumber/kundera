@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Groups.Join;
 
-internal sealed class Endpoint : Endpoint<JoinUserToGroupCommand>
+file sealed class Endpoint : Endpoint<JoinUserToGroupCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<JoinUserToGroupCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<JoinUserToGroupCommand>
+file sealed class RequestValidator : Validator<JoinUserToGroupCommand>
 {
     public RequestValidator()
     {

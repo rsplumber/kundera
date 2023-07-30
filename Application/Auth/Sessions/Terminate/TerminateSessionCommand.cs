@@ -5,7 +5,7 @@ namespace Application.Auth.Sessions.Terminate;
 
 public sealed record TerminateSessionCommand : ICommand
 {
-    public string Id { get; init; } = default!;
+    public string Token { get; init; } = default!;
 }
 
 internal sealed class TerminateSessionCommandHandler : ICommandHandler<TerminateSessionCommand>
@@ -19,7 +19,7 @@ internal sealed class TerminateSessionCommandHandler : ICommandHandler<Terminate
 
     public async ValueTask<Unit> Handle(TerminateSessionCommand command, CancellationToken cancellationToken)
     {
-        var session = await _sessionManagement.GetByRefreshTokenAsync(command.Id, cancellationToken);
+        var session = await _sessionManagement.GetAsync(command.Token, cancellationToken);
         if (session is null)
         {
             throw new SessionNotFoundException();

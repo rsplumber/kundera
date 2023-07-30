@@ -18,11 +18,11 @@ public sealed class UserSessionsQueryHandler : IQueryHandler<UserSessionsQuery, 
     {
         return await _dbContext.Sessions
             .AsNoTracking()
-            .Where(session  => session.User.Id == query.UserId)
+            .Where(session => session.User.Id == query.UserId)
             .Select(model => new UserSessionResponse
             {
                 Id = model.RefreshToken,
-                ExpirationDateUtc = model.ExpirationDateUtc,
+                ExpirationDateUtc = model.TokenExpirationDateUtc,
             })
             .ToListAsync(cancellationToken: cancellationToken);
     }

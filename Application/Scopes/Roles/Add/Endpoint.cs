@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Scopes.Roles.Add;
 
-internal sealed class Endpoint : Endpoint<AddScopeRoleCommand>
+file sealed class Endpoint : Endpoint<AddScopeRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<AddScopeRoleCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AddScopeRoleCommand>
+file sealed class RequestValidator : Validator<AddScopeRoleCommand>
 {
     public RequestValidator()
     {

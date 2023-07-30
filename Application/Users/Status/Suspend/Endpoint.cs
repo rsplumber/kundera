@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Status.Suspend;
 
-internal sealed class Endpoint : Endpoint<SuspendUserCommand>
+file sealed class Endpoint : Endpoint<SuspendUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<SuspendUserCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<SuspendUserCommand>
+file sealed class RequestValidator : Validator<SuspendUserCommand>
 {
     public RequestValidator()
     {

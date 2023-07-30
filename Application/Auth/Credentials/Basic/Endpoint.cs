@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Auth.Credentials.Basic;
 
-internal sealed class Endpoint : Endpoint<Request>
+file sealed class Endpoint : Endpoint<CreateBasicCredentialCommand>
 {
     private readonly IMediator _mediator;
 
@@ -15,28 +15,19 @@ internal sealed class Endpoint : Endpoint<Request>
 
     public override void Configure()
     {
-        Post("users/{userId:guid}/credentials");
+        Post("users/credentials");
         Permissions("credentials_create");
         Version(1);
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(CreateBasicCredentialCommand req, CancellationToken ct)
     {
-        var command = new CreateBasicCredentialCommand
-        {
-            Username = req.Username,
-            Password = req.Password,
-            UserId = req.UserId,
-            SingleSession = req.SingleSession,
-            SessionExpireTimeInMinutes = req.SessionExpireTimeInMinutes
-        };
-
-        await _mediator.Send(command, ct);
+        await _mediator.Send(req, ct);
         await SendOkAsync(ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -46,27 +37,10 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record Request
-{
-    public Guid UserId { get; set; } = default!;
-
-    public string Username { get; set; } = default!;
-
-    public string Password { get; set; } = default!;
-
-    public bool? SingleSession { get; set; }
-
-    public int SessionExpireTimeInMinutes { get; set; }
-}
-
-internal sealed class RequestValidator : Validator<Request>
+file sealed class RequestValidator : Validator<CreateBasicCredentialCommand>
 {
     public RequestValidator()
     {
-        RuleFor(request => request.UserId)
-            .NotEmpty().WithMessage("Enter valid UserId")
-            .NotNull().WithMessage("Enter valid UserId");
-
         RuleFor(request => request.Username)
             .NotEmpty().WithMessage("Enter valid Username")
             .NotNull().WithMessage("Enter valid Username");
@@ -74,10 +48,5 @@ internal sealed class RequestValidator : Validator<Request>
         RuleFor(request => request.Password)
             .NotEmpty().WithMessage("Enter valid Password")
             .NotNull().WithMessage("Enter valid Password");
-
-        RuleFor(request => request.SessionExpireTimeInMinutes)
-            .NotEmpty().WithMessage("Enter valid SessionExpireTimeInMinutes")
-            .NotNull().WithMessage("Enter valid SessionExpireTimeInMinutes")
-            .GreaterThan(1).WithMessage("SessionExpireTimeInMinutes must be greater than 1");
     }
 }

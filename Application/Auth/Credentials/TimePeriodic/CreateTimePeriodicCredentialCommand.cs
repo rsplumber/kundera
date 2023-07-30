@@ -5,8 +5,6 @@ namespace Application.Auth.Credentials.TimePeriodic;
 
 public sealed record CreateTimePeriodicCredentialCommand : ICommand
 {
-    public Guid UserId { get; init; } = default!;
-
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
@@ -15,7 +13,9 @@ public sealed record CreateTimePeriodicCredentialCommand : ICommand
 
     public bool? SingleSession { get; set; }
 
-    public int SessionExpireTimeInMinutes { get; set; }
+    public int SessionTokenExpireTimeInMinutes { get; init; }
+
+    public int SessionRefreshTokenExpireTimeInMinutes { get; init; }
 }
 
 internal sealed class CreateTimePeriodicCredentialCommandHandler : ICommandHandler<CreateTimePeriodicCredentialCommand>
@@ -31,8 +31,8 @@ internal sealed class CreateTimePeriodicCredentialCommandHandler : ICommandHandl
     {
         await _credentialFactory.CreateTimePeriodicAsync(command.Username,
             command.Password,
-            command.UserId,
-            command.SessionExpireTimeInMinutes,
+            command.SessionTokenExpireTimeInMinutes,
+            command.SessionRefreshTokenExpireTimeInMinutes,
             command.ExpireInMinutes,
             command.SingleSession
         );

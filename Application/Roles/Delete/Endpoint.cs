@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Roles.Delete;
 
-internal sealed class Endpoint : Endpoint<DeleteRoleCommand>
+file sealed class Endpoint : Endpoint<DeleteRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeleteRoleCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeleteRoleCommand>
+file sealed class RequestValidator : Validator<DeleteRoleCommand>
 {
     public RequestValidator()
     {

@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Delete;
 
-internal sealed class Endpoint : Endpoint<DeleteUserCommand>
+file sealed class Endpoint : Endpoint<DeleteUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeleteUserCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeleteUserCommand>
+file sealed class RequestValidator : Validator<DeleteUserCommand>
 {
     public RequestValidator()
     {

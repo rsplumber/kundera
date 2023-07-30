@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Groups.Status.Disable;
 
-internal sealed class Endpoint : Endpoint<DisableGroupCommand>
+file sealed class Endpoint : Endpoint<DisableGroupCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DisableGroupCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DisableGroupCommand>
+file sealed class RequestValidator : Validator<DisableGroupCommand>
 {
     public RequestValidator()
     {

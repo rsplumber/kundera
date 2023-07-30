@@ -5,7 +5,7 @@ using Queries.Permissions;
 
 namespace Application.Services.Permissions.Create;
 
-internal sealed class Endpoint : Endpoint<CreatePermissionCommand>
+file sealed class Endpoint : Endpoint<CreatePermissionCommand>
 {
     private readonly IMediator _mediator;
 
@@ -35,7 +35,7 @@ internal sealed class Endpoint : Endpoint<CreatePermissionCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -45,7 +45,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreatePermissionCommand>
+file sealed class RequestValidator : Validator<CreatePermissionCommand>
 {
     public RequestValidator()
     {

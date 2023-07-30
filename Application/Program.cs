@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
-    options.ListenAnyIP(5178, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
     // options.ListenAnyIP(5179, listenOptions =>
     // {
     //     listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
@@ -90,21 +90,21 @@ builder.Services.AddQuartz(q =>
     );
     q.ScheduleJob<RemoveExpiredCredentialsJob>(trigger => trigger
         .WithIdentity("RemoveExpiredCredentials")
-        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(5)))
-        .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
+        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(2)))
+        .WithDailyTimeIntervalSchedule(x => x.WithInterval(2, IntervalUnit.Hour))
         .WithDescription("RemoveExpiredCredentials")
     );
     q.ScheduleJob<RemoveExpiredSessionsJob>(trigger => trigger
         .WithIdentity("RemoveExpiredSessionsJob")
-        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(6)))
-        .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Minute))
+        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(5)))
+        .WithDailyTimeIntervalSchedule(x => x.WithInterval(5, IntervalUnit.Hour))
         .WithDescription("RemoveExpiredSessionsJob")
     );
 
     q.ScheduleJob<RemoveExpiredActivitiesJob>(trigger => trigger
         .WithIdentity("RemoveExpiredActivitiesJob")
-        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(7)))
-        .WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Hour))
+        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddMinutes(10)))
+        .WithDailyTimeIntervalSchedule(x => x.WithInterval(24, IntervalUnit.Hour))
         .WithDescription("RemoveExpiredActivitiesJob")
     );
 });

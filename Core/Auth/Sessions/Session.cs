@@ -15,15 +15,13 @@ public class Session : BaseEntity
         string refreshToken,
         Credential credential,
         Scope scope,
-        User user,
-        DateTime expireDate)
+        User user)
     {
         Id = token;
         RefreshToken = refreshToken;
         Credential = credential;
         Scope = scope;
         User = user;
-        ExpirationDateUtc = expireDate;
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
@@ -37,5 +35,9 @@ public class Session : BaseEntity
 
     public User User { get; set; } = default!;
 
-    public DateTime ExpirationDateUtc { get; set; }
+    public DateTime TokenExpirationDateUtc { get; init; } = DateTime.UtcNow;
+
+    public DateTime RefreshTokenExpirationDateUtc { get; init; } = DateTime.UtcNow;
+    
+    public DateTime CreatedDateUtc { get; private set; } = DateTime.UtcNow;
 }

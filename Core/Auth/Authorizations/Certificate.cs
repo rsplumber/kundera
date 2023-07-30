@@ -8,13 +8,15 @@ public sealed record Certificate
     public static Certificate Create(IHashService hashService, Credential credential, Guid scopeId)
     {
         var token = hashService.Hash(credential.User.Id.ToString(), scopeId.ToString());
-        var refreshToken = hashService.Hash(new Random().RandomCharsAndNumbers(6));
-        var expireTime = (double)(credential.SessionExpireTimeInMinutes ?? 0);
+        var refreshToken = hashService.Hash(Random.Shared.RandomCharsAndNumbers(6));
+        var expireTime = (double)(credential.SessionTokenExpireTimeInMinutes ?? 0);
         return new Certificate(token, refreshToken)
         {
             ExpireAtUtc = DateTime.UtcNow.AddMinutes(expireTime)
         };
     }
+
+    public static Certificate From(string token, string refreshToken) => new(token, refreshToken);
 
     private Certificate(string token, string refreshToken)
     {

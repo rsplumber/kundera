@@ -1,3 +1,4 @@
+using System.Net;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
@@ -5,7 +6,7 @@ using Queries.Scopes;
 
 namespace Application.Scopes.Create;
 
-internal sealed class Endpoint : Endpoint<CreateScopeCommand>
+file sealed class Endpoint : Endpoint<CreateScopeCommand>
 {
     private readonly IMediator _mediator;
 
@@ -24,20 +25,17 @@ internal sealed class Endpoint : Endpoint<CreateScopeCommand>
     public override async Task HandleAsync(CreateScopeCommand req, CancellationToken ct)
     {
         var scope = await _mediator.Send(req, ct);
-
-        await SendCreatedAtAsync<Details.Endpoint>(new { scope.Id }, new ScopeResponse
-            {
-                Id = scope.Id,
-                Name = scope.Name,
-                Secret = scope.Secret,
-                Status = scope.Status.ToString()
-            },
-            generateAbsoluteUrl: true,
-            cancellation: ct);
+        await SendAsync(new ScopeResponse
+        {
+            Id = scope.Id,
+            Name = scope.Name,
+            Secret = scope.Secret,
+            Status = scope.Status.ToString()
+        }, (int)HttpStatusCode.Created, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -47,12 +45,24 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreateScopeCommand>
+file sealed class RequestValidator : Validator<CreateScopeCommand>
 {
     public RequestValidator()
     {
         RuleFor(request => request.Name)
             .NotEmpty().WithMessage("Enter a Name")
             .NotNull().WithMessage("Enter a Name");
+
+
+        RuleFor(request => request.SessionTokenExpireTimeInMinutes)
+            .NotEmpty().WithMessage("Enter valid SessionTokenExpireTimeInMinutes")
+            .NotNull().WithMessage("Enter valid SessionTokenExpireTimeInMinutes")
+            .GreaterThan(1).WithMessage("SessionTokenExpireTimeInMinutes must be greater than 1");
+
+
+        RuleFor(request => request.SessionRefreshTokenExpireTimeInMinutes)
+            .NotEmpty().WithMessage("Enter valid SessionRefreshTokenExpireTimeInMinutes")
+            .NotNull().WithMessage("Enter valid SessionRefreshTokenExpireTimeInMinutes")
+            .GreaterThan(1).WithMessage("SessionRefreshTokenExpireTimeInMinutes must be greater than 1");
     }
 }

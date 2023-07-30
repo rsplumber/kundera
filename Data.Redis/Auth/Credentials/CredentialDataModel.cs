@@ -19,7 +19,6 @@ internal sealed class CredentialDataModel
     
     public AuthenticationActivityDataModel? LastActivity { get; internal set; }
     
-    [Indexed(Sortable = true)] public DateTime? ExpiresAtUtc { get; set; }
 
     [Indexed(Sortable = true)] public DateTime CreatedDateUtc { get; set; }
 

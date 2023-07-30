@@ -6,7 +6,7 @@ using Queries.Users;
 
 namespace Application.Users.Details;
 
-internal sealed class Endpoint : Endpoint<UserQuery, UserResponse>
+file sealed class Endpoint : Endpoint<UserQuery, UserResponse>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<UserQuery, UserResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -40,7 +40,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<UserQuery>
+file sealed class RequestValidator : Validator<UserQuery>
 {
     public RequestValidator()
     {

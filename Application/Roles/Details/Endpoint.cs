@@ -6,7 +6,7 @@ using Queries.Roles;
 
 namespace Application.Roles.Details;
 
-internal sealed class Endpoint : Endpoint<RoleQuery, RoleResponse>
+file sealed class Endpoint : Endpoint<RoleQuery, RoleResponse>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<RoleQuery, RoleResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -40,7 +40,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<RoleQuery>
+file sealed class RequestValidator : Validator<RoleQuery>
 {
     public RequestValidator()
     {

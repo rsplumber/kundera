@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Groups.Parents.Set;
 
-internal sealed class Endpoint : Endpoint<SetGroupParentCommand>
+file sealed class Endpoint : Endpoint<SetGroupParentCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<SetGroupParentCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<SetGroupParentCommand>
+file sealed class RequestValidator : Validator<SetGroupParentCommand>
 {
     public RequestValidator()
     {

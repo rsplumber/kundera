@@ -32,12 +32,6 @@ internal sealed class SessionRepository : ISessionRepository
         return _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<Session?> FindByRefreshTokenAsync(string token, CancellationToken cancellationToken = default)
-    {
-        var dataModel = await _sessions.Where(model => model.RefreshToken == token).FirstOrDefaultAsync();
-        return _mapper.Map<Session>(dataModel);
-    }
-
     public async Task<List<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
     {
         var dataModels = await _sessions.Where(model => model.CredentialId == credentialId).ToListAsync();

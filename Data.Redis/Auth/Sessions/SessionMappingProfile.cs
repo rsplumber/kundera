@@ -31,7 +31,6 @@ internal sealed class SessionMappingProfile : Profile
             .ForMember(credential => credential.Id, expression => expression.MapFrom(model => model.Id))
             .ForMember(credential => credential.RefreshToken, expression => expression.MapFrom(model => model.RefreshToken))
             .ForMember(credential => credential.Scope, expression => expression.MapFrom(model => model.ScopeId))
-            .ForMember(credential => credential.ExpirationDateUtc, expression => expression.MapFrom(model => model.ExpirationDateUtc.ToUniversalTime()))
             .ForMember(credential => credential.Credential, expression => expression.MapFrom(model => model.CredentialId))
             .ReverseMap();
     }

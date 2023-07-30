@@ -1,3 +1,4 @@
+using Core.Auth.Credentials;
 using Core.Auth.Sessions;
 using Quartz;
 
@@ -5,16 +6,16 @@ namespace Application.Auth;
 
 internal sealed class RemoveExpiredCredentialsJob : IJob
 {
-    private readonly IExpiredSessionsService _expiredSessionsService;
 
-    public RemoveExpiredCredentialsJob(IExpiredSessionsService expiredSessionsService)
+    private readonly IExpiredCredentialsService _expiredCredentialsService;
+
+    public RemoveExpiredCredentialsJob(IExpiredCredentialsService expiredCredentialsService)
     {
-        _expiredSessionsService = expiredSessionsService;
+        _expiredCredentialsService = expiredCredentialsService;
     }
-
 
     public async Task Execute(IJobExecutionContext context)
     {
-        await _expiredSessionsService.DeleteAsync(context.CancellationToken);
+        await _expiredCredentialsService.DeleteAsync(context.CancellationToken);
     }
 }

@@ -53,7 +53,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         }, null);
 
         bool InvalidPermission() => userRoles.SelectMany(role => role.Permissions)
-            .All(permission => actions.All(action => permission.Name != $"{service.Name}:{action}".ToLower()));
+            .All(permission => actions.All(action => permission.Name != action.ToLower()));
     }
 
     public async Task<(AuthorizeResponse?, UnAuthorizeResponse?)> AuthorizeRoleAsync(string token, IEnumerable<string> roles, string serviceSecret, string? userAgent, string ipAddress, CancellationToken cancellationToken = default)
@@ -104,7 +104,7 @@ internal sealed class AuthorizeService : IAuthorizeService
 
         return (session, null);
 
-        bool IsSessionExpired() => DateTime.UtcNow >= session.ExpirationDateUtc;
+        bool IsSessionExpired() => DateTime.UtcNow >= session.TokenExpirationDateUtc;
     }
 
     private bool ValidateUser(Session session)

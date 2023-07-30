@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Auth.Authorizations.Permission;
 
-internal sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
+file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
 {
     private readonly IAuthorizeService _authorizeService;
     private const string UnAuthorizedMessage = "Unauthorized";
@@ -54,7 +54,7 @@ internal sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -65,7 +65,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record Request
+file sealed record Request
 {
     public string Authorization { get; init; } = default!;
 
@@ -74,7 +74,7 @@ internal sealed record Request
     [FromHeader("service_secret")] public string ServiceSecret { get; init; } = default!;
 }
 
-internal sealed class RequestValidator : Validator<Request>
+file sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {

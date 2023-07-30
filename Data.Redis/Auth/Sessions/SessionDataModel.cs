@@ -15,8 +15,6 @@ internal sealed class SessionDataModel
 
     [Indexed] public Guid CredentialId { get; set; } = default!;
 
-    [Indexed(Sortable = true)] public DateTime ExpirationDateUtc { get; set; } = default!;
-
     public AuthorizationActivityDataModel Activity { get; internal set; } = default!;
 }
 

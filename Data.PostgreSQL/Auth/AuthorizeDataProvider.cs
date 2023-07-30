@@ -48,7 +48,8 @@ WITH RECURSIVE group_tree(id, parent_id) AS (SELECT g.id, g.parent_id FROM group
                     Roles = session.Scope.Roles,
                     Services = session.Scope.Services
                 },
-                ExpirationDateUtc = session.ExpirationDateUtc
+                TokenExpirationDateUtc = session.TokenExpirationDateUtc,
+                RefreshTokenExpirationDateUtc = session.TokenExpirationDateUtc
             })
             .FirstOrDefault());
 

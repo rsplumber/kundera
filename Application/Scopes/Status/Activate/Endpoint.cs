@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Scopes.Status.Activate;
 
-internal sealed class Endpoint : Endpoint<ActivateScopeCommand>
+file sealed class Endpoint : Endpoint<ActivateScopeCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,9 +28,9 @@ internal sealed class Endpoint : Endpoint<ActivateScopeCommand>
     }
 }
 
-internal sealed class ActivateScopeEndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
-    public ActivateScopeEndpointSummary()
+    public EndpointSummary()
     {
         Summary = "Activate a scope in the system";
         Description = "Activate a scope in the system";
@@ -38,7 +38,7 @@ internal sealed class ActivateScopeEndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ActivateScopeCommand>
+file sealed class RequestValidator : Validator<ActivateScopeCommand>
 {
     public RequestValidator()
     {

@@ -1,3 +1,4 @@
+using System.Net;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
@@ -5,7 +6,7 @@ using Queries.Services;
 
 namespace Application.Services.Create;
 
-internal sealed class Endpoint : Endpoint<CreateServiceCommand>
+file sealed class Endpoint : Endpoint<CreateServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -24,22 +25,19 @@ internal sealed class Endpoint : Endpoint<CreateServiceCommand>
     public override async Task HandleAsync(CreateServiceCommand req, CancellationToken ct)
     {
         var service = await _mediator.Send(req, ct);
-
-        await SendCreatedAtAsync<Details.Endpoint>(new { service.Id }, new ServiceResponse
-            {
-                Id = service.Id,
-                Name = service.Name,
-                Secret = service.Secret,
-                Status = service.Status.ToString()
-            },
-            generateAbsoluteUrl: true,
-            cancellation: ct);
+        await SendAsync(new ServiceResponse
+        {
+            Id = service.Id,
+            Name = service.Name,
+            Secret = service.Secret,
+            Status = service.Status.ToString()
+        }, (int)HttpStatusCode.Created, ct);
     }
 }
 
-internal sealed class CreateServiceEndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
-    public CreateServiceEndpointSummary()
+    public EndpointSummary()
     {
         Summary = "Create a new Service in the system";
         Description = "Create a new Service in the system";
@@ -47,7 +45,7 @@ internal sealed class CreateServiceEndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreateServiceCommand>
+file sealed class RequestValidator : Validator<CreateServiceCommand>
 {
     public RequestValidator()
     {

@@ -24,12 +24,12 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IScopeFactory, ScopeFactory>();
         services.TryAddScoped<IRoleFactory, RoleFactory>();
         services.TryAddScoped<IGroupFactory, GroupFactory>();
-        services.TryAddScoped<ISessionFactory, SessionFactory>();
         services.TryAddScoped<ICredentialFactory, CredentialFactory>();
         services.TryAddScoped<IPermissionService, PermissionService>();
 
         services.TryAddScoped<ISessionManagement, SessionManagement>();
         services.TryAddScoped<IAuthorizeService, AuthorizeService>();
+        services.TryAddScoped<IAuthenticateHandler, AuthenticateHandler>();
 
         services.TryAddTransient<AuthenticatedEventHandler>();
         services.TryAddTransient<AuthorizedEventHandler>();

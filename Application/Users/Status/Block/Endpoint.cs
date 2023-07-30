@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Status.Block;
 
-internal sealed class Endpoint : Endpoint<BlockUserCommand>
+file sealed class Endpoint : Endpoint<BlockUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<BlockUserCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<BlockUserCommand>
+file sealed class RequestValidator : Validator<BlockUserCommand>
 {
     public RequestValidator()
     {

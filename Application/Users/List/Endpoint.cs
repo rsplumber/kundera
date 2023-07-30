@@ -6,7 +6,7 @@ using Queries.Users;
 
 namespace Application.Users.List;
 
-internal sealed class Endpoint : Endpoint<UsersQuery, PageableResponse<UsersResponse>>
+file sealed class Endpoint : Endpoint<UsersQuery, PageableResponse<UsersResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<UsersQuery, PageableResponse<UsersResp
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {

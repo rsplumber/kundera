@@ -39,11 +39,13 @@ internal sealed class ServiceFactory : IServiceFactory
         var kunderaService = await _serviceRepository.FindBySecretAsync(EntityBaseValues.KunderaServiceName);
         if (kunderaService is not null)
         {
-            throw new ServiceAlreadyExistsException(EntityBaseValues.KunderaServiceName);
+            Console.WriteLine("------------ServiceSecret: " + kunderaService.Secret);
+            return kunderaService;
         }
 
         var service = new Service(EntityBaseValues.KunderaServiceName, serviceSecret);
         await _serviceRepository.AddAsync(service);
+        Console.WriteLine("------------ServiceSecret: " + service.Secret);
         return service;
     }
 }

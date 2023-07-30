@@ -5,7 +5,7 @@ using Queries.Groups;
 
 namespace Application.Groups.Details;
 
-internal sealed class Endpoint : Endpoint<GroupQuery, GroupResponse>
+file sealed class Endpoint : Endpoint<GroupQuery, GroupResponse>
 {
     private readonly IMediator _mediator;
 
@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<GroupQuery, GroupResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -39,7 +39,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<GroupQuery>
+file sealed class RequestValidator : Validator<GroupQuery>
 {
     public RequestValidator()
     {

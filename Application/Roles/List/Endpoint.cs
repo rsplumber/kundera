@@ -6,7 +6,7 @@ using Queries.Roles;
 
 namespace Application.Roles.List;
 
-internal sealed class Endpoint : Endpoint<RolesQuery, PageableResponse<RolesResponse>>
+file sealed class Endpoint : Endpoint<RolesQuery, PageableResponse<RolesResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<RolesQuery, PageableResponse<RolesResp
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {

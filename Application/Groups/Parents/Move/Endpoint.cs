@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Groups.Parents.Move;
 
-internal sealed class Endpoint : Endpoint<MoveGroupParentCommand>
+file sealed class Endpoint : Endpoint<MoveGroupParentCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<MoveGroupParentCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<MoveGroupParentCommand>
+file sealed class RequestValidator : Validator<MoveGroupParentCommand>
 {
     public RequestValidator()
     {

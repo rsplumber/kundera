@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Scopes.Services.Delete;
 
-internal sealed class Endpoint : Endpoint<DeleteScopeServiceCommand>
+file sealed class Endpoint : Endpoint<DeleteScopeServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeleteScopeServiceCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeleteScopeServiceCommand>
+file sealed class RequestValidator : Validator<DeleteScopeServiceCommand>
 {
     public RequestValidator()
     {

@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Auth.Sessions.Terminate;
 
-internal sealed class Endpoint : Endpoint<TerminateSessionCommand>
+file sealed class Endpoint : Endpoint<TerminateSessionCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<TerminateSessionCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,12 +38,12 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<TerminateSessionCommand>
+file sealed class RequestValidator : Validator<TerminateSessionCommand>
 {
     public RequestValidator()
     {
-        RuleFor(request => request.Id)
-            .NotEmpty().WithMessage("Enter valid Id")
-            .NotNull().WithMessage("Enter valid Id");
+        RuleFor(request => request.Token)
+            .NotEmpty().WithMessage("Enter valid Token")
+            .NotNull().WithMessage("Enter valid Token");
     }
 }

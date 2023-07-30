@@ -11,6 +11,4 @@ public interface ISessionManagement
     Task DeleteAsync(string token, CancellationToken cancellationToken = default);
 
     Task<Session?> GetAsync(string token, CancellationToken cancellationToken = default);
-
-    Task<Session?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken = default);
 }

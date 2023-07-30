@@ -5,7 +5,7 @@ using Queries.Scopes;
 
 namespace Application.Scopes.Sessions.List;
 
-internal sealed class Endpoint : Endpoint<ScopeSessionsQuery, List<ScopeSessionResponse>>
+file sealed class Endpoint : Endpoint<ScopeSessionsQuery, List<ScopeSessionResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<ScopeSessionsQuery, List<ScopeSessionR
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ScopeSessionsQuery>
+file sealed class RequestValidator : Validator<ScopeSessionsQuery>
 {
     public RequestValidator()
     {

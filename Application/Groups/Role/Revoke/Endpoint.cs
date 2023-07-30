@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Groups.Role.Revoke;
 
-internal sealed class Endpoint : Endpoint<RevokeGroupRoleCommand>
+file sealed class Endpoint : Endpoint<RevokeGroupRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<RevokeGroupRoleCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<RevokeGroupRoleCommand>
+file sealed class RequestValidator : Validator<RevokeGroupRoleCommand>
 {
     public RequestValidator()
     {

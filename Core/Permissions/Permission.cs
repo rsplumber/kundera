@@ -11,7 +11,7 @@ public class Permission : BaseEntity
 
     internal Permission(Service service, string name, IDictionary<string, string>? meta = null)
     {
-        Name = $"{service.Name}:{name}".ToLower();
+        Name = name.ToLower();
         Service = service;
         FillMeta(meta);
         AddDomainEvent(new PermissionCreatedEvent(Id));

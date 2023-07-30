@@ -1,3 +1,4 @@
+using System.Net;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
@@ -5,7 +6,7 @@ using Queries.Roles;
 
 namespace Application.Roles.Create;
 
-internal sealed class Endpoint : Endpoint<CreateRoleCommand>
+file sealed class Endpoint : Endpoint<CreateRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -25,17 +26,15 @@ internal sealed class Endpoint : Endpoint<CreateRoleCommand>
     {
         var role = await _mediator.Send(req, ct);
 
-        await SendCreatedAtAsync<Details.Endpoint>(new { role.Id }, new RoleResponse
-            {
-                Id = role.Id,
-                Name = role.Name
-            },
-            generateAbsoluteUrl: true,
-            cancellation: ct);
+        await SendAsync(new RoleResponse
+        {
+            Id = role.Id,
+            Name = role.Name
+        }, (int)HttpStatusCode.Created, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -45,7 +44,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreateRoleCommand>
+file sealed class RequestValidator : Validator<CreateRoleCommand>
 {
     public RequestValidator()
     {

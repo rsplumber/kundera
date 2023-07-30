@@ -11,9 +11,8 @@
     </ItemGroup>
     
     <ItemGroup>
+        <PackageReference Include="KunderaNet.Services.Authorization.Http" Version="1.0.2" />
         <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.5.0" />
-        <PackageReference Include="KunderaNet.Services.Authorization.Http" Version="1.0.1" />
-        <PackageReference Include="KunderaNet.Services.Authorization.Mock" Version="1.0.1" />
         <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.1.4" />
         <PackageReference Include="Mediator.Abstractions" Version="2.1.5" />
         <PackageReference Include="Quartz.AspNetCore" Version="3.6.3" />

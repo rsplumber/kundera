@@ -30,7 +30,7 @@ internal sealed class Endpoint : Endpoint<ServiceQuery, ServiceResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -40,7 +40,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ServiceQuery>
+file sealed class RequestValidator : Validator<ServiceQuery>
 {
     public RequestValidator()
     {

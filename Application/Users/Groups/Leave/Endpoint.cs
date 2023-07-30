@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Users.Groups.Leave;
 
-internal sealed class Endpoint : Endpoint<LeaveUserFromGroupCommand>
+file sealed class Endpoint : Endpoint<LeaveUserFromGroupCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<LeaveUserFromGroupCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<LeaveUserFromGroupCommand>
+file sealed class RequestValidator : Validator<LeaveUserFromGroupCommand>
 {
     public RequestValidator()
     {

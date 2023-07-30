@@ -1,17 +1,17 @@
 ﻿using Core.Auth.Authorizations;
+using Core.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
-using Mediator;
 
 namespace Application.Auth.Authentications.Authenticate;
 
-internal sealed class Endpoint : Endpoint<Request, Certificate>
+file sealed class Endpoint : Endpoint<Request, Certificate>
 {
-    private readonly IMediator _mediator;
+    private readonly IAuthenticateHandler _authenticateHandler;
 
-    public Endpoint(IMediator mediator)
+    public Endpoint(IAuthenticateHandler authenticateHandler)
     {
-        _mediator = mediator;
+        _authenticateHandler = authenticateHandler;
     }
 
     public override void Configure()
@@ -23,21 +23,20 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var command = new AuthenticateCommand
-        {
-            Username = req.Username,
-            Password = req.Password,
-            ScopeSecret = req.ScopeSecret,
-            UserAgent = HttpContext.Request.UserAgent(),
-            IpAddress = HttpContext.Request.IpAddress()
-        };
-        var response = await _mediator.Send(command, ct);
-
-        await SendOkAsync(response, ct);
+        var certificate = await _authenticateHandler.AuthenticateAsync(req.Username,
+            req.Password,
+            req.ScopeSecret,
+            new RequestInfo
+            {
+                UserAgent = HttpContext.Request.UserAgent(),
+                IpAddress = HttpContext.Request.IpAddress(),
+            },
+            ct);
+        await SendOkAsync(certificate, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -47,7 +46,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record Request
+file sealed record Request
 {
     public string Username { get; set; } = default!;
 
@@ -56,7 +55,7 @@ internal sealed record Request
     [FromHeader("scope_secret")] public string ScopeSecret { get; set; } = default!;
 }
 
-internal sealed class RequestValidator : Validator<Request>
+file sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {

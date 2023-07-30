@@ -1,3 +1,4 @@
+using System.Net;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
@@ -5,7 +6,7 @@ using Queries.Users;
 
 namespace Application.Users.Create;
 
-internal sealed class Endpoint : Endpoint<CreateUserCommand>
+file sealed class Endpoint : Endpoint<CreateUserCommand>
 {
     private readonly IMediator _mediator;
 
@@ -24,21 +25,18 @@ internal sealed class Endpoint : Endpoint<CreateUserCommand>
     public override async Task HandleAsync(CreateUserCommand req, CancellationToken ct)
     {
         var user = await _mediator.Send(req, ct);
-
-        await SendCreatedAtAsync<Details.Endpoint>(new { user.Id }, new UserResponse
-            {
-                Id = user.Id,
-                Usernames = user.Usernames.Select(username => username).ToList(),
-                Status = user.Status.ToString(),
-                Groups = user.Groups.Select(g => g.Id).ToList(),
-                Roles = user.Roles.Select(r => r.Id).ToList()
-            },
-            generateAbsoluteUrl: true,
-            cancellation: ct);
+        await SendAsync(new UserResponse
+        {
+            Id = user.Id,
+            Usernames = user.Usernames.Select(username => username).ToList(),
+            Status = user.Status.ToString(),
+            Groups = user.Groups.Select(g => g.Id).ToList(),
+            Roles = user.Roles.Select(r => r.Id).ToList()
+        }, (int)HttpStatusCode.Created, ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -48,7 +46,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<CreateUserCommand>
+file sealed class RequestValidator : Validator<CreateUserCommand>
 {
     public RequestValidator()
     {

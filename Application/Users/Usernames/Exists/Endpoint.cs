@@ -5,7 +5,7 @@ using Queries.Users;
 
 namespace Application.Users.Usernames.Exists;
 
-internal sealed class Endpoint : Endpoint<ExistUserUsernameQuery, bool>
+file sealed class Endpoint : Endpoint<ExistUserUsernameQuery, bool>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<ExistUserUsernameQuery, bool>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ExistUserUsernameQuery>
+file sealed class RequestValidator : Validator<ExistUserUsernameQuery>
 {
     public RequestValidator()
     {

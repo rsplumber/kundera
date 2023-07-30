@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Scopes.Status.DeActivate;
 
-internal sealed class Endpoint : Endpoint<DeActivateScopeCommand>
+file sealed class Endpoint : Endpoint<DeActivateScopeCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<DeActivateScopeCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<DeActivateScopeCommand>
+file sealed class RequestValidator : Validator<DeActivateScopeCommand>
 {
     public RequestValidator()
     {

@@ -6,7 +6,7 @@ using Queries.Scopes;
 
 namespace Application.Scopes.List;
 
-internal sealed class Endpoint : Endpoint<ScopesQuery, PageableResponse<ScopesResponse>>
+file sealed class Endpoint : Endpoint<ScopesQuery, PageableResponse<ScopesResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<ScopesQuery, PageableResponse<ScopesRe
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {

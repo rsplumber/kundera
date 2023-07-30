@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Groups.Role.Assign;
 
-internal sealed class Endpoint : Endpoint<AssignGroupRoleCommand>
+file sealed class Endpoint : Endpoint<AssignGroupRoleCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<AssignGroupRoleCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AssignGroupRoleCommand>
+file sealed class RequestValidator : Validator<AssignGroupRoleCommand>
 {
     public RequestValidator()
     {

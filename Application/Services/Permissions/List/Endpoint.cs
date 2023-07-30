@@ -6,7 +6,7 @@ using Queries.Services;
 
 namespace Application.Services.Permissions.List;
 
-internal sealed class Endpoint : Endpoint<ServicePermissionsQuery, List<PermissionsResponse>>
+file sealed class Endpoint : Endpoint<ServicePermissionsQuery, List<PermissionsResponse>>
 {
     private readonly IMediator _mediator;
 
@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<ServicePermissionsQuery, List<Permissi
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -39,7 +39,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ServicePermissionsQuery>
+file sealed class RequestValidator : Validator<ServicePermissionsQuery>
 {
     public RequestValidator()
     {

@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Roles.Meta;
 
-internal sealed class Endpoint : Endpoint<ChangeRoleMetaCommand>
+file sealed class Endpoint : Endpoint<ChangeRoleMetaCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<ChangeRoleMetaCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<ChangeRoleMetaCommand>
+file sealed class RequestValidator : Validator<ChangeRoleMetaCommand>
 {
     public RequestValidator()
     {

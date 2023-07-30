@@ -27,11 +27,6 @@ internal sealed class SessionRepository : ISessionRepository
             .FirstOrDefaultAsync(session => session.Id == token, cancellationToken);
     }
 
-    public Task<Session?> FindByRefreshTokenAsync(string token, CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Sessions.FirstOrDefaultAsync(sessions => sessions.RefreshToken == token, cancellationToken);
-    }
-
     public Task<List<Session>> FindByCredentialIdAsync(Guid credentialId, CancellationToken cancellationToken = default)
     {
         return _dbContext.Sessions

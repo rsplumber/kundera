@@ -29,7 +29,7 @@ internal sealed class Endpoint : Endpoint<PermissionQuery, PermissionResponse>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -39,7 +39,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<PermissionQuery>
+file sealed class RequestValidator : Validator<PermissionQuery>
 {
     public RequestValidator()
     {

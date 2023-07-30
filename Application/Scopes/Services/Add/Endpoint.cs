@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Application.Scopes.Services.Add;
 
-internal sealed class Endpoint : Endpoint<AddScopeServiceCommand>
+file sealed class Endpoint : Endpoint<AddScopeServiceCommand>
 {
     private readonly IMediator _mediator;
 
@@ -28,7 +28,7 @@ internal sealed class Endpoint : Endpoint<AddScopeServiceCommand>
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -38,7 +38,7 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed class RequestValidator : Validator<AddScopeServiceCommand>
+file sealed class RequestValidator : Validator<AddScopeServiceCommand>
 {
     public RequestValidator()
     {

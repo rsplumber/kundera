@@ -1,17 +1,17 @@
 ﻿using Core.Auth.Authorizations;
+using Core.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
-using Mediator;
 
 namespace Application.Auth.Logout;
 
-internal sealed class Endpoint : Endpoint<Request, Certificate>
+file sealed class Endpoint : Endpoint<Request, Certificate>
 {
-    private readonly IMediator _mediator;
+    private readonly IAuthenticateHandler _authenticateHandler;
 
-    public Endpoint(IMediator mediator)
+    public Endpoint(IAuthenticateHandler authenticateHandler)
     {
-        _mediator = mediator;
+        _authenticateHandler = authenticateHandler;
     }
 
     public override void Configure()
@@ -23,16 +23,12 @@ internal sealed class Endpoint : Endpoint<Request, Certificate>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var command = new LogoutCommand
-        {
-            RefreshToken = req.RefreshToken
-        };
-        await _mediator.Send(command, ct);
+        await _authenticateHandler.LogoutAsync(Certificate.From(req.Token, req.RefreshToken), ct);
         await SendOkAsync(ct);
     }
 }
 
-internal sealed class EndpointSummary : Summary<Endpoint>
+file sealed class EndpointSummary : Summary<Endpoint>
 {
     public EndpointSummary()
     {
@@ -42,17 +38,19 @@ internal sealed class EndpointSummary : Summary<Endpoint>
     }
 }
 
-internal sealed record Request
+file sealed record Request
 {
+    [FromHeader("Authorization")] public string Token { get; set; } = default!;
+
     public string RefreshToken { get; set; } = default!;
 }
 
-internal sealed class RequestValidator : Validator<Request>
+file sealed class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {
-        RuleFor(request => request.RefreshToken)
-            .NotEmpty().WithMessage("Enter valid RefreshToken")
-            .NotNull().WithMessage("Enter valid RefreshToken");
+        RuleFor(request => request.Token)
+            .NotEmpty().WithMessage("Enter valid Token")
+            .NotNull().WithMessage("Enter valid Token");
     }
 }
