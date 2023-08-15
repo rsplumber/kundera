@@ -1,6 +1,6 @@
 ﻿using Core.Services.Exceptions;
+using Data.Abstractions.Services;
 using Mediator;
-using Queries.Services;
 using Redis.OM;
 using Redis.OM.Searching;
 

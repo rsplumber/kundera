@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions.Groups;
+using Data.Abstractions.Services;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
-using Queries.Services;
 
 namespace Application.Services.Permissions.List;
 

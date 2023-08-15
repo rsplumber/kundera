@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions;
+using Data.Abstractions.Groups;
+using FastEndpoints;
 using Mediator;
-using Queries;
-using Queries.Groups;
 
 namespace Application.Groups.List;
 

@@ -1,8 +1,8 @@
 using System.Net;
+using Data.Abstractions.Users;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Users;
 
 namespace Application.Users.Create;
 

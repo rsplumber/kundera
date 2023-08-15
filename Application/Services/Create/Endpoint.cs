@@ -1,8 +1,8 @@
 using System.Net;
+using Data.Abstractions.Services;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Services;
 
 namespace Application.Services.Create;
 

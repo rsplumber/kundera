@@ -1,7 +1,7 @@
+using Data.Abstractions.Permissions;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Permissions;
 
 namespace Application.Services.Permissions.Create;
 

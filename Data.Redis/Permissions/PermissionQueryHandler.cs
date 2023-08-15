@@ -1,6 +1,6 @@
 ﻿using Core.Permissions.Exceptions;
+using Data.Abstractions.Permissions;
 using Mediator;
-using Queries.Permissions;
 using Redis.OM;
 using Redis.OM.Searching;
 

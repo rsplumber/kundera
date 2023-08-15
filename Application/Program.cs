@@ -4,13 +4,15 @@ using Application.Auth;
 using Application.Seeders;
 using Core;
 using Data;
-using Data.Caching;
+using Data.Abstractions;
+using Data.Caching.Abstractions;
 using Elastic.Apm.NetCoreAll;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using KunderaNet.FastEndpoints.Authorization;
 using KunderaNet.Services.Authorization.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
 using Quartz.AspNetCore;
@@ -57,8 +59,8 @@ builder.Services.AddCap(options =>
     options.FailedRetryInterval = 5;
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
-    options.SucceedMessageExpiredAfter = 30;
-    options.FailedMessageExpiredAfter = 30;
+    options.SucceedMessageExpiredAfter = 60 * 5;
+    options.FailedMessageExpiredAfter = 60 * 5;
     options.UseRabbitMQ(op =>
     {
         op.HostName = configuration.GetValue<string>("RabbitMQ:HostName") ?? throw new ArgumentNullException("RabbitMQ:HostName", "Enter RabbitMQ:HostName in app settings");
@@ -81,7 +83,6 @@ builder.Services.TryAddScoped<RemoveExpiredActivitiesJob>();
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerId = "Kundera";
-    q.UseMicrosoftDependencyInjectionJobFactory();
     q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 1; });
     q.ScheduleJob<SeedDataJob>(trigger => trigger
         .WithIdentity("SeedDataJob")
@@ -115,13 +116,18 @@ builder.Services.AddQuartzServer(options =>
     options.WaitForJobsToComplete = true;
 });
 
-builder.Services.AddData(builder.Configuration);
-builder.Services.AddCaching(builder.Configuration);
+builder.Services.AddData(options =>
+{
+    options.UseEntityFramework(optionsBuilder => optionsBuilder.UseNpgsql(configuration.GetConnectionString("Default") ??
+                                                                          throw new ArgumentNullException("connectionString", "Enter connection string in app settings")));
+
+    options.AddCaching();
+});
 builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
 
-
 var app = builder.Build();
-app.UseData();
+app.Services.UseData(options => { options.UseEntityFramework(); });
+
 app.UseHealthChecks("/health");
 app.UseCors(b => b.AllowAnyHeader()
     .AllowAnyMethod()

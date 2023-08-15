@@ -1,6 +1,6 @@
 ﻿using Core.Users.Exception;
+using Data.Abstractions.Users;
 using Mediator;
-using Queries.Users;
 using Redis.OM;
 using Redis.OM.Searching;
 

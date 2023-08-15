@@ -1,5 +1,5 @@
-﻿using Mediator;
-using Queries.Services;
+﻿using Data.Abstractions.Services;
+using Mediator;
 using Redis.OM;
 using Redis.OM.Searching;
 

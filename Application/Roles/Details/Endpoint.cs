@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions.Groups;
+using Data.Abstractions.Roles;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
-using Queries.Roles;
 
 namespace Application.Roles.Details;
 

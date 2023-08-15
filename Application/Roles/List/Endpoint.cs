@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions;
+using Data.Abstractions.Groups;
+using Data.Abstractions.Roles;
+using FastEndpoints;
 using Mediator;
-using Queries;
-using Queries.Groups;
-using Queries.Roles;
 
 namespace Application.Roles.List;
 

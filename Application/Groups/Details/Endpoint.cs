@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions.Groups;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Groups;
 
 namespace Application.Groups.Details;
 

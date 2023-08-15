@@ -1,4 +1,4 @@
-﻿using Queries;
+﻿using Data.Abstractions;
 using Redis.OM;
 using Redis.OM.Searching;
 

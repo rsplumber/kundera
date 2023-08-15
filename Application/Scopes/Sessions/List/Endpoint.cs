@@ -1,7 +1,7 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions.Scopes;
+using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Scopes;
 
 namespace Application.Scopes.Sessions.List;
 

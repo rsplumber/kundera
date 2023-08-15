@@ -1,8 +1,8 @@
 using System.Net;
+using Data.Abstractions.Roles;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Roles;
 
 namespace Application.Roles.Create;
 

@@ -1,8 +1,8 @@
 using System.Net;
+using Data.Abstractions.Scopes;
 using FastEndpoints;
 using FluentValidation;
 using Mediator;
-using Queries.Scopes;
 
 namespace Application.Scopes.Create;
 

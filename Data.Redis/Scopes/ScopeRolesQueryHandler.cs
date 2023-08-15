@@ -1,7 +1,7 @@
 ﻿using Core.Scopes.Exceptions;
+using Data.Abstractions.Scopes;
 using Data.Roles;
 using Mediator;
-using Queries.Scopes;
 using Redis.OM;
 using Redis.OM.Searching;
 

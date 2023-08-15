@@ -1,8 +1,8 @@
-﻿using FastEndpoints;
+﻿using Data.Abstractions;
+using Data.Abstractions.Groups;
+using Data.Abstractions.Users;
+using FastEndpoints;
 using Mediator;
-using Queries;
-using Queries.Groups;
-using Queries.Users;
 
 namespace Application.Users.List;
 

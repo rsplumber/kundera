@@ -1,6 +1,6 @@
 ﻿using Core.Roles.Exceptions;
+using Data.Abstractions.Roles;
 using Mediator;
-using Queries.Roles;
 using Redis.OM;
 using Redis.OM.Searching;
 
