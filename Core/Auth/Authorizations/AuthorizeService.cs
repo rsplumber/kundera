@@ -35,7 +35,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         if (service is null) return (null, UnAuthorizeResponse.Forbidden);
         if (InvalidPermission()) return (null, UnAuthorizeResponse.Forbidden);
 
-        var _ = Task.Run(() =>
+        _ = Task.Run(() =>
         {
             _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
             {
@@ -73,7 +73,7 @@ internal sealed class AuthorizeService : IAuthorizeService
         if (service is null) return (null, UnAuthorizeResponse.Forbidden);
         if (InvalidRole()) return (null, UnAuthorizeResponse.Forbidden);
 
-        var _ = Task.Run(() =>
+        _ = Task.Run(() =>
         {
             _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
             {
