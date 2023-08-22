@@ -42,13 +42,12 @@ internal class AuthenticateHandler : IAuthenticateHandler
 
     public async Task<Certificate> AuthenticateAsync(string username, string password, string scopeSecret, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)
     {
+        var scope = await _scopeRepository.FindBySecretAsync(scopeSecret, cancellationToken);
+        if (scope is null) throw new InvalidScopeException();
+
         var credentials = await _credentialRepository.FindByUsernameAsync(username, cancellationToken);
         var credential = credentials.FirstOrDefault(credential => credential.Username == username && credential.Password.Check(password));
-        var scope = await _scopeRepository.FindBySecretAsync(scopeSecret, cancellationToken);
-        if (credential is null || scope is null)
-        {
-            throw new WrongUsernamePasswordException();
-        }
+        if (credential is null) throw new WrongUsernamePasswordException();
 
         if (CredentialExpired())
         {

@@ -9,22 +9,28 @@ public sealed class ExceptionHandlerMiddleware : IMiddleware
     private const int InternalServerErrorCode = 500;
     private const string InternalServerErrorMessage = "Whoops :( , somthing impossibly went wrong!";
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
-            return next(context);
+            await next(context);
         }
         catch (Exception exception)
         {
             var response = context.Response;
             response.ContentType = "application/json";
-            return exception switch
+            switch (exception)
             {
-                CoreException coreException => response.SendAsync(coreException.Message, coreException.Code),
-                ValidationException validationException => response.SendAsync(string.Join(", ", validationException.Errors.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}")), 400),
-                _ => response.SendAsync(InternalServerErrorMessage, InternalServerErrorCode)
-            };
+                case CoreException coreException:
+                    await response.SendAsync(coreException.Message, coreException.Code);
+                    break;
+                case ValidationException validationException:
+                    await response.SendAsync(string.Join(", ", validationException.Errors.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}")), 400);
+                    break;
+                default:
+                    await response.SendAsync(InternalServerErrorMessage, InternalServerErrorCode);
+                    break;
+            }
         }
     }
 }
