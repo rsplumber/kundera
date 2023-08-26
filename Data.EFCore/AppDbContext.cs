@@ -316,7 +316,7 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
 
-            builder.HasIndex(model => model.Name).IsUnique();
+            builder.HasIndex(model => model.Name);
 
             builder.Property(e => e.Meta)
                 .HasColumnType("jsonb")

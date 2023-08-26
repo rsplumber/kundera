@@ -28,7 +28,8 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IPermissionService, PermissionService>();
 
         services.TryAddScoped<ISessionManagement, SessionManagement>();
-        services.TryAddScoped<IAuthorizeService, AuthorizeService>();
+        services.TryAddScoped<IPermissionAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.TryAddScoped<IRoleAuthorizationHandler, RoleAuthorizationHandler>();
         services.TryAddScoped<IAuthenticateHandler, AuthenticateHandler>();
 
         services.TryAddTransient<AuthenticatedEventHandler>();

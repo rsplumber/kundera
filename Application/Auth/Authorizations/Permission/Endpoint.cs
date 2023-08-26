@@ -6,14 +6,14 @@ namespace Application.Auth.Authorizations.Permission;
 
 file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
 {
-    private readonly IAuthorizeService _authorizeService;
+    private readonly IPermissionAuthorizationHandler _authorizationHandler;
     private const string UnAuthorizedMessage = "Unauthorized";
     private const string ForbiddenMessage = "Forbidden";
     private const string SessionExpiredMessage = "SessionExpired";
 
-    public Endpoint(IAuthorizeService authorizeService)
+    public Endpoint(IPermissionAuthorizationHandler authorizationHandler)
     {
-        _authorizeService = authorizeService;
+        _authorizationHandler = authorizationHandler;
     }
 
     public override void Configure()
@@ -25,32 +25,23 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var (authorize, unAuthorized) = await _authorizeService.AuthorizePermissionAsync(req.Authorization,
-            req.Actions,
+        var authorizeResponse = await _authorizationHandler.HandleAsync(req.Authorization,
             req.ServiceSecret,
+            req.Actions,
+            HttpContext.Request.IpAddress(),
             HttpContext.Request.UserAgent(),
-            HttpContext.Request.IpAddress().ToString(),
             ct);
 
-        switch (authorize)
+        var authorizationResult = authorizeResponse.Code switch
         {
-            case null when unAuthorized is not null:
-                await SendStringAsync(GetUnAuthorizedMessage(), unAuthorized.Code, cancellation: ct);
-                return;
-            case null when unAuthorized is null:
-                await SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct);
-                return;
-        }
-
-        await SendOkAsync(authorize!, ct);
-
-        string GetUnAuthorizedMessage() => unAuthorized.Code switch
-        {
-            401 => ForbiddenMessage,
-            403 => UnAuthorizedMessage,
-            440 => SessionExpiredMessage,
-            _ => UnAuthorizedMessage
+            200 => SendOkAsync(authorizeResponse, ct),
+            401 => SendStringAsync(UnAuthorizedMessage, authorizeResponse.Code, cancellation: ct),
+            403 => SendStringAsync(ForbiddenMessage, authorizeResponse.Code, cancellation: ct),
+            440 => SendStringAsync(SessionExpiredMessage, authorizeResponse.Code, cancellation: ct),
+            _ => SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct)
         };
+
+        await authorizationResult;
     }
 }
 
