@@ -14,7 +14,8 @@ public class Scope : BaseEntity
     internal Scope(string name, IHashService hashService)
     {
         Name = name;
-        Secret = hashService.Hash(Id.ToString(), Name);
+        var hashKey = Random.Shared.RandomCharsAndNumbers(6);
+        Secret = hashService.HashAsync(hashKey, Id.ToString(), Name).Result;
         ChangeStatus(ScopeStatus.Active);
         AddDomainEvent(new ScopeCreatedEvent(Id));
     }

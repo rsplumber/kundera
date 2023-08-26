@@ -7,8 +7,9 @@ public sealed record Certificate
 {
     public static Certificate Create(IHashService hashService, Credential credential, Guid scopeId)
     {
-        var token = hashService.Hash(credential.User.Id.ToString(), scopeId.ToString());
-        var refreshToken = hashService.Hash(Random.Shared.RandomCharsAndNumbers(6));
+        var hashKey = Random.Shared.RandomCharsAndNumbers(6);
+        var token = hashService.HashAsync(hashKey, credential.User.Id.ToString(), scopeId.ToString()).Result;
+        var refreshToken = hashService.HashAsync(hashKey, Random.Shared.RandomCharsAndNumbers(6)).Result;
         var expireTime = (double)(credential.SessionTokenExpireTimeInMinutes ?? 0);
         return new Certificate(token, refreshToken)
         {

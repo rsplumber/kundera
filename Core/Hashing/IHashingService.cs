@@ -2,5 +2,5 @@
 
 public interface IHashService
 {
-    string Hash(params string[] values);
+    Task<string> HashAsync(string key, params string[] values);
 }

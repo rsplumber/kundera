@@ -1,5 +1,7 @@
 ﻿using Core.Auth.Authorizations;
+using Core.Auth.Authorizations.Handlers;
 using Core.Auth.Credentials;
+using Core.Auth.Credentials.Handlers;
 using Core.Auth.Sessions;
 using Core.Groups;
 using Core.Hashing;
@@ -18,7 +20,7 @@ public static class ServiceCollectionExtension
 {
     public static void AddCore(this IServiceCollection services, IConfiguration configuration)
     {
-        services.TryAddSingleton<IHashService>(_ => new HmacHashingService(HashingType.HMACSHA384, 6));
+        services.TryAddSingleton<IHashService>(_ => new HmacHashingService(HashingType.HMACSHA384));
         services.TryAddScoped<IUserFactory, UserFactory>();
         services.TryAddScoped<IServiceFactory, ServiceFactory>();
         services.TryAddScoped<IScopeFactory, ScopeFactory>();
