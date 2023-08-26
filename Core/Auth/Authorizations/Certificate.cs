@@ -31,35 +31,16 @@ public sealed record Certificate
 
     public string Token { get; init; } = default!;
 
-    private sealed class ExpireAtUtcRefreshTokenTokenEqualityComparer : IEqualityComparer<Certificate>
-    {
-        public bool Equals(Certificate? x, Certificate? y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null)) return false;
-            if (ReferenceEquals(y, null)) return false;
-            if (x.GetType() != y.GetType()) return false;
-            return x.ExpireAtUtc.Equals(y.ExpireAtUtc) && x.RefreshToken == y.RefreshToken && x.Token == y.Token;
-        }
-
-        public int GetHashCode(Certificate obj)
-        {
-            return HashCode.Combine(obj.ExpireAtUtc, obj.RefreshToken, obj.Token);
-        }
-    }
-
-    public static IEqualityComparer<Certificate> ExpireAtUtcRefreshTokenTokenComparer { get; } = new ExpireAtUtcRefreshTokenTokenEqualityComparer();
-
     public bool Equals(Certificate? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return ExpireAtUtc.Equals(other.ExpireAtUtc) && RefreshToken == other.RefreshToken && Token == other.Token;
+        return RefreshToken == other.RefreshToken && Token == other.Token;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(ExpireAtUtc, RefreshToken, Token);
+        return HashCode.Combine(RefreshToken, Token);
     }
 
     public override string ToString()

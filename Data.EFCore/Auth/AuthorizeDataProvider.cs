@@ -81,7 +81,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return CurrentSessionCompileAsyncQuery!(_dbContext, sessionToken);
     }
 
-    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<List<Role>> FindUserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var allRoles = new List<Role>();
         allRoles.AddRange(user.Roles);

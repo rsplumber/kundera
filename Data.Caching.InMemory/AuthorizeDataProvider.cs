@@ -40,7 +40,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return session;
     }
 
-    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<List<Role>> FindUserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var cachedRoles = await _userRoleCacheManagement.GetAsync(user.Id, cancellationToken);
         if (cachedRoles is not null)
@@ -48,7 +48,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             return cachedRoles;
         }
 
-        var roles = await _authorizeDataProvider.UserRolesAsync(user, cancellationToken);
+        var roles = await _authorizeDataProvider.FindUserRolesAsync(user, cancellationToken);
         await _userRoleCacheManagement.SetAsync(user.Id, roles, cancellationToken);
         return roles;
     }

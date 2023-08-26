@@ -7,7 +7,7 @@ using DotNetCore.CAP;
 
 namespace Core.Auth.Credentials.Handlers;
 
-internal class AuthenticateHandler : IAuthenticateHandler
+public class AuthenticateHandler : IAuthenticateHandler
 {
     private readonly ISessionManagement _sessionManagement;
     private readonly IScopeRepository _scopeRepository;
@@ -24,7 +24,7 @@ internal class AuthenticateHandler : IAuthenticateHandler
         _hashService = hashService;
     }
 
-    public async Task<Certificate> AuthenticateAsync(string username, string password, string scopeSecret, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)
+    public virtual async Task<Certificate> AuthenticateAsync(string username, string password, string scopeSecret, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)
     {
         var scope = await _scopeRepository.FindBySecretAsync(scopeSecret, cancellationToken);
         if (scope is null) throw new InvalidScopeException();
@@ -61,7 +61,7 @@ internal class AuthenticateHandler : IAuthenticateHandler
         bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }
 
-    public async Task<Certificate> RefreshAsync(Certificate certificate, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)
+    public virtual async Task<Certificate> RefreshAsync(Certificate certificate, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)
     {
         var session = await _sessionManagement.GetAsync(certificate.Token, cancellationToken);
         var hashedRefreshToken = await _hashService.HashAsync(Session.StaticHashKey, certificate.RefreshToken);
@@ -85,7 +85,7 @@ internal class AuthenticateHandler : IAuthenticateHandler
         bool RefreshTokenExpired() => DateTime.UtcNow >= session.RefreshTokenExpirationDateUtc;
     }
 
-    public async Task LogoutAsync(Certificate certificate, CancellationToken cancellationToken = default)
+    public virtual async Task LogoutAsync(Certificate certificate, CancellationToken cancellationToken = default)
     {
         var session = await _sessionManagement.GetAsync(certificate.Token, cancellationToken);
         var hashedRefreshToken = await _hashService.HashAsync(Session.StaticHashKey, certificate.RefreshToken);

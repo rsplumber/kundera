@@ -5,7 +5,7 @@ using Core.Users;
 
 namespace Core.Auth.Authorizations.Extensions;
 
-public static class SessionExtensions
+internal static class SessionExtensions
 {
     internal static bool Validate(this Session? session, out AuthorizeResponse? unAuthorizeResponse)
     {

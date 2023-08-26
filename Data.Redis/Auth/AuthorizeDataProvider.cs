@@ -29,7 +29,7 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
         return dataModel is null ? null : _mapper.Map<Session>(dataModel);
     }
 
-    public async Task<List<Role>> UserRolesAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<List<Role>> FindUserRolesAsync(User user, CancellationToken cancellationToken = default)
     {
         var userGroupRoleIds = await UserGroupsRolesAsync();
         var allRoleIds = new List<Guid>(userGroupRoleIds);

@@ -6,7 +6,7 @@ using DotNetCore.CAP;
 
 namespace Core.Auth.Authorizations.Handlers;
 
-internal sealed class RoleAuthorizationHandler : IRoleAuthorizationHandler
+internal class RoleAuthorizationHandler : IRoleAuthorizationHandler
 {
     private readonly IAuthorizeDataProvider _authorizeDataProvider;
     private readonly ICapPublisher _eventBus;
@@ -20,7 +20,7 @@ internal sealed class RoleAuthorizationHandler : IRoleAuthorizationHandler
         _hashService = hashService;
     }
 
-    public async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, string[] roles, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, string[] roles, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
     {
         var hashedToken = await _hashService.HashAsync(Session.StaticHashKey, token);
         var session = await _authorizeDataProvider.FindSessionAsync(hashedToken, cancellationToken);
@@ -34,7 +34,7 @@ internal sealed class RoleAuthorizationHandler : IRoleAuthorizationHandler
             return userValidationFailedResponse!;
         }
 
-        var userRoles = await _authorizeDataProvider.UserRolesAsync(session!.User, cancellationToken);
+        var userRoles = await _authorizeDataProvider.FindUserRolesAsync(session!.User, cancellationToken);
         var service = await _authorizeDataProvider.FindServiceAsync(serviceSecret, cancellationToken);
         if (!session.ValidateScope(service, userRoles, out var scopeValidationFailedResponse))
         {

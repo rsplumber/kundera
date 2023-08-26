@@ -30,7 +30,7 @@ public class User : BaseEntity
 
     public List<Role> Roles { get; set; } = new();
 
-    public UserStatus Status { get; set; } = default!;
+    public UserStatus Status { get; set; }
 
     public string? StatusChangeReason { get; set; }
 
