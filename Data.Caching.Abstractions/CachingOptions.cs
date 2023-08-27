@@ -4,5 +4,5 @@ namespace Data.Caching.Abstractions;
 
 public sealed class CachingOptions
 {
-    public IServiceCollection Services { get; init; } = default!;
+    public required IServiceCollection Services { get; init; } = default!;
 }

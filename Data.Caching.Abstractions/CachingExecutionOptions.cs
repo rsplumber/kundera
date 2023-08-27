@@ -2,5 +2,5 @@ namespace Data.Caching.Abstractions;
 
 public sealed class CachingExecutionOptions
 {
-    public IServiceProvider ServiceProvider { get; init; } = default!;
+    public required IServiceProvider ServiceProvider { get; init; } = default!;
 }

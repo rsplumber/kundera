@@ -20,6 +20,7 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
     public override void Configure()
     {
         Post("authorize/role");
+        ResponseCache(30, varyByHeader: "Authorization");
         AllowAnonymous();
         Version(1);
     }

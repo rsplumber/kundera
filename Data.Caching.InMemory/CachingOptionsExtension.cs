@@ -1,4 +1,5 @@
 ﻿using Core.Auth.Authorizations;
+using Data.Caching.Abstractions;
 using Data.Caching.InMemory.CacheManagements;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,13 +8,13 @@ namespace Data.Caching.InMemory;
 
 public static class CachingOptionsExtension
 {
-    public static void UseInMemoryCaching(this IServiceCollection services, IConfiguration? configuration = default)
+    public static void UseInMemory(this CachingOptions cachingOptions)
     {
-        services.Decorate<IAuthorizeDataProvider, AuthorizeDataProvider>();
-        services.AddSingleton<ServiceCacheManagement>();
-        services.AddSingleton<UserRoleCacheManagement>();
-        services.AddSingleton<SessionCacheManagement>();
-        services.AddTransient<EventHandlers>();
-        services.AddDistributedMemoryCache();
+        cachingOptions.Services.Decorate<IAuthorizeDataProvider, AuthorizeDataProvider>();
+        cachingOptions.Services.AddSingleton<ServiceCacheManagement>();
+        cachingOptions.Services.AddSingleton<UserRoleCacheManagement>();
+        cachingOptions.Services.AddSingleton<SessionCacheManagement>();
+        cachingOptions.Services.AddTransient<EventHandlers>();
+        cachingOptions.Services.AddDistributedMemoryCache();
     }
 }
