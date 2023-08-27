@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
-    options.ListenAnyIP(5178, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
     // options.ListenAnyIP(5179, listenOptions =>
     // {
     //     listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
@@ -35,7 +35,6 @@ builder.Services.AddAuthentication(KunderaDefaults.Scheme)
     .AddKundera(builder.Configuration, k => k.UseHttpService(builder.Configuration));
 builder.Services.AddAuthorization();
 builder.Services.AddResponseCaching();
-builder.Services.AddResponseCompression();
 builder.Services.AddFastEndpoints();
 
 builder.Services.SwaggerDocument(settings =>
@@ -140,7 +139,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAllElasticApm(builder.Configuration);
 app.UseResponseCaching();
-app.UseResponseCompression();
 app.UseFastEndpoints(config =>
 {
     config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
