@@ -5,7 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
     <ItemGroup>
-        <ProjectReference Include="..\Data.Abstractions\Data.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Data.Abstractions\Data.Abstractions.csproj" />
     </ItemGroup>
 </Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>KunderaNet.Services.Authorization.Mock</Title>
+        <Authors>Aliasghar Sharifian(Plumber)</Authors>
+        <Version>1.0.1</Version>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="KunderaNet.Services.Authorization.Abstractions" Version="1.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+</Project>

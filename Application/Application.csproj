@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
-    </ItemGroup>
-    
-    <ItemGroup>
         <PackageReference Include="KunderaNet.Services.Authorization.Http" Version="1.0.2" />
         <PackageReference Include="KunderaNet.FastEndpoints.Authorization" Version="1.5.0" />
         <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.0" />
@@ -42,8 +38,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
-      <ProjectReference Include="..\Data.Caching.Abstractions\Data.Caching.Abstractions.csproj" />
-      <ProjectReference Include="..\Data.EFCore\Data.EFCore.csproj" />
+      <ProjectReference Include="..\Data\Caching\Data.Caching.InMemory\Data.Caching.InMemory.csproj" />
+      <ProjectReference Include="..\Data\Data.EFCore\Data.EFCore.csproj" />
     </ItemGroup>
 
 </Project>
