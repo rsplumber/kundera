@@ -5,7 +5,7 @@ using Mediator;
 
 namespace Application.Users.Usernames.Exists;
 
-file sealed class Endpoint : Endpoint<ExistUserUsernameQuery, bool>
+file sealed class Endpoint : Endpoint<UserUsernameExistsQuery, UserUsernameExistsResponse>
 {
     private readonly IMediator _mediator;
 
@@ -21,7 +21,7 @@ file sealed class Endpoint : Endpoint<ExistUserUsernameQuery, bool>
         Version(1);
     }
 
-    public override async Task HandleAsync(ExistUserUsernameQuery req, CancellationToken ct)
+    public override async Task HandleAsync(UserUsernameExistsQuery req, CancellationToken ct)
     {
         var response = await _mediator.Send(req, ct);
         await SendOkAsync(response, ct);
@@ -34,11 +34,11 @@ file sealed class EndpointSummary : Summary<Endpoint>
     {
         Summary = "Check User exists";
         Description = "Check that a User with Username exists";
-        Response<bool>(200, "Username checked");
+        Response<UserUsernameExistsResponse>(200, "Username checked");
     }
 }
 
-file sealed class RequestValidator : Validator<ExistUserUsernameQuery>
+file sealed class RequestValidator : Validator<UserUsernameExistsQuery>
 {
     public RequestValidator()
     {
