@@ -19,7 +19,7 @@ public class PermissionAuthorizationHandler : IPermissionAuthorizationHandler
         _hashService = hashService;
     }
 
-    public virtual async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, string[] actions, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, IEnumerable<string> actions, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
     {
         var hashedToken = await _hashService.HashAsync(Session.StaticHashKey, token);
         var session = await _authorizeDataProvider.FindSessionAsync(hashedToken, cancellationToken);
@@ -44,10 +44,10 @@ public class PermissionAuthorizationHandler : IPermissionAuthorizationHandler
 
         _ = _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
         {
-            Agent = userAgent,
-            IpAddress = ipAddress.ToString(),
             SessionId = session.Id,
-            UserId = session.User.Id
+            UserId = session.User.Id,
+            Agent = userAgent,
+            IpAddress = ipAddress.ToString()
         }, cancellationToken: cancellationToken);
 
 

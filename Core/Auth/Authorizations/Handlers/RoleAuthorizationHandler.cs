@@ -20,7 +20,7 @@ internal class RoleAuthorizationHandler : IRoleAuthorizationHandler
         _hashService = hashService;
     }
 
-    public virtual async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, string[] roles, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<AuthorizeResponse> HandleAsync(string token, string serviceSecret, IEnumerable<string> roles, IPAddress ipAddress, string? userAgent = null, CancellationToken cancellationToken = default)
     {
         var hashedToken = await _hashService.HashAsync(Session.StaticHashKey, token);
         var session = await _authorizeDataProvider.FindSessionAsync(hashedToken, cancellationToken);

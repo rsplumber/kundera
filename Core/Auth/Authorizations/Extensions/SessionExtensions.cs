@@ -31,7 +31,7 @@ internal static class SessionExtensions
     {
         if (UserIsNotActive())
         {
-            unAuthorizeResponse = AuthorizeResponse.UnAuthorized;
+            unAuthorizeResponse = AuthorizeResponse.Forbidden;
             return false;
         }
 
@@ -45,27 +45,20 @@ internal static class SessionExtensions
     {
         if (service is null || requestedRoles.Count == 0)
         {
-            unAuthorizeResponse = AuthorizeResponse.UnAuthorized;
+            unAuthorizeResponse = AuthorizeResponse.Forbidden;
             return false;
         }
 
         if (InvalidSessionScopeService())
         {
-            unAuthorizeResponse = AuthorizeResponse.UnAuthorized;
+            unAuthorizeResponse = AuthorizeResponse.Forbidden;
             return false;
         }
 
         if (UserHasNotScopeRole())
         {
-            unAuthorizeResponse = AuthorizeResponse.UnAuthorized;
+            unAuthorizeResponse = AuthorizeResponse.Forbidden;
             return false;
-        }
-
-
-        if (service.Name == EntityBaseValues.KunderaServiceName)
-        {
-            unAuthorizeResponse = null;
-            return true;
         }
 
         unAuthorizeResponse = null;

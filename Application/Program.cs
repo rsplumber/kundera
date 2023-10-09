@@ -127,18 +127,16 @@ builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
 
 var app = builder.Build();
 app.Services.UseData(options => { options.UseEntityFramework(); });
-
-app.UseHealthChecks("/health");
 app.UseCors(b => b.AllowAnyHeader()
     .AllowAnyMethod()
     .SetIsOriginAllowed(_ => true)
     .AllowCredentials());
-
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAllElasticApm(builder.Configuration);
-app.UseResponseCaching();
+app.UseHealthChecks("/health");
 app.UseFastEndpoints(config =>
 {
     config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

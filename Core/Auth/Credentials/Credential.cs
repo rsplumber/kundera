@@ -64,4 +64,6 @@ public class Credential : BaseEntity
 
         AddDomainEvent(new CredentialPasswordChangedEvent(Id));
     }
+
+    public bool Expired() => ExpiresAtUtc is not null && DateTime.UtcNow >= ExpiresAtUtc;
 }

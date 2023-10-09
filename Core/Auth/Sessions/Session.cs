@@ -15,18 +15,16 @@ public class Session : BaseEntity
     {
     }
 
-    internal Session(
-        IHashService hashService,
-        Certificate certificate,
-        Credential credential,
-        Scope scope,
-        User user)
+    internal Session(IHashService hashService, Certificate certificate, Credential credential, Scope scope)
     {
         Id = hashService.HashAsync(StaticHashKey, certificate.Token).Result;
         RefreshToken = hashService.HashAsync(StaticHashKey, certificate.RefreshToken).Result;
         Credential = credential;
         Scope = scope;
-        User = user;
+        User = credential.User;
+        TokenExpirationDateUtc = CalculateTokenExpirationDateUtc();
+        RefreshTokenExpirationDateUtc = CalculateRefreshTokenExpirationDateUtc();
+        CreatedDateUtc = DateTime.UtcNow;
         AddDomainEvent(new SessionCreatedEvent(Id));
     }
 
@@ -40,9 +38,19 @@ public class Session : BaseEntity
 
     public User User { get; set; } = default!;
 
-    public DateTime TokenExpirationDateUtc { get; init; } = DateTime.UtcNow;
+    public DateTime TokenExpirationDateUtc { get; set; }
 
-    public DateTime RefreshTokenExpirationDateUtc { get; init; } = DateTime.UtcNow;
+    public DateTime RefreshTokenExpirationDateUtc { get; set; }
 
-    public DateTime CreatedDateUtc { get; private set; } = DateTime.UtcNow;
+    public DateTime CreatedDateUtc { get; set; }
+
+    private DateTime CalculateTokenExpirationDateUtc() => Scope.Restricted
+        ? DateTime.UtcNow.AddMinutes(Scope.SessionTokenExpireTimeInMinutes)
+        : DateTime.UtcNow.AddMinutes(Credential.SessionTokenExpireTimeInMinutes ?? Scope.SessionTokenExpireTimeInMinutes);
+
+    private DateTime CalculateRefreshTokenExpirationDateUtc() => Scope.Restricted
+        ? DateTime.UtcNow.AddMinutes(Scope.SessionRefreshTokenExpireTimeInMinutes)
+        : DateTime.UtcNow.AddMinutes(Credential.SessionRefreshTokenExpireTimeInMinutes ?? Scope.SessionRefreshTokenExpireTimeInMinutes);
+    
+    
 }

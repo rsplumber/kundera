@@ -41,7 +41,7 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
             401 => SendStringAsync(UnAuthorizedMessage, authorizeResponse.Code, cancellation: ct),
             403 => SendStringAsync(ForbiddenMessage, authorizeResponse.Code, cancellation: ct),
             440 => SendStringAsync(SessionExpiredMessage, authorizeResponse.Code, cancellation: ct),
-            _ => SendStringAsync(UnAuthorizedMessage, 403, cancellation: ct)
+            _ => SendStringAsync(UnAuthorizedMessage, 401, cancellation: ct)
         };
 
         await authorizationResult;

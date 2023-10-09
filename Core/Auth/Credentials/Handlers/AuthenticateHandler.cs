@@ -33,7 +33,7 @@ public class AuthenticateHandler : IAuthenticateHandler
         var credential = credentials.FirstOrDefault(credential => credential.Username == username && credential.Password.Check(password));
         if (credential is null) throw new WrongUsernamePasswordException();
 
-        if (CredentialExpired())
+        if (credential.Expired())
         {
             await _credentialRepository.DeleteAsync(credential.Id, cancellationToken);
             throw new WrongUsernamePasswordException();
@@ -48,17 +48,15 @@ public class AuthenticateHandler : IAuthenticateHandler
 
         _ = _eventBus.PublishAsync(AuthenticatedEvent.EventName, new AuthenticatedEvent
         {
-            Agent = requestInfo?.UserAgent,
-            IpAddress = requestInfo?.IpAddress?.ToString(),
             Username = credential.Username,
             CredentialId = credential.Id,
             UserId = credential.User.Id,
-            ScopeId = scope.Id
+            ScopeId = scope.Id,
+            Agent = requestInfo?.UserAgent,
+            IpAddress = requestInfo?.IpAddress?.ToString()
         }, cancellationToken: cancellationToken);
 
         return certificate;
-
-        bool CredentialExpired() => DateTime.UtcNow >= credential.ExpiresAtUtc;
     }
 
     public virtual async Task<Certificate> RefreshAsync(Certificate certificate, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default)

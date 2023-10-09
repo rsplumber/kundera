@@ -25,7 +25,7 @@ public sealed class ExceptionHandlerMiddleware : IMiddleware
                     await response.SendAsync(coreException.Message, coreException.Code);
                     break;
                 case ValidationException validationException:
-                    await response.SendAsync(string.Join(", ", validationException.Errors.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}")), 400);
+                    await response.SendAsync(string.Join(", ", validationException.Errors.Select(failure => $"{failure.PropertyName} : {failure.ErrorMessage}")), 422);
                     break;
                 default:
                     await response.SendAsync(InternalServerErrorMessage, InternalServerErrorCode);

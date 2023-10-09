@@ -10,10 +10,9 @@ public sealed record Certificate
         var hashKey = Random.Shared.RandomCharsAndNumbers(6);
         var token = hashService.HashAsync(hashKey, credential.User.Id.ToString(), scopeId.ToString()).Result;
         var refreshToken = hashService.HashAsync(hashKey, Random.Shared.RandomCharsAndNumbers(6)).Result;
-        var expireTime = (double)(credential.SessionTokenExpireTimeInMinutes ?? 0);
         return new Certificate(token, refreshToken)
         {
-            ExpireAtUtc = DateTime.UtcNow.AddMinutes(expireTime)
+            ExpireAtUtc = DateTime.UtcNow.AddMinutes(credential.SessionTokenExpireTimeInMinutes ?? 0)
         };
     }
 

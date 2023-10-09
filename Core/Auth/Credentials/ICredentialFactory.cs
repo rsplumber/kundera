@@ -49,7 +49,7 @@ internal sealed class CredentialFactory : ICredentialFactory
         {
             SingleSession = singleSession ?? false,
             SessionTokenExpireTimeInMinutes = sessionTokenExpireTimeInMinutes > 0 ? sessionTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
-            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes > 0 ? sessionRefreshTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes,
+            SessionRefreshTokenExpireTimeInMinutes = sessionRefreshTokenExpireTimeInMinutes > 0 ? sessionRefreshTokenExpireTimeInMinutes : DefaultSessionExpireTimeInMinutes
         };
         await _credentialRepository.AddAsync(credential);
         return credential;

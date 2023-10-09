@@ -20,17 +20,7 @@ internal sealed class SessionManagement : ISessionManagement
     public async Task<Certificate> SaveAsync(Credential credential, Scope scope, CancellationToken cancellationToken = default)
     {
         var certificate = Certificate.Create(_hashService, credential, scope.Id);
-        var session = new Session(
-            _hashService,
-            certificate,
-            credential,
-            scope,
-            credential.User)
-        {
-            TokenExpirationDateUtc = CalculateTokenExpirationDateUtc(),
-            RefreshTokenExpirationDateUtc = CalculateRefreshTokenExpirationDateUtc()
-        };
-
+        var session = new Session(_hashService, certificate, credential, scope);
         if (credential.SingleSession)
         {
             await RemoveOtherSessionsAsync();
@@ -38,10 +28,6 @@ internal sealed class SessionManagement : ISessionManagement
 
         await _sessionRepository.AddAsync(session, cancellationToken);
         return certificate;
-
-        DateTime CalculateTokenExpirationDateUtc() => scope.Restricted ? DateTime.UtcNow.AddMinutes(scope.SessionTokenExpireTimeInMinutes) : DateTime.UtcNow.AddMinutes(credential.SessionTokenExpireTimeInMinutes ?? scope.SessionTokenExpireTimeInMinutes);
-
-        DateTime CalculateRefreshTokenExpirationDateUtc() => scope.Restricted ? DateTime.UtcNow.AddMinutes(scope.SessionRefreshTokenExpireTimeInMinutes) : DateTime.UtcNow.AddMinutes(credential.SessionRefreshTokenExpireTimeInMinutes ?? scope.SessionRefreshTokenExpireTimeInMinutes);
 
         async Task RemoveOtherSessionsAsync()
         {

@@ -7,7 +7,7 @@ public interface IRoleAuthorizationHandler
     ValueTask<AuthorizeResponse> HandleAsync(
         string token,
         string serviceSecret,
-        string[] roles,
+        IEnumerable<string> roles,
         IPAddress ipAddress,
         string? userAgent = null,
         CancellationToken cancellationToken = default);

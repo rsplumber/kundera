@@ -7,7 +7,7 @@ public interface IPermissionAuthorizationHandler
     ValueTask<AuthorizeResponse> HandleAsync(
         string token,
         string serviceSecret,
-        string[] actions,
+        IEnumerable<string> actions,
         IPAddress ipAddress,
         string? userAgent = null,
         CancellationToken cancellationToken = default);
