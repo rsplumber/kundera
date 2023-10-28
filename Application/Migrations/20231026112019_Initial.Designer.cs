@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230730080229_Initial")]
+    [Migration("20231026112019_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -241,8 +241,7 @@ namespace Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("parent_id")
-                        .IsUnique();
+                    b.HasIndex("parent_id");
 
                     b.ToTable("groups", (string)null);
                 });
@@ -267,9 +266,6 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("service_id");
 
@@ -545,8 +541,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Core.Groups.Group", b =>
                 {
                     b.HasOne("Core.Groups.Group", "Parent")
-                        .WithOne()
-                        .HasForeignKey("Core.Groups.Group", "parent_id")
+                        .WithMany()
+                        .HasForeignKey("parent_id")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");

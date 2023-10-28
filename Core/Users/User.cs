@@ -102,7 +102,7 @@ public class User : BaseEntity
         AddDomainEvent(new UserRoleRemovedEvent(Id, role.Id));
     }
 
-    public bool Has(Role role) =>Roles.Any(r => r == role);
+    public bool Has(Role role) => Roles.Any(r => r == role);
 
     public void Activate() => ChangeStatus(UserStatus.Active);
 

@@ -78,7 +78,7 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("username");
 
-            builder.HasIndex(model => model.Username);
+            builder.HasIndex(model => model.Username).IsUnique(false);
 
             builder.HasOne(model => model.User)
                 .WithMany()
@@ -194,8 +194,8 @@ public sealed class AppDbContext : DbContext
                 .IsRequired(false);
 
             builder.HasOne(model => model.Parent)
-                .WithOne()
-                .HasForeignKey<Group>("parent_id")
+                .WithMany()
+                .HasForeignKey("parent_id")
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(model => model.Children)
@@ -315,8 +315,6 @@ public sealed class AppDbContext : DbContext
             builder.Property(model => model.Name)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("name");
-
-            builder.HasIndex(model => model.Name);
 
             builder.Property(e => e.Meta)
                 .HasColumnType("jsonb")

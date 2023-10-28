@@ -19,7 +19,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -238,8 +238,7 @@ namespace Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("parent_id")
-                        .IsUnique();
+                    b.HasIndex("parent_id");
 
                     b.ToTable("groups", (string)null);
                 });
@@ -264,9 +263,6 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("service_id");
 
@@ -542,8 +538,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Core.Groups.Group", b =>
                 {
                     b.HasOne("Core.Groups.Group", "Parent")
-                        .WithOne()
-                        .HasForeignKey("Core.Groups.Group", "parent_id")
+                        .WithMany()
+                        .HasForeignKey("parent_id")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");

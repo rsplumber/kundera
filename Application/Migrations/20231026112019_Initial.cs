@@ -418,8 +418,7 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_groups_parent_id",
                 table: "groups",
-                column: "parent_id",
-                unique: true);
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_groups_children_group_id",
@@ -430,12 +429,6 @@ namespace Data.Migrations
                 name: "IX_groups_roles_role_id",
                 table: "groups_roles",
                 column: "role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_permissions_name",
-                table: "permissions",
-                column: "name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_permissions_service_id",

@@ -2,22 +2,23 @@
 
     <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.5.0</PackageVersion>
-        <Title>KunderaNet.AspNetCore.Authorization</Title>
+        <PackageVersion>1.5.1</PackageVersion>
+        <Title>Kundera.Net.AspNetCore.Authorization</Title>
         <Authors>Aliasghar Sharifian(Plumber)</Authors>
         <Nullable>enable</Nullable>
         <TargetFramework>net7.0</TargetFramework>
+        <PackageId>Kundera.Net.AspNetCore.Authorization</PackageId>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="KunderaNet.Services.Authorization.Abstractions" Version="1.0.0" />
         <PackageReference Include="KunderaNet.Authorization" Version="1.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.13" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
     </ItemGroup>
     
 </Project>
