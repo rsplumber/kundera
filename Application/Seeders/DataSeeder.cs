@@ -206,6 +206,7 @@ internal sealed class DataSeeder
             await _permissionService.CreateAsync(service, "users_get");
             await _permissionService.CreateAsync(service, "users_delete");
             await _permissionService.CreateAsync(service, "users_add_username");
+            await _permissionService.CreateAsync(service, "users_username_credential");
             await _permissionService.CreateAsync(service, "users_remove_username");
             await _permissionService.CreateAsync(service, "users_exist_username");
             await _permissionService.CreateAsync(service, "users_assign_role");
@@ -224,6 +225,7 @@ internal sealed class DataSeeder
             await _permissionService.CreateAsync(service, "credentials_create_onetime");
             await _permissionService.CreateAsync(service, "credentials_create_time-periodic");
             await _permissionService.CreateAsync(service, "credentials_delete");
+            await _permissionService.CreateAsync(service, "credentials_session_terminate");
         }
 
         async Task SeedSessionsPermissionsAsync()
