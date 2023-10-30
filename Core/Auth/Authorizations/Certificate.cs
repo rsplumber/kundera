@@ -12,7 +12,8 @@ public sealed record Certificate
         var refreshToken = hashService.HashAsync(hashKey, Random.Shared.RandomCharsAndNumbers(6)).Result;
         return new Certificate(token, refreshToken)
         {
-            ExpireAtUtc = DateTime.UtcNow.AddMinutes(credential.SessionTokenExpireTimeInMinutes ?? 0)
+            ExpireAtUtc = DateTime.UtcNow.AddMinutes(credential.SessionTokenExpireTimeInMinutes ?? 0),
+            LoginRequiresAtUtc = DateTime.UtcNow.AddMinutes(credential.SessionRefreshTokenExpireTimeInMinutes ?? 0)
         };
     }
 
@@ -25,6 +26,8 @@ public sealed record Certificate
     }
 
     public DateTime ExpireAtUtc { get; init; }
+
+    public DateTime LoginRequiresAtUtc { get; init; }
 
     public string RefreshToken { get; init; } = default!;
 
