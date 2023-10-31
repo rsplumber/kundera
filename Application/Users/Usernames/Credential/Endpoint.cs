@@ -23,8 +23,8 @@ file sealed class Endpoint : Endpoint<UserUsernameCredentialQuery, UserUsernameC
 
     public override async Task HandleAsync(UserUsernameCredentialQuery req, CancellationToken ct)
     {
-        await _mediator.Send(req, ct);
-        await SendOkAsync(ct);
+        var response = await _mediator.Send(req, ct);
+        await SendOkAsync(response, ct);
     }
 }
 
