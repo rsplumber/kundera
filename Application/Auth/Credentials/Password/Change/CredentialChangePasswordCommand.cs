@@ -19,24 +19,17 @@ public sealed record CredentialChangePasswordCommand : ICommand
 
 internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<CredentialChangePasswordCommand>
 {
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IUserRepository _userRepository;
     private readonly ICredentialRepository _credentialRepository;
     private readonly ISessionRepository _sessionRepository;
 
-    public CredentialChangePasswordCommandHandler(ICredentialRepository credentialRepository, ICurrentUserService currentUserService, IUserRepository userRepository, ISessionRepository sessionRepository)
+    public CredentialChangePasswordCommandHandler(ICredentialRepository credentialRepository,  ISessionRepository sessionRepository)
     {
         _credentialRepository = credentialRepository;
-        _currentUserService = currentUserService;
-        _userRepository = userRepository;
         _sessionRepository = sessionRepository;
     }
 
     public async ValueTask<Unit> Handle(CredentialChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindAsync(_currentUserService.User().Id, cancellationToken);
-        if (user is null) throw new UserNotFoundException();
-        if (user.Usernames.All(s => s != command.Username)) throw new CredentialNotFoundException();
         var credentials = await _credentialRepository.FindByUsernameAsync(command.Username, cancellationToken);
         var credential = credentials.FirstOrDefault(credential => credential.Password.Check(command.Password));
         if (credential is null) throw new CredentialNotFoundException();
