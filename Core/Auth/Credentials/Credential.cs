@@ -9,7 +9,7 @@ public class Credential : BaseEntity
     {
     }
 
-    internal Credential(string username, string password, User user)
+    public Credential(string username, string password, User user)
     {
         Username = username;
         Password = Password.Create(password);
@@ -18,7 +18,7 @@ public class Credential : BaseEntity
         AddDomainEvent(new CredentialCreatedEvent(Id, user.Id));
     }
 
-    internal Credential(string username, string password, User user, int expireInMinutes) :
+    public Credential(string username, string password, User user, int expireInMinutes) :
         this(username, password, user)
     {
         if (expireInMinutes > 0)
@@ -27,7 +27,7 @@ public class Credential : BaseEntity
         }
     }
 
-    internal Credential(string username, string password, User user, bool oneTime, int expireInMinutes = 0) :
+    public Credential(string username, string password, User user, bool oneTime, int expireInMinutes = 0) :
         this(username, password, user, expireInMinutes)
     {
         OneTime = oneTime;
@@ -55,13 +55,8 @@ public class Credential : BaseEntity
     public DateTime CreatedDateUtc { get; set; }
 
     public void ChangePassword(string password, string newPassword)
-    {
-        var oldPassword = Password.From(password, Password.Salt);
-        if (Password.Equals(oldPassword))
-        {
-            Password = Password.Create(newPassword);
-        }
-
+    { 
+        Password = Password.Create(newPassword);
         AddDomainEvent(new CredentialPasswordChangedEvent(Id));
     }
 
