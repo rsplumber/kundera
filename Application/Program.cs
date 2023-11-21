@@ -22,11 +22,6 @@ builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
     options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
-    // options.ListenAnyIP(5179, listenOptions =>
-    // {
-    //     listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-    //     listenOptions.UseHttps();
-    // });
 });
 var configuration = builder.Configuration;
 builder.Services.AddCors();

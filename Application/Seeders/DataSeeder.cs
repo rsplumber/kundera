@@ -226,6 +226,7 @@ internal sealed class DataSeeder
             await _permissionService.CreateAsync(service, "credentials_create_time-periodic");
             await _permissionService.CreateAsync(service, "credentials_delete");
             await _permissionService.CreateAsync(service, "credentials_session_terminate");
+            await _permissionService.CreateAsync(service, "credentials_password_change");
         }
 
         async Task SeedSessionsPermissionsAsync()
