@@ -21,7 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
-    options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    // options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    options.ListenAnyIP(5278, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
 });
 var configuration = builder.Configuration;
 builder.Services.AddCors();

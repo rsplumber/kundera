@@ -23,7 +23,7 @@ file sealed class Endpoint : Endpoint<Request, Certificate>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        await _authenticateHandler.LogoutAsync(Certificate.From(req.Token, req.RefreshToken), ct);
+        await _authenticateHandler.LogoutAsync(req.Token, req.RefreshToken, ct);
         await SendOkAsync(ct);
     }
 }

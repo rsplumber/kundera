@@ -45,7 +45,6 @@ public class AuthenticateHandler : IAuthenticateHandler
         {
             await _credentialRepository.DeleteAsync(credential.Id, cancellationToken);
         }
-
         _ = _eventBus.PublishAsync(AuthenticatedEvent.EventName, new AuthenticatedEvent
         {
             Username = credential.Username,
@@ -83,10 +82,10 @@ public class AuthenticateHandler : IAuthenticateHandler
         bool RefreshTokenExpired() => DateTime.UtcNow >= session.RefreshTokenExpirationDateUtc;
     }
 
-    public virtual async Task LogoutAsync(Certificate certificate, CancellationToken cancellationToken = default)
+    public virtual async Task LogoutAsync(string token,string refreshToken, CancellationToken cancellationToken = default)
     {
-        var session = await _sessionManagement.GetAsync(certificate.Token, cancellationToken);
-        var hashedRefreshToken = await _hashService.HashAsync(Session.StaticHashKey, certificate.RefreshToken);
+        var session = await _sessionManagement.GetAsync(token, cancellationToken);
+        var hashedRefreshToken = await _hashService.HashAsync(Session.StaticHashKey, refreshToken);
         if (session is null || session.RefreshToken != hashedRefreshToken) throw new SessionNotFoundException();
 
         await _sessionManagement.DeleteAsync(session.Id, cancellationToken);
