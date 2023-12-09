@@ -5,7 +5,8 @@
         <PackageVersion>1.0.0</PackageVersion>
         <Title>KunderaNet.Authorization.Swagger.Extensions</Title>
         <Authors>Aliasghar Sharifian(Plumber)</Authors>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+<LangVersion>12</LangVersion>
     </PropertyGroup>
     
     <ItemGroup>

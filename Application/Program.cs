@@ -21,8 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
-    // options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
-    options.ListenAnyIP(5278, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    // options.ListenAnyIP(5278, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
 });
 var configuration = builder.Configuration;
 builder.Services.AddCors();
@@ -31,9 +31,7 @@ builder.Services.AddAuthentication(KunderaDefaults.Scheme)
     .AddKundera(builder.Configuration, k => k.UseHttpService(builder.Configuration));
 builder.Services.AddAuthorization();
 builder.Services.AddResponseCaching();
-builder.Services.AddFastEndpoints();
-
-builder.Services.SwaggerDocument(settings =>
+builder.Services.AddFastEndpoints().SwaggerDocument(settings =>
 {
     settings.DocumentSettings = generatorSettings =>
     {
@@ -44,15 +42,15 @@ builder.Services.SwaggerDocument(settings =>
     };
     settings.EnableJWTBearerAuth = false;
     settings.MaxEndpointVersion = 1;
-});
+});;
+
 
 
 builder.Services.TryAddSingleton<ExceptionHandlerMiddleware>();
 builder.Services.AddCore(builder.Configuration);
 builder.Services.AddCap(options =>
 {
-    options.FailedRetryCount = 2;
-    options.FailedRetryInterval = 5;
+    options.FailedRetryCount = 0;
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
     options.SucceedMessageExpiredAfter = 60 * 5;
@@ -139,12 +137,11 @@ app.UseFastEndpoints(config =>
     config.Endpoints.RoutePrefix = "api";
     config.Versioning.Prefix = "v";
     config.Versioning.PrependToRoute = true;
-});
+}).UseSwaggerGen();
 
+app.UseSwaggerUi();
 // if (app.Environment.IsDevelopment())
 // {
-app.UseOpenApi();
-app.UseSwaggerUi3(s => s.ConfigureDefaults());
 // }
 
 

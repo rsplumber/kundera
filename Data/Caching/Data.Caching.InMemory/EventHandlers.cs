@@ -20,37 +20,44 @@ internal sealed class EventHandlers : ICapSubscribe
 
 
     [CapSubscribe("kundera.scopes.*", Group = QueueGroupName)]
-    public async Task HandleScopesAsync(dynamic data)
+    public Task HandleScopes(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.users.*", Group = QueueGroupName)]
-    public async Task HandleUsersAsync(dynamic data)
+    public Task HandleUsers(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.credentials.*", Group = QueueGroupName)]
-    public async Task HandleCredentialsAsync(dynamic data)
+    public Task HandleCredentials(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.services.*", Group = QueueGroupName)]
-    public async Task HandleServicesAsync(dynamic data)
+    public Task HandleServices(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.groups.*", Group = QueueGroupName)]
-    public async Task HandleGroupsAsync(dynamic data)
+    public Task HandleGroups(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.roles.*", Group = QueueGroupName)]
-    public async Task HandleRolesAsync(dynamic data)
+    public Task HandleRoles(dynamic data)
     {
+        return Task.CompletedTask;
     }
 
     [CapSubscribe("kundera.permissions.*", Group = QueueGroupName)]
-    public async Task HandlePermissionsAsync(dynamic data)
+    public Task HandlePermissions(dynamic data)
     {
+        return Task.CompletedTask;
     }
 }

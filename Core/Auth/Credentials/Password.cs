@@ -2,6 +2,10 @@
 
 public record Password
 {
+    public Password()
+    {
+    }
+
     private Password(string value, string salt)
     {
         Value = value;
@@ -23,9 +27,9 @@ public record Password
         return new(hashed, salt);
     }
 
-    public string Value { get; }
+    public string Value { get; set; }
 
-    public string Salt { get; } = string.Empty;
+    public string Salt { get; set; } = string.Empty;
 
     public bool Verify(string value)
     {

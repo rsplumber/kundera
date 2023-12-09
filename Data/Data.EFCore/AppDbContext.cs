@@ -1,4 +1,5 @@
-﻿using Core.Auth.Credentials;
+﻿using System.Text.Json;
+using Core.Auth.Credentials;
 using Core.Auth.Sessions;
 using Core.Groups;
 using Core.Permissions;
@@ -16,6 +17,10 @@ namespace Data;
 public sealed class AppDbContext : DbContext
 {
     private readonly ICapPublisher _eventBus;
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        IgnoreReadOnlyFields = true
+    };
 
     public AppDbContext(DbContextOptions<AppDbContext> options, ICapPublisher eventBus) : base(options)
     {
@@ -86,13 +91,8 @@ public sealed class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(b => b.Password)
-                .HasConversion(
-                    v => new PasswordType
-                    {
-                        Salt = v.Salt,
-                        Value = v.Value
-                    },
-                    v => Password.From(v.Value, v.Salt))
+                .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
+                    s => JsonSerializer.Deserialize<Password>(s, JsonSerializerOptions)!)
                 .HasColumnType("jsonb");
 
             builder.Property(model => model.SingleSession)
@@ -293,6 +293,8 @@ public sealed class AppDbContext : DbContext
                     x => x.HasOne<Role>().WithMany().HasForeignKey("role_id"));
 
             builder.Property(e => e.Meta)
+                .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
+                    s => JsonSerializer.Deserialize<Dictionary<string,string>>(s, JsonSerializerOptions)!)
                 .HasColumnType("jsonb")
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("meta")
@@ -317,6 +319,8 @@ public sealed class AppDbContext : DbContext
                 .HasColumnName("name");
 
             builder.Property(e => e.Meta)
+                .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
+                    s => JsonSerializer.Deserialize<Dictionary<string,string>>(s, JsonSerializerOptions)!)
                 .HasColumnType("jsonb")
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("meta")

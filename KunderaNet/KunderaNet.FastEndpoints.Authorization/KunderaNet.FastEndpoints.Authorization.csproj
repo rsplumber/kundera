@@ -4,18 +4,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.5.1</PackageVersion>
+        <PackageVersion>1.6.0</PackageVersion>
         <Title>Kundera.Net.FastEndpoints.Authorization</Title>
         <Authors>Aliasghar Sharifian(Plumber)</Authors>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+<LangVersion>12</LangVersion>
         <PackageId>Kundera.Net.FastEndpoints.Authorization</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="KunderaNet.Authorization" Version="1.0.0" />
-        <PackageReference Include="FastEndpoints" Version="5.18.0" />
-        <PackageReference Include="FastEndpoints.Security" Version="5.18.0" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="5.18.0" />
+        <PackageReference Include="FastEndpoints" Version="5.20.1" />
+        <PackageReference Include="FastEndpoints.Security" Version="5.20.1" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="5.20.1" />
         <PackageReference Include="KunderaNet.Services.Authorization.Abstractions" Version="1.0.0" />
     </ItemGroup>
     

@@ -4,7 +4,7 @@ namespace Data.Abstractions.Users;
 
 public sealed record UserUsernameCredentialQuery : IQuery<UserUsernameCredentialQueryResponse>
 {
-    public string Username { get; init; }
+    public string Username { get; init; } = default!;
 }
 
 public sealed record UserUsernameCredentialQueryResponse

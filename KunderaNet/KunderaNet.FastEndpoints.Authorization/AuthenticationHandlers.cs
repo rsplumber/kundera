@@ -36,7 +36,7 @@ internal sealed class KunderaAuthenticationHandler : AuthenticationHandler<Kunde
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (AllowAnonymous())
+        if (AllowAnonymous() || IsSwagger())
         {
             return AuthenticateResult.Success(EmptyTicket);
         }
@@ -52,11 +52,13 @@ internal sealed class KunderaAuthenticationHandler : AuthenticationHandler<Kunde
         bool AllowAnonymous() => Context.GetEndpoint()?
             .Metadata
             .GetMetadata<IAllowAnonymous>() != null;
+
+        bool IsSwagger() => Context.Request.Path.ToUriComponent().StartsWith("/swagger");
     }
 
-    private async Task<AuthenticateResult> AuthorizeByUserTokenAsync(string? userToken)
+    private Task<AuthenticateResult> AuthorizeByUserTokenAsync(string? userToken)
     {
-        return await Task.Run(() =>
+        return Task.Run(() =>
         {
             if (string.IsNullOrEmpty(userToken))
             {
