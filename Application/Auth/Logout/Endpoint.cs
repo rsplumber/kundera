@@ -1,11 +1,10 @@
-﻿using Core.Auth.Authorizations;
-using Core.Auth.Credentials;
+﻿using Core.Auth.Credentials;
 using FastEndpoints;
 using FluentValidation;
 
 namespace Application.Auth.Logout;
 
-file sealed class Endpoint : Endpoint<Request, Certificate>
+file sealed class Endpoint : Endpoint<Request>
 {
     private readonly IAuthenticateHandler _authenticateHandler;
 
@@ -40,7 +39,7 @@ file sealed class EndpointSummary : Summary<Endpoint>
 
 file sealed record Request
 {
-    [FromHeader("Authorization")] public string Token { get; set; } = default!;
+    public string Token { get; set; } = default!;
 
     public string RefreshToken { get; set; } = default!;
 }
@@ -51,6 +50,10 @@ file sealed class RequestValidator : Validator<Request>
     {
         RuleFor(request => request.Token)
             .NotEmpty().WithMessage("Enter valid Token")
-            .NotNull().WithMessage("Enter valid Token");
+            .NotNull().WithMessage("Enter Token");
+
+        RuleFor(request => request.RefreshToken)
+            .NotEmpty().WithMessage("Enter valid RefreshToken")
+            .NotNull().WithMessage("Enter RefreshToken");
     }
 }

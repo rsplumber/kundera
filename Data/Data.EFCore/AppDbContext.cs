@@ -7,7 +7,6 @@ using Core.Roles;
 using Core.Scopes;
 using Core.Services;
 using Core.Users;
-using Data.Auth.Credentials;
 using DotNetCore.CAP;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,6 +16,7 @@ namespace Data;
 public sealed class AppDbContext : DbContext
 {
     private readonly ICapPublisher _eventBus;
+
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
         IgnoreReadOnlyFields = true
@@ -93,7 +93,7 @@ public sealed class AppDbContext : DbContext
             builder.Property(b => b.Password)
                 .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
                     s => JsonSerializer.Deserialize<Password>(s, JsonSerializerOptions)!)
-                .HasColumnType("jsonb");
+                .HasColumnName("Password");
 
             builder.Property(model => model.SingleSession)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
@@ -294,8 +294,7 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(e => e.Meta)
                 .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
-                    s => JsonSerializer.Deserialize<Dictionary<string,string>>(s, JsonSerializerOptions)!)
-                .HasColumnType("jsonb")
+                    s => JsonSerializer.Deserialize<Dictionary<string, string>>(s, JsonSerializerOptions)!)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("meta")
                 .IsRequired(false);
@@ -320,8 +319,7 @@ public sealed class AppDbContext : DbContext
 
             builder.Property(e => e.Meta)
                 .HasConversion(password => JsonSerializer.Serialize(password, JsonSerializerOptions),
-                    s => JsonSerializer.Deserialize<Dictionary<string,string>>(s, JsonSerializerOptions)!)
-                .HasColumnType("jsonb")
+                    s => JsonSerializer.Deserialize<Dictionary<string, string>>(s, JsonSerializerOptions)!)
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("meta")
                 .IsRequired(false);

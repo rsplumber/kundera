@@ -22,7 +22,7 @@ builder.WebHost.UseKestrel();
 builder.WebHost.ConfigureKestrel((_, options) =>
 {
     options.ListenAnyIP(1002, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
-    // options.ListenAnyIP(5278, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
+    // options.ListenAnyIP(5178, listenOptions => { listenOptions.Protocols = HttpProtocols.Http1; });
 });
 var configuration = builder.Configuration;
 builder.Services.AddCors();
@@ -42,11 +42,11 @@ builder.Services.AddFastEndpoints().SwaggerDocument(settings =>
     };
     settings.EnableJWTBearerAuth = false;
     settings.MaxEndpointVersion = 1;
-});;
+});
+;
 
 
-
-builder.Services.TryAddSingleton<ExceptionHandlerMiddleware>();
+builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
 builder.Services.AddCore(builder.Configuration);
 builder.Services.AddCap(options =>
 {
@@ -120,12 +120,12 @@ builder.Services.AddData(options =>
 builder.Services.AddMediator(c => c.ServiceLifetime = ServiceLifetime.Scoped);
 
 var app = builder.Build();
+app.UseExceptionHandler("/error");
 app.Services.UseData(options => { options.UseEntityFramework(); });
 app.UseCors(b => b.AllowAnyHeader()
     .AllowAnyMethod()
     .SetIsOriginAllowed(_ => true)
     .AllowCredentials());
-app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();

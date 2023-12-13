@@ -42,7 +42,7 @@ internal class RoleAuthorizationHandler : IRoleAuthorizationHandler
         }
 
         if (InvalidRole()) return AuthorizeResponse.Forbidden;
-
+        
         _ = _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
         {
             Agent = userAgent,
@@ -53,6 +53,7 @@ internal class RoleAuthorizationHandler : IRoleAuthorizationHandler
 
         return AuthorizeResponse.Success(session.User.Id, session.Scope.Id, service!.Id);
 
-        bool InvalidRole() => userRoles.All(role => roles.All(r => role.Name != r.ToLower()));
+        // bool HasNotRole() => !userRoles.Any(role => roles.Any(r => role.Name.Equals(r, StringComparison.CurrentCultureIgnoreCase))); 
+        bool InvalidRole() => userRoles.All(role => roles.All(r => !role.Name.Equals(r, StringComparison.CurrentCultureIgnoreCase)));
     }
 }

@@ -33,7 +33,7 @@ public static class ServiceCollectionExtension
             }
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.Timeout = TimeSpan.FromSeconds(15);
+            client.Timeout = TimeSpan.FromSeconds(5);
         });
 
         services.TryAddSingleton<IAuthorizeService, AuthorizeService>();
