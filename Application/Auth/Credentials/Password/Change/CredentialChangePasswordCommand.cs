@@ -30,14 +30,14 @@ internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<C
         var credentials = await _credentialRepository.FindByUsernameAsync(command.Username, cancellationToken);
         var credential = credentials.FirstOrDefault(credential => credential.Password.Check(command.Password));
         if (credential is null) throw new CredentialNotFoundException();
+        credential.ChangePassword(command.Password, command.NewPassword);
+        await _credentialRepository.UpdateAsync(credential, cancellationToken);
         var sessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
         foreach (var session in sessions)
         {
             await _sessionRepository.DeleteAsync(session.Id, cancellationToken);
         }
 
-        credential.ChangePassword(command.Password, command.NewPassword);
-        await _credentialRepository.UpdateAsync(credential, cancellationToken);
         return Unit.Value;
     }
 }
