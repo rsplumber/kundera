@@ -1,6 +1,5 @@
 ﻿using Core.Auth.Credentials;
 using Core.Auth.Credentials.Exceptions;
-using Core.Auth.Sessions;
 using Mediator;
 
 namespace Application.Auth.Credentials.Password.Change;
@@ -17,12 +16,10 @@ public sealed record CredentialChangePasswordCommand : ICommand
 internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<CredentialChangePasswordCommand>
 {
     private readonly ICredentialRepository _credentialRepository;
-    private readonly ISessionRepository _sessionRepository;
 
-    public CredentialChangePasswordCommandHandler(ICredentialRepository credentialRepository, ISessionRepository sessionRepository)
+    public CredentialChangePasswordCommandHandler(ICredentialRepository credentialRepository)
     {
         _credentialRepository = credentialRepository;
-        _sessionRepository = sessionRepository;
     }
 
     public async ValueTask<Unit> Handle(CredentialChangePasswordCommand command, CancellationToken cancellationToken)
@@ -32,12 +29,6 @@ internal sealed class CredentialChangePasswordCommandHandler : ICommandHandler<C
         if (credential is null) throw new CredentialNotFoundException();
         credential.ChangePassword(command.Password, command.NewPassword);
         await _credentialRepository.UpdateAsync(credential, cancellationToken);
-        var sessions = await _sessionRepository.FindByCredentialIdAsync(credential.Id, cancellationToken);
-        foreach (var session in sessions)
-        {
-            await _sessionRepository.DeleteAsync(session.Id, cancellationToken);
-        }
-
         return Unit.Value;
     }
 }
