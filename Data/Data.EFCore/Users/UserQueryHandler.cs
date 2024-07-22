@@ -29,7 +29,6 @@ public sealed class UserQueryHandler : IQueryHandler<UserQuery, UserResponse>
         return new UserResponse
         {
             Id = user.Id,
-            Usernames = user.Usernames.ToList(),
             Status = user.Status.ToString(),
             Roles = user.Roles.Select(role => role.Id),
             Groups = user.Groups.Select(group => group.Id),

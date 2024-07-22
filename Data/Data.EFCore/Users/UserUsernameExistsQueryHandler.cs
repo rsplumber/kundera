@@ -1,29 +1,27 @@
-﻿using Core.Users.Exception;
+﻿using Core.Auth.Credentials;
+using Core.Users.Exception;
 using Data.Abstractions.Users;
 using Mediator;
-using Microsoft.EntityFrameworkCore;
 
 namespace Data.Users;
 
 public sealed class UserUsernameExistsQueryHandler : IQueryHandler<UserUsernameExistsQuery, UserUsernameExistsResponse>
 {
-    private readonly AppDbContext _dbContext;
+    private readonly ICredentialRepository _credentialRepository;
 
-    public UserUsernameExistsQueryHandler(AppDbContext dbContext)
+    public UserUsernameExistsQueryHandler(ICredentialRepository credentialRepository)
     {
-        _dbContext = dbContext;
+        _credentialRepository = credentialRepository;
     }
+
 
     public async ValueTask<UserUsernameExistsResponse> Handle(UserUsernameExistsQuery query, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(user => user.Usernames.Any(username => username == query.Username),
-                cancellationToken);
-        if (user is null) throw new UserNotFoundException();
+        var currentCredentials = await _credentialRepository.FindByUsernameAsync(query.Username, cancellationToken);
+        if (currentCredentials.Count == 0) throw new UserNotFoundException();
         return new UserUsernameExistsResponse
         {
-            Id = user.Id
+            Id = currentCredentials.First().User.Id
         };
     }
 }

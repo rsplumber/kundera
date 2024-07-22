@@ -13,8 +13,6 @@ public sealed record UserResponse
 
     public string Status { get; init; } = string.Empty;
 
-    public List<string> Usernames { get; init; } = Array.Empty<string>().ToList();
-
     public IEnumerable<Guid> Groups { get; init; } = Array.Empty<Guid>().ToList();
 
     public IEnumerable<Guid>? Roles { get; init; } = Array.Empty<Guid>().ToList();

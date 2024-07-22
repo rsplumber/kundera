@@ -18,7 +18,7 @@ public sealed class UsersQueryHandler : IQueryHandler<UsersQuery, PageableRespon
     public async ValueTask<PageableResponse<UsersResponse>> Handle(UsersQuery query, CancellationToken cancellationToken)
     {
         var usersQuery = await _users.Page(query).ToListAsync();
-        var users = usersQuery.Select(model => new UsersResponse(model.Id, model.Usernames))
+        var users = usersQuery.Select(model => new UsersResponse(model.Id))
             .ToList();
         var counts = await _users.CountAsync();
 

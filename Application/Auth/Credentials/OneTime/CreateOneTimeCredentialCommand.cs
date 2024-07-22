@@ -5,6 +5,8 @@ namespace Application.Auth.Credentials.OneTime;
 
 public sealed record CreateOneTimeCredentialCommand : ICommand
 {
+    public Guid UserId { get; init; } = default!;
+    
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
@@ -27,7 +29,9 @@ internal sealed class CreateOneTimeCredentialCommandHandler : ICommandHandler<Cr
 
     public async ValueTask<Unit> Handle(CreateOneTimeCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateOneTimeAsync(command.Username,
+        await _credentialFactory.CreateOneTimeAsync(
+            command.UserId,
+            command.Username,
             command.Password,
             command.SessionTokenExpireTimeInMinutes,
             command.SessionRefreshTokenExpireTimeInMinutes,

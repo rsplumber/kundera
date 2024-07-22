@@ -5,7 +5,7 @@ namespace Application.Users.Create;
 
 public sealed record CreateUserCommand : ICommand<User>
 {
-    public string Username { get; init; } = default!;
+    public Guid? UserId { get; set; } = default!;
 
     public Guid GroupId { get; set; } = default!;
 }
@@ -21,8 +21,13 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
 
     public async ValueTask<User> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userFactory.CreateAsync(command.Username, command.GroupId);
-
-        return user;
+        if (command.UserId is not null)
+        {
+            return await _userFactory.CreateAsync(command.UserId.Value, command.GroupId);
+        }
+        else
+        {
+            return await _userFactory.CreateAsync(command.GroupId);
+        }
     }
 }

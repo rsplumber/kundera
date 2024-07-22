@@ -6,19 +6,25 @@ namespace Core.Auth.Credentials;
 
 public interface ICredentialFactory
 {
-    Task<Credential> CreateAsync(string username,
+    Task<Credential> CreateAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
         bool? singleSession = false);
 
-    Task<Credential> CreateOneTimeAsync(string username,
+    Task<Credential> CreateOneTimeAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
         int expireInMinutes = 0);
 
-    Task<Credential> CreateTimePeriodicAsync(string username,
+    Task<Credential> CreateTimePeriodicAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
@@ -38,13 +44,15 @@ internal sealed class CredentialFactory : ICredentialFactory
         _userRepository = userRepository;
     }
 
-    public async Task<Credential> CreateAsync(string username,
+    public async Task<Credential> CreateAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
         bool? singleSession = false)
     {
-        var user = await ValidateCredentialAsync(username, password);
+        var user = await ValidateCredentialAsync(userId, username, password);
         var credential = new Credential(username, password, user)
         {
             SingleSession = singleSession ?? false,
@@ -55,13 +63,24 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    public async Task<Credential> CreateOneTimeAsync(string username,
+    public async Task<Credential> CreateOneTimeAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
         int expireInMinutes = 0)
     {
-        var user = await ValidateCredentialAsync(username, password);
+        var user = await _userRepository.FindAsync(userId);
+        if (user is null) throw new UserNotFoundException();
+
+        var currentCredentials = await _credentialRepository.FindByUsernameAsync(username);
+        var selectedCredential = currentCredentials.FirstOrDefault(credential => credential.Username == username && credential.Password.Check(password));
+        if (selectedCredential is not null)
+        {
+            await _credentialRepository.DeleteAsync(selectedCredential.Id);
+        }
+        
         var credential = new Credential(username, password, user, true, expireInMinutes)
         {
             SingleSession = true,
@@ -72,14 +91,16 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    public async Task<Credential> CreateTimePeriodicAsync(string username,
+    public async Task<Credential> CreateTimePeriodicAsync(
+        Guid userId,
+        string username,
         string password,
         int sessionTokenExpireTimeInMinutes,
         int sessionRefreshTokenExpireTimeInMinutes,
         int expireInMinutes,
         bool? singleSession = false)
     {
-        var user = await ValidateCredentialAsync(username, password);
+        var user = await ValidateCredentialAsync(userId, username, password);
         var credential = new Credential(username, password, user, expireInMinutes)
         {
             SingleSession = singleSession ?? false,
@@ -90,18 +111,10 @@ internal sealed class CredentialFactory : ICredentialFactory
         return credential;
     }
 
-    private async Task<User> ValidateCredentialAsync(string username, string password)
+    private async Task<User> ValidateCredentialAsync(Guid userId, string username, string password)
     {
-        var user = await _userRepository.FindByUsernameAsync(username);
-        if (user is null)
-        {
-            throw new UserNotFoundException();
-        }
-
-        if (!user.HasUsername(username))
-        {
-            throw new UsernameNotFoundException();
-        }
+        var user = await _userRepository.FindAsync(userId);
+        if (user is null) throw new UserNotFoundException();
 
         var currentCredentials = await _credentialRepository.FindByUsernameAsync(username);
         if (currentCredentials.Any(credential => credential.Username == username && credential.Password.Check(password)))

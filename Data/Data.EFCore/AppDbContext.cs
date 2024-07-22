@@ -235,8 +235,6 @@ public sealed class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Property)
                 .HasColumnName("id");
 
-            builder.HasIndex(model => model.Usernames);
-
             builder.HasMany(model => model.Groups)
                 .WithMany()
                 .UsingEntity<Dictionary<string, object>>(

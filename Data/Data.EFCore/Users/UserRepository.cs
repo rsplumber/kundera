@@ -26,14 +26,6 @@ internal class UserRepository : IUserRepository
             .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
     }
 
-    public Task<User?> FindByUsernameAsync(string username, CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Users
-            .Include(user => user.Roles)
-            .Include(user => user.Groups)
-            .FirstOrDefaultAsync(user => user.Usernames.Any(name => name == username) , cancellationToken);
-    }
-
     public async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
     {
         _dbContext.Users.Update(entity);

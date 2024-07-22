@@ -94,16 +94,11 @@ internal sealed class DataSeeder
             await _scopeRepository.UpdateAsync(scope);
         }
 
-        var user = await _userRepository.FindByUsernameAsync(_adminUsername);
-        if (user is null)
-        {
-            user = await _userFactory.CreateAsync(_adminUsername, group.Id);
-        }
-
         var credentials = await _credentialRepository.FindByUsernameAsync(_adminUsername);
         if (!credentials.Any(credential => credential.Password.Check(_adminPassword)))
         {
-            await _credentialFactory.CreateAsync(_adminUsername, _adminPassword,
+            var user = await _userFactory.CreateAsync(group.Id);
+            await _credentialFactory.CreateAsync(user.Id, _adminUsername, _adminPassword,
                 1000,
                 1000,
                 true);

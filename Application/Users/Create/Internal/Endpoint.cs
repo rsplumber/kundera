@@ -27,7 +27,6 @@ file sealed class Endpoint : Endpoint<CreateUserCommand>
         await SendAsync(new UserResponse
         {
             Id = user.Id,
-            Usernames = user.Usernames.Select(username => username).ToList(),
             Status = user.Status.ToString(),
             Groups = user.Groups.Select(g => g.Id).ToList(),
             Roles = user.Roles.Select(r => r.Id).ToList()

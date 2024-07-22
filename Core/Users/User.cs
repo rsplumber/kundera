@@ -11,10 +11,8 @@ public class User : BaseEntity
     {
     }
 
-    internal User(string username, Group group)
+    internal User(Group group)
     {
-        AddUsername(username);
-
         Join(group);
 
         ChangeStatus(UserStatus.Active);
@@ -22,9 +20,12 @@ public class User : BaseEntity
         AddDomainEvent(new UserCreatedEvent(Id));
     }
 
-    public Guid Id { get; set; } = Guid.NewGuid();
+    internal User(Guid id, Group group) : this(group)
+    {
+        Id = id;
+    }
 
-    public List<string> Usernames { get; set; } = new();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public List<Group> Groups { get; set; } = new();
 
@@ -38,34 +39,6 @@ public class User : BaseEntity
 
     private void ChangeReason(string? reason) => StatusChangeReason = reason;
 
-    public void AddUsername(string username)
-    {
-        if (HasUsername(username))
-        {
-            throw new UserDuplicateIdentifierException(username);
-        }
-
-        Usernames.Add(username);
-        AddDomainEvent(new UserUsernameAddedEvent(Id, username));
-    }
-
-    public void RemoveUsername(string username)
-    {
-        if (!HasUsername(username)) return;
-
-        if (Usernames.Count == 1)
-        {
-            throw new UsernameCouldNotBeEmptyException();
-        }
-
-        Usernames.Remove(username);
-        AddDomainEvent(new UserUsernameRemovedEvent(Id, username));
-    }
-
-    public bool HasUsername(string username)
-    {
-        return Usernames.Any(u => u == username);
-    }
 
     public void Join(Group group)
     {

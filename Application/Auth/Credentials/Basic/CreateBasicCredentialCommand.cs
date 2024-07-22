@@ -5,6 +5,8 @@ namespace Application.Auth.Credentials.Basic;
 
 public sealed record CreateBasicCredentialCommand : ICommand
 {
+    public Guid UserId { get; init; } = default!;
+    
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
@@ -27,7 +29,9 @@ internal sealed class CreateBasicCredentialCommandHandler : ICommandHandler<Crea
 
     public async ValueTask<Unit> Handle(CreateBasicCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateAsync(command.Username,
+        await _credentialFactory.CreateAsync(
+            command.UserId,
+            command.Username,
             command.Password,
             command.SessionTokenExpireTimeInMinutes,
             command.SessionRefreshTokenExpireTimeInMinutes,

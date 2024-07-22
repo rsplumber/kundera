@@ -5,6 +5,8 @@ namespace Application.Auth.Credentials.TimePeriodic;
 
 public sealed record CreateTimePeriodicCredentialCommand : ICommand
 {
+    public Guid UserId { get; init; } = default!;
+
     public string Username { get; init; } = default!;
 
     public string Password { get; init; } = default!;
@@ -29,7 +31,9 @@ internal sealed class CreateTimePeriodicCredentialCommandHandler : ICommandHandl
 
     public async ValueTask<Unit> Handle(CreateTimePeriodicCredentialCommand command, CancellationToken cancellationToken)
     {
-        await _credentialFactory.CreateTimePeriodicAsync(command.Username,
+        await _credentialFactory.CreateTimePeriodicAsync(
+            command.UserId,
+            command.Username,
             command.Password,
             command.SessionTokenExpireTimeInMinutes,
             command.SessionRefreshTokenExpireTimeInMinutes,
