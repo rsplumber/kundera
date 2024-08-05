@@ -23,6 +23,8 @@ public sealed class UserRoleQueryHandler : IQueryHandler<UsersRolesQuery, List<U
         var user = await _dbContext.Users
             .AsNoTracking()
             .Include(user => user.Groups)
+            .Include(user => user.Roles)
+            .ThenInclude(role => role.Permissions)
             .Where(user => user.Id == query.UserId)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
