@@ -31,6 +31,9 @@ internal sealed class AuthorizeDataProvider : IAuthorizeDataProvider
             .ThenInclude(user => user.Groups)
             .Include(session => session.Scope)
             .ThenInclude(scope => scope.Roles)
+            .Include(session => session.User)
+            .ThenInclude(user => user.Roles)
+            .ThenInclude(role => role.Permissions)
             .Where(session => session.Id == st)
             .Select(session => new Session
             {
