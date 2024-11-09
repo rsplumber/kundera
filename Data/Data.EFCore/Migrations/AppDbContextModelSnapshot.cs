@@ -45,9 +45,6 @@ namespace Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("ip_address");
 
-                    b.Property<string>("Platform")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("ScopeId")
                         .HasColumnType("uuid")
                         .HasColumnName("scope_id");
@@ -401,7 +398,7 @@ namespace Data.Migrations
 
                     b.HasIndex("group_id");
 
-                    b.ToTable("groups_children");
+                    b.ToTable("groups_children", (string)null);
                 });
 
             modelBuilder.Entity("groups_roles", b =>
@@ -416,7 +413,7 @@ namespace Data.Migrations
 
                     b.HasIndex("role_id");
 
-                    b.ToTable("groups_roles");
+                    b.ToTable("groups_roles", (string)null);
                 });
 
             modelBuilder.Entity("roles_permission", b =>
@@ -431,7 +428,7 @@ namespace Data.Migrations
 
                     b.HasIndex("role_id");
 
-                    b.ToTable("roles_permission");
+                    b.ToTable("roles_permission", (string)null);
                 });
 
             modelBuilder.Entity("scopes_roles", b =>
@@ -446,7 +443,7 @@ namespace Data.Migrations
 
                     b.HasIndex("scope_id");
 
-                    b.ToTable("scopes_roles");
+                    b.ToTable("scopes_roles", (string)null);
                 });
 
             modelBuilder.Entity("scopes_services", b =>
@@ -461,7 +458,7 @@ namespace Data.Migrations
 
                     b.HasIndex("service_id");
 
-                    b.ToTable("scopes_services");
+                    b.ToTable("scopes_services", (string)null);
                 });
 
             modelBuilder.Entity("users_groups", b =>
@@ -476,7 +473,7 @@ namespace Data.Migrations
 
                     b.HasIndex("user_id");
 
-                    b.ToTable("users_groups");
+                    b.ToTable("users_groups", (string)null);
                 });
 
             modelBuilder.Entity("users_roles", b =>
@@ -491,7 +488,7 @@ namespace Data.Migrations
 
                     b.HasIndex("user_id");
 
-                    b.ToTable("users_roles");
+                    b.ToTable("users_roles", (string)null);
                 });
 
             modelBuilder.Entity("Core.Auth.Credentials.Credential", b =>

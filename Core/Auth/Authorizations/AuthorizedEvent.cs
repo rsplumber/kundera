@@ -15,7 +15,6 @@ public record AuthorizedEvent
 
     public string? Agent { get; init; }
     
-    public string? Platform { get; init; }
 }
 
 public sealed class AuthorizedEventHandler : ICapSubscribe

@@ -25,7 +25,6 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
                 Username = model.Username,
                 UserId = model.UserId,
                 IpAddress = model.IpAddress,
-                Platform = model.Platform,
                 CreatedDateUtc = model.CreatedDateUtc,
             })
             .ToListAsync(cancellationToken: cancellationToken);

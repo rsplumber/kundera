@@ -10,6 +10,5 @@ public interface IRoleAuthorizationHandler
         IEnumerable<string> roles,
         IPAddress ipAddress,
         string? userAgent = null,
-        string? platform = null,
         CancellationToken cancellationToken = default);
 }
