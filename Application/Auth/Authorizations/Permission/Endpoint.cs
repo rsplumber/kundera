@@ -31,7 +31,6 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
             req.Actions,
             HttpContext.Request.IpAddress(),
             HttpContext.Request.UserAgent(),
-            HttpContext.Request.Platform(),
             ct);
 
         var authorizationResult = authorizeResponse.Code switch

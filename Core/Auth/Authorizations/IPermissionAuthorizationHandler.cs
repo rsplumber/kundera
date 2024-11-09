@@ -10,6 +10,5 @@ public interface IPermissionAuthorizationHandler
         IEnumerable<string> actions,
         IPAddress ipAddress,
         string? userAgent = null,
-        string? platform = null,
         CancellationToken cancellationToken = default);
 }

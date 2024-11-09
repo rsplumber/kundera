@@ -52,8 +52,7 @@ public class AuthenticateHandler : IAuthenticateHandler
             UserId = credential.User.Id,
             ScopeId = scope.Id,
             Agent = requestInfo?.UserAgent,
-            IpAddress = requestInfo?.IpAddress?.ToString(),
-            Platform = requestInfo?.Platform
+            IpAddress = requestInfo?.IpAddress?.ToString()
             
         }, cancellationToken: cancellationToken);
 
