@@ -9,7 +9,7 @@ public interface IAuthenticateHandler
 
     Task<Certificate> RefreshAsync(Certificate certificate, RequestInfo? requestInfo = null, CancellationToken cancellationToken = default);
 
-    Task LogoutAsync(string token,string refreshToken, CancellationToken cancellationToken = default);
+    Task LogoutAsync(string token, string refreshToken, CancellationToken cancellationToken = default);
 }
 
 public sealed record RequestInfo
@@ -17,4 +17,6 @@ public sealed record RequestInfo
     public string? UserAgent { get; init; }
 
     public IPAddress? IpAddress { get; init; }
+
+    public string? Platform { get; init; }
 }

@@ -52,7 +52,9 @@ public class AuthenticateHandler : IAuthenticateHandler
             UserId = credential.User.Id,
             ScopeId = scope.Id,
             Agent = requestInfo?.UserAgent,
-            IpAddress = requestInfo?.IpAddress?.ToString()
+            IpAddress = requestInfo?.IpAddress?.ToString(),
+            Platform = requestInfo?.Platform
+            
         }, cancellationToken: cancellationToken);
 
         return certificate;
