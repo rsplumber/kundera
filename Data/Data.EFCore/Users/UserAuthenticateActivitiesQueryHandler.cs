@@ -18,6 +18,7 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
     {
         var users = await _dbContext.AuthenticationActivities
             .Where(activity => activity.UserId == query.UserId)
+            .OrderByDescending(response => response.CreatedDateUtc)
             .Page(query)
             .Select(model => new UserAuthenticateActivitiesResponse
             {
