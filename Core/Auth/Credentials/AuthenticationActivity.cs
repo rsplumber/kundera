@@ -11,7 +11,8 @@ public class AuthenticationActivity : BaseEntity
         Guid scopeId,
         string username,
         string? ipAddress,
-        string? agent)
+        string? agent,
+        string? platform)
     {
         Credential = credentialId;
         UserId = userId;
@@ -19,6 +20,7 @@ public class AuthenticationActivity : BaseEntity
         Agent = agent;
         Username = username;
         ScopeId = scopeId;
+        Platform = platform;
     }
 
 
@@ -35,6 +37,8 @@ public class AuthenticationActivity : BaseEntity
     public string? IpAddress { get; init; }
 
     public string? Agent { get; init; }
+
+    public string? Platform { get; init; }
 
     public DateTime CreatedDateUtc { get; init; } = DateTime.UtcNow;
 }

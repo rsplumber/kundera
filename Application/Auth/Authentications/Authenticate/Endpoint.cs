@@ -30,6 +30,7 @@ file sealed class Endpoint : Endpoint<Request, Certificate>
             {
                 UserAgent = HttpContext.Request.UserAgent(),
                 IpAddress = HttpContext.Request.IpAddress(),
+                Platform = HttpContext.Request.Platform()
             },
             ct);
         await SendOkAsync(certificate, ct);

@@ -14,4 +14,10 @@ public static class HttpRequestExtensions
     {
         return request.HttpContext.Connection.RemoteIpAddress ?? IPAddress.None;
     }
+
+    public static string Platform(this HttpRequest request)
+    {
+        var platform = request.Headers["Platform"];
+        return platform.Count > 0 ? platform[0] ?? string.Empty : string.Empty;
+    }
 }

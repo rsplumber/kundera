@@ -19,7 +19,7 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
     public override void Configure()
     {
         Post("authorize/permission");
-        ResponseCache(10,varyByHeader: "Authorization");
+        ResponseCache(10, varyByHeader: "Authorization");
         AllowAnonymous();
         Version(1);
     }
@@ -31,6 +31,7 @@ file sealed class Endpoint : Endpoint<Request, AuthorizeResponse>
             req.Actions,
             HttpContext.Request.IpAddress(),
             HttpContext.Request.UserAgent(),
+            HttpContext.Request.Platform(),
             ct);
 
         var authorizationResult = authorizeResponse.Code switch

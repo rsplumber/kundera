@@ -17,6 +17,8 @@ public record AuthenticatedEvent
     public string? IpAddress { get; init; }
 
     public string? Agent { get; init; }
+    
+    public string? Platform { get; init; }
 }
 
 public sealed class AuthenticatedEventHandler : ICapSubscribe
@@ -37,6 +39,7 @@ public sealed class AuthenticatedEventHandler : ICapSubscribe
             message.ScopeId,
             message.Username,
             message.IpAddress,
-            message.Agent));
+            message.Agent,
+            message.Platform));
     }
 }
