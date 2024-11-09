@@ -17,15 +17,16 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
     public async ValueTask<PageableResponse<UserAuthenticateActivitiesResponse>> Handle(UserAuthenticateActivitiesQuery query, CancellationToken cancellationToken)
     {
         var users = await _dbContext.AuthenticationActivities
+            .Where(activity => activity.UserId == query.UserId)
             .Page(query)
-            .Select(model => new UserAuthenticateActivitiesResponse()
+            .Select(model => new UserAuthenticateActivitiesResponse
             {
                 Id = model.Id,
                 Agent = model.Agent,
                 Username = model.Username,
                 UserId = model.UserId,
                 IpAddress = model.IpAddress,
-                CreatedDateUtc = model.CreatedDateUtc,
+                CreatedDateUtc = model.CreatedDateUtc
             })
             .ToListAsync(cancellationToken: cancellationToken);
         var counts = await _dbContext.Users.CountAsync(cancellationToken);

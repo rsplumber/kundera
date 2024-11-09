@@ -16,16 +16,14 @@ file sealed class Endpoint : Endpoint<UserAuthenticateActivitiesQuery, PageableR
 
     public override void Configure()
     {
-        Get("users/authenticate_activities");
-        AllowAnonymous();
-        // Permissions("users_list");
+        Get("users/{userId}/authenticate_activities");
+        Permissions("users_list");
         Version(1);
     }
 
     public override async Task HandleAsync(UserAuthenticateActivitiesQuery req, CancellationToken ct)
     {
         var response = await _mediator.Send(req, ct);
-
         await SendOkAsync(response, ct);
     }
 }

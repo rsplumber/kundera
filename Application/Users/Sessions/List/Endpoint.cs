@@ -17,8 +17,7 @@ file sealed class Endpoint : Endpoint<UserSessionsQuery, List<UserSessionRespons
     public override void Configure()
     {
         Get("users/{userId:guid}/sessions");
-        AllowAnonymous();
-        // Permissions("users_sessions_list");
+        Permissions("users_sessions_list");
         Version(1);
     }
 
