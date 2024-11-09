@@ -3,7 +3,7 @@ using Data.Abstractions.Users;
 using FastEndpoints;
 using Mediator;
 
-namespace Application.Users.AuthenticateActivities;
+namespace Application.Users.AuthenticateActivities.Internal;
 
 file sealed class Endpoint : Endpoint<UserAuthenticateActivitiesQuery, PageableResponse<UserAuthenticateActivitiesResponse>>
 {
@@ -16,8 +16,8 @@ file sealed class Endpoint : Endpoint<UserAuthenticateActivitiesQuery, PageableR
 
     public override void Configure()
     {
-        Get("users/{userId}/authenticate_activities");
-        Permissions("users_list");
+        Get("internal/users/{userId}/authenticate_activities");
+        AllowAnonymous();
         Version(1);
     }
 
