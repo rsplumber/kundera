@@ -59,6 +59,11 @@ public class Credential : BaseEntity
         Password = Password.Create(newPassword);
         AddDomainEvent(new CredentialPasswordChangedEvent(Id));
     }
+    public void ChangeUsername(string username)
+    { 
+        Username = username;
+        AddDomainEvent(new CredentialUsernameChangedEvent(Id));
+    }
 
     public bool Expired() => ExpiresAtUtc is not null && DateTime.UtcNow >= ExpiresAtUtc;
 }
