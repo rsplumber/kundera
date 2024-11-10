@@ -42,13 +42,13 @@ internal class RoleAuthorizationHandler : IRoleAuthorizationHandler
         }
 
         if (InvalidRole()) return AuthorizeResponse.Forbidden;
-        
+
         _ = _eventBus.PublishAsync(AuthorizedEvent.EventName, new AuthorizedEvent
         {
             Agent = userAgent,
             IpAddress = ipAddress.ToString(),
             SessionId = session.Id,
-            UserId = session.User.Id
+            UserId = session.User.Id,
         }, cancellationToken: cancellationToken);
 
         return AuthorizeResponse.Success(session.User.Id, session.Scope.Id, service!.Id);

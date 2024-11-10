@@ -28,7 +28,7 @@ file sealed class Endpoint : Endpoint<Request, Certificate>
             new RequestInfo
             {
                 UserAgent = HttpContext.Request.UserAgent(),
-                IpAddress = HttpContext.Request.IpAddress(),
+                IpAddress = HttpContext.Request.IpAddress()
             },
             ct);
         await SendOkAsync(certificate, ct);

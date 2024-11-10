@@ -47,7 +47,7 @@ public class PermissionAuthorizationHandler : IPermissionAuthorizationHandler
             SessionId = session.Id,
             UserId = session.User.Id,
             Agent = userAgent,
-            IpAddress = ipAddress.ToString()
+            IpAddress = ipAddress.ToString(),
         }, cancellationToken: cancellationToken);
 
 

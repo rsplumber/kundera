@@ -14,6 +14,7 @@ public record AuthorizedEvent
     public string? IpAddress { get; init; }
 
     public string? Agent { get; init; }
+    
 }
 
 public sealed class AuthorizedEventHandler : ICapSubscribe
