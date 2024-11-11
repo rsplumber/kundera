@@ -16,7 +16,9 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
 
     public async ValueTask<PageableResponse<UserAuthenticateActivitiesResponse>> Handle(UserAuthenticateActivitiesQuery query, CancellationToken cancellationToken)
     {
-        var users = await _dbContext.AuthenticationActivities
+        var authenticateActivities = await _dbContext.AuthenticationActivities
+            .Where(activity => activity.UserId == query.UserId)
+            .OrderByDescending(response => response.CreatedDateUtc)
             .Page(query)
             .Select(model => new UserAuthenticateActivitiesResponse()
             {
@@ -28,11 +30,11 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
                 CreatedDateUtc = model.CreatedDateUtc,
             })
             .ToListAsync(cancellationToken: cancellationToken);
-        var counts = users.Count;
+        var counts = authenticateActivities.Count;
 
         return new PageableResponse<UserAuthenticateActivitiesResponse>
         {
-            Data = users,
+            Data = authenticateActivities,
             TotalItems = counts,
             TotalPages = counts / query.Size
         };

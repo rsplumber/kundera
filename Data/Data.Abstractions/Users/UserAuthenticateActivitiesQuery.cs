@@ -2,7 +2,10 @@
 
 namespace Data.Abstractions.Users;
 
-public sealed record UserAuthenticateActivitiesQuery : PageableQuery, IQuery<PageableResponse<UserAuthenticateActivitiesResponse>>;
+public sealed record UserAuthenticateActivitiesQuery : PageableQuery, IQuery<PageableResponse<UserAuthenticateActivitiesResponse>>
+{
+    public Guid UserId { get; set; }
+}
 
 public sealed record UserAuthenticateActivitiesResponse
 {
@@ -15,8 +18,6 @@ public sealed record UserAuthenticateActivitiesResponse
     public string? IpAddress { get; init; }
 
     public string? Agent { get; init; }
-
-    public string? Platform { get; init; }
-
+    
     public DateTime CreatedDateUtc { get; init; }
 };
