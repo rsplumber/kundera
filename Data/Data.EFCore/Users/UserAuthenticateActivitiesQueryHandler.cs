@@ -30,7 +30,7 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
                 CreatedDateUtc = model.CreatedDateUtc
             })
             .ToListAsync(cancellationToken: cancellationToken);
-        var counts = await _dbContext.Users.CountAsync(cancellationToken);
+        var counts = users.Count;
 
         return new PageableResponse<UserAuthenticateActivitiesResponse>
         {
