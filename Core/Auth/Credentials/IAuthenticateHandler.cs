@@ -17,6 +17,4 @@ public sealed record RequestInfo
     public string? UserAgent { get; init; }
 
     public IPAddress? IpAddress { get; init; }
-
-    public string? Platform { get; init; }
 }
