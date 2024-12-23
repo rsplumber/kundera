@@ -16,7 +16,7 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
 
     public async ValueTask<PageableResponse<UserAuthenticateActivitiesResponse>> Handle(UserAuthenticateActivitiesQuery query, CancellationToken cancellationToken)
     {
-        var authenticateActivities = await _dbContext.AuthenticationActivities
+        var authenticateActivities = await _dbContext.AuthorizationActivities
             .Where(activity => activity.UserId == query.UserId)
             .OrderByDescending(response => response.CreatedDateUtc)
             .Page(query)
@@ -24,7 +24,6 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
             {
                 Id = model.Id,
                 Agent = model.Agent,
-                Username = model.Username,
                 UserId = model.UserId,
                 IpAddress = model.IpAddress,
                 CreatedDateUtc = model.CreatedDateUtc,

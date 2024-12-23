@@ -12,6 +12,8 @@ public static class HttpRequestExtensions
 
     public static IPAddress IpAddress(this HttpRequest request)
     {
+        var xForwardedForHeader = request.HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+        if (!string.IsNullOrEmpty(xForwardedForHeader)) return IPAddress.Parse(xForwardedForHeader);;
         return request.HttpContext.Connection.RemoteIpAddress ?? IPAddress.None;
     }
 }
