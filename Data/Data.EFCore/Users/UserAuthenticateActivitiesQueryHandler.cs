@@ -16,7 +16,7 @@ public sealed class UserAuthenticateActivitiesQueryHandler : IQueryHandler<UserA
 
     public async ValueTask<PageableResponse<UserAuthenticateActivitiesResponse>> Handle(UserAuthenticateActivitiesQuery query, CancellationToken cancellationToken)
     {
-        var authenticateActivities = await _dbContext.AuthorizationActivities
+        var authenticateActivities = await _dbContext.AuthenticationActivities
             .Where(activity => activity.UserId == query.UserId)
             .OrderByDescending(response => response.CreatedDateUtc)
             .Page(query)
